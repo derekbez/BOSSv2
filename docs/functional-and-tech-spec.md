@@ -106,10 +106,15 @@ User stories and personas are now maintained in [docs/user-stories.md](./user-st
 ---
 
 ### 3.3. Directory Structure
+
+The project directory structure is designed for modularity, scalability, and maintainability. The following layout is recommended:
+
 ```
 boss/
+  __init__.py
   main.py
   core/
+    __init__.py
     app_manager.py
     event_bus.py
     config.py
@@ -117,6 +122,7 @@ boss/
     api.py
     remote.py
   hardware/
+    __init__.py
     switch_reader.py
     button.py
     led.py
@@ -124,21 +130,40 @@ boss/
     screen.py
     speaker.py
   apps/
-    app_matrixrain.py
-    app_showtext.py
+    app_matrixrain/
+      __init__.py
+      main.py
+      manifest.json
+      assets/
+    app_showtext/
+      __init__.py
+      main.py
+      manifest.json
+      assets/
     ...
   assets/
     images/
     sounds/
-    ...
+  config/
+    BOSSsettings.json
   tests/
-    test_switch_reader.py
-    test_app_manager.py
-    ...
-  BOSSsettings.json
+    core/
+    hardware/
+    apps/
+  scripts/
+  docs/
   requirements.txt
   README.md
 ```
+
+**Notes:**
+- All code is inside the `boss/` package for import clarity and best practice.
+- Each app is a subdirectory with its own code, manifest, and optional assets.
+- Configuration files are in `config/`.
+- Documentation is in `docs/`.
+- Utility scripts are in `scripts/`.
+- The `tests/` directory mirrors the main package structure for clarity.
+- Add `.env.example` and document secret management if environment variables are used.
 
 ---
 

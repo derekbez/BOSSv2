@@ -1,0 +1,12 @@
+[2025-06-18 15:15:26,275] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-18 15:15:26,275] INFO BOSS: Initializing hardware interfaces...
+[2025-06-18 15:15:26,275] INFO BOSS: Hardware initialized.
+[2025-06-18 15:15:26,275] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-18 15:15:26,276] ERROR BOSS: Fatal error: module 'signal' has no attribute 'pause'
+Traceback (most recent call last):
+  File "D:\dev\BOSSv2\boss\main.py", line 30, in main
+    signal.pause()
+    ^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'pause'
+[2025-06-18 15:15:26,281] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-18 15:15:26,281] INFO BOSS: Shutdown complete.

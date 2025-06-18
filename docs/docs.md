@@ -86,6 +86,68 @@ If the user presses the main "go" button again, the mini-app terminates and BOSS
 
 ---
 
+## Directory Structure & Best Practices
+
+The recommended directory structure for B.O.S.S. is designed for modularity, scalability, and maintainability:
+
+```
+boss/
+  __init__.py
+  main.py
+  core/
+    __init__.py
+    app_manager.py
+    event_bus.py
+    config.py
+    logger.py
+    api.py
+    remote.py
+  hardware/
+    __init__.py
+    switch_reader.py
+    button.py
+    led.py
+    display.py
+    screen.py
+    speaker.py
+  apps/
+    app_matrixrain/
+      __init__.py
+      main.py
+      manifest.json
+      assets/
+    app_showtext/
+      __init__.py
+      main.py
+      manifest.json
+      assets/
+    ...
+  assets/
+    images/
+    sounds/
+  config/
+    BOSSsettings.json
+  tests/
+    core/
+    hardware/
+    apps/
+  scripts/
+  docs/
+  requirements.txt
+  README.md
+```
+
+**Key Points:**
+- All code is inside the `boss/` package for import clarity and best practice.
+- Each app is a subdirectory with its own code, manifest, and optional assets.
+- Configuration files are in `config/`.
+- Documentation is in `docs/`.
+- Utility scripts are in `scripts/`.
+- The `tests/` directory mirrors the main package structure for clarity.
+- Add `.env.example` and document secret management if environment variables are used.
+
+---
+
 ## Notable Implementation Details
 - **Multiplexer Reading:**
   - 8 toggle switches are read using a 74HC151 multiplexer, reducing GPIO usage to 4 pins.
@@ -98,36 +160,6 @@ If the user presses the main "go" button again, the mini-app terminates and BOSS
   - Configuration file can be edited to map switch positions to new apps.
 - **Cross-Platform:**
   - Code checks for RPi environment and disables hardware features on Windows for development.
-
----
-
-## File/Module Summary
-- `start.py`: Main entry point, hardware init, app selection/launch, config management.
-- `ConfigButtons.py`: Button/LED abstraction.
-- `intervaltimer.py`: Timer utilities for periodic tasks.
-- `leddisplay.py`: 7-segment display abstraction (assumed).
-- `BOSSsettings.conf`: Switch-to-app mapping.
-- `app_*.py`: Individual apps (matrix rain, show text, display image, etc.).
-- `assets/`: Data files (quotes, riddles, images, etc.).
-- `archive/`: Old/experimental code.
-- `reference/`: Documentation, datasheets, hardware diagrams.
-
----
-
-## Hardware Reference
-- 74HC151 multiplexer for reading switches.
-- TM1637 7-segment display.
-- GPIO pinout and wiring diagrams in `reference/`.
-
----
-
-## TODOs & Future Improvements
-- Refactor to OOP for better maintainability.
-- Wrap `ConfigButtons` in try/except for robustness.
-- Convert some apps (e.g., display_image) to class-based structure.
-- Add more apps and expand configuration.
-- Improve shutdown/cleanup logic for running apps.
-- Enhance cross-platform support and emulation.
 
 ---
 

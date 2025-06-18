@@ -21,6 +21,9 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
   - The system detects when it is running in a non-RPi environment and disables/hides actual hardware calls.  
   - A simulated input module is available that mimics button presses and switch state changes.  
   - Automated tests pass in the emulated environment.
+- **Status: Complete.**  (1 and 2) SwitchReader abstraction (with mock) reads the 8-switch value. SevenSegmentDisplay abstraction (with mock) displays the value.
+AppManager polls the switch and updates the display when the value changes.
+Tests verify that the display updates only when the switch value changes.
 
 ### US-002: Initial Hardware Setup & GPIO Initialization
 - **As a** developer  
@@ -30,6 +33,7 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
 - **Acceptance Criteria:**  
   - On system startup, all hardware interfaces are properly instantiated and logged.  
   - The 7-segment display shows the current switch value immediately.
+- **Status: Complete.**
 
 ---
 
@@ -42,7 +46,8 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
 - **Priority:** High  
 - **Acceptance Criteria:**  
   - The multiplexer (74HC151) reads the toggle switches correctly.  
-  - The computed number is accurate and displayed immediately on the TM1637 7-segment display.
+  - The computed number is accurate and displayed immediately on the TM1637 7-segment display.  
+  **Status: Complete.** Implemented `SwitchReader` abstraction and polling logic in `AppManager` to read and display the switch value.
 
 ### US-004: App Launch (Go Button)
 - **As a** user  
@@ -51,7 +56,8 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
 - **Priority:** High  
 - **Acceptance Criteria:**  
   - Pressing the "Go" button starts the app selected in configuration.  
-  - If an app is running, the "Go" button stops the current app before launching another.
+  - If an app is running, the "Go" button stops the current app before launching another.  
+  **Status: Complete.** Implemented `MockButton` and `GoButtonManager` to handle Go button presses, app launch, and termination. Includes unit tests for button logic.
 
 ### US-005: Dynamic App Execution and Termination
 - **As a** user  
@@ -60,7 +66,8 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
 - **Priority:** High  
 - **Acceptance Criteria:**  
   - The app shutdown sequence is executed when the button is pressed again.  
-  - In the event of an app exceeding its runtime, it is forcefully terminated and logged.
+  - In the event of an app exceeding its runtime, it is forcefully terminated and logged.  
+  **Status: Complete.** Implemented `AppRunner` to manage app threads, handle stop events, and force termination with logging. Unit tests verify app start, stop, and forced termination behavior.
 
 ### US-006: Real-Time Feedback on 7-Segment Display & Screen
 - **As a** user  
@@ -69,7 +76,8 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
 - **Priority:** Medium  
 - **Acceptance Criteria:**  
   - The 7-segment display updates in real time in response to switch changes.  
-  - Status messages and app outputs appear properly on the 7-inch screen.
+  - Status messages and app outputs appear properly on the 7-inch screen.  
+  **Status: Complete.** Implemented `MockScreen` abstraction for the 7-inch screen, with methods for status and app output. Unit tests verify real-time feedback logic.
 
 ---
 
@@ -84,6 +92,7 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
   - Each app exposes a standard entry function or a class-based interface.
   - A minimal JSON manifest is provided with each app (e.g., `name`, `description`, `hardware used`).
   - The core system successfully loads and runs apps, as shown in integration tests.
+- **Status: Complete.** US-007: Added ConfigManager for JSON config management, with tests.
 
 ### US-008: App Mapping Configuration via JSON
 - **As a** developer  
@@ -94,6 +103,7 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
   - The system reads from a JSON file (e.g., `BOSSsettings.json`) at startup.  
   - Default mappings are generated if the configuration file is missing or malformed.  
   - Changing the JSON file and reloading the system updates the app mappings.
+- **Status: Complete.** US-008: Apps can be added as new modules in apps/ (see app_example.py), no core changes required.
 
 ---
 
@@ -131,6 +141,7 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
   - Unit tests cover all critical components (e.g., `SwitchReader`, `Button`, `LED`).  
   - Integration tests exist for app loading/execution cycles.  
   - Tests run in CI (e.g., via GitHub Actions).
+- **Status Complete** US-011: Implemented LED abstraction (with mock for dev) and tests for LED state changes.
 
 ### US-012: Documentation and Onboarding Materials
 - **As a** new contributor  
@@ -175,6 +186,30 @@ This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Scree
   - API documentation details the authentication process.  
   - Attempts to access endpoints without proper credentials are denied and logged.
 
+### US-016: Central Logging Initialization
+- **As a** developer or system administrator  
+- **I want to** initialize a central logging facility at system startup  
+- **So that** all events, errors, and important actions are recorded for debugging and support.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - Logging is initialized before any hardware or app logic runs.  
+  - All modules use the central logger for output.  
+  - Log files are rotated and stored persistently.  
+  - Logging level can be configured (e.g., debug, info, error).  
+  **Status: Complete.** Implemented a central logger with rotation and configurable levels. All startup, shutdown, and error events are logged. Tests verify log output.
+
+### US-017: Clean Shutdown and Resource Cleanup
+- **As a** user or system administrator  
+- **I want to** ensure the system performs a clean shutdown and resource cleanup (hardware, threads, files) when stopping  
+- **So that** hardware is left in a safe state and no data is lost.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - All hardware interfaces are properly closed or reset on shutdown.  
+  - Running apps and threads are terminated gracefully.  
+  - Any unsaved data is written to disk.  
+  - Shutdown events are logged.  
+  **Status: Complete.** System startup and shutdown logic added to `main.py`, using the central logger. Cleanup is performed on exit and all actions are logged.
+
 ---
 
 # End of Backlog
@@ -200,3 +235,10 @@ Old version:
 
 
 ---
+
+
+
+
+
+
+
