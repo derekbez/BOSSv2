@@ -1,0 +1,202 @@
+# B.O.S.S. Backlog – User Stories
+
+## User Roles & Personas
+- **Primary User** (e.g., child, museum visitor, educator): Presses buttons, uses switches, runs apps.
+- **System Admin** (e.g., technician, facilitator): Manages mappings, handles power/reset, remote config.
+- **Developer**: Adds apps, extends system APIs.
+
+
+This backlog outlines user stories for the B.O.S.S. (Board Of Switches and Screen) project in a logical order of activity. Each story is written in the standard Agile format with a brief description, priority indicator, and acceptance criteria.
+
+---
+
+## 1. Setup & Environment
+
+### US-001: Development Environment & Hardware Emulation
+- **As a** developer  
+- **I want to** run B.O.S.S. on my Windows laptop using an emulated GPIO environment  
+- **So that** I can develop and test the software without requiring physical hardware at all times.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - The system detects when it is running in a non-RPi environment and disables/hides actual hardware calls.  
+  - A simulated input module is available that mimics button presses and switch state changes.  
+  - Automated tests pass in the emulated environment.
+
+### US-002: Initial Hardware Setup & GPIO Initialization
+- **As a** developer  
+- **I want to** initialize GPIO, buttons, and the display on startup (via `main.py`)  
+- **So that** the core system is ready for user interaction as soon as booted.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - On system startup, all hardware interfaces are properly instantiated and logged.  
+  - The 7-segment display shows the current switch value immediately.
+
+---
+
+## 2. Core User Functionality
+
+### US-003: Toggle Switch Selection
+- **As a** user  
+- **I want to** use 8 toggle switches to select a number (0–255)  
+- **So that** I can choose the mini-app I want to run.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - The multiplexer (74HC151) reads the toggle switches correctly.  
+  - The computed number is accurate and displayed immediately on the TM1637 7-segment display.
+
+### US-004: App Launch (Go Button)
+- **As a** user  
+- **I want to** press the main "Go" button to launch the mini-app mapped to the current switch value  
+- **So that** I have direct control over which mini-app is executed.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - Pressing the "Go" button starts the app selected in configuration.  
+  - If an app is running, the "Go" button stops the current app before launching another.
+
+### US-005: Dynamic App Execution and Termination
+- **As a** user  
+- **I want to** have the running mini-app terminated upon a new "Go" button press or timeout  
+- **So that** I can easily switch between apps without conflicts or lingering processes.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - The app shutdown sequence is executed when the button is pressed again.  
+  - In the event of an app exceeding its runtime, it is forcefully terminated and logged.
+
+### US-006: Real-Time Feedback on 7-Segment Display & Screen
+- **As a** user  
+- **I want to** receive immediate visual feedback on both the 7-segment display and the 7-inch screen  
+- **So that** I know the system is correctly registering my inputs and providing status updates.  
+- **Priority:** Medium  
+- **Acceptance Criteria:**  
+  - The 7-segment display updates in real time in response to switch changes.  
+  - Status messages and app outputs appear properly on the 7-inch screen.
+
+---
+
+## 3. App Interaction & Extensibility
+
+### US-007: Standardized App API & Plugin Structure
+- **As a** developer  
+- **I want to** have mini-apps load dynamically from the `apps/` directory and follow a standard interface (e.g., `run(stop_event, api)`)  
+- **So that** new apps can be added or updated without modifying core code.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - Each app exposes a standard entry function or a class-based interface.
+  - A minimal JSON manifest is provided with each app (e.g., `name`, `description`, `hardware used`).
+  - The core system successfully loads and runs apps, as shown in integration tests.
+
+### US-008: App Mapping Configuration via JSON
+- **As a** developer  
+- **I want to** store the mapping of switch values to mini-apps, including parameters, in a JSON configuration file  
+- **So that** configuration is clear, easily editable, and decoupled from the application logic.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - The system reads from a JSON file (e.g., `BOSSsettings.json`) at startup.  
+  - Default mappings are generated if the configuration file is missing or malformed.  
+  - Changing the JSON file and reloading the system updates the app mappings.
+
+---
+
+## 4. Remote Management & Networking
+
+### US-009: Remote Device Management
+- **As a** system administrator  
+- **I want to** remotely access a secure REST API exposed by the device  
+- **So that** I can monitor status, update configuration, and manage running apps without physical access.  
+- **Priority:** Medium  
+- **Acceptance Criteria:**  
+  - A secure REST endpoint is available for device status, app mapping, and log access.  
+  - Authentication is enforced on all API endpoints.  
+  - Changes made via the API are reflected in the system behavior without requiring a reboot.
+
+### US-010: OTA App Sync & Update (Future Enhancement)
+- **As a** system administrator  
+- **I want to** have the ability to sync new or updated mini-apps over-the-air  
+- **So that** the device can be kept up-to-date without manual intervention.  
+- **Priority:** Low (Future Improvement)  
+- **Acceptance Criteria:**  
+  - A mechanism is in place for securely fetching and updating app modules from a remote repository.  
+  - The update process does not interrupt device operation more than necessary.
+
+---
+
+## 5. Testing, Documentation & Developer Experience
+
+### US-011: Unit and Integration Testing for Core Modules
+- **As a** developer  
+- **I want to** have comprehensive unit tests for hardware abstraction and core logic  
+- **So that** changes can be confidently made, and regressions are prevented.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - Unit tests cover all critical components (e.g., `SwitchReader`, `Button`, `LED`).  
+  - Integration tests exist for app loading/execution cycles.  
+  - Tests run in CI (e.g., via GitHub Actions).
+
+### US-012: Documentation and Onboarding Materials
+- **As a** new contributor  
+- **I want to** have an up-to-date README, architecture overview, and in-code documentation  
+- **So that** I can understand the project quickly and contribute effectively.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - A README file provides project setup instructions, dependency lists, and architectural diagrams.  
+  - User stories and technical specifications are maintained in docs (e.g., `docs/user-stories.md`).  
+  - Code is documented with docstrings and type hints.
+
+### US-013: Developer Tooling and Emulated Inputs for CI
+- **As a** developer  
+- **I want to** have utility scripts and emulation layers for simulating button presses and switches  
+- **So that** I can develop and test the system without constant access to the physical hardware.  
+- **Priority:** Medium  
+- **Acceptance Criteria:**  
+  - Emulation modules are available for GPIO input.  
+  - Developer scripts can simulate hardware inputs and verify system responses.
+
+---
+
+## 6. Security, Safety & Robustness
+
+### US-014: Robust Error Handling and Safe Shutdown
+- **As a** user  
+- **I want to** know that hardware errors or app crashes trigger safe shutdown or fallback states  
+- **So that** the device isn't damaged and user data is protected.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - All hardware interfaces use robust try/except mechanisms.
+  - Logs capture any errors and provide clear diagnostic information.
+  - A safe fallback state is activated on hardware errors.
+
+### US-015: Secure Remote API Authentication
+- **As a** system administrator  
+- **I want to** authenticate users accessing the remote management API  
+- **So that** unauthorized users cannot alter device configurations or retrieve sensitive data.  
+- **Priority:** High  
+- **Acceptance Criteria:**  
+  - All remote API endpoints require secure authentication (e.g., JWT tokens).  
+  - API documentation details the authentication process.  
+  - Attempts to access endpoints without proper credentials are denied and logged.
+
+---
+
+# End of Backlog
+
+
+---
+
+Old version:
+
+## User Stories
+- **US1:** As a user, I want to select a number (0–255) using toggle switches, so I can choose which mini-app to run.
+- **US2:** As a user, I want to see the selected number displayed on a 7-segment display.
+- **US3:** As a user, I want to press a main "Go" button to launch the mini-app mapped to the selected number.
+- **US4:** As a user, I want to interact with the running mini-app using color-coded buttons (Red, Yellow, Green, Blue).
+- **US5:** As a user, I want visual feedback from LEDs (Red, Yellow, Green, Blue) during app operation.
+- **US6:** As a user, I want to terminate the current mini-app and launch a new one by changing the switch and pressing "Go" again.
+- **US7:** As an admin, I want to configure which mini-app is mapped to each switch value, using a JSON configuration file.
+- **US8:** As a developer, I want to add new mini-apps easily without modifying the core system.
+- **US9:** As a user, I want to see system and app feedback on the 7-inch screen.
+- **US10:** As an admin, I want to manage and configure the device remotely over WiFi.
+
+
+
+
+---
