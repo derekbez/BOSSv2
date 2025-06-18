@@ -11,18 +11,21 @@ git config --global user.name "derekbez"
 git config --global user.email "derek@be-easy.com"
 echo "*** Git configuration completed."
 
+echo "*** Cloning the B.O.S.S. repository..."
+git clone https://github.com/derekbez/BOSSv2.git boss
+cd boss
+echo "*** Repository cloned successfully."
+
 echo "*** Installing Python 3.11+ and essential build tools..."
 sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential
 echo "*** Python and build tools installation completed."
 
-echo "*** Creating and activating a Python virtual environment 'bossenv'..."
-python3 -m venv ~/bossenv
-echo "source ~/bossenv/bin/activate" >> ~/.bashrc
-echo "*** Virtual environment 'bossenv' will now activate automatically on new terminal sessions."
-source ~/bossenv/bin/activate
-echo "*** Virtual environment 'bossenv' activated for the current session."
-
-cd ~
+echo "*** Creating and activating a Python virtual environment 'venv' inside the project directory..."
+python3 -m venv venv
+source venv/bin/activate
+echo "source $(pwd)/venv/bin/activate" >> ~/.bashrc
+echo "*** Virtual environment 'venv' will now activate automatically on new terminal sessions."
+echo "*** Virtual environment 'venv' activated for the current session."
 
 echo "*** Ensuring pip is installed and updated..."
 python -m ensurepip
@@ -32,15 +35,9 @@ echo "*** Pip is installed and updated."
 echo "*** Installing B.O.S.S. Python dependencies..."
 pip install gpiozero pigpio rpi-tm1637 pytest Pillow
 echo "*** B.O.S.S. Python dependencies installed."
-
 echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
 sudo apt install -y pigpio
 echo "*** pigpio system daemon installed."
-
-echo "*** Cloning the B.O.S.S. repository..."
-git clone https://github.com/derekbez/BOSSv2.git boss
-cd boss
-echo "*** Repository cloned successfully."
 
 echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
 echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
