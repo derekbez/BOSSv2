@@ -1,106 +1,109 @@
 # Copilot Instructions for B.O.S.S. (Board Of Switches and Screen)
 
 ## Project Overview
-B.O.S.S. is a modular, Python-based application for the Raspberry Pi (OS 64-bit Lite, no GUI) that provides a physical interface to select and execute mini-apps. Users interact using eight toggle switches (combined via a 74HC151 multiplexer) to choose a value from 0–255, which is immediately displayed on a TM1637-based 7-segment display. Pressing the main "Go" button launches the mini-app mapped to that number. Mini-apps can interact with a 7-inch screen, four color-coded LEDs and buttons (Red, Yellow, Green, Blue), and optionally a speaker. Remote management over WiFi is also supported via a secure API.
+B.O.S.S. is a modular Python application for Raspberry Pi that provides a physical interface to select and run mini-apps through 8 toggle switches (0-255). The system displays the selected number on a 7-segment display and executes the corresponding app when the "Go" button is pressed. Apps can utilize a 7-inch screen, 4 color LEDs, 4 color buttons, and optionally a speaker for interaction.
 
 ## System Requirements and Installation
 - **Hardware:**
-  - Raspberry Pi running Raspberry Pi OS 64bit Lite (no GUI)
-  - 8 toggle switches (through a 74HC151 multiplexer)
-  - 4 color-coded buttons and 4 color-coded LEDs
+  - Raspberry Pi (64bit Lite OS, no GUI)
+  - 8 toggle switches (via 74HC151 multiplexer)
+  - 4 color buttons (Red, Yellow, Green, Blue)
+  - 4 color LEDs (Red, Yellow, Green, Blue)
   - Main "Go" button
   - TM1637 7-segment display
   - 7-inch screen
-  - Optional speaker for audio output
-- **Software Setup:**
+  - Speaker (optional, for some apps)
+- **Setup:**
   - Python 3.11+
-  - Virtual environment recommended
-  - Required libraries include: `gpiozero`, `pigpio`, `rpi-tm1637`, and others as specified in `requirements.txt`
-  - Configuration is managed in a JSON file (`BOSSsettings.json`)
-  - For development on non-RPi platforms, support for remote GPIO (via PiGPIOFactory) allows emulation/testing
+  - Use Python virtual environment
+  - Install dependencies: `gpiozero`, `pigpio`, `rpi-tm1637`, etc.
+  - All configuration is in `BOSSsettings.json`
 
-## High-Level Architecture & Components
-- **Language & Platform:** Python 3.11+, Raspberry Pi OS 64bit Lite  
-- **Design Patterns:**
-  - **Dependency Injection:** For flexible hardware abstraction and unit testing
-  - **Observer/Event Pattern:** Manages button and switch events
-  - **Plugin Pattern:** Dynamically load mini-apps from the `apps/` directory
-  - **Singleton:** Centralized configuration and logging
-  - **Factory Pattern:** Instantiates hardware interfaces uniformly
-  - **OOP/Class-based Design:** Encourages maintainability and extensibility
+## Key Components
+- **main.py:** Entry point, initializes hardware, loads config, manages app lifecycle, handles errors and logging.
+- **core/**: App management, event bus, config, logging, API for apps, remote management.
+- **hardware/**: Abstractions for switches, buttons, LEDs, display, screen, speaker.
+- **apps/**: Mini-apps, each as a Python module implementing the required API interface.
+- **assets/**: Images, sounds, and other data files.
+- **tests/**: Unit and integration tests for all core and hardware modules.
 
-### Key Components & Directory Structure
-- **Entry Point:** `main.py` – Initializes hardware, logging, configuration, and the app lifecycle.
-- **Core Modules (in `core/`):**
-  - `app_manager.py`: Loads/unloads mini-apps and manages their lifecycle with timeouts.
-  - `event_bus.py`: Publishes hardware events to system and mini-app subscribers.
-  - `config.py`: Loads and validates JSON configuration from `BOSSsettings.json`, mapping switch values to apps.
-  - `logger.py`: Implements a centralized logging system with rotation and error tracking.
-  - `api.py`: Provides a controlled API for mini-apps to interact with hardware (screen, LEDs, buttons, etc.).
-  - `remote.py`: Exposes a secure REST API for remote management and configuration via WiFi.
-- **Hardware Abstraction (in `hardware/`):**
-  - `switch_reader.py`: Reads the 8 toggle switches using a 74HC151 multiplexer.
-  - `button.py`: Handles debounced button inputs.
-  - `led.py`: Controls individual LEDs.
-  - `display.py`: Manages the TM1637 7-segment display.
-  - `screen.py`: Interfaces with the 7-inch screen using direct or framebuffer draws.
-  - `speaker.py`: Handles optional audio output.
-- **Mini-Apps (in `apps/`):** Each app is a Python module (e.g., `app_matrixrain.py`, `app_showtext.py`), following a standard interface such as `run(stop_event, api)`.  
-  - Each app should also include a minimal manifest (in JSON or as module-level metadata) providing its name, description, and hardware usage.
-- **Supporting Assets & Tests:**
-  - `assets/`: Contains images, sounds, or other resources used by apps.
-  - `tests/`: Unit and integration tests for hardware abstraction, core logic, and app interactions.
-- **Documentation:**
-  - Documentation and user stories are maintained in `docs/` (e.g., `docs/user-stories.md`).
+## Coding Guidelines
+- **App API:** Apps must not access hardware directly. All hardware and display access is via the provided API object.
+- **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout.
+- **Configuration:** All app mappings and parameters are in `BOSSsettings.json` (JSON format).
+- **Logging:** Use the central logger for all events and errors.
+- **Remote Management:** The system exposes a secure API for remote configuration and status.
+- **Error Handling:** Catch and log all hardware and app errors. Ensure safe shutdown.
+- **Extensibility:** Add new apps by dropping new `app_*.py` modules in `apps/` and updating the config. Add new hardware by extending the hardware abstraction layer.
+- **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`.
 
-## App Development Guidelines
-- **API Usage:**
-  - Mini-apps **MUST** access all hardware through the provided API in `api.py`. No direct GPIO or hardware calls are allowed.
-  - The API layer exposes functions for screen drawing, LED control, button input, and optionally network access.
-- **Lifecycle & Thread Management:**
-  - Each mini-app must run in its own thread and periodically check a provided `stop_event` for shutdown requests.
-  - The system will enforce a timeout on mini-apps and, if needed, force stop execution.
-- **Configuration & Mapping:**
-  - The mapping of toggle switch values to mini-apps and their parameters is maintained in the JSON file (`BOSSsettings.json`). Default configurations are auto-generated when missing.
-- **Code Quality:**
-  - Use type hints and thorough docstrings for every module and function.
-  - Follow the single-responsibility principle and maintain clear separation between hardware and business logic.
-  - Ensure that any new code is covered by unit tests and, where applicable, integration tests.
+## Best Practices
+- Use type hints and docstrings throughout.
+- Keep code modular and follow single-responsibility principle.
+- Validate all configuration and user input.
+- Use event-driven patterns for hardware events.
+- Document all new apps and hardware modules.
 
-## Testing Requirements
-- **Unit Testing:**
-  - Use `pytest` to cover all critical modules, particularly hardware abstraction layers and core functionalities.
-  - Leverage dependency injection to mock physical hardware for tests.
-- **Integration Testing:**
-  - Create tests for app lifecycle events: loading, executing, and forced shutdown.
-  - Validate configuration formats and error handling paths.
-- **CI Integration:**
-  - Automated tests should run via CI pipelines (e.g., GitHub Actions) with coverage reporting.
-- **Emulation & Simulation:**
-  - Provide emulation modules to simulate GPIO inputs/outputs when running in non-RPi environments.
+## Directory Structure
+```
+boss/
+  main.py
+  core/
+    app_manager.py
+    event_bus.py
+    config.py
+    logger.py
+    api.py
+    remote.py
+  hardware/
+    switch_reader.py
+    button.py
+    led.py
+    display.py
+    screen.py
+    speaker.py
+  apps/
+    app_matrixrain.py
+    app_showtext.py
+    ...
+  assets/
+    images/
+    sounds/
+    ...
+  tests/
+    test_switch_reader.py
+    test_app_manager.py
+    ...
+  BOSSsettings.json
+  requirements.txt
+  README.md
+```
 
-## Best Practices & Git Workflow
-- **Coding Standards & Documentation:**
-  - Adhere to GB English conventions.
-  - Document every module, function, and app with clear docstrings.
-  - Maintain an up-to-date README with architecture diagrams, setup instructions, and contribution guidelines.
-- **Version Control:**
-  - The `main` branch must always be deployable.
-  - Develop features in well-scoped branches with atomic PRs.
-  - Use squash and rebase practices to maintain a clean commit history.
-  - Follow semantic versioning for releases.
-- **Security & Error Handling:**
-  - All hardware interactions must be wrapped in try/except blocks with appropriate fallbacks.
-  - The remote management API must implement secure authentication (e.g., JWT tokens) on all end points.
-  - Validate all configuration and user inputs to prevent system crashes.
+## Git Workflow
+- Main branch must always be deployable.
+- Use feature branches for new development.
+- Keep PRs focused and atomic; squash and rebase as needed.
+- Ignore generated files and sensitive config.
+- Tag releases with semantic versioning.
+
+## Testing Framework
+- Use `pytest` for all tests.
+- Mock hardware interfaces in tests.
+- Run tests with `pytest` and coverage.
+- Place all tests in `tests/`.
 
 ## Acceptance Criteria
-- **Robustness:** Meets all functional requirements and gracefully handles hardware errors.
-- **Modularity:** New apps and hardware can be added without core system modifications.
-- **Testing:** Complete coverage of core logic and hardware abstraction via unit and integration tests.
-- **Documentation:** Comprehensive documentation is provided for setup, development, and usage.
-- **Remote & OTA Support:** Remote management APIs are secure, and the system supports future OTA app sync capabilities.
+- Meets all functional requirements
+- Robust to hardware errors
+- Clean shutdown support
+- No direct hardware access in apps
+- Modular and extensible design
+- Complete test coverage
+- Up-to-date documentation
+- Remote management support
+- WiFi connectivity
+- Secure API endpoints
 
 ---
 
-*This document guides GitHub Copilot and human developers in understanding the B.O.S.S. project's scope, architecture, and best practices. Please update this file as needed to reflect evolving requirements and implementation details.*
+*This file guides GitHub Copilot in understanding the BOSS project's architecture, patterns, and requirements. Update as needed.*
