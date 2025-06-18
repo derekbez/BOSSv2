@@ -2,3 +2,4 @@ gpiozero
 pigpio
 rpi-tm1637
 pytest
+Pillow

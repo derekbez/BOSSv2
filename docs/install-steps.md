@@ -1,4 +1,3 @@
-
 echo "*** Starting system update..."
 sudo apt update && sudo apt upgrade -y
 echo "*** System update completed."
@@ -12,74 +11,48 @@ git config --global user.name "derekbez"
 git config --global user.email "derek@be-easy.com"
 echo "*** Git configuration completed."
 
-echo "*** Creating and activating a Python virtual environment 'repo'..."
-python3 -m venv ~/repo
-echo "source ~/repo/bin/activate" >> ~/.bashrc
-echo "*** Virtual environment 'repo' will now activate automatically on new terminal sessions."
-source ~/repo/bin/activate
-cd repo
-echo "*** Virtual environment 'repo' activated for the current session."
+echo "*** Installing Python 3.11+ and essential build tools..."
+sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential
+echo "*** Python and build tools installation completed."
 
-echo "*** Installing Python and essential packages..."
-sudo apt install -y python3 python3-pip
-sudo apt install -y python3-dev build-essential
-sudo apt install -y python3-rpi-lgpio
-sudo apt install -y python3-debugpy
-echo "*** Python and essential packages installation completed."
+echo "*** Creating and activating a Python virtual environment 'bossenv'..."
+python3 -m venv ~/bossenv
+echo "source ~/bossenv/bin/activate" >> ~/.bashrc
+echo "*** Virtual environment 'bossenv' will now activate automatically on new terminal sessions."
+source ~/bossenv/bin/activate
+echo "*** Virtual environment 'bossenv' activated for the current session."
+
+cd ~
 
 echo "*** Ensuring pip is installed and updated..."
 python -m ensurepip
 python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
-echo "*** Installing GPIO and NFC-related packages..."
-pip install RPi.GPIO
-pip install nfcpy
-sudo apt-get install -y libusb-1.0-0-dev libnfc-bin libnfc-dev libpcsclite-dev
-echo "*** NFC-related packages installation completed."
+echo "*** Installing B.O.S.S. Python dependencies..."
+pip install gpiozero pigpio rpi-tm1637 pytest Pillow
+echo "*** B.O.S.S. Python dependencies installed."
 
-echo "*** Installing MPD and related tools..."
-sudo apt-get install -y mpd
-pip install python-mpd2
-echo "*** MPD and related tools installation completed."
+echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
+sudo apt install -y pigpio
+echo "*** pigpio system daemon installed."
 
-echo "*** Removing unnecessary packages..."
-sudo apt autoremove -y
-echo "*** Clean-up completed."
-
-echo "*** Cloning the bookplayer repository..."
-git clone https://github.com/derekbez/bookplayer.git bookplayer
+echo "*** Cloning the B.O.S.S. repository..."
+git clone https://github.com/derekbez/BOSSv2.git boss
+cd boss
 echo "*** Repository cloned successfully."
 
-echo "*** Setting up books folder and configuring fstab..."
-sudo mkdir -p ~/books
-sudo cp /etc/fstab /etc/fstab.bak
-echo "*** Backup of /etc/fstab created."
-
-echo "*** Adding mount point to fstab..."
-echo "*** LABEL=BOOKS /home/rpi/books auto defaults,nofail 0 0" | sudo tee -a /etc/fstab
-echo "*** Updated fstab file:"
-cat /etc/fstab
-echo "*** Mount point configuration completed."
-
-echo "*** Configuring GPIO settings for power button and indicator light..."
+echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
 echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
 echo "gpio=14=op,pd,dh" | sudo tee -a /boot/firmware/config.txt
 echo "*** Updated /boot/firmware/config.txt:"
 cat /boot/firmware/config.txt
 echo "*** GPIO configuration completed."
 
-echo "*** Setting up crontab for application startup..."
-sudo crontab -l > crontab_backup.txt
-(sudo crontab -l; echo "@reboot /home/rpi/repo/bookplayer/online_light.py &") | sudo crontab -
-sudo crontab -l
-chmod +x /home/rpi/repo/bookplayer/online_light.py
-echo "*** Crontab setup completed."
+# To start the pigpio daemon (required for gpiozero with pigpio backend):
+sudo systemctl start pigpiod
+sudo systemctl enable pigpiod
 
-echo "*** Final step: Configure MPD settings."
-echo "*** Now edit : sudo nano /etc/mpd.conf"
+echo "*** B.O.S.S. installation complete. Activate your virtual environment and run the app with:"
+echo "python -m boss.main"
 
-sudo systemctl enable mpd
-sudo systemctl start mpd
-sudo systemctl status mpd
-sudo apt-get install -y mpc
