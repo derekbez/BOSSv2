@@ -26,6 +26,53 @@ If the user presses the main "go" button again, the mini-app terminates and BOSS
   - GPIOZero library for hardware abstraction.
   - PiGPIOFactory for remote GPIO support.
 
+## GPIO Pin Mapping & Wiring
+
+The following table summarizes the GPIO pin assignments for B.O.S.S. components:
+
+| Component         | GPIO Pin | Physical Pin | Notes/Colour      |
+|------------------|----------|--------------|-------------------|
+| btnRed           | 26       | 37           | orange + grey gnd |
+| btnYellow        | 19       | 35           | yellow            |
+| btnGreen         | 13       | 33           | green             |
+| btnBlue          | 6        | 31           | blue              |
+| ledRed           | 21       | 40           |                   |
+| ledYellow        | 20       | 38           |                   |
+| ledGreen         | 16       | 36           |                   |
+| ledBlue          | 12       | 32           |                   |
+| mainBtn          | 17       | 11           | + gnd             |
+| mux1 (C/9)       | 23       | 16           | orange            |
+| mux2 (B/10)      | 24       | 18           | yellow            |
+| mux3 (A/11)      | 25       | 22           | green             |
+| muxIn            | 8        | 24           | blue              |
+| TM1637 CLK       | 5        | 29           |                   |
+| TM1637 DIO       | 4        | 7            |                   |
+
+- For a full pinout, see: [RPi-GPIO-Pin-Diagram.md](./RPi-GPIO-Pin-Diagram.md) or https://pinout.xyz/
+- All grounds (GND) must be connected as per the diagram.
+- Wire colours in comments are for reference to the physical build.
+
+### Example GPIO Setup in Code
+```python
+btnRedpin = 26  # orange   + grey grd
+btnYellowpin = 19  # yellow
+btnGreenpin = 13  # green
+btnBluepin = 6   # blue
+
+ledRedpin = 21
+ledYellowpin = 20
+ledGreenpin = 16
+ledBluepin = 12
+
+tm = tm1637.TM1637(clk=5, dio=4)
+
+mainBtnpin = 17 # + gnd
+mux1pin = 23  # C / 9    orange
+mux2pin = 24  # B / 10   yellow 
+mux3pin = 25  # A / 11    green
+muxInpin = 8  #           blue
+```
+
 ---
 
 ## Software Architecture
