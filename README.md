@@ -31,9 +31,10 @@ B.O.S.S. is a modular, hardware-driven Python application designed for Raspberry
 
 3. Configure switch-to-app mappings in `BOSSsettings.json`
 
-4. Run the app:
+4. Run the app (from the project root):
    ```bash
-   python main.py
+   source boss-venv/bin/activate
+   python3 -m boss.main
    ```
 
 ## 🧩 Mini-App Examples

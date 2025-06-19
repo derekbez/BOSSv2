@@ -51,5 +51,6 @@ sudo systemctl enable pigpiod
 
 echo "*** B.O.S.S. installation complete. Activate your virtual environment and run the app with:"
 echo "source ~/boss/boss-venv/bin/activate"
-echo "python -m boss.main"
+echo "cd ~/boss"
+echo "python3 -m boss.main"
 
