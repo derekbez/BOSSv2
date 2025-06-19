@@ -210,6 +210,35 @@ Tests verify that the display updates only when the switch value changes.
   - Shutdown events are logged.  
   **Status: Complete.** System startup and shutdown logic added to `main.py`, using the central logger. Cleanup is performed on exit and all actions are logged.
 
+
+
+### US-018 document GPIO and apply 
+- as a developer
+- I want to know how to connect the various components to the Rpi GPIO pins
+- so that the components are connected safely and work as expected
+- priority high
+- acceptance criteria:
+	- GPIO connections are documented appropriately
+	- GPIO is configured in the application for all components
+- additional info (data in comments (after "#") indicates the wire colour or other useful fact about the hardware component):
+btnRedpin = 26  # orange   + grey grd
+btnYellowpin = 19  # yellow
+btnGreenpin = 13  # green
+btnBluepin = 6   # blue
+
+ledRedpin = 21
+ledYellowpin = 20
+ledGreenpin = 16
+ledBluepin = 12
+
+tm = tm1637.TM1637(clk=5, dio=4)
+
+mainBtnpin = 17 # + gnd
+mux1pin = 23  # C / 9    orange
+mux2pin = 24  # B / 10   yellow 
+mux3pin = 25  # A / 11    green
+muxInpin = 8  #           blue
+
 ---
 
 # End of Backlog
