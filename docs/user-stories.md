@@ -223,6 +223,15 @@ Tests verify that the display updates only when the switch value changes.
 - additional info: See docs.md for table and wiring notes. See RPi-GPIO-Pin-Diagram.md for full pinout.
 - **Status: Complete.**
 
+
+### US-019 mini-app for displaying random data
+- as a user
+- I want to select a number for my choice of mini-app.  When I press the "go" button, I want see a random joke from a long list of jokes that are stored in the system.
+- Acceptance Criteria:
+	- when I toggle the switches, I see the corresponging number on the 7-segment display
+	- when I press the "go" button, I see the the joke displayed on the 7-inch screen
+
+
 ---
 
 # End of Backlog

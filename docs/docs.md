@@ -217,3 +217,39 @@ boss/
 
 ## Summary
 B.O.S.S. is a flexible, extensible, and hardware-focused Python application for the Raspberry Pi, enabling physical selection and execution of a wide variety of mini-apps. It is well-documented, modular, and designed for both development and deployment on real hardware.
+
+---
+## Issues
+When imaging an SD Card from Raspberry Pi Imager with RPI OS 64bit Lite, the imager seems to configure the wifi with wpa_supplicant, but the latest OS is using Network Manager.   Wifi does not get set up when booting the rpi for the first time.
+
+Unblocked Wi-Fi via rfkill:
+
+bash
+`sudo rfkill unblock wifi`
+
+Enabled Wi-Fi radio with nmcli:
+
+bash
+`nmcli radio wifi on`
+
+(Optional) Restarted NetworkManager to refresh device status:
+
+bash
+`sudo systemctl restart NetworkManager`
+
+Confirmed the interface was available:
+
+bash
+`nmcli device status`
+
+You should see wlan0 listed as “disconnected” (which is good—it means it’s ready).
+
+Connected to Wi-Fi using nmtui or nmcli:
+
+`sudo nmtui` for a text-based UI
+
+Or:
+
+bash
+`nmcli device wifi list`
+`nmcli device wifi connect "YourSSID" password "YourPassword"`
