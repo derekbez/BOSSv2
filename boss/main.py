@@ -52,17 +52,53 @@ def initialize_hardware():
     global display, switch_reader
     logger.info("Initializing hardware interfaces...")
     if REAL_HARDWARE:
-        btn_red = PiButton(BTN_RED_PIN)
-        btn_yellow = PiButton(BTN_YELLOW_PIN)
-        btn_green = PiButton(BTN_GREEN_PIN)
-        btn_blue = PiButton(BTN_BLUE_PIN)
-        main_btn = PiButton(MAIN_BTN_PIN)
-        led_red = PiLED(LED_RED_PIN)
-        led_yellow = PiLED(LED_YELLOW_PIN)
-        led_green = PiLED(LED_GREEN_PIN)
-        led_blue = PiLED(LED_BLUE_PIN)
-        display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
-        switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
+        try:
+            btn_red = PiButton(BTN_RED_PIN)
+            btn_yellow = PiButton(BTN_YELLOW_PIN)
+            btn_green = PiButton(BTN_GREEN_PIN)
+            btn_blue = PiButton(BTN_BLUE_PIN)
+            main_btn = PiButton(MAIN_BTN_PIN)
+            led_red = PiLED(LED_RED_PIN)
+            led_yellow = PiLED(LED_YELLOW_PIN)
+            led_green = PiLED(LED_GREEN_PIN)
+            led_blue = PiLED(LED_BLUE_PIN)
+        except Exception as e:
+            logger.warning(f"Button/LED hardware init failed: {e}. Falling back to mocks.")
+            from boss.hardware.button import MockButton as PiButton
+            from boss.hardware.led import MockLED as PiLED
+            btn_red = PiButton("red")
+            btn_yellow = PiButton("yellow")
+            btn_green = PiButton("green")
+            btn_blue = PiButton("blue")
+            main_btn = KeyboardGoButton()
+            led_red = PiLED("red")
+            led_yellow = PiLED("yellow")
+            led_green = PiLED("green")
+            led_blue = PiLED("blue")
+        # 7-segment display check
+        try:
+            display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
+            display.show_number(88)  # Test write
+        except Exception as e:
+            logger.warning(f"7-segment display not detected: {e}. Using mock display.")
+            display = MockSevenSegmentDisplay()
+        # Multiplexer check
+        try:
+            switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
+            test_val = switch_reader.read_value()
+            if test_val == 0:
+                logger.warning("Multiplexer read returned 0. MUX may not be connected. Using keyboard input.")
+                switch_reader = KeyboardSwitchReader(1)
+        except Exception as e:
+            logger.warning(f"Multiplexer not detected: {e}. Using keyboard input.")
+            switch_reader = KeyboardSwitchReader(1)
+        # Go button check
+        try:
+            if main_btn.is_pressed() not in [True, False]:
+                raise Exception("Go button read did not return a boolean.")
+        except Exception as e:
+            logger.warning(f"Go button not detected: {e}. Using keyboard input.")
+            main_btn = KeyboardGoButton()
     else:
         btn_red = PiButton("red")
         btn_yellow = PiButton("yellow")
@@ -99,6 +135,7 @@ def main():
         # Use mocks for now; replace with real hardware as needed
         switch = switch_reader if switch_reader else MockSwitchReader(1)
         seg_display = display if display else MockSevenSegmentDisplay()
+        print(f"[DEBUG] {switch}")
         app_manager = AppManager(switch, seg_display)
         app_runner = AppRunner()
         last_value = None

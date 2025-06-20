@@ -130,3 +130,24 @@ Traceback (most recent call last):
 TypeError: 'bool' object is not callable
 [2025-06-20 13:19:40,262] INFO BOSS: Performing clean shutdown and resource cleanup...
 [2025-06-20 13:19:40,297] INFO BOSS: Shutdown complete.
+[2025-06-20 14:11:58,565] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 14:11:58,572] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 14:11:58,640] INFO BOSS: Hardware initialized.
+[2025-06-20 14:11:58,648] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 14:11:58,688] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 116, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 14:11:58,694] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 14:11:58,814] INFO BOSS: Shutdown complete.
+[2025-06-20 14:23:25,797] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 14:23:25,803] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 14:23:25,804] WARNING BOSS: Button/LED hardware init failed: cannot access local variable 'PiButton' where it is not associated with a value. Falling back to mocks.
+[2025-06-20 14:23:25,885] WARNING BOSS: Multiplexer read returned 0. MUX may not be connected. Using keyboard input.
+[2025-06-20 14:23:31,067] INFO BOSS: Hardware initialized.
+[2025-06-20 14:23:31,076] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 14:23:50,150] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 14:23:50,152] INFO BOSS: Shutdown complete.
+[2025-06-20 14:23:50,153] INFO BOSS: System exited cleanly.
