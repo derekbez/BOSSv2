@@ -5,10 +5,23 @@ Initializes core systems, logging, hardware, and handles clean shutdown.
 
 import sys
 import signal
+import json
 from boss.core.logger import get_logger
+from boss.core.app_manager import AppManager
+from boss.core.app_runner import AppRunner
 from boss.hardware.pins import *
+from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
+from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
+import time
+from gpiozero import Device
 
 # Try to import real hardware libraries, fallback to mocks if unavailable
+try:
+    from gpiozero.pins.lgpio import LGPIOFactory
+    Device.pin_factory = LGPIOFactory()
+except ImportError:
+    pass  # Fallback to default pin factory if lgpio is not available
+
 try:
     from gpiozero import Button as PiButton, LED as PiLED
     import tm1637
@@ -16,8 +29,6 @@ try:
 except ImportError:
     from boss.hardware.button import MockButton as PiButton
     from boss.hardware.led import MockLED as PiLED
-    from boss.hardware.display import MockSevenSegmentDisplay as PiDisplay
-    from boss.hardware.switch_reader import MockSwitchReader as PiSwitchReader
     REAL_HARDWARE = False
 
 logger = get_logger("BOSS")
@@ -50,21 +61,20 @@ def initialize_hardware():
         led_yellow = PiLED(LED_YELLOW_PIN)
         led_green = PiLED(LED_GREEN_PIN)
         led_blue = PiLED(LED_BLUE_PIN)
-        display = tm1637.TM1637(clk=TM_CLK_PIN, dio=TM_DIO_PIN)
-        # You would implement PiSwitchReader for real hardware
-        switch_reader = None  # TODO: Implement PiSwitchReader
+        display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
+        switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
     else:
         btn_red = PiButton("red")
         btn_yellow = PiButton("yellow")
         btn_green = PiButton("green")
         btn_blue = PiButton("blue")
-        main_btn = PiButton("main")
+        main_btn = KeyboardGoButton()
         led_red = PiLED("red")
         led_yellow = PiLED("yellow")
         led_green = PiLED("green")
         led_blue = PiLED("blue")
-        display = PiDisplay()
-        switch_reader = PiSwitchReader()
+        display = MockSevenSegmentDisplay()
+        switch_reader = KeyboardSwitchReader(1)
     logger.info("Hardware initialized.")
 
 def cleanup():
@@ -82,10 +92,45 @@ def main():
     logger.info("B.O.S.S. system starting up.")
     try:
         initialize_hardware()
-        # ...main event loop or app manager...
+        # Load app mappings
+        with open("boss/config/BOSSsettings.json") as f:
+            config = json.load(f)
+        app_mappings = config.get("app_mappings", {})
+        # Use mocks for now; replace with real hardware as needed
+        switch = switch_reader if switch_reader else MockSwitchReader(1)
+        seg_display = display if display else MockSevenSegmentDisplay()
+        app_manager = AppManager(switch, seg_display)
+        app_runner = AppRunner()
+        last_value = None
+        last_btn_state = False
         logger.info("System running. Press Ctrl+C to exit.")
+        print("[DEBUG] Entering main event loop...")
         signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
-        signal.pause()
+        while True:
+            print("[DEBUG] Polling switch and button...")
+            value = app_manager.poll_and_update_display()
+            print(f"[DEBUG] Switch value: {value}")
+            print("[DEBUG] About to check Go button state...")
+            try:
+                btn_state = main_btn.is_pressed() if main_btn else False
+                print(f"[DEBUG] Go button state: {btn_state}")
+            except Exception as e:
+                print(f"[DEBUG] Exception in is_pressed(): {e}")
+                raise
+            # Debounce: detect rising edge
+            if btn_state and not last_btn_state:
+                app_name = app_mappings.get(str(value))
+                print(f"[DEBUG] Launching app: {app_name} for value {value}")
+                if app_name:
+                    class MockScreen:
+                        def clear(self):
+                            print("[MOCK SCREEN] clear")
+                        def display_text(self, text, align='center'):
+                            print(f"[MOCK SCREEN] {text}")
+                    api = type('API', (), {'screen': MockScreen()})()
+                    app_runner.run_app(app_name, api=api)
+            last_btn_state = btn_state
+            time.sleep(0.1)
     except SystemExit:
         cleanup()
         logger.info("System exited cleanly.")

@@ -226,11 +226,22 @@ Tests verify that the display updates only when the switch value changes.
 
 ### US-019 mini-app for displaying random data
 - as a user
-- I want to select a number for my choice of mini-app.  When I press the "go" button, I want see a random joke from a long list of jokes that are stored in the system.
-- Acceptance Criteria:
-	- when I toggle the switches, I see the corresponging number on the 7-segment display
-	- when I press the "go" button, I see the the joke displayed on the 7-inch screen
+- I want to select a number for my choice of mini-app. When I press the "go" button, I want see a random joke from a long list of jokes that are stored in the system.
+- **Acceptance Criteria:**
+    - when I toggle the switches, I see the corresponding number on the 7-segment display
+    - when I press the "go" button, I see the joke displayed on the 7-inch screen
 
+#### Implementation Q&A (2025-06-20)
+1. **Switch Mapping:**
+   - The app should be mapped to a number in `config/BOSSsettings.json`. For this app, use number `001`.
+2. **Joke Storage:**
+   - The list of jokes will be a JSON file, stored in the relevant app's folder. There should be an `assets` folder under the app's sub-folder. A sample JSON file with temporary jokes will be created for initial testing.
+3. **Display:**
+   - There will be a requirement to format the text with colour, size, and position in the future. Initially, if no other formats are applied, the text should be centred on the screen and remain until another app is launched.
+4. **App Structure:**
+   - All mini-apps should follow the same structure that allows them to be run and terminated by BOSS. No additional user interaction at this time, but future enhancements may allow user-triggered results.
+5. **Testing:**
+   - Tests should detect hardware and use mock or real hardware accordingly.
 
 ---
 

@@ -106,4 +106,13 @@ boss/
 
 ---
 
+Always run the BOSS app from the project root (~/boss) for correct module resolution.
+Example:
+```
+cd ~/boss
+python3 -m boss.main
+```
+
+Do NOT run from inside the boss/boss subfolder.
+
 *This file guides GitHub Copilot in understanding the BOSS project's architecture, patterns, and requirements. Update as needed.*

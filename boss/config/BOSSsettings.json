@@ -1,4 +1,6 @@
 {
-  "app_mappings": {},
+  "app_mappings": {
+    "1": "app_jokes"
+  },
   "parameters": {}
 }

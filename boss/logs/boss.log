@@ -10,3 +10,123 @@ Traceback (most recent call last):
 AttributeError: module 'signal' has no attribute 'pause'
 [2025-06-18 15:15:26,281] INFO BOSS: Performing clean shutdown and resource cleanup...
 [2025-06-18 15:15:26,281] INFO BOSS: Shutdown complete.
+[2025-06-20 10:43:52,899] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 10:43:52,901] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 10:43:53,068] INFO BOSS: Hardware initialized.
+[2025-06-20 10:43:53,076] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 10:43:53,097] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 104, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 10:43:53,101] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 10:43:53,152] INFO BOSS: Shutdown complete.
+[2025-06-20 10:56:56,345] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 10:56:56,347] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 10:56:56,460] INFO BOSS: Hardware initialized.
+[2025-06-20 10:56:56,467] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 10:56:56,490] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 111, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 10:56:56,494] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 10:56:56,542] INFO BOSS: Shutdown complete.
+[2025-06-20 11:13:52,309] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 11:13:52,311] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 11:13:52,366] INFO BOSS: Hardware initialized.
+[2025-06-20 11:13:52,370] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 11:13:52,422] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 111, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 11:13:52,431] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 11:13:52,550] INFO BOSS: Shutdown complete.
+[2025-06-20 11:16:21,455] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 11:16:21,461] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 11:16:21,518] INFO BOSS: Hardware initialized.
+[2025-06-20 11:16:21,525] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 11:16:21,548] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 111, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 11:16:21,554] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 11:16:21,602] INFO BOSS: Shutdown complete.
+[2025-06-20 11:25:50,804] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 11:25:50,805] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 11:25:50,858] INFO BOSS: Hardware initialized.
+[2025-06-20 11:25:50,861] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 11:25:50,895] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 110, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 11:25:50,900] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 11:25:50,939] INFO BOSS: Shutdown complete.
+[2025-06-20 11:28:55,096] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 11:28:55,097] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 11:28:55,151] INFO BOSS: Hardware initialized.
+[2025-06-20 11:28:55,154] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 11:28:55,190] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 113, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 11:28:55,196] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 11:28:55,233] INFO BOSS: Shutdown complete.
+[2025-06-20 12:53:36,972] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 12:53:36,972] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 12:53:37,000] INFO BOSS: Hardware initialized.
+[2025-06-20 12:53:37,002] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 12:53:37,034] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 113, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 12:53:37,041] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 12:53:37,196] INFO BOSS: Shutdown complete.
+[2025-06-20 12:56:07,020] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 12:56:07,021] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 12:56:07,076] INFO BOSS: Hardware initialized.
+[2025-06-20 12:56:07,078] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 12:56:07,104] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 113, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 12:56:07,107] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 12:56:07,154] INFO BOSS: Shutdown complete.
+[2025-06-20 13:05:40,969] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 13:05:40,975] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 13:05:41,030] INFO BOSS: Hardware initialized.
+[2025-06-20 13:05:41,039] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 13:05:41,076] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 115, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 13:05:41,082] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 13:05:41,113] INFO BOSS: Shutdown complete.
+[2025-06-20 13:19:40,161] INFO BOSS: B.O.S.S. system starting up.
+[2025-06-20 13:19:40,162] INFO BOSS: Initializing hardware interfaces...
+[2025-06-20 13:19:40,217] INFO BOSS: Hardware initialized.
+[2025-06-20 13:19:40,220] INFO BOSS: System running. Press Ctrl+C to exit.
+[2025-06-20 13:19:40,256] ERROR BOSS: Fatal error: 'bool' object is not callable
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 115, in main
+    btn_state = main_btn.is_pressed() if main_btn else False
+                ^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'bool' object is not callable
+[2025-06-20 13:19:40,262] INFO BOSS: Performing clean shutdown and resource cleanup...
+[2025-06-20 13:19:40,297] INFO BOSS: Shutdown complete.

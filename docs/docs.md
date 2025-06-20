@@ -210,6 +210,44 @@ boss/
 
 ---
 
+## Mini-App Structure & Assets
+
+Each mini-app should be placed in its own subdirectory under `apps/`, following this structure:
+
+```
+apps/
+  app_jokes/
+    __init__.py
+    main.py
+    manifest.json
+    assets/
+      jokes.json
+```
+
+- **main.py**: Entry point for the mini-app, must follow the standard interface (e.g., `run(stop_event, api)`).
+- **manifest.json**: Metadata about the app (name, description, etc.).
+- **assets/**: Folder for any data files (e.g., `jokes.json`).
+- **jokes.json**: JSON file containing a list of jokes for the random joke app.
+
+### Example `jokes.json` format
+```json
+{
+  "jokes": [
+    "Why did the scarecrow win an award? Because he was outstanding in his field!",
+    "Why don't scientists trust atoms? Because they make up everything!",
+    "I told my computer I needed a break, and it said 'No problem, I'll go to sleep.'"
+  ]
+}
+```
+
+- The app should load this file at runtime and select a random joke to display.
+- Future formatting (colour, size, position) can be added to the JSON or handled in code.
+
+### Hardware/Mock Testing
+- All mini-apps and tests should detect hardware and use mock or real hardware accordingly.
+
+---
+
 ## References
 - Extensive links to hardware datasheets, Python docs, GPIOZero, pygame, threading, and more in `BOSS-devnotes.md` (TODO).
 
