@@ -76,17 +76,19 @@ muxInpin = 8  #           blue
 ---
 
 ## Software Architecture
-- **Entry Point:** `start.py`
+- **Entry Point:** `main.py`
   - Initializes GPIO, buttons, and display.
-  - Loads or creates a configuration file (`BOSSsettings.conf`) mapping switch positions to apps.
+  - Loads or creates a configuration file (`BOSSsettings.json`) mapping switch positions to apps.
   - Waits for user input (main button press) to select and launch an app.
   - Dynamically loads and runs apps in a separate thread.
   - Handles clean-up and display updates on exit.
+  - **At startup, the system prints/logs all pin assignments and a hardware startup summary, indicating which devices are real or mocked.**
+  - **Each hardware device (button, LED, display, etc.) falls back to a mock if not detected, allowing seamless development and testing without hardware.**
 
 - **Configuration:**
-  - `BOSSsettings.conf` stores mappings: binary switch value → decimal → app name → parameters.
+  - `BOSSsettings.json` stores mappings: binary switch value → decimal → app name → parameters.
   - If missing or empty, it is auto-generated with default values.
-  - Uses `configparser` for reading/writing.
+  - Uses JSON for reading/writing.
 
 - **App Management:**
   - Apps are Python modules named `app_<name>.py` (e.g., `app_matrixrain.py`).

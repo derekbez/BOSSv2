@@ -20,7 +20,7 @@ B.O.S.S. is a modular Python application for Raspberry Pi that provides a physic
   - All configuration is in `BOSSsettings.json`
 
 ## Key Components
-- **main.py:** Entry point, initializes hardware, loads config, manages app lifecycle, handles errors and logging.
+- **main.py:** Entry point, initializes hardware, loads config, manages app lifecycle, handles errors and logging. At startup, prints/logs pin assignments and a hardware startup summary, indicating which devices are real or mocked. Each hardware device (button, LED, display, etc.) falls back to a mock if not detected, allowing seamless development and testing without hardware.
 - **core/**: App management, event bus, config, logging, API for apps, remote management.
 - **hardware/**: Abstractions for switches, buttons, LEDs, display, screen, speaker.
 - **apps/**: Mini-apps, each as a Python module implementing the required API interface.
@@ -38,6 +38,8 @@ B.O.S.S. is a modular Python application for Raspberry Pi that provides a physic
 - **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`.
 
 ## Best Practices
+- The system prints/logs all pin assignments and a hardware startup summary at launch, indicating which devices are real or mocked.
+- Each hardware device (button, LED, display, etc.) falls back to a mock if not detected, allowing seamless development and testing without hardware.
 - Use type hints and docstrings throughout.
 - Keep code modular and follow single-responsibility principle.
 - Validate all configuration and user input.

@@ -58,3 +58,10 @@ echo "source ~/boss/boss-venv/bin/activate"
 echo "cd ~/boss"
 echo "python3 -m boss.main"
 
+# Before running the app, ensure the pigpio daemon is running:
+sudo systemctl start pigpiod
+
+# Always run the app from the project root:
+cd ~/boss
+python3 -m boss.main
+

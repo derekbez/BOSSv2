@@ -17,6 +17,12 @@ This is the main application package for B.O.S.S., a modular, hardware-interfaci
 1. Install Python 3.11+ and create a virtual environment.
 2. Install dependencies from `requirements.txt`.
 3. Edit `config/BOSSsettings.json` to map switch values to apps.
-4. Run `python -m boss.main` to start the system.
+4. Ensure the pigpio daemon is running for GPIO hardware:
+   sudo systemctl start pigpiod
+5. Run `python -m boss.main` from the project root to start the system.
+
+**Note:**
+- Always run the app from the project root (not from inside the boss/boss subfolder).
+- The system will automatically detect hardware and use keyboard/mocks for development if hardware is not present.
 
 See `docs/` for more details.
