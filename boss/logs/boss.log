@@ -373,3 +373,7 @@ TypeError: 'bool' object is not callable
 [2025-06-25 17:18:28,121] INFO AppRunner: Started app: app_jokes
 [2025-06-25 19:49:55,251] INFO AppRunner: Started app: app_jokes
 [2025-06-25 19:49:55,269] ERROR AppRunner: Error running app app_jokes: PygameScreen.display_text() got an unexpected keyword argument 'align'
+[2025-06-25 21:28:45,913] INFO AppRunner: Started app: app_jokes
+[2025-06-25 21:28:57,993] INFO AppRunner: Stopping app: app_jokes
+[2025-06-25 21:28:57,996] INFO AppRunner: App app_jokes stopped cleanly.
+[2025-06-25 21:28:58,001] INFO AppRunner: Started app: app_jokes

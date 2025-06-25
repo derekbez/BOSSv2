@@ -1,6 +1,6 @@
 """
-Startup mini-app for B.O.S.S.
-Clears the screen, blinks all four LEDs, and displays 'ready' on the screen.
+[DEPRECATED] Use the folder-based mini-app in app_startup/ with manifest.json and main.py.
+This file remains for backward compatibility only.
 """
 def run(api, leds=None, screen=None, **kwargs):
     # Accepts api object with .screen, and optionally a dict of leds

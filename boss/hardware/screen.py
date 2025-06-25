@@ -31,9 +31,13 @@ class MockScreen:
         self.last_output = None
         print("[MOCK SCREEN] CLEARED")
     def display_text(self, text: str, **kwargs):
-        # Display arbitrary text on the mock screen, ignore extra kwargs
+        """
+        Display arbitrary text on the mock screen, print all advanced options for dev/test.
+        """
         self.last_output = text
         print(f"[MOCK SCREEN] DISPLAY: {text}")
+        if kwargs:
+            print(f"[MOCK SCREEN] OPTIONS: {kwargs}")
 
 class PiScreen:
     """
@@ -57,8 +61,12 @@ class PiScreen:
         print("[PI SCREEN] CLEARED")
 
     def display_text(self, text: str, **kwargs):
-        # Display arbitrary text on the real hardware screen, ignore extra kwargs
+        """
+        Display arbitrary text on the real hardware screen, print all advanced options for now.
+        """
         print(f"[PI SCREEN] DISPLAY: {text}")
+        if kwargs:
+            print(f"[PI SCREEN] OPTIONS: {kwargs}")
 
 class PygameScreen:
     """
@@ -98,23 +106,107 @@ class PygameScreen:
             pygame.display.flip()
 
     def display_text(self, text: str, color=(255,255,255), center=True, size=48, **kwargs):
-        # Accept 'align' kwarg for compatibility with mini-apps
+        """
+        Display text with advanced options:
+        - color: (r,g,b) tuple
+        - center: bool (centered if True)
+        - size: font size
+        - x, y: position (overrides center)
+        - font_name: font family
+        - bg_color: background color
+        - bold, italic, underline: text effects
+        - shadow: (offset, color)
+        - align: 'center', 'left', 'right'
+        - multiline: bool (split on \n)
+        - wrap: int (max width in px)
+        - opacity: 0-255
+        - outline: (color, thickness)
+        - emoji: bool (default True)
+        """
         align = kwargs.get('align', None)
         if align == 'center':
             center = True
         elif align == 'left':
             center = False
+        x = kwargs.get('x', None)
+        y = kwargs.get('y', None)
+        font_name = kwargs.get('font_name', None)
+        bg_color = kwargs.get('bg_color', (0,0,0))
+        bold = kwargs.get('bold', False)
+        italic = kwargs.get('italic', False)
+        underline = kwargs.get('underline', False)
+        shadow = kwargs.get('shadow', None)  # (offset, color)
+        multiline = kwargs.get('multiline', True)
+        wrap = kwargs.get('wrap', None)
+        opacity = kwargs.get('opacity', 255)
+        outline = kwargs.get('outline', None)  # (color, thickness)
+        # emoji = kwargs.get('emoji', True)  # Pygame supports Unicode, emoji if font does
+        text_lines = [text]
+        if multiline:
+            text_lines = text.split('\n')
         with self.lock:
-            self.screen.fill((0, 0, 0))
-            font = pygame.font.SysFont(None, size)
-            text_surface = font.render(text, True, color)
-            rect = text_surface.get_rect()
-            if center:
-                rect.center = (self.width // 2, self.height // 2)
-            else:
-                rect.topleft = (10, 10)
-            self.screen.blit(text_surface, rect)
+            self.screen.fill(bg_color)
+            font = pygame.font.SysFont(font_name, size, bold=bold, italic=italic)
+            font.set_underline(underline)
+            y_offset = 0
+            for line in text_lines:
+                # Word wrap if needed
+                if wrap:
+                    words = line.split(' ')
+                    line_buf = ''
+                    for word in words:
+                        test_line = (line_buf + ' ' + word).strip()
+                        test_surface = font.render(test_line, True, color)
+                        if test_surface.get_width() > wrap:
+                            # Draw current line_buf
+                            self._draw_text(font, line_buf, color, bg_color, x, y, center, y_offset, shadow, opacity, outline)
+                            y_offset += test_surface.get_height()
+                            line_buf = word
+                        else:
+                            line_buf = test_line
+                    if line_buf:
+                        self._draw_text(font, line_buf, color, bg_color, x, y, center, y_offset, shadow, opacity, outline)
+                        y_offset += font.get_height()
+                else:
+                    self._draw_text(font, line, color, bg_color, x, y, center, y_offset, shadow, opacity, outline)
+                    y_offset += font.get_height()
             pygame.display.flip()
+
+    def _draw_text(self, font, text, color, bg_color, x, y, center, y_offset, shadow, opacity, outline):
+        # Render text with effects
+        text_surface = font.render(text, True, color)
+        if opacity < 255:
+            text_surface.set_alpha(opacity)
+        rect = text_surface.get_rect()
+        # Positioning
+        if x is not None and y is not None:
+            rect.topleft = (x, y + y_offset)
+        elif center:
+            rect.center = (self.width // 2, self.height // 2 + y_offset)
+        else:
+            rect.topleft = (10, 10 + y_offset)
+        # Shadow
+        if shadow:
+            offset, shadow_color = shadow
+            shadow_surface = font.render(text, True, shadow_color)
+            shadow_rect = rect.copy()
+            shadow_rect.x += offset[0]
+            shadow_rect.y += offset[1]
+            self.screen.blit(shadow_surface, shadow_rect)
+        # Outline
+        if outline:
+            outline_color, thickness = outline
+            for dx in range(-thickness, thickness+1):
+                for dy in range(-thickness, thickness+1):
+                    if dx == 0 and dy == 0:
+                        continue
+                    outline_surface = font.render(text, True, outline_color)
+                    outline_rect = rect.copy()
+                    outline_rect.x += dx
+                    outline_rect.y += dy
+                    self.screen.blit(outline_surface, outline_rect)
+        # Main text
+        self.screen.blit(text_surface, rect)
 
     def close(self):
         self._running = False

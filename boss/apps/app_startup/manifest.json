@@ -1,0 +1,10 @@
+{
+  "name": "Startup App",
+  "description": "Clears the screen, blinks all four LEDs, and displays 'ready' on the screen. This app is not user-selectable and only runs automatically at system startup before any user app is launched.",
+  "entry": "main.py",
+  "hardware": ["screen", "leds"],
+  "version": "1.0.0",
+  "author": "BOSS Team",
+  "special": true,
+  "run_mode": "startup-only"
+}
