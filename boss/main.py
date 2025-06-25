@@ -6,12 +6,15 @@ Initializes core systems, logging, hardware, and handles clean shutdown.
 import sys
 import signal
 import json
+import logging
+import logging.handlers
 from boss.core.logger import get_logger
 from boss.core.app_manager import AppManager
 from boss.core.app_runner import AppRunner
 from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
+from boss.hardware.screen import MockScreen, PiScreen
 import time
 from gpiozero import Device
 
@@ -31,7 +34,32 @@ except ImportError:
     from boss.hardware.led import MockLED as PiLED
     REAL_HARDWARE = False
 
-logger = get_logger("BOSS")
+# Configure logging ONCE for the whole application
+def setup_logging():
+    """Configure logging for the entire application"""
+    log_format = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+    date_format = '%Y-%m-%d %H:%M:%S'
+    root_logger = logging.getLogger()
+    # Avoid duplicate handlers if setup_logging is called more than once
+    if not root_logger.handlers:
+        root_logger.setLevel(logging.INFO)  # Change to DEBUG for more verbosity
+        # Console handler
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(logging.Formatter(log_format, date_format))
+        root_logger.addHandler(console_handler)
+        # File handler - rotate files at 1MB
+        # NOTE: This writes to the current working directory. Change path if needed.
+        file_handler = logging.handlers.RotatingFileHandler(
+            'boss.log',
+            maxBytes=1024*1024,
+            backupCount=2  # Keep 2 backup files
+        )
+        file_handler.setFormatter(logging.Formatter(log_format, date_format))
+        root_logger.addHandler(file_handler)
+
+# Set up logging before anything else
+setup_logging()
+logger = logging.getLogger(__name__)
 
 # Hardware device instances (global for cleanup)
 btn_red = None
@@ -45,11 +73,12 @@ led_green = None
 led_blue = None
 display = None
 switch_reader = None
+screen = None
 
 def initialize_hardware():
     global btn_red, btn_yellow, btn_green, btn_blue, main_btn
     global led_red, led_yellow, led_green, led_blue
-    global display, switch_reader
+    global display, switch_reader, screen
     logger.info("Initializing hardware interfaces...")
     hardware_status = {}
     pin_info = {
@@ -149,15 +178,13 @@ def initialize_hardware():
         except Exception as e:
             switch_reader = KeyboardSwitchReader(1)
             hardware_status['switch_reader'] = f"MOCK ({e})"
-        # Go button check (redundant, but for summary)
+        # Screen check
         try:
-            # FIX: is_pressed is a property, not a method
-            if main_btn.is_pressed not in [True, False]:
-                raise Exception("Go button read did not return a boolean.")
-            hardware_status['go_button'] = 'OK'
+            screen = PiScreen()
+            logger.info("Screen: OK")
         except Exception as e:
-            main_btn = KeyboardGoButton()
-            hardware_status['go_button'] = f"MOCK ({e})"
+            screen = MockScreen()
+            logger.warning(f"Screen not detected: {e}. Using mock screen.")
     else:
         btn_red = PiButton("red")
         btn_yellow = PiButton("yellow")
@@ -170,6 +197,7 @@ def initialize_hardware():
         led_blue = PiLED("blue")
         display = MockSevenSegmentDisplay()
         switch_reader = KeyboardSwitchReader(1)
+        screen = MockScreen()
         for k in ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button']:
             hardware_status[k] = 'MOCK (dev mode)'
     logger.info("Hardware initialized.")
@@ -182,7 +210,7 @@ def initialize_hardware():
     for led in [led_red, led_yellow, led_green, led_blue]:
         try:
             led.on()
-            time.sleep(0.2)
+            time.sleep(0.5)
             led.off()
             time.sleep(0.1)
         except Exception as e:
@@ -211,6 +239,14 @@ def main():
     logger.info("B.O.S.S. system starting up.")
     try:
         initialize_hardware()
+        # Run startup mini-app before anything else
+        try:
+            from boss.apps import app_startup
+            leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
+            api = type('API', (), {'screen': screen, 'leds': leds})()
+            app_startup.run(api=api)
+        except Exception as e:
+            logger.warning(f"Startup app failed: {e}")
         # Load app mappings
         with open("boss/config/BOSSsettings.json") as f:
             config = json.load(f)
@@ -227,27 +263,19 @@ def main():
             value = app_manager.poll_and_update_display()
             try:
                 btn_state = main_btn.is_pressed if main_btn else False
+                logger.debug(f"Go button state: {btn_state}")
             except Exception as e:
                 logger.error(f"Exception in is_pressed(): {e}")
                 raise
             # Debounce: detect rising edge
             if btn_state and not last_btn_state:
                 app_name = app_mappings.get(str(value))
-                logger.info(f"Launching app: {app_name} for value {value}")
+                logger.info(f"Go button pressed. Switch value: {value}, launching app: {app_name}")
                 if app_name:
-                    class MockScreen:
-                        def clear(self):
-                            logger.info("[MOCK SCREEN] clear")
-                        def display_text(self, text, align='center'):
-                            logger.info(f"[MOCK SCREEN] {text}")
-                    api = type('API', (), {'screen': MockScreen()})()
+                    api = type('API', (), {'screen': screen})()
                     app_runner.run_app(app_name, api=api)
-            else:
-                # If no app is running, show "Ready" on the main screen
-                try:
-                    display.show_message("Ready")
-                except Exception:
-                    pass
+                else:
+                    logger.info(f"No app mapped for value {value}.")
             last_btn_state = btn_state
             time.sleep(0.1)
     except SystemExit:

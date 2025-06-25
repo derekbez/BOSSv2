@@ -25,3 +25,12 @@ class PiSevenSegmentDisplay:
         # Show up to 4 digits, pad with spaces if needed
         str_val = str(value)[-4:].rjust(4)
         self.display.show(str_val)
+    def show_message(self, message: str):
+        # For compatibility with MockSevenSegmentDisplay
+        # If message is numeric, display as number; else, show as scrolling text or fallback
+        try:
+            num = int(message)
+            self.show_number(num)
+        except Exception:
+            # No scrolling text support; just print to console for now
+            print(f"[7SEG] MESSAGE: {message}")
