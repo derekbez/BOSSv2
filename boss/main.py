@@ -15,6 +15,12 @@ from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
 from boss.hardware.screen import MockScreen, PiScreen
+# Add PygameScreen import
+try:
+    from boss.hardware.screen import PygameScreen
+    HAS_PYGAME = True
+except ImportError:
+    HAS_PYGAME = False
 import time
 from gpiozero import Device
 
@@ -180,8 +186,13 @@ def initialize_hardware():
             hardware_status['switch_reader'] = f"MOCK ({e})"
         # Screen check
         try:
-            screen = PiScreen()
-            logger.info("Screen: OK")
+            # Use PygameScreen if available, else PiScreen
+            if HAS_PYGAME:
+                screen = PygameScreen()
+                logger.info("Screen: PygameScreen initialized")
+            else:
+                screen = PiScreen()
+                logger.info("Screen: PiScreen initialized")
         except Exception as e:
             screen = MockScreen()
             logger.warning(f"Screen not detected: {e}. Using mock screen.")
@@ -197,7 +208,13 @@ def initialize_hardware():
         led_blue = PiLED("blue")
         display = MockSevenSegmentDisplay()
         switch_reader = KeyboardSwitchReader(1)
-        screen = MockScreen()
+        # Use PygameScreen for dev if available
+        if HAS_PYGAME:
+            screen = PygameScreen()
+            logger.info("Screen: PygameScreen initialized (dev mode)")
+        else:
+            screen = MockScreen()
+            logger.info("Screen: MockScreen initialized (dev mode)")
         for k in ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button']:
             hardware_status[k] = 'MOCK (dev mode)'
     logger.info("Hardware initialized.")

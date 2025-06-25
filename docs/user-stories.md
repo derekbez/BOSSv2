@@ -245,6 +245,22 @@ Tests verify that the display updates only when the switch value changes.
 
 ---
 
+## 7. Display & Graphics
+
+### US-020: Support Multiple Display Backends (pygame & Pillow)
+- **As a** developer or app creator  
+- **I want to** choose between pygame and Pillow for rendering graphics in my mini-apps  
+- **So that** each app can use the most suitable library for its display needs.  
+- **Priority:** Medium  
+- **Acceptance Criteria:**  
+  - Both pygame and Pillow are installed and available in the environment.  
+  - The system API allows an app to request either a pygame or Pillow display context.  
+  - Example apps demonstrate use of both backends.  
+- **Status:** Planned.  
+
+
+---
+
 # End of Backlog
 
 

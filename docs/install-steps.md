@@ -32,7 +32,8 @@ python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
 echo "*** Installing B.O.S.S. Python dependencies..."
-pip install gpiozero pigpio tm1637 pytest Pillow
+pip install gpiozero pigpio tm1637 pytest Pillow pygame
+# Pillow and pygame are both available for mini-apps to use for display functionality.
 echo "*** B.O.S.S. Python dependencies installed."
 echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
 sudo apt install -y pigpio
