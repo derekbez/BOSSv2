@@ -249,4 +249,40 @@ user_stories:
       - Example apps demonstrate use of both backends.
     status: Planned
 
+  - id: US-021
+    title: Advanced Text Display Options in API
+    as: developer or app creator
+    want: Have flexible options for displaying text on the screen (e.g., centering, positioning, color, effects)
+    so_that: Mini-apps can present information in a visually appealing and context-appropriate way
+    priority: Medium
+    acceptance_criteria:
+      - The API allows text to be centered horizontally and/or vertically.
+      - Text can be positioned at specific (x, y) coordinates.
+      - Font color and background color can be set via the API.
+      - Font size and font family can be specified.
+      - Text alignment (left, center, right) is supported for multi-line text.
+      - Text effects such as bold, italic, underline, and shadow are available.
+      - The API supports multi-line and word-wrapped text.
+      - Opacity/transparency can be set for text and background.
+      - The API allows displaying text with an outline or border.
+      - Emoji and Unicode symbols are supported in text rendering.
+      - Example mini-apps demonstrate at least three of these features.
+    notes: These features should be available regardless of the display backend (pygame or Pillow). The API should provide sensible defaults and allow easy extension for future display features.
+
+  - id: US-022
+    title: Image Display Support in API
+    as: developer or app creator
+    want: Display images on the screen with flexible options for scaling, positioning, and appearance
+    so_that: Mini-apps can show pictures, icons, or graphics in a visually appropriate way regardless of the original image size
+    priority: Medium
+    acceptance_criteria:
+      - The API allows displaying images (e.g., PNG, JPEG, BMP) on the screen.
+      - If the image size does not match the screen, the API automatically scales the image to fit or fill the screen, preserving aspect ratio by default.
+      - The API provides options for scaling modes: fit, fill, stretch, or center without scaling.
+      - Images can be positioned at specific (x, y) coordinates or centered horizontally/vertically.
+      - The API supports setting a background color or transparency for images with alpha channels.
+      - The API allows drawing images with rounded corners or as circles/ellipses.
+      - Example mini-apps demonstrate at least two of these features.
+    notes: These features should be available for both pygame and Pillow backends. The API should handle common image formats and provide sensible defaults for scaling and placement.
+
 # End of Backlog
