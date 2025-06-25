@@ -35,5 +35,5 @@ def run(stop_event, api, **kwargs):
             except Exception:
                 pass
     # Wait until stop_event is set (app terminated)
-    if stop_event:
-        stop_event.wait()
+    # if stop_event:
+    #     stop_event.wait()

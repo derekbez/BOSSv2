@@ -43,6 +43,10 @@ echo "*** Installing lgpio backend for GPIOZero (recommended for modern Pi OS)..
 sudo apt install -y python3-lgpio
 echo "*** lgpio backend installation completed."
 
+echo "*** Installing fontconfig for system font support (required by Pygame)..."
+sudo apt install -y fontconfig
+echo "*** fontconfig installation completed."
+
 echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
 echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
 echo "gpio=14=op,pd,dh" | sudo tee -a /boot/firmware/config.txt

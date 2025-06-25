@@ -56,7 +56,7 @@ def setup_logging():
         # File handler - rotate files at 1MB
         # NOTE: This writes to the current working directory. Change path if needed.
         file_handler = logging.handlers.RotatingFileHandler(
-            'boss.log',
+            'boss/logs/boss.log',
             maxBytes=1024*1024,
             backupCount=2  # Keep 2 backup files
         )
@@ -259,9 +259,11 @@ def main():
         # Run startup mini-app before anything else
         try:
             from boss.apps import app_startup
+            import threading
             leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
             api = type('API', (), {'screen': screen, 'leds': leds})()
-            app_startup.run(api=api)
+            stop_event = threading.Event()
+            app_startup.run(stop_event, api=api)
         except Exception as e:
             logger.warning(f"Startup app failed: {e}")
         # Load app mappings
