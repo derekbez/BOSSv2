@@ -1,0 +1,252 @@
+user_roles:
+  - name: Primary User
+    description: Presses buttons, uses switches, runs apps.
+  - name: System Admin
+    description: Manages mappings, handles power/reset, remote config.
+  - name: Developer
+    description: Adds apps, extends system APIs.
+
+user_stories:
+  - id: US-001
+    title: Development Environment & Hardware Emulation
+    as: developer
+    want: Run B.O.S.S. on my Windows laptop using an emulated GPIO environment
+    so_that: I can develop and test the software without requiring physical hardware at all times.
+    priority: High
+    acceptance_criteria:
+      - The system detects when it is running in a non-RPi environment and disables/hides actual hardware calls.
+      - A simulated input module is available that mimics button presses and switch state changes.
+      - Automated tests pass in the emulated environment.
+    status: Complete
+    notes: SwitchReader abstraction (with mock) reads the 8-switch value. SevenSegmentDisplay abstraction (with mock) displays the value. AppManager polls the switch and updates the display when the value changes. Tests verify that the display updates only when the switch value changes.
+
+  - id: US-002
+    title: Initial Hardware Setup & GPIO Initialization
+    as: developer
+    want: Initialize GPIO, buttons, and the display on startup (via main.py)
+    so_that: The core system is ready for user interaction as soon as booted.
+    priority: High
+    acceptance_criteria:
+      - On system startup, all hardware interfaces are properly instantiated and logged.
+      - The 7-segment display shows the current switch value immediately.
+    status: Complete
+
+  - id: US-003
+    title: Toggle Switch Selection
+    as: user
+    want: Use 8 toggle switches to select a number (0–255)
+    so_that: I can choose the mini-app I want to run.
+    priority: High
+    acceptance_criteria:
+      - The multiplexer (74HC151) reads the toggle switches correctly.
+      - The computed number is accurate and displayed immediately on the TM1637 7-segment display.
+    status: Complete
+    notes: Implemented SwitchReader abstraction and polling logic in AppManager to read and display the switch value.
+
+  - id: US-004
+    title: App Launch (Go Button)
+    as: user
+    want: Press the main "Go" button to launch the mini-app mapped to the current switch value
+    so_that: I have direct control over which mini-app is executed.
+    priority: High
+    acceptance_criteria:
+      - Pressing the "Go" button starts the app selected in configuration.
+      - If an app is running, the "Go" button stops the current app before launching another.
+    status: Complete
+    notes: Implemented MockButton and GoButtonManager to handle Go button presses, app launch, and termination. Includes unit tests for button logic.
+
+  - id: US-005
+    title: Dynamic App Execution and Termination
+    as: user
+    want: Have the running mini-app terminated upon a new "Go" button press or timeout
+    so_that: I can easily switch between apps without conflicts or lingering processes.
+    priority: High
+    acceptance_criteria:
+      - The app shutdown sequence is executed when the button is pressed again.
+      - In the event of an app exceeding its runtime, it is forcefully terminated and logged.
+    status: Complete
+    notes: Implemented AppRunner to manage app threads, handle stop events, and force termination with logging. Unit tests verify app start, stop, and forced termination behavior.
+
+  - id: US-006
+    title: Real-Time Feedback on 7-Segment Display & Screen
+    as: user
+    want: Receive immediate visual feedback on both the 7-segment display and the 7-inch screen
+    so_that: I know the system is correctly registering my inputs and providing status updates.
+    priority: Medium
+    acceptance_criteria:
+      - The 7-segment display updates in real time in response to switch changes.
+      - Status messages and app outputs appear properly on the 7-inch screen.
+    status: Complete
+    notes: Implemented MockScreen abstraction for the 7-inch screen, with methods for status and app output. Unit tests verify real-time feedback logic.
+
+  - id: US-007
+    title: Standardized App API & Plugin Structure
+    as: developer
+    want: Have mini-apps load dynamically from the apps/ directory and follow a standard interface (e.g., run(stop_event, api))
+    so_that: New apps can be added or updated without modifying core code.
+    priority: High
+    acceptance_criteria:
+      - Each app exposes a standard entry function or a class-based interface.
+      - A minimal JSON manifest is provided with each app (e.g., name, description, hardware used).
+      - The core system successfully loads and runs apps, as shown in integration tests.
+    status: Complete
+    notes: Added ConfigManager for JSON config management, with tests.
+
+  - id: US-008
+    title: App Mapping Configuration via JSON
+    as: developer
+    want: Store the mapping of switch values to mini-apps, including parameters, in a JSON configuration file
+    so_that: Configuration is clear, easily editable, and decoupled from the application logic.
+    priority: High
+    acceptance_criteria:
+      - The system reads from a JSON file (e.g., BOSSsettings.json) at startup.
+      - Default mappings are generated if the configuration file is missing or malformed.
+      - Changing the JSON file and reloading the system updates the app mappings.
+    status: Complete
+    notes: Apps can be added as new modules in apps/ (see app_example.py), no core changes required.
+
+  - id: US-009
+    title: Remote Device Management
+    as: system administrator
+    want: Remotely access a secure REST API exposed by the device
+    so_that: I can monitor status, update configuration, and manage running apps without physical access.
+    priority: Medium
+    acceptance_criteria:
+      - A secure REST endpoint is available for device status, app mapping, and log access.
+      - Authentication is enforced on all API endpoints.
+      - Changes made via the API are reflected in the system behavior without requiring a reboot.
+
+  - id: US-010
+    title: OTA App Sync & Update (Future Enhancement)
+    as: system administrator
+    want: Have the ability to sync new or updated mini-apps over-the-air
+    so_that: The device can be kept up-to-date without manual intervention.
+    priority: Low
+    acceptance_criteria:
+      - A mechanism is in place for securely fetching and updating app modules from a remote repository.
+      - The update process does not interrupt device operation more than necessary.
+    status: Planned
+
+  - id: US-011
+    title: Unit and Integration Testing for Core Modules
+    as: developer
+    want: Have comprehensive unit tests for hardware abstraction and core logic
+    so_that: Changes can be confidently made, and regressions are prevented.
+    priority: High
+    acceptance_criteria:
+      - Unit tests cover all critical components (e.g., SwitchReader, Button, LED).
+      - Integration tests exist for app loading/execution cycles.
+      - Tests run in CI (e.g., via GitHub Actions).
+    status: Complete
+    notes: Implemented LED abstraction (with mock for dev) and tests for LED state changes.
+
+  - id: US-012
+    title: Documentation and Onboarding Materials
+    as: new contributor
+    want: Have an up-to-date README, architecture overview, and in-code documentation
+    so_that: I can understand the project quickly and contribute effectively.
+    priority: High
+    acceptance_criteria:
+      - A README file provides project setup instructions, dependency lists, and architectural diagrams.
+      - User stories and technical specifications are maintained in docs (e.g., docs/user-stories.md).
+      - Code is documented with docstrings and type hints.
+
+  - id: US-013
+    title: Developer Tooling and Emulated Inputs for CI
+    as: developer
+    want: Have utility scripts and emulation layers for simulating button presses and switches
+    so_that: I can develop and test the system without constant access to the physical hardware.
+    priority: Medium
+    acceptance_criteria:
+      - Emulation modules are available for GPIO input.
+      - Developer scripts can simulate hardware inputs and verify system responses.
+
+  - id: US-014
+    title: Robust Error Handling and Safe Shutdown
+    as: user
+    want: Know that hardware errors or app crashes trigger safe shutdown or fallback states
+    so_that: The device isn't damaged and user data is protected.
+    priority: High
+    acceptance_criteria:
+      - All hardware interfaces use robust try/except mechanisms.
+      - Logs capture any errors and provide clear diagnostic information.
+      - A safe fallback state is activated on hardware errors.
+
+  - id: US-015
+    title: Secure Remote API Authentication
+    as: system administrator
+    want: Authenticate users accessing the remote management API
+    so_that: Unauthorized users cannot alter device configurations or retrieve sensitive data.
+    priority: High
+    acceptance_criteria:
+      - All remote API endpoints require secure authentication (e.g., JWT tokens).
+      - API documentation details the authentication process.
+      - Attempts to access endpoints without proper credentials are denied and logged.
+
+  - id: US-016
+    title: Central Logging Initialization
+    as: developer or system administrator
+    want: Initialize a central logging facility at system startup
+    so_that: All events, errors, and important actions are recorded for debugging and support.
+    priority: High
+    acceptance_criteria:
+      - Logging is initialized before any hardware or app logic runs.
+      - All modules use the central logger for output.
+      - Log files are rotated and stored persistently.
+      - Logging level can be configured (e.g., debug, info, error).
+    status: Complete
+    notes: Implemented a central logger with rotation and configurable levels. All startup, shutdown, and error events are logged. Tests verify log output.
+
+  - id: US-017
+    title: Clean Shutdown and Resource Cleanup
+    as: user or system administrator
+    want: Ensure the system performs a clean shutdown and resource cleanup (hardware, threads, files) when stopping
+    so_that: Hardware is left in a safe state and no data is lost.
+    priority: High
+    acceptance_criteria:
+      - All hardware interfaces are properly closed or reset on shutdown.
+      - Running apps and threads are terminated gracefully.
+      - Any unsaved data is written to disk.
+      - Shutdown events are logged.
+    status: Complete
+    notes: System startup and shutdown logic added to main.py, using the central logger. Cleanup is performed on exit and all actions are logged.
+
+  - id: US-018
+    title: Document GPIO and Apply
+    as: developer
+    want: Know how to connect the various components to the Rpi GPIO pins
+    so_that: The components are connected safely and work as expected
+    priority: High
+    acceptance_criteria:
+      - GPIO connections are documented appropriately (See: docs.md, RPi-GPIO-Pin-Diagram.md)
+      - GPIO is configured in the application for all components
+    status: Complete
+    notes: See docs.md for table and wiring notes. See RPi-GPIO-Pin-Diagram.md for full pinout.
+
+  - id: US-019
+    title: Mini-app for Displaying Random Data
+    as: user
+    want: Select a number for my choice of mini-app. When I press the "go" button, I want see a random joke from a long list of jokes that are stored in the system.
+    acceptance_criteria:
+      - When I toggle the switches, I see the corresponding number on the 7-segment display
+      - When I press the "go" button, I see the joke displayed on the 7-inch screen
+    implementation_notes:
+      - Switch Mapping: The app should be mapped to a number in config/BOSSsettings.json. For this app, use number 001.
+      - Joke Storage: The list of jokes will be a JSON file, stored in the relevant app's folder. There should be an assets folder under the app's sub-folder. A sample JSON file with temporary jokes will be created for initial testing.
+      - Display: There will be a requirement to format the text with colour, size, and position in the future. Initially, if no other formats are applied, the text should be centred on the screen and remain until another app is launched.
+      - App Structure: All mini-apps should follow the same structure that allows them to be run and terminated by BOSS. No additional user interaction at this time, but future enhancements may allow user-triggered results.
+      - Testing: Tests should detect hardware and use mock or real hardware accordingly.
+
+  - id: US-020
+    title: Support Multiple Display Backends (pygame & Pillow)
+    as: developer or app creator
+    want: Choose between pygame and Pillow for rendering graphics in my mini-apps
+    so_that: Each app can use the most suitable library for its display needs.
+    priority: Medium
+    acceptance_criteria:
+      - Both pygame and Pillow are installed and available in the environment.
+      - The system API allows an app to request either a pygame or Pillow display context.
+      - Example apps demonstrate use of both backends.
+    status: Planned
+
+# End of Backlog

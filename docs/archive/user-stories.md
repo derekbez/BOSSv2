@@ -264,21 +264,6 @@ Tests verify that the display updates only when the switch value changes.
 # End of Backlog
 
 
----
-
-Old version:
-
-## User Stories
-- **US1:** As a user, I want to select a number (0–255) using toggle switches, so I can choose which mini-app to run.
-- **US2:** As a user, I want to see the selected number displayed on a 7-segment display.
-- **US3:** As a user, I want to press a main "Go" button to launch the mini-app mapped to the selected number.
-- **US4:** As a user, I want to interact with the running mini-app using color-coded buttons (Red, Yellow, Green, Blue).
-- **US5:** As a user, I want visual feedback from LEDs (Red, Yellow, Green, Blue) during app operation.
-- **US6:** As a user, I want to terminate the current mini-app and launch a new one by changing the switch and pressing "Go" again.
-- **US7:** As an admin, I want to configure which mini-app is mapped to each switch value, using a JSON configuration file.
-- **US8:** As a developer, I want to add new mini-apps easily without modifying the core system.
-- **US9:** As a user, I want to see system and app feedback on the 7-inch screen.
-- **US10:** As an admin, I want to manage and configure the device remotely over WiFi.
 
 
 
