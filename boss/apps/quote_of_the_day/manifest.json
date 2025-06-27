@@ -1,0 +1,24 @@
+{
+  "id": "quote_of_the_day",
+  "title": "Quote of the Day",
+  "description": "Fetches and displays a quote from one of several sources—ranging from motivational to literary to Shakespearean.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_sources": [
+    {"name": "They Said So", "api": "https://theysaidso.com/api/", "auth_required": true},
+    {"name": "Quotable", "api": "https://api.quotable.io/random", "auth_required": false},
+    {"name": "Shakespeare", "source": "https://shakespeare.folger.edu/downloads/", "auth_required": false}
+  ],
+  "config": {
+    "source": "quotable",
+    "category": "motivational"
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [
+    {"name": "They Said So", "placeholder": "YOUR_API_KEY_HERE", "instructions": "Register at theysaidso.com for a free API key."}
+  ],
+  "instructions": "Configure preferred source and category in config. Shakespeare quotes require local data.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

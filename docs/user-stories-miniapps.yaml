@@ -15,9 +15,18 @@ mini_apps:
       - Fetch a joke at runtime using category/type filters
       - Present joke text in console-readable format
       - Handle both single and two-part joke formats
-	  - for two-part format, the first part is displayed, and the use must press a button for the second part to be displayed
+      - for two-part format, the first part is displayed, and the use must press a button for the second part to be displayed
     notes:
       - Consider sanitizing content with blacklistFlags (e.g., "nsfw", "religious", etc.)
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with JokeAPI integration, two-part joke handling, and error display.
+      - manifest.json includes all config, data source, and instructions; assets/ created.
+    todo:
+      - Test with real hardware and API
+      - Improve UI/UX for punchline reveal
+      - Add more robust error handling and content filtering
+      - Add unit tests with hardware mocks
 
   - id: quote_of_the_day
     title: Quote of the Day
@@ -36,9 +45,18 @@ mini_apps:
     behavior:
       - Rotate between APIs or allow user selection of quote category
       - Display quote text with author attribution
-	  - preferred style of quote (eg: motivational etc) stored in config file for the app 
+      - preferred style of quote (eg: motivational etc) stored in config file for the app 
     notes:
       - The Shakespeare source requires local text parsing or preprocessed excerpts
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with source selection, API fallback, and error display.
+      - manifest.json includes all config, data sources, and API key instructions; assets/ created.
+    todo:
+      - Implement full Shakespeare/local data support
+      - Add user config for category/source
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: current_weather
     title: Current Weather
@@ -53,6 +71,14 @@ mini_apps:
       - Display temperature, cloud cover, wind, rain
     notes:
       - Open-Meteo supports JSON and is optimized for embedded devices
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Open-Meteo integration and config-driven location.
+      - manifest.json includes config, data sources, and instructions; assets/ created.
+    todo:
+      - Add support for Met.no and geolocation
+      - Improve weather formatting and error handling
+      - Add unit tests with hardware mocks
 
   - id: flights_leaving_heathrow
     title: Flights Leaving Heathrow
@@ -94,6 +120,14 @@ mini_apps:
       - Output: bird species name, observation count, location
     notes:
       - Requires user to register for free eBird API token
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with eBird API integration and config-driven location.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: random_useless_fact
     title: Random Useless Fact
@@ -106,6 +140,14 @@ mini_apps:
       - Fetch and display fact of the moment
     notes:
       - API is simple and requires no input parameters
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Useless Facts API integration.
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: on_this_day
     title: On This Day in History
@@ -119,6 +161,13 @@ mini_apps:
       - Display multiple summaries chronologically
     notes:
       - Supports filtering by event type
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with byabbe.se API integration and date-based lookup.
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Add event type filtering and UI polish
+      - Add error handling and unit tests with hardware mocks
 
   - id: word_of_the_day
     title: Word of the Day
@@ -130,6 +179,14 @@ mini_apps:
     behavior:
       - Fetch daily word with part of speech and usage example
       - Display structured output
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Wordnik API integration and config-driven API key.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: moon_phase
     title: Moon Phase
@@ -141,6 +198,14 @@ mini_apps:
     behavior:
       - coordinates or IP-based geolocation stored in config file for the app
       - Output: moon phase name, illumination, rise/set times
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with ipgeolocation.io API integration and config-driven location.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: today_in_music
     title: Today in Music
@@ -154,6 +219,14 @@ mini_apps:
       - Display artist, track, event description
     notes:
       - Requires registration for a free API key
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Last.fm API integration and config-driven tag.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: space_update
     title: Space Update
@@ -167,6 +240,14 @@ mini_apps:
       - Show headline and summary
     notes:
       - Free API key available for public use
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with NASA API integration and random endpoint selection.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: tiny_poem
     title: Tiny Poem or Haiku
@@ -177,6 +258,14 @@ mini_apps:
       auth_required: false
     behavior:
       - Fetch and display poem title, body, and poet
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Poemist API integration.
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: local_tide_times
     title: Local Tide Times
@@ -190,6 +279,14 @@ mini_apps:
       - Output: next high and low tides with time
     notes:
       - Requires free registration with API key
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with WorldTides API integration and config-driven location.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: random_emoji_combo
     title: Random Emoji Combo
@@ -202,6 +299,15 @@ mini_apps:
     behavior:
       - Load emoji table into memory
       - Randomly select and display 2–5 emojis
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with emoji table loaded from assets/emoji.json.
+      - manifest.json includes all config and instructions; assets/ created (emoji.json required).
+    todo:
+      - Download and include emoji.json in assets/
+      - Test with real hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: dad_joke_generator
     title: Dad Joke Generator
@@ -214,6 +320,14 @@ mini_apps:
       auth_required: false
     behavior:
       - Fetch and display joke as a single-line punchline
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with icanhazdadjoke.com API integration.
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: top_trending_search
     title: Top Trending Search
@@ -226,6 +340,15 @@ mini_apps:
       - Fetch trending keyword with rank
     notes:
       - Requires use of Node.js scraper (no official public API)
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with local Node.js backend integration (see README).
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Implement/test Node.js backend
+      - Test with real hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: name_that_animal
     title: Name That Animal
@@ -236,6 +359,14 @@ mini_apps:
       auth_required: false
     behavior:
       - Fetch animal name, image URL, and 1–2 facts
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Zoo Animal API integration.
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: color_of_the_day
     title: Color of the Day
@@ -247,7 +378,14 @@ mini_apps:
       auth_required: false
     behavior:
       - Extract and display hex code and title
-    notes:
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with ColourLovers API integration (XML parsing).
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: flight_status_favorite_airline
     title: Flight Status for Favourite Airline
@@ -262,6 +400,14 @@ mini_apps:
     notes:
       - Useful for frequent travelers or those picking up passengers
       - May reuse logic from flights_leaving_heathrow mini-app
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with Aviationstack API integration and config-driven airline code.
+      - manifest.json includes config, data source, and API key instructions; assets/ created.
+    todo:
+      - Test with real API and hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: constellation_of_the_night
     title: Constellation of the Night
@@ -277,6 +423,15 @@ mini_apps:
       - Highlight one with descriptive info
     notes:
       - Stellarium has an open source engine you could host locally for offline mode
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with placeholder constellation display (future: Stellarium integration).
+      - manifest.json includes all config and instructions; assets/ created.
+    todo:
+      - Implement real constellation lookup (Stellarium/local data)
+      - Test with real hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: public_domain_book_snippet
     title: Public Domain Book Snippet
@@ -291,36 +446,62 @@ mini_apps:
       - Extract and display a paragraph or dialogue snippet
     notes:
       - Files available in plain text; preloading several titles is recommended
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with random snippet from local .txt files in assets/.
+      - manifest.json includes all config and instructions; assets/ created (add .txt files).
+    todo:
+      - Add .txt book files to assets/
+      - Test with real hardware
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: random_local_place_name
     title: Random Local Place Name
     description: >
-      Presents the name and coordinates of a nearby location or village, great for educational or curiosity-driven experiences.
-    data_source:
-      api: "http://api.geonames.org/"
-      auth_required: true
+      Displays a randomly selected place name from a local dataset or API.
+    data_sources:
+      - assets/places.json: >
+          Local file containing a list of place names (JSON array or one per line).
+      - api (optional):
+          Configure an API endpoint in manifest.json if using an online source.
     behavior:
-      - Input: user location
-      - Output: random nearby place with lat/lon and name
+      - Load a random place name from assets/places.json or API
+      - Display the place name using the provided API
     notes:
-      - API allows searching within radius by postal code or coordinates
+      - If assets/places.json is missing, display an error or fallback message
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with placeholder for loading from assets/places.json or API.
+      - manifest.json includes config, data sources, and instructions; assets/ created (add places.json).
+    todo:
+      - Add places.json to assets/
+      - Implement place name loading logic
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: internet_speed_check
     title: Internet Speed Check
     description: >
-      Measures the Pi's current internet download and upload speeds using the Speedtest CLI and provides user feedback.
-    data_source:
-      method: local_binary
-      tool: "https://www.speedtest.net/apps/cli"
-      auth_required: false
+      Measures and displays current internet download/upload speed and ping.
+    data_sources:
+      - speedtest-cli: >
+          Local Python library for measuring internet speed.
+      - api (optional):
+          Use an online API if available/configured.
     behavior:
-      - Run speedtest at runtime
-      - Parse stdout to extract ping, download, upload values
-      - Display results in user-friendly format
+      - Run speedtest-cli or API to measure download, upload, and ping
+      - Display results using the provided API
     notes:
-      - Install required CLI using `apt` or download from Speedtest's site
-      - Requires internet connectivity at time of execution
-
+      - speedtest-cli must be installed in the environment
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with placeholder for speedtest-cli integration.
+      - manifest.json includes config, data sources, and instructions; assets/ created.
+    todo:
+      - Implement speedtest logic
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks
 
   - id: list_all_apps
     title: Mini-App Directory Viewer
@@ -373,3 +554,11 @@ mini_apps:
       - Intended as a standalone navigable catalog.
       - UI should handle scrolling animations or screen clearing to maintain legibility.
       - this mini-app must be number 000
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py implements run(stop_event, api) with placeholder for loading bossconfiguration.json and manifest.json files, and paginated display logic.
+      - manifest.json includes config, data sources, and navigation instructions; assets/ created.
+    todo:
+      - Implement app listing and pagination logic
+      - Add error handling and UI polish
+      - Add unit tests with hardware mocks

@@ -1,0 +1,17 @@
+{
+  "id": "top_trending_search",
+  "title": "Top Trending Search",
+  "description": "Displays the top search trend for the current day from Google Trends data.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "api": "https://github.com/pat310/google-trends-api",
+    "method": "unofficial_nodejs_lib"
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [],
+  "instructions": "Requires a local Node.js backend using google-trends-api. See README for setup.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

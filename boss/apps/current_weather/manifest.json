@@ -1,0 +1,21 @@
+{
+  "id": "current_weather",
+  "title": "Current Weather",
+  "description": "Displays real-time weather for the user's preset or geolocated location. Meant for daily planning or travel awareness.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_sources": [
+    {"name": "Open-Meteo", "api": "https://api.open-meteo.com/v1/forecast", "auth_required": false},
+    {"name": "Met.no", "api": "https://api.met.no/weatherapi/locationforecast/2.0/", "auth_required": false}
+  ],
+  "config": {
+    "latitude": 51.5074,
+    "longitude": -0.1278
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [],
+  "instructions": "Set latitude/longitude in config for your location.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

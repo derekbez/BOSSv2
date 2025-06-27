@@ -1,0 +1,24 @@
+{
+  "id": "moon_phase",
+  "title": "Moon Phase",
+  "description": "Shows the current phase of the moon, as well as sunset/sunrise data for your location.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "api": "https://api.ipgeolocation.io/astronomy",
+    "auth_required": true
+  },
+  "config": {
+    "api_key": "YOUR_API_KEY_HERE",
+    "latitude": 51.5074,
+    "longitude": -0.1278
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [
+    {"name": "ipgeolocation.io", "placeholder": "YOUR_API_KEY_HERE", "instructions": "Register at ipgeolocation.io for a free API key."}
+  ],
+  "instructions": "Set your API key and location in config.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

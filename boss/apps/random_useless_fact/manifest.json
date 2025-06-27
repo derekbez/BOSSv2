@@ -1,0 +1,17 @@
+{
+  "id": "random_useless_fact",
+  "title": "Random Useless Fact",
+  "description": "Displays an amusing and often bizarre fact with no practical application—perfect for a chuckle.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "api": "https://uselessfacts.jsph.pl/random.json?language=en",
+    "auth_required": false
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [],
+  "instructions": "No API key required.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

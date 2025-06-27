@@ -1,0 +1,24 @@
+{
+  "id": "local_tide_times",
+  "title": "Local Tide Times",
+  "description": "Provides tide predictions for the user's local coast or harbor.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "api": "https://www.worldtides.info/api",
+    "auth_required": true
+  },
+  "config": {
+    "api_key": "YOUR_API_KEY_HERE",
+    "latitude": 51.5074,
+    "longitude": -0.1278
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [
+    {"name": "WorldTides", "placeholder": "YOUR_API_KEY_HERE", "instructions": "Register at worldtides.info for a free API key."}
+  ],
+  "instructions": "Set your API key and location in config.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

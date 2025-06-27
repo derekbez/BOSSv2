@@ -1,0 +1,22 @@
+{
+  "id": "constellation_of_the_night",
+  "title": "Constellation of the Night",
+  "description": "Displays a featured constellation based on the user's location and time of night, ideal for stargazers and astronomy enthusiasts.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "method": "stellarium_web_scrape_or_local",
+    "source": "https://stellarium-web.org/",
+    "auth_required": false
+  },
+  "config": {
+    "latitude": 51.5074,
+    "longitude": -0.1278
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [],
+  "instructions": "Future: Use Stellarium data or scraping for real-time constellations.",
+  "dependencies": [],
+  "entry_point": "main.py:run"
+}

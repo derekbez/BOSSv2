@@ -1,0 +1,17 @@
+{
+  "id": "name_that_animal",
+  "title": "Name That Animal",
+  "description": "Presents a random animal's name, facts, and image to educate and delight.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "api": "https://zoo-animal-api.herokuapp.com/animals/rand",
+    "auth_required": false
+  },
+  "hardware": ["screen"],
+  "assets": [],
+  "api_keys": [],
+  "instructions": "No API key required.",
+  "dependencies": ["requests"],
+  "entry_point": "main.py:run"
+}

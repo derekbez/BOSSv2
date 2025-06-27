@@ -1,0 +1,14 @@
+{
+  "id": "list_all_apps",
+  "title": "Mini-App Directory Viewer",
+  "description": "Displays a paginated list of all available mini-apps by reading their number, name, and description from configuration files.",
+  "entry_point": "main.py",
+  "config": {
+    "entries_per_page": 15,
+    "layout": "Tabular list: Number | Name | Short Description",
+    "navigation_buttons": ["yellow", "blue"]
+  },
+  "assets_required": [],
+  "api_keys": [],
+  "instructions": "Reads bossconfiguration.json and each mini-app's manifest.json. Configurable entries per page. Uses yellow/blue buttons for navigation."
+}

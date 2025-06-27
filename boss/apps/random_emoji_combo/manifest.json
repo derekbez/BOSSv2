@@ -1,0 +1,18 @@
+{
+  "id": "random_emoji_combo",
+  "title": "Random Emoji Combo",
+  "description": "Displays a whimsical or mysterious sequence of emojis to inspire, confuse, or amuse.",
+  "author": "BOSS Team",
+  "version": "0.1.0",
+  "data_source": {
+    "method": "static_json",
+    "source": "https://github.com/github/gemoji",
+    "auth_required": false
+  },
+  "hardware": ["screen"],
+  "assets": ["emoji.json"],
+  "api_keys": [],
+  "instructions": "Download emoji.json from gemoji or similar source and place in assets/.",
+  "dependencies": [],
+  "entry_point": "main.py:run"
+}
