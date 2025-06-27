@@ -285,4 +285,33 @@ user_stories:
       - Example mini-apps demonstrate at least two of these features.
     notes: These features should be available for both pygame and Pillow backends. The API should handle common image formats and provide sensible defaults for scaling and placement.
 
+  - id: US-023
+    name: startup_update_check
+    title: Check for Software Updates at Startup
+    description: >
+      On BOSS application startup, check the associated GitHub repository for newer versions and visually notify the user if updates are available.
+    trigger:
+      type: startup_hook
+    behavior:
+      - fetch_remote_git_commit
+      - compare_with_local_commit
+      - display_update_notification:
+          when: remote_commit_is_newer
+
+  - id: US-024
+    name: startup_network_check
+    title: Check Network Connectivity at Startup
+    description: >
+      Verifies internet availability when BOSS starts up, displaying a warning message if the system is offline.
+    trigger:
+      type: startup_hook
+    behavior:
+      - check_interface_status: wlan0
+      - ping_external_host: "8.8.8.8"
+      - display_status_message:
+          if_failed: "No internet connection detected. Please connect to Wi-Fi to ensure full functionality."
+
+
+
+
 # End of Backlog

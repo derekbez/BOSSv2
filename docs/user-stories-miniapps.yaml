@@ -1,0 +1,375 @@
+mini_apps:
+
+  - id: joke_of_the_moment
+    title: Joke of the Moment
+    description: >
+      Displays a random joke from a selected category and type (e.g., programming, pun, dark). Designed to bring quick comic relief.
+    data_source:
+      api: "https://v2.jokeapi.dev/"
+      method: GET
+      params:
+        category: "Any or user-defined"
+        type: "single or twopart"
+      auth_required: false
+    behavior:
+      - Fetch a joke at runtime using category/type filters
+      - Present joke text in console-readable format
+      - Handle both single and two-part joke formats
+	  - for two-part format, the first part is displayed, and the use must press a button for the second part to be displayed
+    notes:
+      - Consider sanitizing content with blacklistFlags (e.g., "nsfw", "religious", etc.)
+
+  - id: quote_of_the_day
+    title: Quote of the Day
+    description: >
+      Fetches and displays a quote from one of several sources—ranging from motivational to literary to Shakespearean.
+    data_sources:
+      - name: They Said So
+        api: "https://theysaidso.com/api/"
+        auth_required: true
+      - name: Quotable
+        api: "https://api.quotable.io/random"
+        auth_required: false
+      - name: Shakespeare
+        method: local_data
+        source: "https://shakespeare.folger.edu/downloads/"
+    behavior:
+      - Rotate between APIs or allow user selection of quote category
+      - Display quote text with author attribution
+	  - preferred style of quote (eg: motivational etc) stored in config file for the app 
+    notes:
+      - The Shakespeare source requires local text parsing or preprocessed excerpts
+
+  - id: current_weather
+    title: Current Weather
+    description: >
+      Displays real-time weather for the user's preset or geolocated location. Meant for daily planning or travel awareness.
+    data_sources:
+      - Open-Meteo: "https://api.open-meteo.com/v1/forecast"
+      - Met.no: "https://api.met.no/weatherapi/locationforecast/2.0/"
+    auth_required: false
+    behavior:
+      - latitude and longitude stored in config file for the app
+      - Display temperature, cloud cover, wind, rain
+    notes:
+      - Open-Meteo supports JSON and is optimized for embedded devices
+
+  - id: flights_leaving_heathrow
+    title: Flights Leaving Heathrow
+    description: >
+      Provides a list of upcoming departures from Heathrow Airport including airline, gate, and time.
+    data_source:
+      api: "https://aviationstack.com/"
+      auth_required: true
+      plan: "Free tier includes limited real-time data"
+    behavior:
+      - Query departures from airport code EGLL
+      - Display next 5–10 flights with summary data
+    fallback:
+      - Web scraping from heathrow.com may be considered if API becomes limited or inaccurate
+    notes:
+      - Respect API rate limits; cache results for short intervals
+
+  - id: breaking_news
+    title: Breaking News
+    description: >
+      Displays global or regional breaking news headlines in summary form.
+    data_sources:
+      - NewsData.io: "https://newsdata.io/"
+      - GNews: "https://gnews.io/api/v4/search"
+    auth_required: true
+    behavior:
+      - Allow filtering by country, keyword, or category (e.g., technology, science)
+      - Display headline, source, and timestamp
+
+  - id: bird_sightings_near_me
+    title: Bird Sightings Near Me
+    description: >
+      Shows recent bird species observed in a user-defined area using citizen-scientist data.
+    data_source:
+      api: "https://api.ebird.org/v2/data/obs/geo/recent"
+      auth_required: true
+    behavior:
+      - latitude, longitude, radius stored in config file for the app
+      - Output: bird species name, observation count, location
+    notes:
+      - Requires user to register for free eBird API token
+
+  - id: random_useless_fact
+    title: Random Useless Fact
+    description: >
+      Displays an amusing and often bizarre fact with no practical application—perfect for a chuckle.
+    data_source:
+      api: "https://uselessfacts.jsph.pl/random.json?language=en"
+      auth_required: false
+    behavior:
+      - Fetch and display fact of the moment
+    notes:
+      - API is simple and requires no input parameters
+
+  - id: on_this_day
+    title: On This Day in History
+    description: >
+      Provides notable historical events, births, and deaths on today’s date.
+    data_source:
+      api: "https://byabbe.se/on-this-day/"
+      auth_required: false
+    behavior:
+      - Extract current date and request events
+      - Display multiple summaries chronologically
+    notes:
+      - Supports filtering by event type
+
+  - id: word_of_the_day
+    title: Word of the Day
+    description: >
+      Educates users with a new English word and its definition, pronunciation, and usage.
+    data_source:
+      api: "https://api.wordnik.com/v4/words.json/wordOfTheDay"
+      auth_required: true
+    behavior:
+      - Fetch daily word with part of speech and usage example
+      - Display structured output
+
+  - id: moon_phase
+    title: Moon Phase
+    description: >
+      Shows the current phase of the moon, as well as sunset/sunrise data for your location.
+    data_source:
+      api: "https://api.ipgeolocation.io/astronomy"
+      auth_required: true
+    behavior:
+      - coordinates or IP-based geolocation stored in config file for the app
+      - Output: moon phase name, illumination, rise/set times
+
+  - id: today_in_music
+    title: Today in Music
+    description: >
+      Shares a music-related highlight that occurred on this day in history or trending track data.
+    data_source:
+      api: "https://www.last.fm/api"
+      auth_required: true
+    behavior:
+      - Optionally filter by tag (e.g., "rock", "classical")
+      - Display artist, track, event description
+    notes:
+      - Requires registration for a free API key
+
+  - id: space_update
+    title: Space Update
+    description: >
+      Displays astronomy content such as NASA's Astronomy Picture of the Day or Mars rover photos.
+    data_source:
+      api: "https://api.nasa.gov/"
+      auth_required: true
+    behavior:
+      - Select random endpoint (e.g., APOD, Mars photos)
+      - Show headline and summary
+    notes:
+      - Free API key available for public use
+
+  - id: tiny_poem
+    title: Tiny Poem or Haiku
+    description: >
+      Displays a short poem from a curated collection of contemporary works.
+    data_source:
+      api: "https://www.poemist.com/api/v1/randompoems"
+      auth_required: false
+    behavior:
+      - Fetch and display poem title, body, and poet
+
+  - id: local_tide_times
+    title: Local Tide Times
+    description: >
+      Provides tide predictions for the user's local coast or harbor.
+    data_source:
+      api: "https://www.worldtides.info/api"
+      auth_required: true
+    behavior:
+      - Input: coordinates
+      - Output: next high and low tides with time
+    notes:
+      - Requires free registration with API key
+
+  - id: random_emoji_combo
+    title: Random Emoji Combo
+    description: >
+      Displays a whimsical or mysterious sequence of emojis to inspire, confuse, or amuse.
+    data_source:
+      method: static_json
+      source: "https://github.com/github/gemoji"
+      auth_required: false
+    behavior:
+      - Load emoji table into memory
+      - Randomly select and display 2–5 emojis
+
+  - id: dad_joke_generator
+    title: Dad Joke Generator
+    description: >
+      Fetches a groan-worthy one-liner from the official Dad Joke API.
+    data_source:
+      api: "https://icanhazdadjoke.com/"
+      headers:
+        Accept: "application/json"
+      auth_required: false
+    behavior:
+      - Fetch and display joke as a single-line punchline
+
+  - id: top_trending_search
+    title: Top Trending Search
+    description: >
+      Displays the top search trend for the current day from Google Trends data.
+    data_source:
+      api: "https://github.com/pat310/google-trends-api"
+      method: unofficial_nodejs_lib
+    behavior:
+      - Fetch trending keyword with rank
+    notes:
+      - Requires use of Node.js scraper (no official public API)
+
+  - id: name_that_animal
+    title: Name That Animal
+    description: >
+      Presents a random animal's name, facts, and image to educate and delight.
+    data_source:
+      api: "https://zoo-animal-api.herokuapp.com/animals/rand"
+      auth_required: false
+    behavior:
+      - Fetch animal name, image URL, and 1–2 facts
+
+  - id: color_of_the_day
+    title: Color of the Day
+    description: >
+      Selects a daily color and displays its name, hex code, and palette inspiration.
+    data_source:
+      api: "https://www.colourlovers.com/api/colors/random"
+      format: JSON or XML
+      auth_required: false
+    behavior:
+      - Extract and display hex code and title
+    notes:
+
+  - id: flight_status_favorite_airline
+    title: Flight Status for Favourite Airline
+    description: >
+      Shows the live status of flights for a user-specified airline, including delays, destinations, and gates.
+    data_source:
+      api: "https://aviationstack.com/"
+      auth_required: true
+    behavior:
+      - airline IATA code (e.g., BA for British Airways) stored in config file for the app
+      - Output: list of flights including departure time, status, and destination
+    notes:
+      - Useful for frequent travelers or those picking up passengers
+      - May reuse logic from flights_leaving_heathrow mini-app
+
+  - id: constellation_of_the_night
+    title: Constellation of the Night
+    description: >
+      Displays a featured constellation based on the user's location and time of night, ideal for stargazers and astronomy enthusiasts.
+    data_source:
+      method: stellarium_web_scrape_or_local
+      source: "https://stellarium-web.org/"
+      auth_required: false
+    behavior:
+      - coordinates  stored in config file for the app
+      - Determine which constellations are overhead
+      - Highlight one with descriptive info
+    notes:
+      - Stellarium has an open source engine you could host locally for offline mode
+
+  - id: public_domain_book_snippet
+    title: Public Domain Book Snippet
+    description: >
+      Displays a short passage from classic literature in the public domain to spark curiosity or reflection.
+    data_source:
+      method: local_or_scraped
+      source: "https://www.gutenberg.org/"
+      auth_required: false
+    behavior:
+      - Randomly select a book
+      - Extract and display a paragraph or dialogue snippet
+    notes:
+      - Files available in plain text; preloading several titles is recommended
+
+  - id: random_local_place_name
+    title: Random Local Place Name
+    description: >
+      Presents the name and coordinates of a nearby location or village, great for educational or curiosity-driven experiences.
+    data_source:
+      api: "http://api.geonames.org/"
+      auth_required: true
+    behavior:
+      - Input: user location
+      - Output: random nearby place with lat/lon and name
+    notes:
+      - API allows searching within radius by postal code or coordinates
+
+  - id: internet_speed_check
+    title: Internet Speed Check
+    description: >
+      Measures the Pi's current internet download and upload speeds using the Speedtest CLI and provides user feedback.
+    data_source:
+      method: local_binary
+      tool: "https://www.speedtest.net/apps/cli"
+      auth_required: false
+    behavior:
+      - Run speedtest at runtime
+      - Parse stdout to extract ping, download, upload values
+      - Display results in user-friendly format
+    notes:
+      - Install required CLI using `apt` or download from Speedtest's site
+      - Requires internet connectivity at time of execution
+
+
+  - id: list_all_apps
+    title: Mini-App Directory Viewer
+    description: >
+      Displays a paginated list of all available mini-apps by reading their number, name, and description from configuration files.
+      Designed to help users quickly browse and locate mini-apps by ID and purpose.
+    data_sources:
+      - bossconfiguration.json: >
+          Contains the mapping between mini-app numbers and their corresponding directories.
+      - manifest.json (per mini-app): >
+          Contains metadata such as 'name' and 'description' used for display.
+      - config.json (this app): >
+          May define pagination settings like entries per page and styling preferences.
+    ui_behavior:
+      layout:
+        format: "Tabular list per page: Number | Name | Short Description"
+        entries_per_page: configurable (default: 15)
+      navigation:
+        if_yellow_button_available:
+           yellow_led : true
+        if_blue_button_available:
+           blue_led : true   
+        yellow_button:
+          action: previous_page
+          description: "Move one page up in the list"
+        blue_button:
+          action: next_page
+          description: "Move one page down in the list"
+      edge_cases:
+        if_last_page:
+          disable_blue_button: true
+          disable_blue_led: true
+        if_first_page:
+          disable_yellow_button: true
+          disable_yellow_led: true
+      updates:
+        dynamic_redraw_on_navigation: true
+    behavior:
+      - Load bossconfiguration.json
+      - Sort mini-apps by number (ascending)
+      - For each mini-app:
+          - Load manifest.json
+          - Extract 'name' and 'description'
+      - Paginate results based on config
+      - Display formatted screen content with paging indicators
+    example_entry_format: |
+      101  | Word of the Day     | Learn a new word with definition and usage.
+      102  | Weather Snapshot    | Shows current weather data for your location.
+    notes:
+      - Intended as a standalone navigable catalog.
+      - UI should handle scrolling animations or screen clearing to maintain legibility.
+      - this mini-app must be number 000

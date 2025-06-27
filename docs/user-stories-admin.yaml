@@ -1,0 +1,93 @@
+admin_features:
+
+  - id: admin_001
+    name: shutdown
+    title: Graceful Application and System Shutdown
+    description: >
+      Provides administrative control for shutting down the BOSS application or the underlying system cleanly, minimizing the risk of data loss or corruption.
+    trigger:
+      type: mini_app
+      mini_app_number: 255
+    ui_behavior:
+      display:
+        - prompt_message: "Select shutdown option using Yellow (Reboot), Blue (Poweroff), or Green (Exit to OS)."
+        - buttons_illuminated: [yellow, blue, green]
+      button_actions:
+        yellow:
+          action: reboot_system
+          description: Gracefully shut down BOSS and reboot the operating system.
+        blue:
+          action: shutdown_system
+          description: Gracefully shut down BOSS and power off the device.
+        green:
+          action: exit_to_os
+          description: Gracefully shut down BOSS and return to the OS shell or login prompt.
+
+  - id: admin_002
+    name: wifi_configuration
+    title: Configure or Change Wi-Fi Connection
+    description: >
+      Enables an administrator to configure the active Wi-Fi connection using a temporary access point and web interface. Useful in headless setups to recover connectivity.
+    trigger:
+      type: mini_app
+      mini_app_number: 252
+    sequence:
+      - start_web_server:
+          port: 80
+          interface: wlan0
+          behavior: Accept HTTP POST with SSID and password
+      - switch_network_mode:
+          action: enable_ap_mode
+          ssid: "PiSetup"
+          password: "raspberry"
+          ipv4_method: shared
+      - display_interface_info:
+          show_ip_address: true
+          show_web_instructions: true
+      - credentials_collection:
+          via: web_form
+          endpoint: /connect.php
+          parameters: [ssid, password]
+          behavior: on_submit_run_nmcli_to_connect
+      - switch_back_to_client_mode:
+          behavior: disable_ap_mode, activate_wifi_with_new_credentials
+      - connection_verification:
+          actions:
+            - ping_default_gateway
+            - ping_external_host: "8.8.8.8"
+    dependencies:
+      - network_manager_must_be_installed: true
+      - wpa_supplicant_is_not_used: true
+    notes:
+      - Consider adding TLS to the web server.
+      - Optionally auto-disable AP mode after successful connection.
+
+  - id: admin_003
+    name: boss_admin
+    title: Administrative Mini-App Manager
+    description: >
+      Launches a web interface providing full administrative control over mini-apps and core BOSS functionality. Used for configuration, file management, and software updates.
+    trigger:
+      type: mini_app
+      mini_app_number: 254
+    web_server:
+      status: active_during_app_runtime_only
+      port: 8080
+      show_ip_on_screen: true
+    capabilities:
+      - list_all_mini_apps
+      - assign_mini_app_to_number:
+          config_target: "bossconfiguration.json"
+      - show_unassigned_apps
+      - edit_manifest_file
+      - edit_config_file
+      - browse_assets_directory
+      - upload_assets: true
+      - download_assets: true
+      - software_update:
+          method: git_pull
+          description: Checks and fetches latest version of BOSS software from GitHub.
+    shutdown_behavior:
+      on_exit: gracefully_terminate_web_server
+
+
