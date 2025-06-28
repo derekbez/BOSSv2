@@ -26,6 +26,7 @@
     "30": "random_local_place_name",
     "31": "internet_speed_check",
     "252": "admin_wifi_configuration",
+    "254": "admin_boss_admin",
     "255": "admin_shutdown"
   },
   "parameters": {}

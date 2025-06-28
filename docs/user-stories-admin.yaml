@@ -109,14 +109,18 @@ admin_features:
           description: Checks and fetches latest version of BOSS software from GitHub.
     shutdown_behavior:
       on_exit: gracefully_terminate_web_server
-    status: scaffolded
+    status: implemented
     implementation_notes: |
-      - Scaffolding complete: main.py and manifest.json created in admin_boss_admin/.
-      - Entry point, web server config, and assets/ folder present.
+      - Basic implementation: main.py starts HTTP server on port 8080 with endpoints for app listing and software update (git pull).
+      - Web UI available at http://<device_ip>:8080 with navigation for core admin features.
       - No authentication or rollback; logging via central BOSS logger.
+      - Assigned to mini-app number 254 in config.
+      - Further endpoints (assign, edit, upload, etc.) are placeholders for future extension.
     todo:
-      - Implement admin web server and management UI
+      - Test on real hardware and browsers
+      - Implement remaining POST endpoints (assign, edit, upload, etc.)
       - Add error handling and logging
       - Add unit tests with hardware mocks
+      - Optionally add authentication and UI polish
 
 
