@@ -1,0 +1,15 @@
+{
+  "id": "admin_wifi_configuration",
+  "title": "Configure or Change Wi-Fi Connection",
+  "description": "Provides UI and web server for Wi-Fi setup via AP mode.",
+  "entry_point": "main.py",
+  "config": {
+    "ap_ssid": "PiSetup",
+    "ap_password": "raspberry",
+    "ap_interface": "wlan0",
+    "web_port": 80
+  },
+  "assets_required": [],
+  "api_keys": [],
+  "instructions": "Triggered by mini-app number 252. No authentication, no timeout, no fallback. Uses AP mode and web server for credential collection."
+}

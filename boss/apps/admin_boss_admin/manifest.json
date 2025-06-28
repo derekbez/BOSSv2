@@ -1,0 +1,12 @@
+{
+  "id": "admin_boss_admin",
+  "title": "Administrative Mini-App Manager",
+  "description": "Web interface for full administrative control over BOSS.",
+  "entry_point": "main.py",
+  "config": {
+    "web_port": 8080
+  },
+  "assets_required": [],
+  "api_keys": [],
+  "instructions": "Triggered by mini-app number 254. No authentication, no rollback for updates. Logging via central BOSS logger."
+}

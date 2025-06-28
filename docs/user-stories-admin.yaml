@@ -22,6 +22,15 @@ admin_features:
         green:
           action: exit_to_os
           description: Gracefully shut down BOSS and return to the OS shell or login prompt.
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py and manifest.json created in admin_shutdown/.
+      - Entry point and button mapping documented; assets/ folder present.
+      - No authentication required; system calls to be implemented.
+    todo:
+      - Implement shutdown, reboot, and exit logic using system calls and api
+      - Add error handling and logging
+      - Add unit tests with hardware mocks
 
   - id: admin_002
     name: wifi_configuration
@@ -61,6 +70,15 @@ admin_features:
     notes:
       - Consider adding TLS to the web server.
       - Optionally auto-disable AP mode after successful connection.
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py and manifest.json created in admin_wifi_configuration/.
+      - Entry point, AP/web config, and assets/ folder present.
+      - No authentication, timeout, or fallback; config and sequence documented.
+    todo:
+      - Implement AP mode switching, web server, and credential handling
+      - Add error handling and logging
+      - Add unit tests with hardware mocks
 
   - id: admin_003
     name: boss_admin
@@ -89,5 +107,14 @@ admin_features:
           description: Checks and fetches latest version of BOSS software from GitHub.
     shutdown_behavior:
       on_exit: gracefully_terminate_web_server
+    status: scaffolded
+    implementation_notes: |
+      - Scaffolding complete: main.py and manifest.json created in admin_boss_admin/.
+      - Entry point, web server config, and assets/ folder present.
+      - No authentication or rollback; logging via central BOSS logger.
+    todo:
+      - Implement admin web server and management UI
+      - Add error handling and logging
+      - Add unit tests with hardware mocks
 
 
