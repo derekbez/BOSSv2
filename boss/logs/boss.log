@@ -37,3 +37,42 @@
 2025-06-25 21:57:08 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-06-25 21:57:08 [INFO] __main__: Shutdown complete.
 2025-06-25 21:57:08 [INFO] __main__: System exited cleanly.
+2025-06-25 22:10:59 [INFO] __main__: B.O.S.S. system starting up.
+2025-06-25 22:10:59 [INFO] __main__: Initializing hardware interfaces...
+2025-06-25 22:10:59 [INFO] __main__: Pin assignments:
+2025-06-25 22:10:59 [INFO] __main__:   BTN_RED_PIN: 26
+2025-06-25 22:10:59 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-06-25 22:10:59 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-06-25 22:10:59 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-06-25 22:10:59 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-06-25 22:10:59 [INFO] __main__:   LED_RED_PIN: 21
+2025-06-25 22:10:59 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-06-25 22:10:59 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-06-25 22:10:59 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-06-25 22:10:59 [INFO] __main__:   TM_CLK_PIN: 5
+2025-06-25 22:10:59 [INFO] __main__:   TM_DIO_PIN: 4
+2025-06-25 22:10:59 [INFO] __main__:   MUX1_PIN: 23
+2025-06-25 22:10:59 [INFO] __main__:   MUX2_PIN: 24
+2025-06-25 22:10:59 [INFO] __main__:   MUX3_PIN: 25
+2025-06-25 22:10:59 [INFO] __main__:   MUX_IN_PIN: 8
+2025-06-25 22:11:00 [INFO] __main__: Screen: PygameScreen initialized
+2025-06-25 22:11:00 [INFO] __main__: Hardware initialized.
+2025-06-25 22:11:00 [INFO] __main__: Hardware startup summary:
+2025-06-25 22:11:00 [INFO] __main__:   btn_red: OK
+2025-06-25 22:11:00 [INFO] __main__:   btn_yellow: OK
+2025-06-25 22:11:00 [INFO] __main__:   btn_green: OK
+2025-06-25 22:11:00 [INFO] __main__:   btn_blue: OK
+2025-06-25 22:11:00 [INFO] __main__:   main_btn: OK
+2025-06-25 22:11:00 [INFO] __main__:   led_red: OK
+2025-06-25 22:11:00 [INFO] __main__:   led_yellow: OK
+2025-06-25 22:11:00 [INFO] __main__:   led_green: OK
+2025-06-25 22:11:00 [INFO] __main__:   led_blue: OK
+2025-06-25 22:11:00 [INFO] __main__:   display: OK
+2025-06-25 22:11:00 [INFO] __main__:   switch_reader: OK
+2025-06-25 22:11:05 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-06-25 22:11:09 [INFO] __main__: Go button pressed. Switch value: 1, launching app: app_jokes
+[2025-06-25 22:11:09,864] INFO AppRunner: Started app: app_jokes
+2025-06-25 22:11:09 [INFO] AppRunner: Started app: app_jokes
+2025-06-25 22:11:14 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-06-25 22:11:14 [INFO] __main__: Shutdown complete.
+2025-06-25 22:11:14 [INFO] __main__: System exited cleanly.

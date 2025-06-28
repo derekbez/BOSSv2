@@ -186,13 +186,10 @@ def initialize_hardware():
             hardware_status['switch_reader'] = f"MOCK ({e})"
         # Screen check
         try:
-            # Use PygameScreen if available, else PiScreen
-            if HAS_PYGAME:
-                screen = PygameScreen()
-                logger.info("Screen: PygameScreen initialized")
-            else:
-                screen = PiScreen()
-                logger.info("Screen: PiScreen initialized")
+            # Use PillowScreen for HDMI framebuffer
+            from boss.hardware.pillow_screen import PillowScreen
+            screen = PillowScreen()
+            logger.info("Screen: PillowScreen initialized (HDMI framebuffer)")
         except Exception as e:
             screen = MockScreen()
             logger.warning(f"Screen not detected: {e}. Using mock screen.")
@@ -209,10 +206,11 @@ def initialize_hardware():
         display = MockSevenSegmentDisplay()
         switch_reader = KeyboardSwitchReader(1)
         # Use PygameScreen for dev if available
-        if HAS_PYGAME:
-            screen = PygameScreen()
-            logger.info("Screen: PygameScreen initialized (dev mode)")
-        else:
+        try:
+            from boss.hardware.pillow_screen import PillowScreen
+            screen = PillowScreen()
+            logger.info("Screen: PillowScreen initialized (dev mode)")
+        except Exception as e:
             screen = MockScreen()
             logger.info("Screen: MockScreen initialized (dev mode)")
         for k in ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button']:
@@ -250,6 +248,12 @@ def cleanup():
                 dev.close()
             except Exception:
                 pass
+    # Ensure PygameScreen is closed and thread joined
+    if screen and hasattr(screen, 'close'):
+        try:
+            screen.close()
+        except Exception:
+            pass
     logger.info("Shutdown complete.")
 
 def main():

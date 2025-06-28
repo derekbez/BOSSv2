@@ -32,9 +32,9 @@ python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
 echo "*** Installing B.O.S.S. Python dependencies..."
-pip install gpiozero pigpio tm1637 pytest Pillow pygame
-# Pillow and pygame are both available for mini-apps to use for display functionality.
+pip install gpiozero pigpio tm1637 pytest Pillow numpy
 echo "*** B.O.S.S. Python dependencies installed."
+
 echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
 sudo apt install -y pigpio
 echo "*** pigpio system daemon installed."
@@ -42,10 +42,6 @@ echo "*** pigpio system daemon installed."
 echo "*** Installing lgpio backend for GPIOZero (recommended for modern Pi OS)..."
 sudo apt install -y python3-lgpio
 echo "*** lgpio backend installation completed."
-
-echo "*** Installing fontconfig for system font support (required by Pygame)..."
-sudo apt install -y fontconfig
-echo "*** fontconfig installation completed."
 
 echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
 echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
