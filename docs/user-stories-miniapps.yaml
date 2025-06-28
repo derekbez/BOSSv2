@@ -554,11 +554,15 @@ mini_apps:
       - Intended as a standalone navigable catalog.
       - UI should handle scrolling animations or screen clearing to maintain legibility.
       - this mini-app must be number 000
-    status: scaffolded
+    status: implemented
     implementation_notes: |
-      - Scaffolding complete: main.py implements run(stop_event, api) with placeholder for loading bossconfiguration.json and manifest.json files, and paginated display logic.
-      - manifest.json includes config, data sources, and navigation instructions; assets/ created.
+      - Full implementation complete: main.py loads app mappings and all manifest.json files, paginates, displays, and handles navigation as per user story.
+      - UI disables navigation buttons on first/last page and redraws dynamically.
+      - Reads config for entries per page and layout.
+      - Uses api.display_text and api.wait_for_button for hardware abstraction.
     todo:
-      - Implement app listing and pagination logic
-      - Add error handling and UI polish
+      - Test on real hardware with all navigation edge cases
+      - Polish UI formatting for different screen sizes
+      - Add error handling for missing/corrupt manifests
       - Add unit tests with hardware mocks
+      - Document usage and integration in README
