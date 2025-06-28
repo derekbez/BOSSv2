@@ -24,7 +24,9 @@
     "28": "constellation_of_the_night",
     "29": "public_domain_book_snippet",
     "30": "random_local_place_name",
-    "31": "internet_speed_check"
+    "31": "internet_speed_check",
+    "252": "admin_wifi_configuration",
+    "255": "admin_shutdown"
   },
   "parameters": {}
 }

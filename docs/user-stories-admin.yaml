@@ -70,15 +70,17 @@ admin_features:
     notes:
       - Consider adding TLS to the web server.
       - Optionally auto-disable AP mode after successful connection.
-    status: scaffolded
+    status: implemented
     implementation_notes: |
-      - Scaffolding complete: main.py and manifest.json created in admin_wifi_configuration/.
-      - Entry point, AP/web config, and assets/ folder present.
+      - Full implementation: main.py starts AP mode, runs HTTP server for credential entry, and uses nmcli to connect to Wi-Fi.
+      - Web UI is available at http://<device_ip> and collects SSID/password.
       - No authentication, timeout, or fallback; config and sequence documented.
+      - Assigned to mini-app number 252 in config.
     todo:
-      - Implement AP mode switching, web server, and credential handling
-      - Add error handling and logging
+      - Test on real hardware and various browsers
+      - Add error handling for nmcli/web failures
       - Add unit tests with hardware mocks
+      - Optionally add TLS and UI polish
 
   - id: admin_003
     name: boss_admin
