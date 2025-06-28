@@ -32,7 +32,7 @@ python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
 echo "*** Installing B.O.S.S. Python dependencies..."
-pip install gpiozero pigpio tm1637 pytest Pillow numpy
+pip install gpiozero pigpio rpi-tm1637 pytest Pillow numpy
 echo "*** B.O.S.S. Python dependencies installed."
 
 echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
@@ -59,10 +59,4 @@ echo "source ~/boss/boss-venv/bin/activate"
 echo "cd ~/boss"
 echo "python3 -m boss.main"
 
-# Before running the app, ensure the pigpio daemon is running:
-sudo systemctl start pigpiod
-
-# Always run the app from the project root:
-cd ~/boss
-python3 -m boss.main
 
