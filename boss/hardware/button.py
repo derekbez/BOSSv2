@@ -24,3 +24,23 @@ class MockButton:
         return self._pressed
     def set_callback(self, callback: Callable[[], None]):
         self._callback = callback
+
+try:
+    from gpiozero import Button as GpiozeroButton
+    HAS_GPIOZERO = True
+except ImportError:
+    HAS_GPIOZERO = False
+
+class PiButton:
+    def __init__(self, pin: int, pull_up: bool = True, bounce_time: float = 0.05):
+        if not HAS_GPIOZERO:
+            raise ImportError("gpiozero is required for PiButton")
+        self._button = GpiozeroButton(pin, pull_up=pull_up, bounce_time=bounce_time)
+        self._callback = None
+    def is_pressed(self) -> bool:
+        return self._button.is_pressed
+    def set_callback(self, callback: Callable[[], None]):
+        self._callback = callback
+        self._button.when_pressed = callback
+    def close(self):
+        self._button.close()
