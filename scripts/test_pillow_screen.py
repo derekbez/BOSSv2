@@ -17,9 +17,9 @@ if __name__ == "__main__":
         screen.print_line("Larger", color=(0,255,0), size=screen.FONT_SIZE_LARGER)
         screen.print_line("Smaller", color=(0,255,255), size=screen.FONT_SIZE_SMALLER)
         screen.print_line("Smallest", color=(255,0,255), size=screen.FONT_SIZE_SMALLEST)
-        screen.print_line("Random size 72", color=(255,0,0), size=72)
+        screen.print_line("Random size 50", color=(255,0,0), size=50)
         # Draw a line at a specific position
-        screen.draw_text(20, 500, "draw_text at (20,500)", color=(255,128,0), size=64)
+        screen.draw_text(20, 500, "draw_text at (45,350)", color=(255,128,0), size=screen.FONT_SIZE_SMALLER)
         # Update framebuffer once at the end
         screen._update_fb()
         print("[DEBUG] All lines drawn. Text should remain on screen.")

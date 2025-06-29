@@ -15,11 +15,11 @@ import mmap
 import threading
 
 class PillowScreen:
-    FONT_SIZE_LARGEST = 200
-    FONT_SIZE_LARGER = 160
-    FONT_SIZE_DEFAULT = 128
-    FONT_SIZE_SMALLER = 96
-    FONT_SIZE_SMALLEST = 48  # Default font size
+    FONT_SIZE_LARGEST = 64
+    FONT_SIZE_LARGER = 48
+    FONT_SIZE_DEFAULT = 32
+    FONT_SIZE_SMALLER = 24
+    FONT_SIZE_SMALLEST = 16  # Default font size
 
     def __init__(self, width=1024, height=600, stride=2048, bpp=2, fbdev="/dev/fb0", mock=False):
         self.width = width
@@ -123,17 +123,28 @@ class PillowScreen:
     def _get_font(self, font_name, size):
         """
         Returns a PIL ImageFont object. If font_name is provided, checks for file existence first.
-        Falls back to default font if not found or on error.
+        Falls back to a system TTF font at the requested size, or default font if not found or on error.
         """
         if font_name:
             if not os.path.isfile(font_name):
-                print(f"[PillowScreen] WARNING: Font file '{font_name}' not found. Using default font.")
-                return ImageFont.load_default()
-            try:
-                return ImageFont.truetype(font_name, size)
-            except Exception as e:
-                print(f"[PillowScreen] WARNING: Could not load font '{font_name}': {e}. Using default font.")
-                return ImageFont.load_default()
+                print(f"[PillowScreen] WARNING: Font file '{font_name}' not found. Using fallback font.")
+            else:
+                try:
+                    return ImageFont.truetype(font_name, size)
+                except Exception as e:
+                    print(f"[PillowScreen] WARNING: Could not load font '{font_name}': {e}. Using fallback font.")
+        # Try common system fonts for size support
+        for sys_font in [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        ]:
+            if os.path.isfile(sys_font):
+                try:
+                    return ImageFont.truetype(sys_font, size)
+                except Exception as e:
+                    print(f"[PillowScreen] WARNING: Could not load system font '{sys_font}': {e}.")
+        print(f"[PillowScreen] WARNING: No TTF font found. Using default font (fixed size, ignores requested size={size}).")
         return ImageFont.load_default()
 
     def _update_fb(self):
