@@ -23,6 +23,7 @@ except ImportError:
     HAS_PYGAME = False
 import time
 from gpiozero import Device
+import os
 
 # Try to import real hardware libraries, fallback to mocks if unavailable
 try:
@@ -80,6 +81,21 @@ led_blue = None
 display = None
 switch_reader = None
 screen = None
+
+def hide_os_cursor():
+    """Hide the OS-level blinking cursor on the main console (tty1)."""
+    try:
+        os.system('setterm -cursor off > /dev/tty1')
+        os.system('echo -ne "\033[999;999H" > /dev/tty1')
+    except Exception as e:
+        logger.warning(f"Failed to hide OS cursor: {e}")
+
+def show_os_cursor():
+    """Re-enable the OS-level blinking cursor on the main console (tty1)."""
+    try:
+        os.system('setterm -cursor on > /dev/tty1')
+    except Exception as e:
+        logger.warning(f"Failed to re-enable OS cursor: {e}")
 
 def initialize_hardware():
     global btn_red, btn_yellow, btn_green, btn_blue, main_btn
@@ -254,10 +270,12 @@ def cleanup():
             screen.close()
         except Exception:
             pass
+    show_os_cursor()  # Re-enable cursor on exit
     logger.info("Shutdown complete.")
 
 def main():
     logger.info("B.O.S.S. system starting up.")
+    hide_os_cursor()  # Hide cursor at startup
     try:
         initialize_hardware()
         # Run startup mini-app before anything else
