@@ -28,5 +28,7 @@ def run(stop_event: threading.Event, api: Any) -> None:
     except Exception as e:
         snippet = f"Error: {e}"
     api.screen.clear()
-    api.screen.display_text(snippet, align="left")
+    api.screen.set_cursor(0)
+    for line in snippet.splitlines():
+        api.screen.print_line(line, size=28)
     stop_event.wait()

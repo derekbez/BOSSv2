@@ -62,8 +62,10 @@ def run(stop_event: Event, api: Any) -> None:
 
     def display_page(page_idx: int):
         page_items = paginate(app_list, page_idx, per_page)
-        lines = ["Num | Name                 | Description"]
-        lines.append("----+----------------------+--------------------------")
+        lines = [
+            "Num | Name                 | Description",
+            "----+----------------------+--------------------------"
+        ]
         for app in page_items:
             lines.append(f"{app['number']:>3} | {app['name'][:20]:<20} | {app['description'][:24]}")
         lines.append("")
@@ -74,7 +76,10 @@ def run(stop_event: Event, api: Any) -> None:
             lines.append("[YELLOW] Prev | [BLUE: DISABLED] Next")
         else:
             lines.append("[YELLOW] Prev | [BLUE] Next")
-        api.display_text("\n".join(lines))
+        api.screen.clear()
+        api.screen.set_cursor(0)
+        for line in lines:
+            api.screen.print_line(line, size=28)
 
     display_page(page)
 

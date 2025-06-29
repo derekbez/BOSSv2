@@ -14,13 +14,12 @@ def run(stop_event, api, **kwargs):
     leds = getattr(api, 'leds', None)
     if screen:
         screen.clear()
-        # Use advanced display options: center, color, size, bold
+        # Use advanced display options: center, color, size
         screen.display_text(
             "ready",
             align='center',
             color=(0, 255, 0),
-            size=64,
-            bold=True
+            size=64
         )
     if leds:
         for led in leds.values():
