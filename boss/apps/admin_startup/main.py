@@ -1,5 +1,5 @@
 """
-Startup mini-app for B.O.S.S.
+Admin startup mini-app for B.O.S.S.
 Clears the screen, blinks all four LEDs, and displays 'ready' on the screen using the advanced screen API.
 """
 import time

@@ -1,0 +1,8 @@
+{
+  "name": "Admin Startup",
+  "author": "B.O.S.S. Team",
+  "version": "1.0.0",
+  "description": "A system app that runs on startup to show the system is ready.",
+  "entrypoint": "main.run",
+  "type": "system"
+}

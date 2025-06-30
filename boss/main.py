@@ -280,12 +280,12 @@ def main():
         initialize_hardware()
         # Run startup mini-app before anything else
         try:
-            from boss.apps import app_startup
+            from boss.apps import admin_startup
             import threading
             leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
             api = type('API', (), {'screen': screen, 'leds': leds})()
             stop_event = threading.Event()
-            app_startup.run(stop_event, api=api)
+            admin_startup.run(stop_event, api=api)
         except Exception as e:
             logger.warning(f"Startup app failed: {e}")
         # Load app mappings
