@@ -57,12 +57,26 @@ The Event Bus is a core component of B.O.S.S., enabling decoupled, event-driven 
 - Thread-safe event dispatching.
 
 ### 2. Event Types
-- Predefined event types: `button_press`, `button_release`, `switch_change`, `app_started`, `app_stopped`, `error`, `system_shutdown`, etc.
+- Predefined event types include:
+  - **Input Events:**
+    - `button_press`, `button_release` (color buttons, "go" button)
+    - `switch_change` (mux/switches)
+  - **Output Events:**
+    - `led_state_changed` (red, yellow, green, blue LEDs)
+    - `seven_segment_updated` (7-segment display)
+    - `screen_updated` (7-inch screen)
+  - **App/System Events:**
+    - `app_started`, `app_stopped`, `error`, `system_shutdown`, etc.
 - Custom event types can be registered by apps or extensions.
 
 ### 3. Event Payloads
-- Events carry structured payloads (dicts) with relevant data (e.g., button id, timestamp, value).
-- Payload schema is documented for each event type.
+- Events carry structured payloads (dicts) with relevant data (e.g., button id, led color, value, content, timestamp).
+- Payload schema is documented for each event type. Example schemas:
+  - `button_press`: `{ "button": "red", "timestamp": ... }`
+  - `switch_change`: `{ "value": 42, "previous_value": 41, "timestamp": ... }`
+  - `led_state_changed`: `{ "led": "green", "state": "on", "timestamp": ... }`
+  - `seven_segment_updated`: `{ "value": 128, "timestamp": ... }`
+  - `screen_updated`: `{ "action": "display_text", "content": "Hello!", "timestamp": ... }`
 
 ### 4. Synchronous & Asynchronous Handling
 - Subscribers can handle events synchronously (blocking) or asynchronously (in a thread or via callback).
@@ -88,10 +102,10 @@ The Event Bus is a core component of B.O.S.S., enabling decoupled, event-driven 
 ## User Stories
 
 ### US-EB-001: Publish/Subscribe to Hardware Events
-As a developer, I want to subscribe to button press and switch change events so that my mini-app can react to user input in real time.
+As a developer, I want to subscribe to button press, switch change, LED state, display, and screen update events so that my mini-app or core logic can react to user input and system output in real time.
 - **Acceptance Criteria:**
-  - Mini-apps can register callbacks for `button_press` and `switch_change` events.
-  - When a button is pressed or a switch changes, the event bus notifies all subscribers with the correct payload.
+  - Mini-apps can register callbacks for `button_press`, `button_release`, `switch_change`, `led_state_changed`, `seven_segment_updated`, and `screen_updated` events.
+  - When a button is pressed, a switch changes, an LED changes state, the 7-segment display updates, or the screen is updated, the event bus notifies all subscribers with the correct payload.
 
 ### US-EB-002: Decoupled App Lifecycle Management
 As a system architect, I want the core system to publish `app_started` and `app_stopped` events so that other components (e.g., logger, remote API) can react to app lifecycle changes without tight coupling.
@@ -106,13 +120,13 @@ As a mini-app developer, I want to define and publish custom event types so that
   - Other components can subscribe to these custom events.
 
 ### US-EB-004: Event Filtering and Selective Subscription
-As a developer, I want to subscribe only to events matching certain criteria (e.g., only `button_press` for the red button) so that my code is efficient and focused.
+As a developer, I want to subscribe only to events matching certain criteria (e.g., only `button_press` for the red button, or only `led_state_changed` for the green LED) so that my code is efficient and focused.
 - **Acceptance Criteria:**
   - Subscribers can specify filters (event type, source, payload fields) when subscribing.
   - Only matching events are delivered to the subscriber.
 
 ### US-EB-005: Event Logging and Auditing
-As a system administrator, I want all events to be logged with timestamps and payloads so that I can audit system behavior and debug issues.
+As a system administrator, I want all events (input and output) to be logged with timestamps and payloads so that I can audit system behavior and debug issues.
 - **Acceptance Criteria:**
   - The event bus logs all events to the central logger.
   - Log output includes event type, source, timestamp, and payload.
@@ -125,13 +139,13 @@ As a developer, I want to handle events asynchronously so that my app remains re
   - Subscribers can choose between synchronous and asynchronous handling.
 
 ### US-EB-007: Testability and Mocking
-As a developer, I want to mock the event bus in tests so that I can simulate hardware events and verify my app's response without real hardware.
+As a developer, I want to mock the event bus in tests so that I can simulate hardware and output events and verify my app's response without real hardware.
 - **Acceptance Criteria:**
   - The event bus can be replaced with a mock in unit/integration tests.
   - Test utilities exist for publishing simulated events and capturing subscriber responses.
 
 ### US-EB-008: Extensible Event System
-As a system maintainer, I want to add new event types and sources without modifying the core event bus code so that the system can evolve over time.
+As a system maintainer, I want to add new event types and sources (including new hardware or output devices) without modifying the core event bus code so that the system can evolve over time.
 - **Acceptance Criteria:**
   - New event types and sources can be registered at runtime.
   - The event bus API is stable and documented.
