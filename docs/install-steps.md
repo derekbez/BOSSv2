@@ -22,7 +22,7 @@ echo "*** Repository cloned successfully."
 echo "*** Creating and activating a Python virtual environment 'boss-venv' inside the project directory..."
 python3 -m venv boss-venv
 source boss-venv/bin/activate
-echo 'if [ -d "$HOME/boss/boss-venv" ]; then source "$HOME/boss/boss-venv/bin/activate"; fi' >> ~/.bashrc
+echo 'if [ -d "$HOME/boss-venv" ]; then source "$HOME/boss-venv/bin/activate"; fi' >> ~/.bashrc
 echo "*** Virtual environment 'boss-venv' will now activate automatically on new terminal sessions."
 echo "*** Virtual environment 'boss-venv' activated for the current session."
 
@@ -42,6 +42,10 @@ echo "*** pigpio system daemon installed."
 echo "*** Installing lgpio backend for GPIOZero (recommended for modern Pi OS)..."
 sudo apt install -y python3-lgpio
 echo "*** lgpio backend installation completed."
+
+echo "*** Installing  fontconfig..."
+sudo apt install fontconfig
+echo "*** fontconfig installation completed."
 
 echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
 echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt

@@ -293,3 +293,12 @@ Or:
 bash
 `nmcli device wifi list`
 `nmcli device wifi connect "YourSSID" password "YourPassword"`
+
++++
+When VSCode stuggles:
+`ls -la`
+`rm -rf ~/.vscode-server`
+`rm -rf ~/.cache`
+`rm -rf ~/.config`
+
+
