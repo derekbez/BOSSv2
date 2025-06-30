@@ -36,6 +36,9 @@ B.O.S.S. is a modular Python application for Raspberry Pi that provides a physic
 - **Error Handling:** Catch and log all hardware and app errors. Ensure safe shutdown.
 - **Extensibility:** Add new apps by dropping new `app_*.py` modules in `apps/` and updating the config. Add new hardware by extending the hardware abstraction layer.
 - **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`.
+- **Dependency Injection**: Pass dependencies (e.g., `Player`, `ProgressManager`) into constructors instead of creating them inside classes. This improves testability and reduces coupling.
+- **Event Bus**: Consider using an event bus for communication between components (e.g., GPIO, RFID, Player). This decouples components, allowing them to react to events without direct knowledge of each other, making the system more modular.
+
 
 ## Best Practices
 - The system prints/logs all pin assignments and a hardware startup summary at launch, indicating which devices are real or mocked.
