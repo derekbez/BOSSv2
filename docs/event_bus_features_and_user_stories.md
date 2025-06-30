@@ -1,3 +1,46 @@
+# Migration Plan: Integrating Event Bus into B.O.S.S.
+
+## Overview
+This migration plan outlines the steps required to implement the event bus in the B.O.S.S. system, update the API, and refactor mini-apps and core modules for event-driven operation. Follow these steps in order for a smooth transition.
+
+### 1. Design & Implement EventBus Core
+- Design the `EventBus` class with thread-safe publish/subscribe, event filtering, and async support.
+- Define standard event types and payload schemas.
+- Add logging for all published events.
+
+### 2. Integrate EventBus into Core System
+- Instantiate a global event bus in the core application (e.g., in `main.py` or a core module).
+- Refactor hardware abstraction layers (buttons, switches, etc.) to publish events to the event bus instead of calling callbacks or polling.
+- Update core modules (AppManager, Logger, Remote API) to subscribe to relevant events.
+
+### 3. Update the API Object
+- Expose the event bus to mini-apps via the API object:
+  - Add `api.event_bus.subscribe(event_type, callback, filter=None)`
+  - Add `api.event_bus.publish(event_type, payload)`
+- Update API documentation to include event bus usage and event type reference.
+
+### 4. Refactor Mini-Apps for Event-Driven Operation
+- Refactor existing mini-apps to use event subscriptions instead of polling for hardware state.
+- Register event handlers for relevant events (e.g., button presses, switch changes) in each app's entrypoint.
+- Remove or minimize polling loops in favor of event-driven logic.
+- Update or add tests to use event bus mocks and simulated events.
+
+### 5. Update and Expand Tests
+- Add unit and integration tests for the event bus (publish/subscribe, filtering, async delivery).
+- Update mini-app and core tests to use the event bus for simulating hardware events.
+- Ensure all tests pass in both real and mocked hardware environments.
+
+### 6. Documentation & Examples
+- Update all relevant documentation (API docs, developer guides, mini-app templates) to reflect event-driven patterns.
+- Provide migration examples and best practices for app developers.
+
+### 7. Review, QA, and Rollout
+- Review all changes for backward compatibility and performance.
+- Conduct QA with both real and mocked hardware.
+- Roll out the event bus integration in a staged manner, monitoring for regressions.
+
+---
+
 # B.O.S.S. Event Bus: Features & User Stories
 
 ## Overview
