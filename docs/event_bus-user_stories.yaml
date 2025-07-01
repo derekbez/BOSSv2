@@ -241,3 +241,85 @@ user_stories:
     TODO:
       - [x] Add system_shutdown/error event publishing
       - [ ] Add/expand tests for shutdown/error events
+
+  - id: US-EB-010
+    title: Migrate Mini-App Templates to Event Subscriptions
+    description: |
+      Update all existing mini-app boilerplate templates and accompanying developer documentation
+      so that they register for and handle EventBus notifications rather than using polling loops
+      or direct hardware calls. This will standardize app development and improve performance
+      by leveraging the event-driven architecture.
+    acceptance_criteria:
+      - All mini-app starter templates under `templates/` subscribe to relevant events (e.g., button_press,
+        switch_change) via `api.event_bus.subscribe()` instead of polling or using `GPIO` directly.
+      - Documentation in `docs/mini-apps.md` and inline template comments explain how to:
+        • import and use the EventBus API  
+        • define event handlers  
+        • unregister handlers on app exit
+      - A static code analysis or linter rule flags any usage of direct hardware access (e.g., RPi.GPIO calls)
+        or polling constructs in mini-app directories.
+      - Examples in the docs show a simple “Hello World” mini-app reacting to a button_press event.
+    notes:
+      - Ensure backward compatibility by providing a script or guide for migrating existing apps.
+      - Include a CI check that validates templates build and respond to a synthetic event.
+    status: Complete
+    implementation_notes: |
+      - All new mini-app templates (see templates/hello_world.py) use event subscriptions, not polling or direct hardware access.
+      - Documentation in docs/mini-apps.md explains event-driven mini-app development and migration.
+      - Example and template provided for button-driven app.
+      - Existing apps should be migrated as needed; backward compatibility maintained.
+    TODO:
+      - [x] Add event-driven mini-app template (templates/hello_world.py)
+      - [x] Add documentation for event-driven mini-apps (docs/mini-apps.md)
+      - [ ] Add/expand migration guide and CI check for template compliance
+
+  - id: US-EB-011
+    title: Subscriber Failure Tracking & Alerting
+    description: |
+      Implement a mechanism within the EventBus core that monitors subscriber callback failures.
+      If a handler throws exceptions repeatedly, the system should log warnings, emit a special
+      `subscriber_failure` event, and optionally alert administrators or disable the faulty subscription.
+    acceptance_criteria:
+      - The EventBus wrapper around subscriber invocation catches all exceptions from callbacks.
+      - On each exception, a counter per subscriber is incremented.
+      - When a subscriber’s failure count exceeds a configurable threshold (default: 3 in `event_bus_config.json`),
+        EventBus:
+        • publishes `subscriber_failure` event with payload `{ subscriber_id, event_type, failure_count, last_error }`  
+        • logs an ERROR entry with stack trace and context  
+        • optionally disables further delivery to that subscriber if `auto_disable_on_failure: true`
+      - Configuration file `event_bus_config.json` supports:
+        • `failure_threshold` (integer)  
+        • `auto_disable_on_failure` (boolean)  
+        • `alert_callback` (string reference to a function for custom alerting)
+      - Unit tests verify that:
+        • failures are counted correctly  
+        • threshold logic triggers the special event exactly once  
+        • disabled subscribers no longer receive events after threshold breach
+    notes:
+      - Consider exposing a health endpoint or API method to query subscriber states.
+      - Document how downstream systems can subscribe to `subscriber_failure` for monitoring dashboards.
+
+  - id: US-EB-012
+    title: Real-World Event Flow Integration Tests
+    description: |
+      Create and expand end-to-end integration tests that simulate realistic system operation
+      by orchestrating sequences of EventBus events (e.g., app_started → button_press → error →
+      system_shutdown) and asserting that mini-apps and core modules respond correctly.
+    acceptance_criteria:
+      - A new test suite `tests/integration/event_flows/` exists with scenarios for:
+        • App launch and subscription registration  
+        • Button press → corresponding handler invocation  
+        • Triggering an error in a mini-app → `error` event published and caught  
+        • System shutdown sequence → `system_shutdown` event and clean teardown
+      - All hardware abstraction layers (button, switch, LED, display) are replaced in tests
+        by mock publishers that feed events into a `MockEventBus`.
+      - Tests assert:
+        • correct ordering of callback invocations  
+        • state transitions in AppManager (e.g., running → error → stopped)  
+        • that each mock publishes its events when invoked  
+        • no unhandled exceptions bubble out of the test harness
+      - Continuous Integration configuration runs these integration tests on every pull request
+        and reports failures in the GitHub check suite.
+    notes:
+      - Use pytest fixtures to instantiate a fresh `MockEventBus` per test.
+      - Provide utilities to record and replay event sequences from YAML or JSON files.
