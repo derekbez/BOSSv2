@@ -13,6 +13,19 @@ All event payloads should, where possible, include these top-level keys:
 
 ---
 
+## Filtering Example
+To subscribe only to events from a specific source or with certain payload fields, use the `source` and payload keys in your event bus filter. For example, to receive only red button presses from hardware:
+
+```python
+api.event_bus.subscribe(
+    'input.button.pressed',
+    callback,
+    filter={"button_id": "red", "source": "hardware.button"}
+)
+```
+
+---
+
 ## 1. System Events
 Events related to the core application's state.
 
@@ -38,6 +51,7 @@ Events related to the core application's state.
   | `component` | `str`   | Yes      | The component where the error originated. |
   | `message`   | `str`   | Yes      | The error message.                        |
   | `traceback` | `str`   | No       | A formatted traceback string, if available. |
+  | `severity`  | `str`   | No       | 'warning', 'error', or 'critical'.        |
 
 ---
 
@@ -117,11 +131,38 @@ These events are published by the hardware abstraction layer to confirm an actio
   | Field       | Type    | Required | Description                               |
   |-------------|---------|----------|-------------------------------------------|
   | `action`    | `str`   | Yes      | 'clear', 'display_text', 'display_image'. |
-  | `details`   | `dict`  | No       | A dictionary of parameters used for the action. |
+  | `details`   | `dict`  | No       | A dictionary of parameters used for the action. See below. |
+
+#### Common Keys for `details` in `output.screen.updated`
+- For `display_text`:
+  - `text` (str): The text to display.
+  - `position` (tuple or list): (x, y) coordinates (optional).
+  - `color` (str): Text color (optional).
+  - `font` (str): Font name or style (optional).
+- For `display_image`:
+  - `image_path` (str): Path to the image file.
+  - `position` (tuple or list): (x, y) coordinates (optional).
+  - `scale` (float): Scaling factor (optional).
+- For `clear`:
+  - No additional keys required.
 
 ---
 
-## 5. Command Events (Future/Proposed)
+## 5. Custom/Mini-App Events
+Mini-apps may define and publish their own events for inter-app or system communication. Use the `app.<appname>.<event>` naming convention.
+
+### Example: `app.quiz.completed`
+- **Description:** Published by a quiz mini-app when a quiz is completed.
+- **Payload:**
+  | Field       | Type    | Required | Description                               |
+  |-------------|---------|----------|-------------------------------------------|
+  | `score`     | `int`   | Yes      | The user's score.                         |
+  | `max_score` | `int`   | Yes      | The maximum possible score.               |
+  | `user_id`   | `str`   | No       | Optional user identifier.                 |
+
+---
+
+## 6. Command Events (Future/Proposed)
 
 **Note:** The primary mechanism for mini-apps to control hardware is the direct `Mini-App API` (e.g., `api.leds['red'].on()`). This provides a simple, imperative way to issue commands.
 

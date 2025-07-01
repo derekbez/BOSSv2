@@ -1,0 +1,157 @@
+user_stories:
+
+  - id: US-EB-001
+    title: Publish/Subscribe to Hardware Events
+    description: |
+      As a developer, I want to subscribe to button press, switch change, LED state change,
+      seven-segment display updates, and screen update events so that my mini-app or core logic
+      can react to user input and system output in real time.
+    acceptance_criteria:
+      - Mini-apps can register callbacks for these event types:
+        • button_press  
+        • button_release  
+        • switch_change  
+        • led_state_changed  
+        • seven_segment_updated  
+        • screen_updated
+      - When any of these events occur, the EventBus notifies all subscribers with:
+        • event_type (string)  
+        • source (e.g. “red_button” or “wlan0_switch”)  
+        • payload (structured dict)  
+        • timestamp (ISO8601 string)
+    payload_schemas:
+      button_press:
+        button: string
+        timestamp: string
+      switch_change:
+        value: integer
+        previous_value: integer
+        timestamp: string
+      led_state_changed:
+        led: string
+        state: [ "on", "off" ]
+        timestamp: string
+      seven_segment_updated:
+        value: integer
+        timestamp: string
+      screen_updated:
+        action: string
+        content: string
+        timestamp: string
+
+  - id: US-EB-002
+    title: Decoupled App Lifecycle Management
+    description: |
+      As a system architect, I want the core to publish app_started and app_stopped events
+      so that components like the logger or remote API can react to app lifecycle changes
+      without tight coupling.
+    acceptance_criteria:
+      - EventBus publishes these events on app launch/exit:
+        • app_started  
+        • app_stopped
+      - Each event payload includes:
+        • app_name (string)  
+        • version (string, if available)  
+        • timestamp (ISO8601 string)
+      - Subscribers (e.g., Logger) receive and record these events.
+
+  - id: US-EB-003
+    title: Custom Event Types for Mini-Apps
+    description: |
+      As a mini-app developer, I want to define and publish custom event types so that my app
+      can communicate complex state changes or results to the core system or other apps.
+    acceptance_criteria:
+      - Mini-apps can register new event types at runtime via:
+        api.event_bus.register_event_type(name, schema)
+      - Mini-apps can publish custom events:
+        api.event_bus.publish(name, payload)
+      - Other components can subscribe to these custom event types and receive correct payloads.
+    additional_notes:
+      - Documentation must describe how to define schema (field names and types).
+      - Provide examples in the API docs.
+
+  - id: US-EB-004
+    title: Event Filtering and Selective Subscription
+    description: |
+      As a developer, I want to subscribe only to events matching certain criteria—such as
+      button_press for the red button or led_state_changed for the green LED—so my code is
+      efficient and focused.
+    acceptance_criteria:
+      - api.event_bus.subscribe() accepts an optional filter parameter:
+        • filter by event_type  
+        • filter by payload fields (e.g., button == “red”)
+      - Only matching events are delivered to the subscriber’s callback.
+    examples:
+      - Subscribe only to red button presses:
+        api.event_bus.subscribe("button_press", callback, filter={"button": "red"})
+      - Subscribe only to green LED changes:
+        api.event_bus.subscribe("led_state_changed", callback, filter={"led": "green"})
+
+  - id: US-EB-005
+    title: Event Logging and Auditing
+    description: |
+      As a system administrator, I want all events (input and output) to be logged with timestamps
+      and payloads so that I can audit system behavior and debug issues.
+    acceptance_criteria:
+      - By default, EventBus logs every published event to the central logger.
+      - Logged fields include:
+        • event_type  
+        • source  
+        • payload  
+        • timestamp
+      - Logging can be enabled or disabled per event type via configuration.
+    config_options:
+      log_all_events: boolean
+      log_event_types: list of event_type strings
+
+  - id: US-EB-006
+    title: Asynchronous Event Handling
+    description: |
+      As a developer, I want to handle events asynchronously so that my app remains responsive even
+      when processing complex or long-running event handlers.
+    acceptance_criteria:
+      - api.event_bus.subscribe() supports a mode parameter:
+        • mode: "sync" (default) or "async"
+      - If async, callbacks run in a separate thread or task queue.
+      - EventBus provides backpressure or queue limits to avoid memory blow-up.
+    additional_notes:
+      - Document recommended queue sizes and timeout handling.
+
+  - id: US-EB-007
+    title: Testability and Mocking
+    description: |
+      As a developer, I want to mock the EventBus in unit and integration tests so I can simulate
+      hardware and system events without real devices.
+    acceptance_criteria:
+      - Provide a MockEventBus implementation conforming to the same API.
+      - Tests can inject the mock via dependency injection:
+        core = Core(api=Api(event_bus=MockEventBus()))
+      - Test utilities allow publishing simulated events and capturing subscriber calls.
+    examples:
+      - mock_bus.publish("button_press", {"button": "green", "timestamp": "..."})
+      - assert mock_callback.called_with(expected_payload)
+
+  - id: US-EB-008
+    title: Extensible Event System
+    description: |
+      As a system maintainer, I want to add new event types and hardware sources without modifying
+      the core EventBus code so the system can evolve over time.
+    acceptance_criteria:
+      - EventBus exposes:
+        api.event_bus.register_event_source(name, publisher_callback)
+        api.event_bus.register_event_type(name, schema)
+      - New sources/types can be registered at runtime in plugins or extensions.
+      - Documentation explains the plugin registration API.
+
+  - id: US-EB-009
+    title: System Shutdown and Error Events
+    description: |
+      As a system administrator, I want the EventBus to publish system_shutdown and error events so
+      that components can perform cleanup or alerting in response to critical system changes.
+    acceptance_criteria:
+      - EventBus publishes these events at appropriate times:
+        • system_shutdown (payload: reason, timestamp)  
+        • error (payload: error_type, message, stack_trace?, timestamp)
+      - Subscribers can register cleanup or notification handlers for these events.
+    notes:
+      - Ensure that system_shutdown is the last event before process exit.
