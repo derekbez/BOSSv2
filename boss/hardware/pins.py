@@ -20,5 +20,5 @@ MUX3_PIN = 25  # A / 11   green
 MUX_IN_PIN = 8 #          blue
 
 # TM1637 7-segment display
-TM_CLK_PIN = 29 # GPIO 5 = BCM 29
-TM_DIO_PIN = 7  # GPIO 4 = BCM 7
+TM_CLK_PIN = 5 # GPIO 5 = BCM 29
+TM_DIO_PIN = 4  # GPIO 4 = BCM 7

@@ -36,7 +36,7 @@ except ImportError:
 
 try:
     from gpiozero import Button as PiButton, LED as PiLED
-    import tm1637
+    #import rpi_tm1637
     REAL_HARDWARE = True
 except ImportError:
     from boss.hardware.button import MockButton as PiButton

@@ -332,3 +332,119 @@
 2025-07-01 16:46:03 [INFO] __main__:   switch_reader: OK
 2025-07-01 16:46:06 [INFO] __main__: System running. Press Ctrl+C to exit.
 2025-07-01 16:46:06 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T15:46:06Z'}
+2025-07-01 17:11:41 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 17:11:41 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 17:11:41 [INFO] __main__: Pin assignments:
+2025-07-01 17:11:41 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 17:11:41 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 17:11:41 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 17:11:41 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 17:11:41 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 17:11:41 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 17:11:41 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 17:11:41 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 17:11:41 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 17:11:41 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 17:11:41 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 17:11:41 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 17:11:41 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 17:11:41 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 17:11:41 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 17:11:41 [INFO] __main__: Screen: PillowScreen initialized (dev mode)
+2025-07-01 17:11:41 [INFO] __main__: Hardware initialized.
+2025-07-01 17:11:41 [INFO] __main__: Hardware startup summary:
+2025-07-01 17:11:41 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-01 17:11:41 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-01 17:11:44 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 17:13:16 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-01T16:13:16Z'}
+2025-07-01 17:13:16 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-01 17:13:16 [INFO] __main__: Shutdown complete.
+2025-07-01 17:13:16 [INFO] __main__: System exited cleanly.
+2025-07-01 17:13:24 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 17:13:24 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 17:13:24 [INFO] __main__: Pin assignments:
+2025-07-01 17:13:24 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 17:13:24 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 17:13:24 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 17:13:24 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 17:13:24 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 17:13:24 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 17:13:24 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 17:13:24 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 17:13:24 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 17:13:24 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 17:13:24 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 17:13:24 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 17:13:24 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 17:13:24 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 17:13:24 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 17:13:24 [INFO] __main__: Screen: PillowScreen initialized (dev mode)
+2025-07-01 17:13:24 [INFO] __main__: Hardware initialized.
+2025-07-01 17:13:24 [INFO] __main__: Hardware startup summary:
+2025-07-01 17:13:24 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-01 17:13:24 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-01 17:13:26 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 17:13:35 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-01T16:13:35Z'}
+2025-07-01 17:13:35 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-01 17:13:35 [INFO] __main__: Shutdown complete.
+2025-07-01 17:13:35 [INFO] __main__: System exited cleanly.
+2025-07-01 17:20:54 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 17:20:54 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 17:20:54 [INFO] __main__: Pin assignments:
+2025-07-01 17:20:54 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 17:20:54 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 17:20:54 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 17:20:54 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 17:20:54 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 17:20:54 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 17:20:54 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 17:20:54 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 17:20:54 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 17:20:54 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 17:20:54 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 17:20:54 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 17:20:54 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 17:20:54 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 17:20:54 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 17:20:54 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-01 17:20:54 [INFO] __main__: Hardware initialized.
+2025-07-01 17:20:54 [INFO] __main__: Hardware startup summary:
+2025-07-01 17:20:54 [INFO] __main__:   btn_red: OK
+2025-07-01 17:20:54 [INFO] __main__:   btn_yellow: OK
+2025-07-01 17:20:55 [INFO] __main__:   btn_green: OK
+2025-07-01 17:20:55 [INFO] __main__:   btn_blue: OK
+2025-07-01 17:20:55 [INFO] __main__:   main_btn: OK
+2025-07-01 17:20:55 [INFO] __main__:   led_red: OK
+2025-07-01 17:20:55 [INFO] __main__:   led_yellow: OK
+2025-07-01 17:20:55 [INFO] __main__:   led_green: OK
+2025-07-01 17:20:55 [INFO] __main__:   led_blue: OK
+2025-07-01 17:20:55 [INFO] __main__:   display: OK
+2025-07-01 17:20:55 [INFO] __main__:   switch_reader: OK
+2025-07-01 17:20:57 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 17:20:57 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T16:20:57Z'}
+2025-07-01 17:20:59 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-01T16:20:59Z'}
+2025-07-01 17:21:00 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 3, 'timestamp': '2025-07-01T16:21:00Z'}
+2025-07-01 17:21:01 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-01T16:21:01Z'}
+2025-07-01 17:21:02 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 0, 'timestamp': '2025-07-01T16:21:02Z'}
+2025-07-01 17:21:03 [INFO] EventBus: Event published: switch_change | {'value': 5, 'previous_value': 1, 'timestamp': '2025-07-01T16:21:03Z'}
+2025-07-01 17:21:04 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 5, 'timestamp': '2025-07-01T16:21:04Z'}
