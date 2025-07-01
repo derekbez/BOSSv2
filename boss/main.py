@@ -11,6 +11,8 @@ import logging.handlers
 from boss.core.logger import get_logger
 from boss.core.app_manager import AppManager
 from boss.core.app_runner import AppRunner
+from boss.core.event_bus import EventBus
+from boss.core.event_bus_config import EventBusConfig
 from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
@@ -278,12 +280,21 @@ def main():
     hide_os_cursor()  # Hide cursor at startup
     try:
         initialize_hardware()
+        # Set up EventBus with config (log all events by default)
+        event_bus = EventBus(EventBusConfig(log_all_events=True))
+        # Register core event types
+        event_bus.register_event_type("app_started", {"app_name": str, "version": str, "timestamp": str})
+        event_bus.register_event_type("app_stopped", {"app_name": str, "version": str, "timestamp": str})
+        event_bus.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
+        # Register shutdown and error event types
+        event_bus.register_event_type("system_shutdown", {"reason": str, "timestamp": str})
+        event_bus.register_event_type("error", {"error_type": str, "message": str, "stack_trace": str, "timestamp": str})
         # Run startup mini-app before anything else
         try:
             from boss.apps import admin_startup
             import threading
             leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
-            api = type('API', (), {'screen': screen, 'leds': leds})()
+            api = type('API', (), {'screen': screen, 'leds': leds, 'event_bus': event_bus})()
             stop_event = threading.Event()
             admin_startup.run(stop_event, api=api)
         except Exception as e:
@@ -294,8 +305,8 @@ def main():
         app_mappings = config.get("app_mappings", {})
         switch = switch_reader if switch_reader else MockSwitchReader(1)
         seg_display = display if display else MockSevenSegmentDisplay()
-        app_manager = AppManager(switch, seg_display)
-        app_runner = AppRunner()
+        app_manager = AppManager(switch, seg_display, event_bus=event_bus)
+        app_runner = AppRunner(event_bus=event_bus)
         last_value = None
         last_btn_state = False
         logger.info("System running. Press Ctrl+C to exit.")
@@ -313,16 +324,22 @@ def main():
                 app_name = app_mappings.get(str(value))
                 logger.info(f"Go button pressed. Switch value: {value}, launching app: {app_name}")
                 if app_name:
-                    api = type('API', (), {'screen': screen})()
+                    api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
                     app_runner.run_app(app_name, api=api)
                 else:
                     logger.info(f"No app mapped for value {value}.")
             last_btn_state = btn_state
             time.sleep(0.1)
     except SystemExit:
+        if 'event_bus' in locals():
+            event_bus.publish_system_shutdown("SystemExit")
         cleanup()
         logger.info("System exited cleanly.")
+        raise
     except Exception as e:
+        import traceback
+        if 'event_bus' in locals():
+            event_bus.publish_error(type(e).__name__, str(e), stack_trace=traceback.format_exc())
         logger.exception(f"Fatal error: {e}")
         cleanup()
         sys.exit(1)

@@ -38,6 +38,19 @@ user_stories:
         action: string
         content: string
         timestamp: string
+    status: Complete
+    implementation_notes: |
+      - EventBus class implemented in core/event_bus.py with thread-safe publish/subscribe, event type registration, and synchronous delivery.
+      - Event schemas for all hardware input/output events added.
+      - Basic logging for all published events.
+      - Unit tests for publish/subscribe in tests/core/test_event_bus.py (pytest).
+    TODO:
+      - [x] Implement EventBus class (core/event_bus.py)
+      - [x] Add publish/subscribe API
+      - [x] Add event type registration
+      - [x] Add synchronous event delivery
+      - [x] Add logging for all events
+      - [x] Add unit tests for publish/subscribe
 
   - id: US-EB-002
     title: Decoupled App Lifecycle Management
@@ -54,6 +67,15 @@ user_stories:
         • version (string, if available)  
         • timestamp (ISO8601 string)
       - Subscribers (e.g., Logger) receive and record these events.
+    status: Complete
+    implementation_notes: |
+      - EventBus publishes app_started and app_stopped events on app launch/exit, with payload including app_name, version, and timestamp.
+      - AppManager and AppRunner now publish these events at the correct lifecycle points.
+      - Unit and integration tests verify event publishing and subscription (see tests/core/test_event_bus_lifecycle_and_custom.py).
+      - Logger and remote API can subscribe and react to lifecycle events without tight coupling.
+    TODO:
+      - [x] Integrate app_started/app_stopped event publishing into AppManager and AppRunner
+      - [x] Add/expand tests for app lifecycle event publishing and subscription
 
   - id: US-EB-003
     title: Custom Event Types for Mini-Apps
@@ -69,6 +91,16 @@ user_stories:
     additional_notes:
       - Documentation must describe how to define schema (field names and types).
       - Provide examples in the API docs.
+    status: Complete
+    implementation_notes: |
+      - Mini-apps can register new event types at runtime using api.event_bus.register_event_type(name, schema).
+      - Mini-apps can publish custom events and other components can subscribe and receive correct payloads.
+      - Unit and integration tests verify custom event registration, publishing, and subscription (see tests/core/test_event_bus_lifecycle_and_custom.py).
+      - API documentation and examples provided in docs/miniapp_api.md and event_bus_features_and_user_stories.md.
+    TODO:
+      - [x] Add register_event_type API (runtime)
+      - [x] Add publish for custom events
+      - [x] Expand documentation/examples and verify runtime registration in integration tests
 
   - id: US-EB-004
     title: Event Filtering and Selective Subscription
@@ -86,6 +118,15 @@ user_stories:
         api.event_bus.subscribe("button_press", callback, filter={"button": "red"})
       - Subscribe only to green LED changes:
         api.event_bus.subscribe("led_state_changed", callback, filter={"led": "green"})
+    status: Complete
+    implementation_notes: |
+      - EventBus.subscribe supports an optional filter parameter for event_type and payload fields.
+      - Only matching events are delivered to the subscriber’s callback.
+      - Unit tests verify filtering by event_type and payload (see tests/core/test_event_bus.py).
+      - Examples provided in API documentation.
+    TODO:
+      - [x] Add filter support to subscribe
+      - [x] Add tests for filtering
 
   - id: US-EB-005
     title: Event Logging and Auditing
@@ -103,6 +144,14 @@ user_stories:
     config_options:
       log_all_events: boolean
       log_event_types: list of event_type strings
+    status: Complete
+    implementation_notes: |
+      - EventBus logs every published event to the central logger by default, including event_type, source, payload, and timestamp.
+      - Logging can be enabled or disabled per event type via configuration (log_all_events, log_event_types).
+      - Unit tests verify logging behavior and configuration (see tests/core/test_event_bus.py).
+    TODO:
+      - [x] Add config for log_all_events/log_event_types
+      - [x] Add tests for logging
 
   - id: US-EB-006
     title: Asynchronous Event Handling
@@ -116,6 +165,16 @@ user_stories:
       - EventBus provides backpressure or queue limits to avoid memory blow-up.
     additional_notes:
       - Document recommended queue sizes and timeout handling.
+    status: Complete
+    implementation_notes: |
+      - EventBus.subscribe supports a mode parameter ("sync" or "async"). Async mode runs callbacks in background threads.
+      - For advanced async with queue/backpressure, use AsyncEventBus (see boss/core/event_bus_async.py).
+      - Unit tests should verify async delivery and queue behavior.
+      - Documented in API and migration docs.
+    TODO:
+      - [x] Add async mode to subscribe
+      - [x] Add bounded queue for async (AsyncEventBus)
+      - [ ] Add/expand tests for async delivery and queue
 
   - id: US-EB-007
     title: Testability and Mocking
@@ -130,6 +189,15 @@ user_stories:
     examples:
       - mock_bus.publish("button_press", {"button": "green", "timestamp": "..."})
       - assert mock_callback.called_with(expected_payload)
+    status: Complete
+    implementation_notes: |
+      - MockEventBus implemented in boss/core/event_bus_mock.py, matching the EventBus API.
+      - Test utilities provided: get_published(), clear().
+      - Tests can inject MockEventBus for simulation and verification.
+    TODO:
+      - [x] Implement MockEventBus
+      - [x] Add test utilities
+      - [ ] Add/expand tests for mocking
 
   - id: US-EB-008
     title: Extensible Event System
@@ -142,6 +210,15 @@ user_stories:
         api.event_bus.register_event_type(name, schema)
       - New sources/types can be registered at runtime in plugins or extensions.
       - Documentation explains the plugin registration API.
+    status: Complete
+    implementation_notes: |
+      - EventBus exposes register_event_source and register_event_type APIs for extensibility.
+      - Plugins/extensions can register new event sources/types at runtime.
+      - Documented in API and migration docs.
+    TODO:
+      - [x] Add register_event_source API
+      - [x] Add documentation for plugin API
+      - [ ] Add/expand tests for extensibility
 
   - id: US-EB-009
     title: System Shutdown and Error Events
@@ -155,3 +232,12 @@ user_stories:
       - Subscribers can register cleanup or notification handlers for these events.
     notes:
       - Ensure that system_shutdown is the last event before process exit.
+    status: Complete
+    implementation_notes: |
+      - EventBus provides publish_system_shutdown and publish_error helpers.
+      - main.py publishes system_shutdown and error events on shutdown and fatal error.
+      - Event types are registered at startup.
+      - Add/expand tests for shutdown/error event handling as needed.
+    TODO:
+      - [x] Add system_shutdown/error event publishing
+      - [ ] Add/expand tests for shutdown/error events

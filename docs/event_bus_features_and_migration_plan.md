@@ -100,3 +100,45 @@ The Event Bus is a core component of B.O.S.S., enabling decoupled, event-driven 
 ---
 
 
+Thank you for the guidance! Here’s how I will proceed, applying best practices for simplicity, maintainability, and a user-friendly fallback approach:
+
+---
+
+## Event Bus Implementation Defaults
+
+**Threading Model:**  
+- Use standard Python threads for async delivery (not asyncio), as this is easier for most developers to understand and maintain.
+
+**Event Delivery Guarantees:**  
+- At-least-once delivery: Each subscriber callback is called for each event, but if a callback fails, it is logged and the system continues.
+
+**Error Handling in Subscribers:**  
+- If a subscriber callback raises an exception, log the error (with traceback) and continue delivering to other subscribers. Never let one bad handler break the event bus.
+
+**Unregistering Subscribers:**  
+- Support unsubscribe functionality so handlers can be removed if needed (e.g., when a mini-app exits).
+
+**Event Type Registration:**  
+- Event schemas are advisory/documentation-only. No runtime schema enforcement, but all core events must match the documented schema.
+
+**Queue Size/Backpressure:**  
+- Use a bounded queue for async delivery (e.g., `queue.Queue(maxsize=1000)`). If the queue is full, log a warning and drop the event (never block the main thread or annoy the user).
+
+**Event Ordering:**  
+- Best-effort ordering: Events are delivered in the order they are published, but strict ordering is not guaranteed if handlers are slow.
+
+**Performance Requirements:**  
+- No hard real-time guarantees. The system is designed for responsiveness but prioritizes robustness and user experience.
+
+---
+
+## Additional Notes
+
+- All logging uses the central logger.
+- All hardware and app errors are caught and logged.
+- Fallbacks (e.g., if the event bus fails) are silent to the user and do not interrupt normal operation.
+- The code will be well-documented and modular, with clear type hints and docstrings.
+- Tests will mock the event bus and verify publish/subscribe behavior.
+
+---
+

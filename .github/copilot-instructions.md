@@ -109,6 +109,8 @@ boss/
 - WiFi connectivity
 - Secure API endpoints
 
+## User Stories
+- when working from User Stories, always update the user story after implementing the feature to reflect the actual implementation.  Set the status, add relevant implementation notes, and any todos for future improvements.
 ---
 
 Always run the BOSS app from the project root (~/boss) for correct module resolution.
