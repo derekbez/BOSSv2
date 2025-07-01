@@ -40,8 +40,12 @@ class AppRunner:
             })
 
     def _app_thread_func(self, app_name, params, api, version):
+        """
+        Dynamically import and run the mini-app's run() method from boss.apps.<app_name>.main.
+        All mini-apps must be in a subfolder with a main.py.
+        """
         try:
-            app_module = importlib.import_module(f"boss.apps.{app_name}")
+            app_module = importlib.import_module(f"boss.apps.{app_name}.main")
             app_module.run(self.stop_event, api)
         except Exception as e:
             self.logger.error(f"Error running app {app_name}: {e}")

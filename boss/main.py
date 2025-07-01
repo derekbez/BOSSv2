@@ -85,17 +85,23 @@ switch_reader = None
 screen = None
 
 def hide_os_cursor():
-    """Hide the OS-level blinking cursor on the main console (tty1)."""
+    """Hide the OS-level blinking cursor on the main console (tty1), only if running on tty1."""
     try:
-        os.system('setterm -cursor off > /dev/tty1')
-        os.system('echo -ne "\033[999;999H" > /dev/tty1')
+        if os.isatty(0):
+            tty = os.ttyname(0)
+            if tty == '/dev/tty1':
+                os.system('setterm -cursor off > /dev/tty1 2>/dev/null')
+                os.system('echo -ne "\033[999;999H" > /dev/tty1 2>/dev/null')
     except Exception as e:
         logger.warning(f"Failed to hide OS cursor: {e}")
 
 def show_os_cursor():
-    """Re-enable the OS-level blinking cursor on the main console (tty1)."""
+    """Re-enable the OS-level blinking cursor on the main console (tty1), only if running on tty1."""
     try:
-        os.system('setterm -cursor on > /dev/tty1')
+        if os.isatty(0):
+            tty = os.ttyname(0)
+            if tty == '/dev/tty1':
+                os.system('setterm -cursor on > /dev/tty1 2>/dev/null')
     except Exception as e:
         logger.warning(f"Failed to re-enable OS cursor: {e}")
 
@@ -251,6 +257,12 @@ def initialize_hardware():
 
 def cleanup():
     logger.info("Performing clean shutdown and resource cleanup...")
+    # Show shutdown message on 7-segment display
+    try:
+        if display:
+            display.show_message("----")
+    except Exception:
+        pass
     for dev in [btn_red, btn_yellow, btn_green, btn_blue, main_btn,
                 led_red, led_yellow, led_green, led_blue, display, switch_reader]:
         if hasattr(dev, 'close'):
@@ -258,13 +270,20 @@ def cleanup():
                 dev.close()
             except Exception:
                 pass
-    # Ensure PygameScreen is closed and thread joined
+    # Ensure PygameScreen or PillowScreen is closed and thread joined
     if screen and hasattr(screen, 'close'):
         try:
+            screen.clear()
             screen.close()
         except Exception:
             pass
-    show_os_cursor()  # Re-enable cursor on exit
+    # Clear the screen back to OS (do this after closing framebuffer)
+    try:
+        os.system('clear')
+    except Exception:
+        pass
+    # Re-enable cursor on exit
+    show_os_cursor()
     logger.info("Shutdown complete.")
 
 def main():
