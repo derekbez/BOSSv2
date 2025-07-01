@@ -187,7 +187,7 @@ def initialize_hardware():
         # 7-segment display
         try:
             display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
-            display.show_number(88)
+            display.show_message("BOSS")
             hardware_status['display'] = 'OK'
         except Exception as e:
             display = MockSevenSegmentDisplay()

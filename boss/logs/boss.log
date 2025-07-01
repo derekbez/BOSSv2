@@ -176,3 +176,159 @@
 2025-07-01 16:04:46 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-07-01 16:04:47 [INFO] __main__: Shutdown complete.
 2025-07-01 16:04:47 [INFO] __main__: System exited cleanly.
+2025-07-01 16:06:53 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 16:06:53 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 16:06:53 [INFO] __main__: Pin assignments:
+2025-07-01 16:06:53 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 16:06:53 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 16:06:53 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 16:06:53 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 16:06:53 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 16:06:53 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 16:06:53 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 16:06:53 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 16:06:53 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 16:06:53 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 16:06:53 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 16:06:53 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 16:06:53 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 16:06:53 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 16:06:53 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 16:06:54 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-01 16:06:54 [INFO] __main__: Hardware initialized.
+2025-07-01 16:06:54 [INFO] __main__: Hardware startup summary:
+2025-07-01 16:06:54 [INFO] __main__:   btn_red: OK
+2025-07-01 16:06:54 [INFO] __main__:   btn_yellow: OK
+2025-07-01 16:06:54 [INFO] __main__:   btn_green: OK
+2025-07-01 16:06:54 [INFO] __main__:   btn_blue: OK
+2025-07-01 16:06:54 [INFO] __main__:   main_btn: OK
+2025-07-01 16:06:54 [INFO] __main__:   led_red: OK
+2025-07-01 16:06:54 [INFO] __main__:   led_yellow: OK
+2025-07-01 16:06:54 [INFO] __main__:   led_green: OK
+2025-07-01 16:06:54 [INFO] __main__:   led_blue: OK
+2025-07-01 16:06:54 [INFO] __main__:   display: MOCK (No gpiochip found with line offset 5)
+2025-07-01 16:06:54 [INFO] __main__:   switch_reader: OK
+2025-07-01 16:06:54 [WARNING] __main__: Display welcome message failed: 'MockSevenSegmentDisplay' object has no attribute 'show_message'
+2025-07-01 16:06:54 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 16:06:55 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T15:06:54Z'}
+2025-07-01 16:07:26 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-01T15:07:26Z'}
+2025-07-01 16:07:26 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-01 16:07:26 [INFO] __main__: Shutdown complete.
+2025-07-01 16:07:26 [INFO] __main__: System exited cleanly.
+2025-07-01 16:20:25 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 16:20:25 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 16:20:25 [INFO] __main__: Pin assignments:
+2025-07-01 16:20:25 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 16:20:25 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 16:20:25 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 16:20:25 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 16:20:25 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 16:20:25 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 16:20:25 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 16:20:25 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 16:20:25 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 16:20:25 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 16:20:25 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 16:20:25 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 16:20:25 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 16:20:25 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 16:20:25 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 16:20:25 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-01 16:20:25 [INFO] __main__: Hardware initialized.
+2025-07-01 16:20:25 [INFO] __main__: Hardware startup summary:
+2025-07-01 16:20:25 [INFO] __main__:   btn_red: OK
+2025-07-01 16:20:25 [INFO] __main__:   btn_yellow: OK
+2025-07-01 16:20:25 [INFO] __main__:   btn_green: OK
+2025-07-01 16:20:25 [INFO] __main__:   btn_blue: OK
+2025-07-01 16:20:25 [INFO] __main__:   main_btn: OK
+2025-07-01 16:20:25 [INFO] __main__:   led_red: OK
+2025-07-01 16:20:25 [INFO] __main__:   led_yellow: OK
+2025-07-01 16:20:25 [INFO] __main__:   led_green: OK
+2025-07-01 16:20:25 [INFO] __main__:   led_blue: OK
+2025-07-01 16:20:25 [INFO] __main__:   display: MOCK (No gpiochip found with line offset 5)
+2025-07-01 16:20:25 [INFO] __main__:   switch_reader: OK
+2025-07-01 16:20:25 [WARNING] __main__: Display welcome message failed: 'MockSevenSegmentDisplay' object has no attribute 'show_message'
+2025-07-01 16:20:26 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 16:20:26 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T15:20:26Z'}
+2025-07-01 16:20:30 [INFO] EventBus: Event published: switch_change | {'value': 9, 'previous_value': 1, 'timestamp': '2025-07-01T15:20:30Z'}
+2025-07-01 16:20:31 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 9, 'timestamp': '2025-07-01T15:20:31Z'}
+2025-07-01 16:20:32 [INFO] EventBus: Event published: switch_change | {'value': 5, 'previous_value': 1, 'timestamp': '2025-07-01T15:20:32Z'}
+2025-07-01 16:20:32 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 5, 'timestamp': '2025-07-01T15:20:32Z'}
+2025-07-01 16:20:35 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-01T15:20:35Z'}
+2025-07-01 16:20:35 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-01 16:20:36 [INFO] __main__: Shutdown complete.
+2025-07-01 16:20:36 [INFO] __main__: System exited cleanly.
+2025-07-01 16:29:30 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 16:29:30 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 16:29:30 [INFO] __main__: Pin assignments:
+2025-07-01 16:29:30 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 16:29:30 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 16:29:30 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 16:29:30 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 16:29:30 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 16:29:30 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 16:29:30 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 16:29:30 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 16:29:30 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 16:29:30 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-01 16:29:30 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-01 16:29:30 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 16:29:30 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 16:29:30 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 16:29:30 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 16:29:30 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-01 16:29:30 [INFO] __main__: Hardware initialized.
+2025-07-01 16:29:30 [INFO] __main__: Hardware startup summary:
+2025-07-01 16:29:30 [INFO] __main__:   btn_red: OK
+2025-07-01 16:29:30 [INFO] __main__:   btn_yellow: OK
+2025-07-01 16:29:30 [INFO] __main__:   btn_green: OK
+2025-07-01 16:29:30 [INFO] __main__:   btn_blue: OK
+2025-07-01 16:29:30 [INFO] __main__:   main_btn: OK
+2025-07-01 16:29:30 [INFO] __main__:   led_red: OK
+2025-07-01 16:29:30 [INFO] __main__:   led_yellow: OK
+2025-07-01 16:29:30 [INFO] __main__:   led_green: OK
+2025-07-01 16:29:30 [INFO] __main__:   led_blue: OK
+2025-07-01 16:29:30 [INFO] __main__:   display: MOCK (No gpiochip found with line offset 5)
+2025-07-01 16:29:30 [INFO] __main__:   switch_reader: OK
+2025-07-01 16:29:33 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 16:29:33 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T15:29:33Z'}
+2025-07-01 16:30:11 [INFO] EventBus: Event published: switch_change | {'value': 9, 'previous_value': 1, 'timestamp': '2025-07-01T15:30:11Z'}
+2025-07-01 16:30:12 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 9, 'timestamp': '2025-07-01T15:30:12Z'}
+2025-07-01 16:30:21 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-01T15:30:21Z'}
+2025-07-01 16:30:21 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-01 16:30:22 [INFO] __main__: Shutdown complete.
+2025-07-01 16:30:22 [INFO] __main__: System exited cleanly.
+2025-07-01 16:46:03 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-01 16:46:03 [INFO] __main__: Initializing hardware interfaces...
+2025-07-01 16:46:03 [INFO] __main__: Pin assignments:
+2025-07-01 16:46:03 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-01 16:46:03 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-01 16:46:03 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-01 16:46:03 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-01 16:46:03 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-01 16:46:03 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-01 16:46:03 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-01 16:46:03 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-01 16:46:03 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-01 16:46:03 [INFO] __main__:   TM_CLK_PIN: 29
+2025-07-01 16:46:03 [INFO] __main__:   TM_DIO_PIN: 7
+2025-07-01 16:46:03 [INFO] __main__:   MUX1_PIN: 23
+2025-07-01 16:46:03 [INFO] __main__:   MUX2_PIN: 24
+2025-07-01 16:46:03 [INFO] __main__:   MUX3_PIN: 25
+2025-07-01 16:46:03 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-01 16:46:03 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-01 16:46:03 [INFO] __main__: Hardware initialized.
+2025-07-01 16:46:03 [INFO] __main__: Hardware startup summary:
+2025-07-01 16:46:03 [INFO] __main__:   btn_red: OK
+2025-07-01 16:46:03 [INFO] __main__:   btn_yellow: OK
+2025-07-01 16:46:03 [INFO] __main__:   btn_green: OK
+2025-07-01 16:46:03 [INFO] __main__:   btn_blue: OK
+2025-07-01 16:46:03 [INFO] __main__:   main_btn: OK
+2025-07-01 16:46:03 [INFO] __main__:   led_red: OK
+2025-07-01 16:46:03 [INFO] __main__:   led_yellow: OK
+2025-07-01 16:46:03 [INFO] __main__:   led_green: OK
+2025-07-01 16:46:03 [INFO] __main__:   led_blue: OK
+2025-07-01 16:46:03 [INFO] __main__:   display: MOCK (No gpiochip found with line offset 29)
+2025-07-01 16:46:03 [INFO] __main__:   switch_reader: OK
+2025-07-01 16:46:06 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-01 16:46:06 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-01T15:46:06Z'}
