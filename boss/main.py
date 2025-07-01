@@ -36,7 +36,7 @@ except ImportError:
 
 try:
     from gpiozero import Button as PiButton, LED as PiLED
-    from rpi_tm1637 import TM1637
+    import tm1637
     REAL_HARDWARE = True
 except ImportError:
     from boss.hardware.button import MockButton as PiButton
@@ -239,15 +239,7 @@ def initialize_hardware():
         print(f"  {k}: {v}")
         logger.info(f"  {k}: {v}")
     # --- Startup LED blink and welcome message ---
-    # Blink each LED in turn
-    for led in [led_red, led_yellow, led_green, led_blue]:
-        try:
-            led.on()
-            time.sleep(0.5)
-            led.off()
-            time.sleep(0.1)
-        except Exception as e:
-            logger.warning(f"LED blink failed: {e}")
+    # (Moved LED blinking to admin_startup mini-app)
     # Show welcome message on 7-segment display
     try:
         display.show_message("BOSS")
