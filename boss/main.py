@@ -188,6 +188,7 @@ def initialize_hardware():
             hardware_status['led_blue'] = f"MOCK ({e})"
         # 7-segment display
         try:
+            # event_bus will be injected after EventBus is created
             display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
             display.show_message("BOSS")
             hardware_status['display'] = 'OK'
@@ -289,6 +290,9 @@ def main():
         initialize_hardware()
         # Set up EventBus with config (log all events by default)
         event_bus = EventBus(EventBusConfig(log_all_events=True))
+        # Inject event_bus into display (for event-driven publishing)
+        if hasattr(display, 'event_bus'):
+            display.event_bus = event_bus
         # Register core event types
         event_bus.register_event_type("app_started", {"app_name": str, "version": str, "timestamp": str})
         event_bus.register_event_type("app_stopped", {"app_name": str, "version": str, "timestamp": str})
@@ -296,6 +300,19 @@ def main():
         # Register shutdown and error event types
         event_bus.register_event_type("system_shutdown", {"reason": str, "timestamp": str})
         event_bus.register_event_type("error", {"error_type": str, "message": str, "stack_trace": str, "timestamp": str})
+
+        # Subscribe display to output.display.updated events (event-driven display updates)
+        def on_display_update(event_type, payload):
+            val = payload.get("value")
+            if val is not None:
+                # Try to show as number if possible, else as message
+                try:
+                    n = int(val)
+                    display.show_number(n)
+                except Exception:
+                    display.show_message(str(val))
+        event_bus.subscribe("output.display.updated", on_display_update)
+
         # Run startup mini-app before anything else
         try:
             from boss.apps import admin_startup

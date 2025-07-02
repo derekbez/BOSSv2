@@ -7,6 +7,7 @@ import time
 import logging
 from typing import Callable, Dict, List, Any, Optional
 from boss.core.event_bus_config import EventBusConfig
+import uuid
 
 
 class EventBus:
@@ -31,12 +32,26 @@ class EventBus:
             self._logger.debug(f"Registered event type: {event_type}")
 
     def subscribe(self, event_type: str, callback: Callable[[str, dict], None], filter: Optional[dict] = None, mode: str = "sync"):
-        """Subscribe a callback to an event type, with optional payload filter and mode ('sync' or 'async')."""
+        """Subscribe a callback to an event type, with optional payload filter and mode ('sync' or 'async'). Returns a subscription ID for later unsubscription."""
         with self._lock:
             if event_type not in self._subscribers:
                 self._subscribers[event_type] = []
-            self._subscribers[event_type].append({"callback": callback, "filter": filter, "mode": mode})
-            self._logger.debug(f"Subscribed to {event_type}: {callback} with filter: {filter} mode: {mode}")
+            sub_id = str(uuid.uuid4())
+            self._subscribers[event_type].append({"id": sub_id, "callback": callback, "filter": filter, "mode": mode})
+            self._logger.debug(f"Subscribed to {event_type}: {callback} with filter: {filter} mode: {mode} id: {sub_id}")
+            return sub_id
+
+    def unsubscribe(self, sub_id: str):
+        """Unsubscribe a callback using its subscription ID."""
+        with self._lock:
+            for event_type, subs in self._subscribers.items():
+                for i, sub in enumerate(subs):
+                    if sub.get("id") == sub_id:
+                        del subs[i]
+                        self._logger.debug(f"Unsubscribed {sub_id} from {event_type}")
+                        return True
+        self._logger.warning(f"Unsubscribe failed: {sub_id} not found")
+        return False
 
     def publish(self, event_type: str, payload: dict):
         """Publish an event to all subscribers. Adds timestamp if not present. Honors logging config, filtering, and async mode."""
@@ -86,5 +101,6 @@ if __name__ == "__main__":
     def on_button(event_type, payload):
         print(f"Button event: {event_type} | {payload}")
     bus.register_event_type("button_press", {"button": str, "timestamp": float})
-    bus.subscribe("button_press", on_button)
+    sub_id = bus.subscribe("button_press", on_button)
     bus.publish("button_press", {"button": "red"})
+    bus.unsubscribe(sub_id)
