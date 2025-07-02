@@ -226,6 +226,9 @@ def run(stop_event: Event, api: Any) -> None:
     """
     ip = os.popen("hostname -I | awk '{print $1}'").read().strip()
     api.display_text(f"BOSS Admin Web UI:\nhttp://{ip}:{WEB_PORT}")
+    # Optionally, light up a LED to indicate admin mode
+    if hasattr(api, 'led_on'):
+        api.led_on('green')
     server = HTTPServer(("0.0.0.0", WEB_PORT), AdminHandler)
     server_thread = threading.Thread(target=server.serve_forever, daemon=True)
     server_thread.start()
@@ -235,3 +238,5 @@ def run(stop_event: Event, api: Any) -> None:
     finally:
         server.shutdown()
         api.display_text("Admin web server stopped.")
+        if hasattr(api, 'led_off'):
+            api.led_off('green')

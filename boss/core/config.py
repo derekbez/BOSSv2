@@ -3,10 +3,10 @@ ConfigManager: Loads and validates configuration from a JSON file (BOSSsettings.
 """
 import json
 from typing import Any, Dict
-import os
+from boss.core.paths import CONFIG_PATH
 
 class ConfigManager:
-    def __init__(self, config_path: str):
+    def __init__(self, config_path: str = CONFIG_PATH):
         self.config_path = config_path
         self.config: Dict[str, Any] = {}
         self.load()

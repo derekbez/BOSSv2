@@ -735,3 +735,723 @@
 2025-07-01 18:09:28 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-07-01 18:09:28 [INFO] __main__: Shutdown complete.
 2025-07-01 18:09:28 [INFO] __main__: System exited cleanly.
+2025-07-02 19:57:56 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 19:57:56 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 19:57:56 [INFO] __main__: Pin assignments:
+2025-07-02 19:57:56 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 19:57:56 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 19:57:56 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 19:57:56 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 19:57:56 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 19:57:56 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 19:57:56 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 19:57:56 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 19:57:56 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 19:57:56 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 19:57:56 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 19:57:56 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 19:57:56 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 19:57:56 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 19:57:56 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 19:57:57 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 19:57:57 [INFO] __main__: Hardware initialized.
+2025-07-02 19:57:57 [INFO] __main__: Hardware startup summary:
+2025-07-02 19:57:57 [INFO] __main__:   btn_red: OK
+2025-07-02 19:57:57 [INFO] __main__:   btn_yellow: OK
+2025-07-02 19:57:57 [INFO] __main__:   btn_green: OK
+2025-07-02 19:57:57 [INFO] __main__:   btn_blue: OK
+2025-07-02 19:57:57 [INFO] __main__:   main_btn: OK
+2025-07-02 19:57:57 [INFO] __main__:   led_red: OK
+2025-07-02 19:57:57 [INFO] __main__:   led_yellow: OK
+2025-07-02 19:57:57 [INFO] __main__:   led_green: OK
+2025-07-02 19:57:57 [INFO] __main__:   led_blue: OK
+2025-07-02 19:57:57 [INFO] __main__:   display: OK
+2025-07-02 19:57:57 [INFO] __main__:   switch_reader: MOCK (MUX read returned 0)
+2025-07-02 19:57:59 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 19:58:23 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T18:58:23Z'}
+2025-07-02 19:58:23 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 19:58:23 [INFO] __main__: Shutdown complete.
+2025-07-02 19:58:23 [INFO] __main__: System exited cleanly.
+2025-07-02 20:01:31 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:01:31 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:01:31 [INFO] __main__: Pin assignments:
+2025-07-02 20:01:31 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:01:31 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:01:31 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:01:31 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:01:31 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:01:31 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:01:31 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:01:31 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:01:31 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:01:31 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:01:31 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:01:31 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:01:31 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:01:31 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:01:31 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:01:31 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:01:31 [INFO] __main__: Hardware initialized.
+2025-07-02 20:01:31 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:01:31 [INFO] __main__:   btn_red: OK
+2025-07-02 20:01:31 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:01:31 [INFO] __main__:   btn_green: OK
+2025-07-02 20:01:31 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:01:31 [INFO] __main__:   main_btn: OK
+2025-07-02 20:01:31 [INFO] __main__:   led_red: OK
+2025-07-02 20:01:31 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:01:31 [INFO] __main__:   led_green: OK
+2025-07-02 20:01:31 [INFO] __main__:   led_blue: OK
+2025-07-02 20:01:31 [INFO] __main__:   display: OK
+2025-07-02 20:01:31 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:01:34 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:01:34 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': None, 'timestamp': '2025-07-02T19:01:34Z'}
+2025-07-02 20:01:37 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:01:37Z'}
+2025-07-02 20:01:37 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:01:37 [INFO] __main__: Shutdown complete.
+2025-07-02 20:01:37 [INFO] __main__: System exited cleanly.
+2025-07-02 20:06:56 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:06:56 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:06:56 [INFO] __main__: Pin assignments:
+2025-07-02 20:06:56 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:06:56 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:06:56 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:06:56 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:06:56 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:06:56 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:06:56 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:06:56 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:06:56 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:06:56 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:06:56 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:06:56 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:06:56 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:06:56 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:06:56 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:06:56 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:06:56 [INFO] __main__: Hardware initialized.
+2025-07-02 20:06:56 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:06:56 [INFO] __main__:   btn_red: OK
+2025-07-02 20:06:56 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:06:56 [INFO] __main__:   btn_green: OK
+2025-07-02 20:06:56 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:06:56 [INFO] __main__:   main_btn: OK
+2025-07-02 20:06:56 [INFO] __main__:   led_red: OK
+2025-07-02 20:06:56 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:06:56 [INFO] __main__:   led_green: OK
+2025-07-02 20:06:56 [INFO] __main__:   led_blue: OK
+2025-07-02 20:06:56 [INFO] __main__:   display: OK
+2025-07-02 20:06:56 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:06:58 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:06:59 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': None, 'timestamp': '2025-07-02T19:06:58Z'}
+2025-07-02 20:07:02 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 3, 'timestamp': '2025-07-02T19:07:02Z'}
+2025-07-02 20:07:02 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-02T19:07:02Z'}
+2025-07-02 20:07:04 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:07:04,725] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:07:04 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:07:04 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:07:04Z'}
+[2025-07-02 20:07:04,751] ERROR AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:07:04 [ERROR] AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:07:08 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:07:08Z'}
+2025-07-02 20:07:08 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:07:09 [INFO] __main__: Shutdown complete.
+2025-07-02 20:07:09 [INFO] __main__: System exited cleanly.
+2025-07-02 20:07:14 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:07:14 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:07:14 [INFO] __main__: Pin assignments:
+2025-07-02 20:07:14 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:07:14 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:07:14 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:07:14 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:07:14 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:07:14 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:07:14 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:07:14 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:07:14 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:07:14 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:07:14 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:07:14 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:07:14 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:07:14 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:07:14 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:07:14 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:07:14 [INFO] __main__: Hardware initialized.
+2025-07-02 20:07:14 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:07:14 [INFO] __main__:   btn_red: OK
+2025-07-02 20:07:14 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:07:14 [INFO] __main__:   btn_green: OK
+2025-07-02 20:07:14 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:07:14 [INFO] __main__:   main_btn: OK
+2025-07-02 20:07:14 [INFO] __main__:   led_red: OK
+2025-07-02 20:07:14 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:07:14 [INFO] __main__:   led_green: OK
+2025-07-02 20:07:14 [INFO] __main__:   led_blue: OK
+2025-07-02 20:07:14 [INFO] __main__:   display: OK
+2025-07-02 20:07:14 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:07:17 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:07:17 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T19:07:17Z'}
+2025-07-02 20:07:23 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:07:23,010] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:07:23 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:07:23 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:07:23Z'}
+[2025-07-02 20:07:23,020] ERROR AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:07:23 [ERROR] AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:11:08 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:11:08Z'}
+2025-07-02 20:11:08 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:11:08 [INFO] __main__: Shutdown complete.
+2025-07-02 20:11:08 [INFO] __main__: System exited cleanly.
+2025-07-02 20:11:13 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:11:13 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:11:13 [INFO] __main__: Pin assignments:
+2025-07-02 20:11:13 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:11:13 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:11:13 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:11:13 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:11:13 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:11:13 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:11:13 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:11:13 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:11:13 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:11:13 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:11:13 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:11:13 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:11:13 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:11:13 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:11:13 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:11:13 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:11:13 [INFO] __main__: Hardware initialized.
+2025-07-02 20:11:13 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:11:13 [INFO] __main__:   btn_red: OK
+2025-07-02 20:11:13 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:11:13 [INFO] __main__:   btn_green: OK
+2025-07-02 20:11:13 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:11:13 [INFO] __main__:   main_btn: OK
+2025-07-02 20:11:13 [INFO] __main__:   led_red: OK
+2025-07-02 20:11:13 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:11:13 [INFO] __main__:   led_green: OK
+2025-07-02 20:11:13 [INFO] __main__:   led_blue: OK
+2025-07-02 20:11:13 [INFO] __main__:   display: OK
+2025-07-02 20:11:13 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:11:16 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:11:16Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 315, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/config/BOSSsettings.json\'\n'}
+2025-07-02 20:11:16 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 315, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+2025-07-02 20:11:16 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:11:17 [INFO] __main__: Shutdown complete.
+2025-07-02 20:11:26 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:11:26 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:11:26 [INFO] __main__: Pin assignments:
+2025-07-02 20:11:26 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:11:26 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:11:26 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:11:26 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:11:26 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:11:26 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:11:26 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:11:26 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:11:26 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:11:26 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:11:26 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:11:26 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:11:26 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:11:26 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:11:26 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:11:26 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:11:26 [INFO] __main__: Hardware initialized.
+2025-07-02 20:11:26 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:11:26 [INFO] __main__:   btn_red: OK
+2025-07-02 20:11:26 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:11:26 [INFO] __main__:   btn_green: OK
+2025-07-02 20:11:26 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:11:26 [INFO] __main__:   main_btn: OK
+2025-07-02 20:11:26 [INFO] __main__:   led_red: OK
+2025-07-02 20:11:26 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:11:26 [INFO] __main__:   led_green: OK
+2025-07-02 20:11:26 [INFO] __main__:   led_blue: OK
+2025-07-02 20:11:26 [INFO] __main__:   display: OK
+2025-07-02 20:11:26 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:11:29 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:11:29Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 315, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/config/BOSSsettings.json\'\n'}
+2025-07-02 20:11:29 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 315, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+2025-07-02 20:11:29 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:11:29 [INFO] __main__: Shutdown complete.
+2025-07-02 20:13:56 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:13:56 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:13:56 [INFO] __main__: Pin assignments:
+2025-07-02 20:13:56 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:13:56 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:13:56 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:13:56 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:13:56 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:13:56 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:13:56 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:13:56 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:13:56 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:13:56 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:13:56 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:13:56 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:13:56 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:13:56 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:13:56 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:13:56 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:13:56 [INFO] __main__: Hardware initialized.
+2025-07-02 20:13:56 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:13:56 [INFO] __main__:   btn_red: OK
+2025-07-02 20:13:56 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:13:56 [INFO] __main__:   btn_green: OK
+2025-07-02 20:13:56 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:13:56 [INFO] __main__:   main_btn: OK
+2025-07-02 20:13:56 [INFO] __main__:   led_red: OK
+2025-07-02 20:13:56 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:13:56 [INFO] __main__:   led_green: OK
+2025-07-02 20:13:56 [INFO] __main__:   led_blue: OK
+2025-07-02 20:13:56 [INFO] __main__:   display: OK
+2025-07-02 20:13:56 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:13:59 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:13:58Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 315, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/config/BOSSsettings.json\'\n'}
+2025-07-02 20:13:59 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 315, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/config/BOSSsettings.json'
+2025-07-02 20:13:59 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:13:59 [INFO] __main__: Shutdown complete.
+2025-07-02 20:15:55 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:15:55 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:15:55 [INFO] __main__: Pin assignments:
+2025-07-02 20:15:55 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:15:55 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:15:55 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:15:55 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:15:55 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:15:55 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:15:55 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:15:55 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:15:55 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:15:55 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:15:55 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:15:55 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:15:55 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:15:55 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:15:55 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:15:56 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:15:56 [INFO] __main__: Hardware initialized.
+2025-07-02 20:15:56 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:15:56 [INFO] __main__:   btn_red: OK
+2025-07-02 20:15:56 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:15:56 [INFO] __main__:   btn_green: OK
+2025-07-02 20:15:56 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:15:56 [INFO] __main__:   main_btn: OK
+2025-07-02 20:15:56 [INFO] __main__:   led_red: OK
+2025-07-02 20:15:56 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:15:56 [INFO] __main__:   led_green: OK
+2025-07-02 20:15:56 [INFO] __main__:   led_blue: OK
+2025-07-02 20:15:56 [INFO] __main__:   display: OK
+2025-07-02 20:15:56 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:15:58 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:15:58Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 315, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/boss/config/BOSSsettings.json\'\n'}
+2025-07-02 20:15:58 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 315, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+2025-07-02 20:15:58 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:15:59 [INFO] __main__: Shutdown complete.
+2025-07-02 20:18:08 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:18:08 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:18:08 [INFO] __main__: Pin assignments:
+2025-07-02 20:18:08 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:18:08 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:18:08 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:18:08 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:18:08 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:18:08 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:18:08 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:18:08 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:18:08 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:18:08 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:18:08 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:18:08 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:18:08 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:18:08 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:18:08 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:18:09 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:18:09 [INFO] __main__: Hardware initialized.
+2025-07-02 20:18:09 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:18:09 [INFO] __main__:   btn_red: OK
+2025-07-02 20:18:09 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:18:09 [INFO] __main__:   btn_green: OK
+2025-07-02 20:18:09 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:18:09 [INFO] __main__:   main_btn: OK
+2025-07-02 20:18:09 [INFO] __main__:   led_red: OK
+2025-07-02 20:18:09 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:18:09 [INFO] __main__:   led_green: OK
+2025-07-02 20:18:09 [INFO] __main__:   led_blue: OK
+2025-07-02 20:18:09 [INFO] __main__:   display: OK
+2025-07-02 20:18:09 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:18:12 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:18:12Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 316, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/boss/config/BOSSsettings.json\'\n'}
+2025-07-02 20:18:12 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 316, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+2025-07-02 20:18:12 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:18:12 [INFO] __main__: Shutdown complete.
+2025-07-02 20:22:53 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:22:53 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:22:53 [INFO] __main__: Pin assignments:
+2025-07-02 20:22:53 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:22:53 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:22:53 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:22:53 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:22:53 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:22:53 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:22:53 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:22:53 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:22:53 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:22:53 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:22:53 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:22:53 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:22:53 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:22:53 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:22:53 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:22:53 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:22:53 [INFO] __main__: Hardware initialized.
+2025-07-02 20:22:53 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:22:53 [INFO] __main__:   btn_red: OK
+2025-07-02 20:22:53 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:22:53 [INFO] __main__:   btn_green: OK
+2025-07-02 20:22:53 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:22:53 [INFO] __main__:   main_btn: OK
+2025-07-02 20:22:53 [INFO] __main__:   led_red: OK
+2025-07-02 20:22:53 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:22:53 [INFO] __main__:   led_green: OK
+2025-07-02 20:22:53 [INFO] __main__:   led_blue: OK
+2025-07-02 20:22:53 [INFO] __main__:   display: OK
+2025-07-02 20:22:53 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:22:56 [INFO] EventBus: Event published: error | {'error_type': 'FileNotFoundError', 'message': "[Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'", 'timestamp': '2025-07-02T19:22:56Z', 'stack_trace': 'Traceback (most recent call last):\n  File "/home/rpi/boss/boss/main.py", line 316, in main\n    with open(CONFIG_PATH) as f:\n         ^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/home/rpi/boss/config/BOSSsettings.json\'\n'}
+2025-07-02 20:22:56 [ERROR] __main__: Fatal error: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+Traceback (most recent call last):
+  File "/home/rpi/boss/boss/main.py", line 316, in main
+    with open(CONFIG_PATH) as f:
+         ^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/BOSSsettings.json'
+2025-07-02 20:22:56 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:22:56 [INFO] __main__: Shutdown complete.
+2025-07-02 20:23:10 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:23:10 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:23:10 [INFO] __main__: Pin assignments:
+2025-07-02 20:23:10 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:23:10 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:23:10 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:23:10 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:23:10 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:23:10 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:23:10 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:23:10 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:23:10 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:23:10 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:23:10 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:23:10 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:23:10 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:23:10 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:23:10 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:23:10 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:23:10 [INFO] __main__: Hardware initialized.
+2025-07-02 20:23:10 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:23:10 [INFO] __main__:   btn_red: OK
+2025-07-02 20:23:10 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:23:10 [INFO] __main__:   btn_green: OK
+2025-07-02 20:23:10 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:23:10 [INFO] __main__:   main_btn: OK
+2025-07-02 20:23:10 [INFO] __main__:   led_red: OK
+2025-07-02 20:23:10 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:23:10 [INFO] __main__:   led_green: OK
+2025-07-02 20:23:10 [INFO] __main__:   led_blue: OK
+2025-07-02 20:23:10 [INFO] __main__:   display: OK
+2025-07-02 20:23:10 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:23:13 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:23:13 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T19:23:13Z'}
+2025-07-02 20:23:21 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:23:21,347] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:23:21 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:23:21 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:23:21Z'}
+[2025-07-02 20:23:21,360] ERROR AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:23:21 [ERROR] AppRunner: Error running app list_all_apps: [Errno 2] No such file or directory: '/home/rpi/boss/boss/apps/config/BOSSsettings.json'
+2025-07-02 20:37:07 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:37:07 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 20:37:07 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:37:07 [INFO] __main__: Pin assignments:
+2025-07-02 20:37:07 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:37:07 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:37:07 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:37:07 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:37:07 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:37:07 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:37:07 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:37:07 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:37:07 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:37:07 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:37:07 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:37:07 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:37:07 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:37:07 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:37:07 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:37:08 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:37:08 [INFO] __main__: Hardware initialized.
+2025-07-02 20:37:08 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:37:08 [INFO] __main__:   btn_red: OK
+2025-07-02 20:37:08 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:37:08 [INFO] __main__:   btn_green: OK
+2025-07-02 20:37:08 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:37:08 [INFO] __main__:   main_btn: OK
+2025-07-02 20:37:08 [INFO] __main__:   led_red: OK
+2025-07-02 20:37:08 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:37:08 [INFO] __main__:   led_green: OK
+2025-07-02 20:37:08 [INFO] __main__:   led_blue: OK
+2025-07-02 20:37:08 [INFO] __main__:   display: OK
+2025-07-02 20:37:08 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:37:10 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:37:10 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T19:37:10Z'}
+2025-07-02 20:37:14 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:37:14,059] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:37:14 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:37:14 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:37:14Z'}
+[2025-07-02 20:37:14,087] ERROR AppRunner: Error running app list_all_apps: name 'os' is not defined
+2025-07-02 20:37:14 [ERROR] AppRunner: Error running app list_all_apps: name 'os' is not defined
+2025-07-02 20:38:40 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:38:40Z'}
+2025-07-02 20:38:40 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:38:41 [WARNING] __main__: Failed to re-enable OS cursor: name 'os' is not defined
+2025-07-02 20:38:41 [INFO] __main__: Shutdown complete.
+2025-07-02 20:38:41 [INFO] __main__: System exited cleanly.
+2025-07-02 20:38:54 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:38:54 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 20:38:54 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:38:54 [INFO] __main__: Pin assignments:
+2025-07-02 20:38:54 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:38:54 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:38:54 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:38:54 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:38:54 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:38:54 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:38:54 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:38:54 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:38:54 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:38:54 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:38:54 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:38:54 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:38:54 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:38:54 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:38:54 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:38:54 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:38:54 [INFO] __main__: Hardware initialized.
+2025-07-02 20:38:54 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:38:54 [INFO] __main__:   btn_red: OK
+2025-07-02 20:38:54 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:38:54 [INFO] __main__:   btn_green: OK
+2025-07-02 20:38:54 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:38:54 [INFO] __main__:   main_btn: OK
+2025-07-02 20:38:54 [INFO] __main__:   led_red: OK
+2025-07-02 20:38:54 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:38:54 [INFO] __main__:   led_green: OK
+2025-07-02 20:38:54 [INFO] __main__:   led_blue: OK
+2025-07-02 20:38:54 [INFO] __main__:   display: OK
+2025-07-02 20:38:54 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:38:56 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:38:57 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T19:38:57Z'}
+2025-07-02 20:38:59 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:38:59,245] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:38:59 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:38:59 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:38:59Z'}
+[2025-07-02 20:39:00,059] ERROR AppRunner: Error running app list_all_apps: 'API' object has no attribute 'wait_for_button'
+2025-07-02 20:39:00 [ERROR] AppRunner: Error running app list_all_apps: 'API' object has no attribute 'wait_for_button'
+2025-07-02 20:39:14 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:39:14Z'}
+2025-07-02 20:39:14 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:39:14 [WARNING] __main__: Failed to re-enable OS cursor: name 'os' is not defined
+2025-07-02 20:39:14 [INFO] __main__: Shutdown complete.
+2025-07-02 20:39:14 [INFO] __main__: System exited cleanly.
+2025-07-02 20:56:22 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 20:56:22 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 20:56:22 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 20:56:22 [INFO] __main__: Pin assignments:
+2025-07-02 20:56:22 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 20:56:22 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 20:56:22 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 20:56:22 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 20:56:22 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 20:56:23 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 20:56:23 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 20:56:23 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 20:56:23 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 20:56:23 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 20:56:23 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 20:56:23 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 20:56:23 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 20:56:23 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 20:56:23 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 20:56:23 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 20:56:23 [INFO] __main__: Hardware initialized.
+2025-07-02 20:56:23 [INFO] __main__: Hardware startup summary:
+2025-07-02 20:56:23 [INFO] __main__:   btn_red: OK
+2025-07-02 20:56:23 [INFO] __main__:   btn_yellow: OK
+2025-07-02 20:56:23 [INFO] __main__:   btn_green: OK
+2025-07-02 20:56:23 [INFO] __main__:   btn_blue: OK
+2025-07-02 20:56:23 [INFO] __main__:   main_btn: OK
+2025-07-02 20:56:23 [INFO] __main__:   led_red: OK
+2025-07-02 20:56:23 [INFO] __main__:   led_yellow: OK
+2025-07-02 20:56:23 [INFO] __main__:   led_green: OK
+2025-07-02 20:56:23 [INFO] __main__:   led_blue: OK
+2025-07-02 20:56:23 [INFO] __main__:   display: OK
+2025-07-02 20:56:23 [INFO] __main__:   switch_reader: OK
+2025-07-02 20:56:25 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 20:56:25 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T19:56:25Z'}
+2025-07-02 20:56:27 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 20:56:27,438] INFO AppRunner: Started app: list_all_apps
+2025-07-02 20:56:27 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 20:56:27 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T19:56:27Z'}
+[2025-07-02 20:56:28,267] ERROR AppRunner: Error running app list_all_apps: 'bool' object is not callable
+2025-07-02 20:56:28 [ERROR] AppRunner: Error running app list_all_apps: 'bool' object is not callable
+2025-07-02 20:56:59 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T19:56:59Z'}
+2025-07-02 20:56:59 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 20:57:00 [WARNING] __main__: Failed to re-enable OS cursor: name 'os' is not defined
+2025-07-02 20:57:00 [INFO] __main__: Shutdown complete.
+2025-07-02 20:57:00 [INFO] __main__: System exited cleanly.
+2025-07-02 21:09:38 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 21:09:38 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 21:09:38 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 21:09:38 [INFO] __main__: Pin assignments:
+2025-07-02 21:09:38 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 21:09:38 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 21:09:38 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 21:09:38 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 21:09:38 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 21:09:38 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 21:09:38 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 21:09:38 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 21:09:38 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 21:09:38 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 21:09:38 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 21:09:38 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 21:09:38 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 21:09:38 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 21:09:38 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 21:09:38 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 21:09:38 [INFO] __main__: Hardware initialized.
+2025-07-02 21:09:38 [INFO] __main__: Hardware startup summary:
+2025-07-02 21:09:38 [INFO] __main__:   btn_red: OK
+2025-07-02 21:09:38 [INFO] __main__:   btn_yellow: OK
+2025-07-02 21:09:38 [INFO] __main__:   btn_green: OK
+2025-07-02 21:09:38 [INFO] __main__:   btn_blue: OK
+2025-07-02 21:09:38 [INFO] __main__:   main_btn: OK
+2025-07-02 21:09:38 [INFO] __main__:   led_red: OK
+2025-07-02 21:09:38 [INFO] __main__:   led_yellow: OK
+2025-07-02 21:09:38 [INFO] __main__:   led_green: OK
+2025-07-02 21:09:38 [INFO] __main__:   led_blue: OK
+2025-07-02 21:09:38 [INFO] __main__:   display: OK
+2025-07-02 21:09:38 [INFO] __main__:   switch_reader: OK
+2025-07-02 21:09:41 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 21:09:41 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T20:09:41Z'}
+2025-07-02 21:09:43 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 21:09:43,470] INFO AppRunner: Started app: list_all_apps
+2025-07-02 21:09:43 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 21:09:43 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T20:09:43Z'}
+2025-07-02 21:10:05 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 21:10:05,314] INFO AppRunner: Stopping app: list_all_apps
+2025-07-02 21:10:05 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-02 21:10:05,492] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-02 21:10:05 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-02 21:10:05 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:05Z'}
+[2025-07-02 21:10:05,497] INFO AppRunner: Started app: list_all_apps
+2025-07-02 21:10:05 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 21:10:05 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:05Z'}
+2025-07-02 21:10:09 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 0, 'timestamp': '2025-07-02T20:10:09Z'}
+2025-07-02 21:10:11 [INFO] __main__: Go button pressed. Switch value: 1, launching app: None
+2025-07-02 21:10:11 [INFO] __main__: No app mapped for value 1.
+2025-07-02 21:10:14 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-02T20:10:14Z'}
+2025-07-02 21:10:15 [INFO] EventBus: Event published: switch_change | {'value': 4, 'previous_value': 0, 'timestamp': '2025-07-02T20:10:15Z'}
+2025-07-02 21:10:15 [INFO] EventBus: Event published: switch_change | {'value': 12, 'previous_value': 4, 'timestamp': '2025-07-02T20:10:15Z'}
+2025-07-02 21:10:15 [INFO] EventBus: Event published: switch_change | {'value': 14, 'previous_value': 12, 'timestamp': '2025-07-02T20:10:15Z'}
+2025-07-02 21:10:15 [INFO] EventBus: Event published: switch_change | {'value': 12, 'previous_value': 14, 'timestamp': '2025-07-02T20:10:15Z'}
+2025-07-02 21:10:15 [INFO] EventBus: Event published: switch_change | {'value': 15, 'previous_value': 12, 'timestamp': '2025-07-02T20:10:15Z'}
+2025-07-02 21:10:16 [INFO] EventBus: Event published: switch_change | {'value': 63, 'previous_value': 15, 'timestamp': '2025-07-02T20:10:16Z'}
+2025-07-02 21:10:17 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': 63, 'timestamp': '2025-07-02T20:10:17Z'}
+2025-07-02 21:10:19 [INFO] __main__: Go button pressed. Switch value: 255, launching app: admin_shutdown
+[2025-07-02 21:10:19,421] INFO AppRunner: Stopping app: list_all_apps
+2025-07-02 21:10:19 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-02 21:10:19,458] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-02 21:10:19 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-02 21:10:19 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:19Z'}
+[2025-07-02 21:10:19,464] INFO AppRunner: Started app: admin_shutdown
+2025-07-02 21:10:19 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-02 21:10:19 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:19Z'}
+2025-07-02 21:10:32 [INFO] EventBus: Event published: switch_change | {'value': 254, 'previous_value': 255, 'timestamp': '2025-07-02T20:10:32Z'}
+2025-07-02 21:10:32 [INFO] EventBus: Event published: switch_change | {'value': 244, 'previous_value': 254, 'timestamp': '2025-07-02T20:10:32Z'}
+2025-07-02 21:10:33 [INFO] EventBus: Event published: switch_change | {'value': 196, 'previous_value': 244, 'timestamp': '2025-07-02T20:10:33Z'}
+2025-07-02 21:10:33 [INFO] EventBus: Event published: switch_change | {'value': 132, 'previous_value': 196, 'timestamp': '2025-07-02T20:10:33Z'}
+2025-07-02 21:10:35 [INFO] EventBus: Event published: switch_change | {'value': 128, 'previous_value': 132, 'timestamp': '2025-07-02T20:10:35Z'}
+2025-07-02 21:10:35 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 128, 'timestamp': '2025-07-02T20:10:35Z'}
+2025-07-02 21:10:36 [INFO] __main__: Go button pressed. Switch value: 0, launching app: list_all_apps
+[2025-07-02 21:10:36,563] INFO AppRunner: Stopping app: admin_shutdown
+2025-07-02 21:10:36 [INFO] AppRunner: Stopping app: admin_shutdown
+[2025-07-02 21:10:36,911] INFO AppRunner: App admin_shutdown stopped cleanly.
+2025-07-02 21:10:36 [INFO] AppRunner: App admin_shutdown stopped cleanly.
+2025-07-02 21:10:36 [INFO] EventBus: Event published: app_stopped | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:36Z'}
+[2025-07-02 21:10:36,920] INFO AppRunner: Started app: list_all_apps
+2025-07-02 21:10:36 [INFO] AppRunner: Started app: list_all_apps
+2025-07-02 21:10:36 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-02T20:10:36Z'}
+2025-07-02 21:10:40 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T20:10:40Z'}
+2025-07-02 21:10:40 [INFO] __main__: Performing clean shutdown and resource cleanup...
+[2025-07-02 21:10:40,306] ERROR AppRunner: Error running app list_all_apps: Button is closed or uninitialized
+2025-07-02 21:10:40 [ERROR] AppRunner: Error running app list_all_apps: Button is closed or uninitialized
+2025-07-02 21:10:40 [WARNING] __main__: Failed to re-enable OS cursor: name 'os' is not defined
+2025-07-02 21:10:40 [INFO] __main__: Shutdown complete.
+2025-07-02 21:10:40 [INFO] __main__: System exited cleanly.
+2025-07-02 21:40:39 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 21:40:39 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 21:40:39 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 21:40:39 [INFO] __main__: Pin assignments:
+2025-07-02 21:40:39 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 21:40:39 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 21:40:39 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 21:40:39 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 21:40:39 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 21:40:39 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 21:40:39 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 21:40:39 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 21:40:39 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 21:40:39 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 21:40:39 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 21:40:39 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 21:40:39 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 21:40:39 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 21:40:39 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 21:40:40 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 21:40:40 [INFO] __main__: Hardware initialized.
+2025-07-02 21:40:40 [INFO] __main__: Hardware startup summary:
+2025-07-02 21:40:40 [INFO] __main__:   btn_red: OK
+2025-07-02 21:40:40 [INFO] __main__:   btn_yellow: OK
+2025-07-02 21:40:40 [INFO] __main__:   btn_green: OK
+2025-07-02 21:40:40 [INFO] __main__:   btn_blue: OK
+2025-07-02 21:40:40 [INFO] __main__:   main_btn: OK
+2025-07-02 21:40:40 [INFO] __main__:   led_red: OK
+2025-07-02 21:40:40 [INFO] __main__:   led_yellow: OK
+2025-07-02 21:40:40 [INFO] __main__:   led_green: OK
+2025-07-02 21:40:40 [INFO] __main__:   led_blue: OK
+2025-07-02 21:40:40 [INFO] __main__:   display: OK
+2025-07-02 21:40:40 [INFO] __main__:   switch_reader: OK
+2025-07-02 21:40:56 [WARNING] __main__: Startup app failed: 'EventBus' object has no attribute 'unsubscribe'
+2025-07-02 21:40:56 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 21:40:56 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-02T20:40:56Z'}
+2025-07-02 21:42:12 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T20:42:12Z'}
+2025-07-02 21:42:12 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 21:42:12 [WARNING] __main__: Failed to re-enable OS cursor: name 'os' is not defined
+2025-07-02 21:42:12 [INFO] __main__: Shutdown complete.
+2025-07-02 21:42:12 [INFO] __main__: System exited cleanly.

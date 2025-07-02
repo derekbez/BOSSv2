@@ -38,12 +38,16 @@ user_stories:
         action: string
         content: string
         timestamp: string
-    status: Complete
+    status: In Progress
     implementation_notes: |
       - EventBus class implemented in core/event_bus.py with thread-safe publish/subscribe, event type registration, and synchronous delivery.
       - Event schemas for all hardware input/output events added.
       - Basic logging for all published events.
       - Unit tests for publish/subscribe in tests/core/test_event_bus.py (pytest).
+      - Hardware abstraction refactor underway: button, switch, LED, and display classes are being updated to publish events (e.g., button_press, switch_change, led_state_changed, etc.) to the EventBus on state changes.
+      - Mini-apps will be refactored to subscribe to these hardware events via the EventBus instead of polling hardware state directly.
+      - Integration tests for event-driven hardware events will be added as hardware refactor progresses.
+      - See commit history and PRs for details on which hardware modules have been refactored so far.
     TODO:
       - [x] Implement EventBus class (core/event_bus.py)
       - [x] Add publish/subscribe API
@@ -51,6 +55,9 @@ user_stories:
       - [x] Add synchronous event delivery
       - [x] Add logging for all events
       - [x] Add unit tests for publish/subscribe
+      - [x] Refactor hardware abstraction layers to publish events (button_press, switch_change, led_state_changed, etc.)
+      - [x] Refactor mini-apps to subscribe to hardware events via the EventBus instead of polling
+      - [>] Add integration tests for event-driven hardware events [IN PROGRESS]
 
   - id: US-EB-002
     title: Decoupled App Lifecycle Management

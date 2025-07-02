@@ -4,12 +4,12 @@ Displays a paginated list of all available mini-apps by reading their number, na
 Entry point: run(stop_event, api)
 """
 import os
+from boss.core.paths import CONFIG_PATH, APPS_DIR
 import json
 from threading import Event
 from typing import Any, List, Dict
 
-APPS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'config', 'BOSSsettings.json'))
+
 
 
 def load_app_mappings() -> Dict[str, str]:
@@ -49,10 +49,10 @@ def paginate(items: List[Dict[str, Any]], page: int, per_page: int) -> List[Dict
 
 def run(stop_event: Event, api: Any) -> None:
     """
-    Main entry point for the Mini-App Directory Viewer mini-app.
+    Main entry point for the Mini-App Directory Viewer mini-app (event-driven).
     Args:
         stop_event (Event): Event to signal app termination.
-        api (object): Provided API for hardware/display access.
+        api (AppAPI): Provided API for hardware/display access.
     """
     config = load_manifest('list_all_apps').get('config', {})
     per_page = config.get('entries_per_page', 15)
@@ -70,12 +70,21 @@ def run(stop_event: Event, api: Any) -> None:
             lines.append(f"{app['number']:>3} | {app['name'][:20]:<20} | {app['description'][:24]}")
         lines.append("")
         lines.append(f"Page {page_idx+1}/{total_pages}")
+        # LED logic: illuminate available buttons
+        led_states = {'yellow': False, 'blue': False}
         if page_idx == 0:
             lines.append("[YELLOW: DISABLED] Prev | [BLUE] Next")
+            led_states['yellow'] = False
+            led_states['blue'] = True
         elif page_idx == total_pages - 1:
             lines.append("[YELLOW] Prev | [BLUE: DISABLED] Next")
+            led_states['yellow'] = True
+            led_states['blue'] = False
         else:
             lines.append("[YELLOW] Prev | [BLUE] Next")
+            led_states['yellow'] = True
+            led_states['blue'] = True
+        api.set_leds(led_states)
         api.screen.clear()
         api.screen.set_cursor(0)
         for line in lines:
@@ -83,12 +92,26 @@ def run(stop_event: Event, api: Any) -> None:
 
     display_page(page)
 
-    while not stop_event.is_set():
-        event = api.wait_for_button(['yellow', 'blue'], timeout=0.2)
-        if event == 'yellow' and page > 0:
+    # Event-driven: subscribe to button presses
+    def on_button_press(event):
+        nonlocal page
+        button = event.get('button_id')
+        if button == 'yellow' and page > 0:
             page -= 1
             display_page(page)
-        elif event == 'blue' and page < total_pages - 1:
+        elif button == 'blue' and page < total_pages - 1:
             page += 1
             display_page(page)
-        # else: ignore or debounce
+
+    sub_id = api.event_bus.subscribe(
+        'input.button.pressed',
+        on_button_press,
+        filter={"button_id": ["yellow", "blue"]}
+    )
+
+    try:
+        while not stop_event.is_set():
+            stop_event.wait(0.2)
+    finally:
+        # Unsubscribe on exit
+        api.event_bus.unsubscribe(sub_id)

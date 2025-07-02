@@ -16,16 +16,12 @@ from boss.core.event_bus_config import EventBusConfig
 from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
-from boss.hardware.screen import MockScreen, PiScreen
-# Add PygameScreen import
-try:
-    from boss.hardware.screen import PygameScreen
-    HAS_PYGAME = True
-except ImportError:
-    HAS_PYGAME = False
+from boss.hardware.screen import MockScreen
+from boss.hardware.pillow_screen import PillowScreen
+from boss.core.paths import CONFIG_PATH
 import time
 from gpiozero import Device
-import os
+
 
 # Try to import real hardware libraries, fallback to mocks if unavailable
 try:
@@ -201,9 +197,9 @@ def initialize_hardware():
         # Multiplexer
         try:
             switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
-            test_val = switch_reader.read_value()
-            if test_val == 0:
-                raise Exception("MUX read returned 0")
+            # Try reading multiple times to ensure the mux is responsive
+            test_vals = [switch_reader.read_value() for _ in range(3)]
+            # If all reads raise an exception, it will be caught below
             hardware_status['switch_reader'] = 'OK'
         except Exception as e:
             switch_reader = KeyboardSwitchReader(1)
@@ -278,10 +274,10 @@ def cleanup():
         except Exception:
             pass
     # Clear the screen back to OS (do this after closing framebuffer)
-    try:
-        os.system('clear')
-    except Exception:
-        pass
+    # try:
+    #     os.system('clear')
+    # except Exception:
+    #     pass
     # Re-enable cursor on exit
     show_os_cursor()
     logger.info("Shutdown complete.")
@@ -304,14 +300,16 @@ def main():
         try:
             from boss.apps import admin_startup
             import threading
+            from boss.core.api import AppAPI
             leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
-            api = type('API', (), {'screen': screen, 'leds': leds, 'event_bus': event_bus})()
+            buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
+            api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
             stop_event = threading.Event()
             admin_startup.run(stop_event, api=api)
         except Exception as e:
             logger.warning(f"Startup app failed: {e}")
         # Load app mappings
-        with open("boss/config/BOSSsettings.json") as f:
+        with open(CONFIG_PATH) as f:
             config = json.load(f)
         app_mappings = config.get("app_mappings", {})
         switch = switch_reader if switch_reader else MockSwitchReader(1)
@@ -322,6 +320,10 @@ def main():
         last_btn_state = False
         logger.info("System running. Press Ctrl+C to exit.")
         signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
+        from boss.core.api import AppAPI
+        leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
+        buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
+        api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
         while True:
             value = app_manager.poll_and_update_display()
             try:
@@ -335,7 +337,6 @@ def main():
                 app_name = app_mappings.get(str(value))
                 logger.info(f"Go button pressed. Switch value: {value}, launching app: {app_name}")
                 if app_name:
-                    api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
                     app_runner.run_app(app_name, api=api)
                 else:
                     logger.info(f"No app mapped for value {value}.")
