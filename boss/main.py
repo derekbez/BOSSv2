@@ -325,7 +325,7 @@ def main():
             admin_startup.run(stop_event, api=api)
         except Exception as e:
             logger.warning(f"Startup app failed: {e}")
-        # Load app mappings
+        # Load app mappings and initialize managers
         with open(CONFIG_PATH) as f:
             config = json.load(f)
         app_mappings = config.get("app_mappings", {})
@@ -333,31 +333,30 @@ def main():
         seg_display = display if display else MockSevenSegmentDisplay()
         app_manager = AppManager(switch, seg_display, event_bus=event_bus)
         app_runner = AppRunner(event_bus=event_bus)
-        last_value = None
-        last_btn_state = False
         logger.info("System running. Press Ctrl+C to exit.")
         signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
         from boss.core.api import AppAPI
         leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
         buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
         api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
-        while True:
-            value = app_manager.poll_and_update_display()
-            try:
-                btn_state = main_btn.is_pressed if main_btn else False
-                logger.debug(f"Go button state: {btn_state}")
-            except Exception as e:
-                logger.error(f"Exception in is_pressed(): {e}")
-                raise
-            # Debounce: detect rising edge
-            if btn_state and not last_btn_state:
+
+        # --- Event-driven Go button logic ---
+        # Subscribe to main Go button press events via EventBus
+        def on_go_button_pressed(event_type, payload):
+            # Only handle the main Go button
+            if payload.get("button_id") == "main":
+                value = app_manager.poll_and_update_display()
                 app_name = app_mappings.get(str(value))
-                logger.info(f"Go button pressed. Switch value: {value}, launching app: {app_name}")
+                logger.info(f"Go button pressed (event). Switch value: {value}, launching app: {app_name}")
                 if app_name:
                     app_runner.run_app(app_name, api=api)
                 else:
                     logger.info(f"No app mapped for value {value}.")
-            last_btn_state = btn_state
+
+        event_bus.subscribe("input.button.pressed", on_go_button_pressed)
+
+        # Main loop: just keep the process alive, all logic is now event-driven
+        while True:
             time.sleep(0.1)
     except SystemExit:
         if 'event_bus' in locals():
