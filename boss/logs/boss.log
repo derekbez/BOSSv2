@@ -1599,3 +1599,203 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/B
 2025-07-02 22:23:24 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-07-02 22:23:25 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751491405.0137134, 'source': 'hardware.display.pi'}
 2025-07-02 22:23:25 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751491405.037737, 'source': 'hardware.display.pi'}
+2025-07-02 22:35:15 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 22:35:15 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 22:35:15 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 22:35:15 [INFO] __main__: Pin assignments:
+2025-07-02 22:35:15 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 22:35:15 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 22:35:15 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 22:35:15 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 22:35:15 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 22:35:15 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 22:35:15 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 22:35:15 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 22:35:15 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 22:35:15 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 22:35:15 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 22:35:15 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 22:35:15 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 22:35:15 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 22:35:15 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 22:35:15 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 22:35:15 [INFO] __main__: Hardware initialized.
+2025-07-02 22:35:15 [INFO] __main__: Hardware startup summary:
+2025-07-02 22:35:15 [INFO] __main__:   btn_red: OK
+2025-07-02 22:35:15 [INFO] __main__:   btn_yellow: OK
+2025-07-02 22:35:15 [INFO] __main__:   btn_green: OK
+2025-07-02 22:35:15 [INFO] __main__:   btn_blue: OK
+2025-07-02 22:35:15 [INFO] __main__:   main_btn: OK
+2025-07-02 22:35:15 [INFO] __main__:   led_red: OK
+2025-07-02 22:35:15 [INFO] __main__:   led_yellow: OK
+2025-07-02 22:35:15 [INFO] __main__:   led_green: OK
+2025-07-02 22:35:15 [INFO] __main__:   led_blue: OK
+2025-07-02 22:35:15 [INFO] __main__:   display: OK
+2025-07-02 22:35:15 [INFO] __main__:   switch_reader: OK
+2025-07-02 22:35:18 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 22:35:28 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T21:35:28Z'}
+2025-07-02 22:35:28 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 22:35:28 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492128.1502795, 'source': 'hardware.display.pi'}
+2025-07-02 22:35:28 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492128.1719294, 'source': 'hardware.display.pi'}
+2025-07-02 22:45:27 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 22:45:27 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 22:45:27 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 22:45:27 [INFO] __main__: Pin assignments:
+2025-07-02 22:45:27 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 22:45:27 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 22:45:27 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 22:45:27 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 22:45:27 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 22:45:27 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 22:45:27 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 22:45:27 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 22:45:27 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 22:45:27 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 22:45:27 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 22:45:27 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 22:45:27 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 22:45:27 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 22:45:27 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 22:45:27 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 22:45:27 [INFO] __main__: Hardware initialized.
+2025-07-02 22:45:27 [INFO] __main__: Hardware startup summary:
+2025-07-02 22:45:27 [INFO] __main__:   btn_red: OK
+2025-07-02 22:45:27 [INFO] __main__:   btn_yellow: OK
+2025-07-02 22:45:27 [INFO] __main__:   btn_green: OK
+2025-07-02 22:45:27 [INFO] __main__:   btn_blue: OK
+2025-07-02 22:45:27 [INFO] __main__:   main_btn: OK
+2025-07-02 22:45:27 [INFO] __main__:   led_red: OK
+2025-07-02 22:45:27 [INFO] __main__:   led_yellow: OK
+2025-07-02 22:45:27 [INFO] __main__:   led_green: OK
+2025-07-02 22:45:27 [INFO] __main__:   led_blue: OK
+2025-07-02 22:45:27 [INFO] __main__:   display: OK
+2025-07-02 22:45:27 [INFO] __main__:   switch_reader: OK
+2025-07-02 22:45:29 [WARNING] __main__: Startup app failed: cannot access local variable 'app_runner' where it is not associated with a value
+2025-07-02 22:45:29 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-02 22:45:45 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T21:45:45Z'}
+2025-07-02 22:45:45 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 22:45:45 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492745.683125, 'source': 'hardware.display.pi'}
+2025-07-02 22:45:45 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492745.7049685, 'source': 'hardware.display.pi'}
+2025-07-02 22:47:39 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 22:47:39 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 22:47:39 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 22:47:39 [INFO] __main__: Pin assignments:
+2025-07-02 22:47:39 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 22:47:39 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 22:47:39 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 22:47:39 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 22:47:39 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 22:47:39 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 22:47:39 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 22:47:39 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 22:47:39 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 22:47:39 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 22:47:39 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 22:47:39 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 22:47:39 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 22:47:39 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 22:47:39 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 22:47:39 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 22:47:39 [INFO] __main__: Hardware initialized.
+2025-07-02 22:47:39 [INFO] __main__: Hardware startup summary:
+2025-07-02 22:47:39 [INFO] __main__:   btn_red: OK
+2025-07-02 22:47:39 [INFO] __main__:   btn_yellow: OK
+2025-07-02 22:47:39 [INFO] __main__:   btn_green: OK
+2025-07-02 22:47:39 [INFO] __main__:   btn_blue: OK
+2025-07-02 22:47:39 [INFO] __main__:   main_btn: OK
+2025-07-02 22:47:39 [INFO] __main__:   led_red: OK
+2025-07-02 22:47:39 [INFO] __main__:   led_yellow: OK
+2025-07-02 22:47:39 [INFO] __main__:   led_green: OK
+2025-07-02 22:47:39 [INFO] __main__:   led_blue: OK
+2025-07-02 22:47:39 [INFO] __main__:   display: OK
+2025-07-02 22:47:39 [INFO] __main__:   switch_reader: OK
+2025-07-02 22:47:41 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-02 22:47:41,484] INFO AppRunner: Started app: admin_startup
+2025-07-02 22:47:41 [INFO] AppRunner: Started app: admin_startup
+2025-07-02 22:47:41 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-02T21:47:41Z'}
+2025-07-02 22:47:50 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T21:47:50Z'}
+2025-07-02 22:47:50 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 22:47:50 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492870.7805142, 'source': 'hardware.display.pi'}
+2025-07-02 22:47:50 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751492870.8029442, 'source': 'hardware.display.pi'}
+2025-07-02 22:50:13 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 22:50:13 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 22:50:13 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 22:50:13 [INFO] __main__: Pin assignments:
+2025-07-02 22:50:13 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 22:50:13 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 22:50:13 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 22:50:13 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 22:50:13 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 22:50:13 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 22:50:13 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 22:50:13 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 22:50:13 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 22:50:13 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 22:50:13 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 22:50:13 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 22:50:13 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 22:50:13 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 22:50:13 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 22:50:13 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 22:50:13 [INFO] __main__: Hardware initialized.
+2025-07-02 22:50:13 [INFO] __main__: Hardware startup summary:
+2025-07-02 22:50:13 [INFO] __main__:   btn_red: OK
+2025-07-02 22:50:13 [INFO] __main__:   btn_yellow: OK
+2025-07-02 22:50:13 [INFO] __main__:   btn_green: OK
+2025-07-02 22:50:13 [INFO] __main__:   btn_blue: OK
+2025-07-02 22:50:13 [INFO] __main__:   main_btn: OK
+2025-07-02 22:50:13 [INFO] __main__:   led_red: OK
+2025-07-02 22:50:13 [INFO] __main__:   led_yellow: OK
+2025-07-02 22:50:13 [INFO] __main__:   led_green: OK
+2025-07-02 22:50:13 [INFO] __main__:   led_blue: OK
+2025-07-02 22:50:13 [INFO] __main__:   display: OK
+2025-07-02 22:50:13 [INFO] __main__:   switch_reader: OK
+2025-07-02 22:50:15 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-02 22:50:15,196] INFO AppRunner: Started app: admin_startup
+2025-07-02 22:50:15 [INFO] AppRunner: Started app: admin_startup
+2025-07-02 22:50:15 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-02T21:50:15Z'}
+2025-07-02 22:50:47 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T21:50:47Z'}
+2025-07-02 22:50:47 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 22:50:47 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751493047.1544526, 'source': 'hardware.display.pi'}
+2025-07-02 22:50:47 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751493047.1764421, 'source': 'hardware.display.pi'}
+2025-07-02 22:50:56 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-02 22:50:56 [WARNING] __main__: Failed to hide OS cursor: name 'os' is not defined
+2025-07-02 22:50:56 [INFO] __main__: Initializing hardware interfaces...
+2025-07-02 22:50:56 [INFO] __main__: Pin assignments:
+2025-07-02 22:50:56 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-02 22:50:56 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-02 22:50:56 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-02 22:50:56 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-02 22:50:56 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-02 22:50:56 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-02 22:50:56 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-02 22:50:56 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-02 22:50:56 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-02 22:50:56 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-02 22:50:56 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-02 22:50:56 [INFO] __main__:   MUX1_PIN: 23
+2025-07-02 22:50:56 [INFO] __main__:   MUX2_PIN: 24
+2025-07-02 22:50:56 [INFO] __main__:   MUX3_PIN: 25
+2025-07-02 22:50:56 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-02 22:50:56 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-02 22:50:56 [INFO] __main__: Hardware initialized.
+2025-07-02 22:50:56 [INFO] __main__: Hardware startup summary:
+2025-07-02 22:50:56 [INFO] __main__:   btn_red: OK
+2025-07-02 22:50:56 [INFO] __main__:   btn_yellow: OK
+2025-07-02 22:50:56 [INFO] __main__:   btn_green: OK
+2025-07-02 22:50:56 [INFO] __main__:   btn_blue: OK
+2025-07-02 22:50:56 [INFO] __main__:   main_btn: OK
+2025-07-02 22:50:56 [INFO] __main__:   led_red: OK
+2025-07-02 22:50:56 [INFO] __main__:   led_yellow: OK
+2025-07-02 22:50:56 [INFO] __main__:   led_green: OK
+2025-07-02 22:50:56 [INFO] __main__:   led_blue: OK
+2025-07-02 22:50:56 [INFO] __main__:   display: OK
+2025-07-02 22:50:56 [INFO] __main__:   switch_reader: OK
+2025-07-02 22:50:58 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-02 22:50:58,405] INFO AppRunner: Started app: admin_startup
+2025-07-02 22:50:58 [INFO] AppRunner: Started app: admin_startup
+2025-07-02 22:50:58 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-02T21:50:58Z'}
+2025-07-02 22:51:49 [INFO] EventBus: Event published: system_shutdown | {'reason': 'SystemExit', 'timestamp': '2025-07-02T21:51:49Z'}
+2025-07-02 22:51:49 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-02 22:51:49 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751493109.2134328, 'source': 'hardware.display.pi'}
+2025-07-02 22:51:49 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751493109.2380273, 'source': 'hardware.display.pi'}

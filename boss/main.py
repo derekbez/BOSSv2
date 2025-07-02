@@ -313,18 +313,6 @@ def main():
                     display.show_message(str(val))
         event_bus.subscribe("output.display.updated", on_display_update)
 
-        # Run startup mini-app before anything else
-        try:
-            from boss.apps import admin_startup
-            import threading
-            from boss.core.api import AppAPI
-            leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
-            buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
-            api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
-            stop_event = threading.Event()
-            admin_startup.run(stop_event, api=api)
-        except Exception as e:
-            logger.warning(f"Startup app failed: {e}")
         # Load app mappings and initialize managers
         with open(CONFIG_PATH) as f:
             config = json.load(f)
@@ -339,6 +327,19 @@ def main():
         leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
         buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
         api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+
+        # Run startup mini-app before anything else
+        try:
+            # from boss.apps import admin_startup
+            # import threading
+            # from boss.core.api import AppAPI
+            # leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
+            # buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
+            # api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+            # stop_event = threading.Event()
+            app_runner.run_app("admin_startup", api=api)
+        except Exception as e:
+            logger.warning(f"Startup app failed: {e}")
 
         # --- Event-driven Go button logic ---
         # Subscribe to main Go button press events via EventBus

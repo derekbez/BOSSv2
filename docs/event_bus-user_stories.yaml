@@ -330,3 +330,38 @@ user_stories:
     notes:
       - Use pytest fixtures to instantiate a fresh `MockEventBus` per test.
       - Provide utilities to record and replay event sequences from YAML or JSON files.
+
+
+id: US-EVENT-DRIVEN-DISPLAY-013
+title: Event-Driven Switch and Display Updates
+status: In Progress
+description: |
+  As a developer, I want switch value changes to be detected and published as events,
+  and for the 7-segment display to update in response to these events via the API,
+  so that the system is fully event-driven, modular, and testable.
+
+acceptance_criteria:
+  - Switch value changes are detected by a hardware abstraction or background thread.
+  - On change, a "switch_change" event is published to the EventBus with the correct payload.
+  - The display is updated only in response to "switch_change" events, not by direct polling.
+  - All display updates use the AppAPI or event bus, not direct hardware access.
+  - The system does not use polling loops for display updates in production.
+  - Unit and integration tests verify event-driven switch/display behavior.
+
+implementation_notes: |
+  - Refactor AppManager to remove direct polling and display updates.
+  - Implement a SwitchMonitor or similar component that detects switch changes and publishes events.
+  - Subscribe a display handler to "switch_change" events, updating the display via the API.
+  - Ensure all mini-apps and core modules use the event bus and AppAPI for display updates.
+  - Update documentation and tests to reflect the event-driven pattern.
+
+tasks:
+  - [ ] Refactor AppManager to remove poll_and_update_display and run_loop methods.
+  - [ ] Implement SwitchMonitor (or similar) to detect switch changes and publish "switch_change" events.
+  - [ ] Subscribe a display handler to "switch_change" events in main.py, updating the display via the AppAPI.
+  - [ ] Ensure all display updates in mini-apps and core modules use the AppAPI or event bus.
+  - [ ] Update or add unit tests for event-driven switch/display logic.
+  - [ ] Update documentation to describe the new event-driven pattern.
+  - [ ] Remove or deprecate any polling-based display update code.
+  - [ ] Verify with integration tests that the display updates correctly in response to switch changes.
+
