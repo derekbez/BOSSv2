@@ -21,6 +21,7 @@ from boss.hardware.pillow_screen import PillowScreen
 from boss.core.paths import CONFIG_PATH
 import time
 from gpiozero import Device
+from boss.core.switch_monitor import SwitchMonitor
 
 
 # Try to import real hardware libraries, fallback to mocks if unavailable
@@ -288,15 +289,14 @@ def main():
     hide_os_cursor()  # Hide cursor at startup
     try:
         initialize_hardware()
-        # Set up EventBus with config (log all events by default)
         event_bus = EventBus(EventBusConfig(log_all_events=True))
+        event_bus.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
         # Inject event_bus into display (for event-driven publishing)
         if hasattr(display, 'event_bus'):
             display.event_bus = event_bus
         # Register core event types
         event_bus.register_event_type("app_started", {"app_name": str, "version": str, "timestamp": str})
         event_bus.register_event_type("app_stopped", {"app_name": str, "version": str, "timestamp": str})
-        event_bus.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
         # Register shutdown and error event types
         event_bus.register_event_type("system_shutdown", {"reason": str, "timestamp": str})
         event_bus.register_event_type("error", {"error_type": str, "message": str, "stack_trace": str, "timestamp": str})
@@ -356,19 +356,39 @@ def main():
 
         event_bus.subscribe("input.button.pressed", on_go_button_pressed)
 
+        # --- Event-driven switch monitoring and display update ---
+        def display_update_handler(event_type, payload):
+            seg_display.show_number(payload["value"])
+        event_bus.subscribe("switch_change", display_update_handler)
+        switch_monitor = SwitchMonitor(switch, event_bus)
+        switch_monitor.start()
+
         # Main loop: just keep the process alive, all logic is now event-driven
+        last_btn_state = False
         while True:
+            try:
+                btn_state = main_btn.is_pressed if main_btn else False
+                logger.debug(f"Go button state: {btn_state}")
+            except Exception as e:
+                logger.error(f"Exception in is_pressed(): {e}")
+                raise
+            # Debounce: detect rising edge
+            if btn_state and not last_btn_state:
+                app_name = app_mappings.get(str(switch.read_value()))
+                logger.info(f"Go button pressed. Switch value: {switch.read_value()}, launching app: {app_name}")
+                if app_name:
+                    api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
+                    app_runner.run_app(app_name, api=api)
+                else:
+                    logger.info(f"No app mapped for value {switch.read_value()}.")
+            last_btn_state = btn_state
             time.sleep(0.1)
     except SystemExit:
-        if 'event_bus' in locals():
-            event_bus.publish_system_shutdown("SystemExit")
         cleanup()
         logger.info("System exited cleanly.")
         raise
     except Exception as e:
         import traceback
-        if 'event_bus' in locals():
-            event_bus.publish_error(type(e).__name__, str(e), stack_trace=traceback.format_exc())
         logger.exception(f"Fatal error: {e}")
         cleanup()
         sys.exit(1)

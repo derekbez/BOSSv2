@@ -1,34 +1,40 @@
-# B.O.S.S. (Board Of Switches and Screen) Deep Dive Analysis
+
+# B.O.S.S. (Board Of Switches and Screen) — System Documentation
+
+## Overview
+B.O.S.S. is a modular, event-driven Python application for Raspberry Pi, providing a physical interface to select and run mini-apps using 8 toggle switches (0–255), a 7-segment display, 4 color LEDs, 4 color buttons, a main "Go" button, a 7-inch screen, and (optionally) a speaker. The system is designed for extensibility, robust hardware abstraction, and seamless development/testing with or without real hardware.
 
 ## Overview
 B.O.S.S. is a modular, hardware-interfacing Python application designed to run on a Raspberry Pi (RPi). It provides a physical interface (switches, buttons, dials) to select and run various mini-apps, with outputs to LEDs, a 7-segment display, a screen, and a speaker. The system is portable and intended for interactive use.
 
 
-## General Useage
-A user will use the eight toggle switches to select a number (0 - 255).  The number is shown on the 7-segemnt display.
-The user may press the main "go" button, and BOSS will run the mini-app associated with the number chosen.
-The mini-app can display on the 7-inch screen, and use the LEDs (Red, Yellow, Green, Blue). The user can interact with mini-app with the additional buttons (Red, Yellow, Green, Blue).
-If the user presses the main "go" button again, the mini-app terminates and BOSS runs the mini-app associated with the toggle switches number.
+
+## General Usage
+1. The user sets the 8 toggle switches to select a number (0–255), which is shown on the 7-segment display.
+2. Pressing the main "Go" button launches the mapped mini-app for the current switch value.
+3. Mini-apps can use the 7-inch screen, LEDs, and color buttons for interaction, and optionally the speaker.
+4. Pressing the "Go" button again stops the current app and launches the app mapped to the new switch value.
+5. All hardware and display access by apps is via the provided API, never direct hardware access.
 
 ---
 
+
 ## Hardware Architecture
 - **Main Controls:**
-  - 8 toggle switches (via 74HC151 multiplexer) provide 256 unique input combinations.
-  - Additional buttons (Red, Yellow, Green, Blue) and associated LEDs.
-  - Main button for selection/activation.
+  - 8 toggle switches (via 74HC151 multiplexer) for 256 input values
+  - 4 color buttons (Red, Yellow, Green, Blue) and associated LEDs
+  - Main "Go" button
 - **Outputs:**
-  - LEDs 
-  - 7-segment display (TM1637)
-  - 7-inch screen
-  - Speaker
+  - 4 color LEDs
+  - TM1637 7-segment display
+  - 7-inch HDMI screen
+  - Speaker (optional)
 - **Raspberry Pi GPIO:**
-  - GPIOZero library for hardware abstraction.
-  - PiGPIOFactory for remote GPIO support.
+  - Uses `gpiozero` and `pigpio` for hardware abstraction
+  - All hardware modules fall back to mocks if not detected, enabling dev/testing on any platform
+
 
 ## GPIO Pin Mapping & Wiring
-
-The following table summarizes the GPIO pin assignments for B.O.S.S. components:
 
 | Component         | GPIO Pin | Physical Pin | Notes/Colour      |
 |------------------|----------|--------------|-------------------|
@@ -48,69 +54,76 @@ The following table summarizes the GPIO pin assignments for B.O.S.S. components:
 | TM1637 CLK       | 5        | 29           |                   |
 | TM1637 DIO       | 4        | 7            |                   |
 
-- For a full pinout, see: [RPi-GPIO-Pin-Diagram.md](./RPi-GPIO-Pin-Diagram.md) or https://pinout.xyz/
-- All grounds (GND) must be connected as per the diagram.
-- Wire colours in comments are for reference to the physical build.
+See [RPi-GPIO-Pin-Diagram.md](./RPi-GPIO-Pin-Diagram.md) or https://pinout.xyz/ for full pinout.
 
-### Example GPIO Setup in Code
+**Example GPIO setup:**
 ```python
-btnRedpin = 26  # orange   + grey grd
+btnRedpin = 26  # orange   + grey gnd
 btnYellowpin = 19  # yellow
 btnGreenpin = 13  # green
 btnBluepin = 6   # blue
-
 ledRedpin = 21
 ledYellowpin = 20
 ledGreenpin = 16
 ledBluepin = 12
-
 tm = tm1637.TM1637(clk=5, dio=4)
-
 mainBtnpin = 17 # + gnd
 mux1pin = 23  # C / 9    orange
-mux2pin = 24  # B / 10   yellow 
-mux3pin = 25  # A / 11    green
-muxInpin = 8  #           blue
+mux2pin = 24  # B / 10   yellow
+mux3pin = 25  # A / 11   green
+muxInpin = 8  #          blue
 ```
 
 ---
 
+
 ## Software Architecture
+
 - **Entry Point:** `main.py`
-  - Initializes GPIO, buttons, and display.
-  - Loads or creates a configuration file (`BOSSsettings.json`) mapping switch positions to apps.
-  - Waits for user input (main button press) to select and launch an app.
-  - Dynamically loads and runs apps in a separate thread.
-  - Handles clean-up and display updates on exit.
-  - **At startup, the system prints/logs all pin assignments and a hardware startup summary, indicating which devices are real or mocked.**
-  - **Each hardware device (button, LED, display, etc.) falls back to a mock if not detected, allowing seamless development and testing without hardware.**
+  - Initializes logging, configuration, and all hardware interfaces (with fallback to mocks)
+  - Prints/logs all pin assignments and a hardware startup summary (real/mocked)
+  - Loads app mappings from `config/BOSSsettings.json` (auto-generates if missing)
+  - Instantiates the event bus and registers all core event types (see [event_schema.md](./event_schema.md))
+  - Subscribes display and other handlers to relevant events (e.g., switch changes, button presses)
+  - Runs the startup mini-app, then enters the main event-driven loop
+  - All hardware events (button, switch, etc.) are published to the event bus; all display/LED/screen updates are event-driven
+  - Handles clean shutdown and resource cleanup
 
 - **Configuration:**
-  - `BOSSsettings.json` stores mappings: binary switch value → decimal → app name → parameters.
-  - If missing or empty, it is auto-generated with default values.
-  - Uses JSON for reading/writing.
+  - All app mappings and parameters are in `config/BOSSsettings.json` (JSON)
+  - If missing, auto-generated with defaults
+  - Validated at startup
 
 - **App Management:**
-  - Apps are Python modules named `app_<name>.py` (e.g., `app_matrixrain.py`).
-  - Dynamically imported and executed via threading (previously supported multiprocessing).
-  - Each app must have a `main(stop_event, params)` function for compatibility.
-  - Apps are stopped by setting a threading event.
+  - Apps are Python modules or packages under `apps/`, each with a standard interface (`run(stop_event, api)`)
+  - Dynamically loaded and run in threads (with forced termination on timeout)
+  - App lifecycle events are published to the event bus
+  - Apps interact with hardware only via the provided API object
 
-- **Utilities:**
-  - `ConfigButtons.py`: Handles button/LED initialization and control.
-  - `intervaltimer.py`: Provides `IntervalTimer` and `RepeatedTimer` for periodic tasks (e.g., updating the display).
-  - `leddisplay.py`: (not shown) likely handles 7-segment display abstraction.
+- **Event Bus:**
+  - Central event bus (`core/event_bus.py`) for all hardware, system, and app events
+  - Supports publish/subscribe, event filtering, async/sync delivery, and custom event types
+  - All hardware and app events are logged for auditing
+
+- **Hardware Abstraction:**
+  - All hardware (buttons, LEDs, display, screen, speaker) is abstracted in `hardware/` with real and mock implementations
+  - Hardware errors are caught and logged; system falls back to mocks for seamless dev/testing
 
 - **Display:**
-  - TM1637 7-segment display is used for showing the current switch value or status messages.
-  - Display is initialized only on RPi (not on Windows for dev/testing).
+  - TM1637 7-segment display shows current switch value or status messages
+  - All updates are event-driven (no polling)
 
-- **Dynamic Import:**
-  - Uses `importlib.util` to load app modules at runtime based on switch selection.
+- **Remote Management:**
+  - Secure API for remote configuration and status (see `core/remote.py`)
+
+- **Testing:**
+  - All core and hardware modules are unit/integration tested with mocks (see `tests/`)
+
 
 ---
 
-## Supported Apps (Examples)
+
+## Supported Mini-Apps (Examples)
 - Matrix screensaver
 - Display photos (grouped)
 - Play sounds (birds, songs, movie quotes)
@@ -120,24 +133,32 @@ muxInpin = 8  #           blue
 
 ---
 
+
 ## Development & Deployment
+
 - **Setup:**
-  - Designed for RPi OS (Raspbian Lite recommended).
-  - Uses Python virtual environments (`venv`).
-  - Supports both local and remote GPIO (for dev on Windows, run pigpio daemon on RPi).
-  - Install dependencies: `gpiozero`, `pigpio`, `pygame`, `blessed`, `windows-curses` (for Windows dev), `rpi-tm1637`.
+  - Designed for Raspberry Pi OS 64bit Lite (no GUI)
+  - Use Python 3.11+ and a virtual environment
+  - Install dependencies: `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
+  - All configuration is in `config/BOSSsettings.json`
+  - For Windows/dev, hardware is mocked automatically
+
 - **Startup:**
-  - Can be started manually or via systemd service for auto-boot.
-  - Example systemd unit file provided in dev notes.
+  - Run from project root: `python3 -m boss.main`
+  - Can be started manually or as a systemd service (see `docs/install-steps.md`)
+
 - **Testing:**
-  - Includes test scripts and archived experiments.
-  - GPIO emulation/simulation is possible for dev without hardware.
+  - Use `pytest` for all tests (see `tests/`)
+  - All hardware is mocked for tests
+  - Run tests with `pytest` and coverage
+
 
 ---
 
+
 ## Directory Structure & Best Practices
 
-The recommended directory structure for B.O.S.S. is designed for modularity, scalability, and maintainability:
+The project is organized for modularity, scalability, and maintainability:
 
 ```
 boss/
@@ -165,11 +186,6 @@ boss/
       main.py
       manifest.json
       assets/
-    app_showtext/
-      __init__.py
-      main.py
-      manifest.json
-      assets/
     ...
   assets/
     images/
@@ -186,35 +202,47 @@ boss/
   README.md
 ```
 
-**Key Points:**
-- All code is inside the `boss/` package for import clarity and best practice.
-- Each app is a subdirectory with its own code, manifest, and optional assets.
-- Configuration files are in `config/`.
-- Documentation is in `docs/`.
-- Utility scripts are in `scripts/`.
-- The `tests/` directory mirrors the main package structure for clarity.
-- Add `.env.example` and document secret management if environment variables are used.
+**Best Practices:**
+- All code is inside the `boss/` package for import clarity
+- Each app is a subdirectory with its own code, manifest, and assets
+- All configuration is in `config/`
+- All documentation is in `docs/`
+- All tests are in `tests/`, mirroring the main structure
+- Use dependency injection and mocks for all hardware in tests
+- Use type hints and docstrings throughout
+- All hardware and display access by apps is via the provided API only
 
 ---
+
 
 ## Notable Implementation Details
+
 - **Multiplexer Reading:**
-  - 8 toggle switches are read using a 74HC151 multiplexer, reducing GPIO usage to 4 pins.
-  - `ReadMux()` function cycles through channels, sets select lines, and reads the output to build a binary number.
+  - 8 toggle switches are read using a 74HC151 multiplexer (4 GPIO pins)
+  - `SwitchReader` abstraction allows for future input types (dial, keypad, etc.)
+
+- **Event-Driven Architecture:**
+  - All hardware and app events are published to the event bus
+  - Display and other outputs are updated only in response to events (no polling)
+
 - **Threading:**
-  - Apps run in their own thread, allowing main loop to remain responsive.
-  - Clean shutdown via `stop_event`.
+  - Mini-apps run in their own thread, with forced termination on timeout
+  - Clean shutdown via `stop_event`
+
 - **Extensibility:**
-  - New apps can be added by creating new `app_<name>.py` modules.
-  - Configuration file can be edited to map switch positions to new apps.
+  - New apps: add new module/package in `apps/` and update config
+  - New hardware: extend hardware abstraction layer
+  - New events: register new event types with the event bus
+
 - **Cross-Platform:**
-  - Code checks for RPi environment and disables hardware features on Windows for development.
+  - Hardware is auto-mocked for dev/testing on Windows or without hardware
 
 ---
+
 
 ## Mini-App Structure & Assets
 
-Each mini-app should be placed in its own subdirectory under `apps/`, following this structure:
+Each mini-app is a subdirectory under `apps/`, e.g.:
 
 ```
 apps/
@@ -226,12 +254,11 @@ apps/
       jokes.json
 ```
 
-- **main.py**: Entry point for the mini-app, must follow the standard interface (e.g., `run(stop_event, api)`).
-- **manifest.json**: Metadata about the app (name, description, etc.).
-- **assets/**: Folder for any data files (e.g., `jokes.json`).
-- **jokes.json**: JSON file containing a list of jokes for the random joke app.
+- **main.py**: Entry point, must implement `run(stop_event, api)`
+- **manifest.json**: Metadata (name, description, etc.)
+- **assets/**: Data files (e.g., `jokes.json`)
 
-### Example `jokes.json` format
+**Example `jokes.json`:**
 ```json
 {
   "jokes": [
@@ -242,63 +269,65 @@ apps/
 }
 ```
 
-- The app should load this file at runtime and select a random joke to display.
-- Future formatting (colour, size, position) can be added to the JSON or handled in code.
-
-### Hardware/Mock Testing
-- All mini-apps and tests should detect hardware and use mock or real hardware accordingly.
+- Apps load assets at runtime and use the API for all hardware/display access
+- All mini-apps and tests use real or mock hardware as appropriate
 
 ---
+
 
 ## References
-- Extensive links to hardware datasheets, Python docs, GPIOZero, pygame, threading, and more in `BOSS-devnotes.md` (TODO).
+- See `docs/BOSS-devnotes.md` for hardware datasheets, Python docs, GPIOZero, pygame, threading, and more
 
 ---
+
 
 ## Summary
-B.O.S.S. is a flexible, extensible, and hardware-focused Python application for the Raspberry Pi, enabling physical selection and execution of a wide variety of mini-apps. It is well-documented, modular, and designed for both development and deployment on real hardware.
+B.O.S.S. is a robust, extensible, event-driven Python system for Raspberry Pi, enabling physical selection and execution of mini-apps via switches, buttons, LEDs, and display. It is modular, testable, and designed for both real hardware and seamless development/testing on any platform.
 
 ---
-## Issues
-When imaging an SD Card from Raspberry Pi Imager with RPI OS 64bit Lite, the imager seems to configure the wifi with wpa_supplicant, but the latest OS is using Network Manager.   Wifi does not get set up when booting the rpi for the first time.
-
-Unblocked Wi-Fi via rfkill:
-
 bash
-`sudo rfkill unblock wifi`
-
-Enabled Wi-Fi radio with nmcli:
-
 bash
-`nmcli radio wifi on`
-
-(Optional) Restarted NetworkManager to refresh device status:
-
 bash
-`sudo systemctl restart NetworkManager`
-
-Confirmed the interface was available:
-
 bash
-`nmcli device status`
-
-You should see wlan0 listed as “disconnected” (which is good—it means it’s ready).
-
-Connected to Wi-Fi using nmtui or nmcli:
-
-`sudo nmtui` for a text-based UI
-
-Or:
-
 bash
-`nmcli device wifi list`
-`nmcli device wifi connect "YourSSID" password "YourPassword"`
 
-+++
-When VSCode stuggles:
-`ls -la`
-`rm -rf ~/.vscode-server`
-`rm -rf ~/.cache`
-`rm -rf ~/.config`
+## Issues & Troubleshooting
+
+### WiFi Setup on Latest Raspberry Pi OS
+The Raspberry Pi Imager configures WiFi with wpa_supplicant, but the latest OS uses Network Manager. If WiFi does not work on first boot:
+
+1. Unblock Wi-Fi:
+   ```bash
+   sudo rfkill unblock wifi
+   ```
+2. Enable Wi-Fi radio:
+   ```bash
+   nmcli radio wifi on
+   ```
+3. (Optional) Restart NetworkManager:
+   ```bash
+   sudo systemctl restart NetworkManager
+   ```
+4. Confirm interface:
+   ```bash
+   nmcli device status
+   ```
+   You should see `wlan0` as “disconnected” (ready).
+5. Connect to Wi-Fi:
+   - Text UI: `sudo nmtui`
+   - Or CLI:
+     ```bash
+     nmcli device wifi list
+     nmcli device wifi connect "YourSSID" password "YourPassword"
+     ```
+
+### VSCode Remote Troubleshooting
+If VSCode remote server is stuck:
+```bash
+ls -la
+rm -rf ~/.vscode-server
+rm -rf ~/.cache
+rm -rf ~/.config
+```
 
 
