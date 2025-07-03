@@ -218,8 +218,8 @@ Tests verify that the display updates only when the switch value changes.
 - so that the components are connected safely and work as expected
 - priority high
 - acceptance criteria:
-	- GPIO connections are documented appropriately (**See: docs.md, RPi-GPIO-Pin-Diagram.md**)
-	- GPIO is configured in the application for all components
+  - GPIO connections are documented appropriately (**See: docs.md, RPi-GPIO-Pin-Diagram.md**)
+  - GPIO is configured in the application for all components
 - additional info: See docs.md for table and wiring notes. See RPi-GPIO-Pin-Diagram.md for full pinout.
 - **Status: Complete.**
 
@@ -247,14 +247,14 @@ Tests verify that the display updates only when the switch value changes.
 
 ## 7. Display & Graphics
 
-### US-020: Support Multiple Display Backends (pygame & Pillow)
+### US-020: Support Multiple Display Backends (Pillow only)
 - **As a** developer or app creator  
-- **I want to** choose between pygame and Pillow for rendering graphics in my mini-apps  
+- **I want to** use Pillow for rendering graphics in my mini-apps  
 - **So that** each app can use the most suitable library for its display needs.  
 - **Priority:** Medium  
 - **Acceptance Criteria:**  
-  - Both pygame and Pillow are installed and available in the environment.  
-  - The system API allows an app to request either a pygame or Pillow display context.  
+  - Pillow is installed and available in the environment.  
+  - The system API provides a Pillow display context.
   - Example apps demonstrate use of both backends.  
 - **Status:** Planned.  
 

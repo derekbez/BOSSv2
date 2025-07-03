@@ -6,13 +6,23 @@ Optimized PillowScreen for B.O.S.S. (HDMI framebuffer, Pi 3+)
 - Thread-safe
 - Display text or images
 """
-from PIL import Image, ImageDraw, ImageFont
-import numpy as np
+
+# --- Hardware import fallback logic ---
+import sys
+try:
+    from PIL import Image, ImageDraw, ImageFont
+    import numpy as np
+except ImportError:
+    Image = ImageDraw = ImageFont = np = None
+
 import os
-import fcntl
+import threading
 import struct
 import mmap
-import threading
+try:
+    import fcntl
+except ImportError:
+    fcntl = None
 
 class PillowScreen:
     FONT_SIZE_LARGEST = 64
@@ -29,16 +39,21 @@ class PillowScreen:
         self.fbdev = fbdev
         self.mock = mock
         self.lock = threading.RLock()  # Use re-entrant lock to avoid deadlocks
-        self.image = Image.new("RGB", (self.width, self.height), (0, 0, 0))
-        self.draw = ImageDraw.Draw(self.image)
-        self.font = ImageFont.load_default()
+        if Image is not None and ImageDraw is not None and ImageFont is not None:
+            self.image = Image.new("RGB", (self.width, self.height), (0, 0, 0))
+            self.draw = ImageDraw.Draw(self.image)
+            self.font = ImageFont.load_default()
+        else:
+            self.image = None
+            self.draw = None
+            self.font = None
         self.fb = None
         self.fb_mmap = None
         self.cursor_y = 0  # Track current y position for print_line
-        if not self.mock:
+        if not self.mock and self.image is not None and fcntl is not None:
             self._open_fb()
-        else:
-            print("[PillowScreen] MOCK MODE: No framebuffer access.")
+        elif not self.mock:
+            print("[PillowScreen] MOCK MODE: No framebuffer access (missing fcntl or image libs).")
 
     def _open_fb(self):
         self.fb = open(self.fbdev, "rb+")
@@ -67,7 +82,8 @@ class PillowScreen:
 
     def clear(self, color=(0,0,0)):
         with self.lock:
-            self.image.paste(color, [0, 0, self.width, self.height])
+            if self.image is not None:
+                self.image.paste(color, [0, 0, self.width, self.height])
             self.cursor_y = 0  # Reset cursor on clear
             self._update_fb()
 
@@ -95,9 +111,10 @@ class PillowScreen:
 
     def display_image(self, img):
         with self.lock:
-            if img.size != (self.width, self.height):
-                img = img.resize((self.width, self.height), Image.LANCZOS)
-            self.image.paste(img)
+            if self.image is not None:
+                if img.size != (self.width, self.height):
+                    img = img.resize((self.width, self.height), Image.LANCZOS)
+                self.image.paste(img)
             self._update_fb()
 
     def render_text_to_image(self, text, color=(255,255,255), size=48, align='center', font_name=None, bg=(0,0,0)):
@@ -145,40 +162,50 @@ class PillowScreen:
                 except Exception as e:
                     print(f"[PillowScreen] WARNING: Could not load system font '{sys_font}': {e}.")
         print(f"[PillowScreen] WARNING: No TTF font found. Using default font (fixed size, ignores requested size={size}).")
-        return ImageFont.load_default()
+        # Only return default font if ImageFont and load_default are available
+        if ImageFont is not None and hasattr(ImageFont, 'load_default'):
+            return ImageFont.load_default()
+        else:
+            print("[PillowScreen] ERROR: ImageFont or load_default not available. Returning None.")
+            return None
 
     def _update_fb(self):
-        print("[PillowScreen] _update_fb(): Entry.")
-        if self.mock:
-            print("[PillowScreen] _update_fb(): Mock mode, skipping.")
+        """
+        Write the current image buffer to the framebuffer (if not in mock mode and all dependencies present).
+        Only supports 16bpp (RGB565) output. Safe on non-Pi/dev platforms (no-op if mock or missing deps).
+        """
+        if self.mock or self.fb_mmap is None or np is None or self.image is None:
+            # No-op in mock mode or if not all dependencies present
             return
+        # Convert PIL image to numpy array
         arr = np.asarray(self.image, dtype=np.uint8)
-        print("[PillowScreen] _update_fb(): Converted image to numpy array.")
         if self.bpp == 2:
-            print("[PillowScreen] _update_fb(): Converting to RGB565...")
-            r = arr[:,:,0].astype(np.uint16)
-            g = arr[:,:,1].astype(np.uint16)
-            b = arr[:,:,2].astype(np.uint16)
+            # Convert to RGB565
+            r = arr[:, :, 0].astype(np.uint16)
+            g = arr[:, :, 1].astype(np.uint16)
+            b = arr[:, :, 2].astype(np.uint16)
             rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+            # Prepare buffer for framebuffer (stride may be larger than width*2)
             buf = np.zeros((self.height, self.stride), dtype=np.uint8)
-            packed = rgb565.flatten().view(np.uint8).reshape(self.height, self.width*2)
-            buf[:,:self.width*2] = packed
-            print("[PillowScreen] _update_fb(): Writing to framebuffer mmap...")
+            packed = rgb565.flatten().view(np.uint8).reshape(self.height, self.width * 2)
+            buf[:, :self.width * 2] = packed
             self.fb_mmap.seek(0)
             self.fb_mmap.write(buf.tobytes())
-            print("[PillowScreen] _update_fb(): Write complete.")
-        else:
-            print("[PillowScreen] Only 16bpp (RGB565) supported in optimized path.")
-        print("[PillowScreen] _update_fb(): Exit.")
+        # else: silently ignore unsupported bpp
 
     def save_to_file(self, path):
         with self.lock:
-            self.image.save(path)
+            if self.image is not None:
+                self.image.save(path)
+            else:
+                print("[PillowScreen] WARNING: Cannot save image, self.image is None.")
 
     def close(self):
         if not self.mock:
-            self.fb_mmap.close()
-            self.fb.close()
+            if self.fb_mmap is not None:
+                self.fb_mmap.close()
+            if self.fb is not None:
+                self.fb.close()
 
     def print_line(self, text, color=(255,255,255), size=None, font_name=None, x=None, spacing=10):
         """
@@ -188,12 +215,15 @@ class PillowScreen:
             size = self.FONT_SIZE_DEFAULT
         with self.lock:
             font = self._get_font(font_name, size)
-            draw = ImageDraw.Draw(self.image)
-            w, h = draw.textbbox((0,0), text, font=font)[2:4]
-            if x is None:
-                x = (self.width - w) // 2
-            draw.text((x, self.cursor_y), text, font=font, fill=color)
-            self.cursor_y += h + spacing
+            if self.image is not None and font is not None and ImageDraw is not None and hasattr(ImageDraw, 'Draw'):
+                draw = ImageDraw.Draw(self.image)
+                w, h = draw.textbbox((0,0), text, font=font)[2:4]
+                if x is None:
+                    x = (self.width - w) // 2
+                draw.text((x, self.cursor_y), text, font=font, fill=color)
+                self.cursor_y += h + spacing
+            else:
+                print("[PillowScreen] WARNING: Cannot print_line, image/font/ImageDraw/Draw is None or missing.")
 
     def draw_text(self, x, y, text, color=(255,255,255), size=None, font_name=None):
         """
@@ -203,8 +233,11 @@ class PillowScreen:
             size = self.FONT_SIZE_DEFAULT
         with self.lock:
             font = self._get_font(font_name, size)
-            draw = ImageDraw.Draw(self.image)
-            draw.text((x, y), text, font=font, fill=color)
+            if self.image is not None and font is not None and ImageDraw is not None and hasattr(ImageDraw, 'Draw'):
+                draw = ImageDraw.Draw(self.image)
+                draw.text((x, y), text, font=font, fill=color)
+            else:
+                print("[PillowScreen] WARNING: Cannot draw_text, image/font/ImageDraw/Draw is None or missing.")
 
     def set_cursor(self, y=0):
         """

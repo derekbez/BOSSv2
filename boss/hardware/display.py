@@ -2,8 +2,19 @@
 SevenSegmentDisplay: Abstraction for TM1637 7-segment display (or mock for dev)
 """
 from typing import Protocol
-from gpiozero import Device
-import tm1637
+
+# --- Hardware import fallback logic ---
+import sys
+IS_RPI = sys.platform.startswith('linux') and not sys.platform.startswith('win')
+try:
+    if IS_RPI:
+        from gpiozero import Device
+        import tm1637
+    else:
+        raise ImportError
+except ImportError:
+    Device = None
+    tm1637 = None
 
 class DisplayInterface(Protocol):
     def show_number(self, value: int):
@@ -44,15 +55,20 @@ class MockSevenSegmentDisplay:
             )
 
 
+
 class PiSevenSegmentDisplay:
-    """Real TM1637 display using the tm1637_rpi5_gpiod library."""
+    """Real TM1637 display using the tm1637 library (only on RPi)."""
     def __init__(self, clk_pin, dio_pin, event_bus=None):
+        if tm1637 is None:
+            raise RuntimeError("tm1637 library not available; cannot use PiSevenSegmentDisplay on this platform.")
         self.display = tm1637.TM1637(clk_pin, dio_pin)
         self.event_bus = event_bus
     def show_number(self, value: int):
-        # Show up to 4 digits, pad with spaces if needed
         str_val = str(value)[-4:].rjust(4)
-        self.display.show(str_val)
+        try:
+            self.display.show(str_val)
+        except Exception as e:
+            print(f"[7SEG ERROR] show_number: {e}")
         if self.event_bus:
             self.event_bus.publish(
                 "output.display.updated",
@@ -63,18 +79,17 @@ class PiSevenSegmentDisplay:
                 }
             )
     def show_message(self, message: str):
-        # Show up to 4 characters, pad or trim as needed
         try:
             msg = str(message)[:4].rjust(4)
             self.display.show(msg)
-            if self.event_bus:
-                self.event_bus.publish(
-                    "output.display.updated",
-                    {
-                        "value": msg,
-                        "timestamp": time.time(),
-                        "source": "hardware.display.pi"
-                    }
-                )
-        except Exception:
-            print(f"[7SEG] MESSAGE: {message}")
+        except Exception as e:
+            print(f"[7SEG ERROR] show_message: {e}")
+        if self.event_bus:
+            self.event_bus.publish(
+                "output.display.updated",
+                {
+                    "value": msg if 'msg' in locals() else str(message),
+                    "timestamp": time.time(),
+                    "source": "hardware.display.pi"
+                }
+            )

@@ -238,14 +238,14 @@ user_stories:
       - Testing: Tests should detect hardware and use mock or real hardware accordingly.
 
   - id: US-020
-    title: Support Multiple Display Backends (pygame & Pillow)
+    title: Support Multiple Display Backends (Pillow only)
     as: developer or app creator
-    want: Choose between pygame and Pillow for rendering graphics in my mini-apps
+    want: Use Pillow for rendering graphics in my mini-apps
     so_that: Each app can use the most suitable library for its display needs.
     priority: Medium
     acceptance_criteria:
-      - Both pygame and Pillow are installed and available in the environment.
-      - The system API allows an app to request either a pygame or Pillow display context.
+      - Pillow is installed and available in the environment.
+      - The system API provides a Pillow display context.
       - Example apps demonstrate use of both backends.
     status: Planned
 
@@ -267,7 +267,7 @@ user_stories:
       - The API allows displaying text with an outline or border.
       - Emoji and Unicode symbols are supported in text rendering.
       - Example mini-apps demonstrate at least three of these features.
-    notes: These features should be available regardless of the display backend (pygame or Pillow). The API should provide sensible defaults and allow easy extension for future display features.
+    notes: These features should be available for the Pillow display backend. The API should provide sensible defaults and allow easy extension for future display features.
 
   - id: US-022
     title: Image Display Support in API
@@ -283,7 +283,7 @@ user_stories:
       - The API supports setting a background color or transparency for images with alpha channels.
       - The API allows drawing images with rounded corners or as circles/ellipses.
       - Example mini-apps demonstrate at least two of these features.
-    notes: These features should be available for both pygame and Pillow backends. The API should handle common image formats and provide sensible defaults for scaling and placement.
+    notes: These features should be available for the Pillow backend. The API should handle common image formats and provide sensible defaults for scaling and placement.
 
   - id: US-023
     name: startup_update_check

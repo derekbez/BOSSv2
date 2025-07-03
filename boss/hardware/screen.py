@@ -3,7 +3,25 @@ Screen abstraction for B.O.S.S. (with mock for dev)
 """
 from typing import Protocol
 import threading
-from boss.hardware.pillow_screen import PillowScreen
+
+def get_screen(*args, **kwargs):
+    """
+    Factory function to return a real PillowScreen if possible, else a MockScreen.
+    Handles all import errors and dependency checks.
+    Accepts any args/kwargs for PillowScreen/MockScreen.
+    """
+    try:
+        from boss.hardware.pillow_screen import PillowScreen
+        # Check if PillowScreen dependencies are present
+        if getattr(PillowScreen, 'FONT_SIZE_DEFAULT', None) is not None:
+            screen = PillowScreen(*args, **kwargs)
+            # If PillowScreen is in mock mode or missing image, fallback
+            if getattr(screen, 'image', None) is not None:
+                return screen
+    except Exception as e:
+        pass
+    # Fallback to MockScreen
+    return MockScreen(*args, **kwargs)
 
 class ScreenInterface(Protocol):
     def show_status(self, message: str):

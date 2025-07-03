@@ -276,7 +276,7 @@ apps/
 
 
 ## References
-- See `docs/BOSS-devnotes.md` for hardware datasheets, Python docs, GPIOZero, pygame, threading, and more
+- See `docs/BOSS-devnotes.md` for hardware datasheets, Python docs, GPIOZero, threading, and more
 
 ---
 

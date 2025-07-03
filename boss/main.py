@@ -3,11 +3,15 @@ B.O.S.S. Main Entry Point
 Initializes core systems, logging, hardware, and handles clean shutdown.
 """
 
+# --- Standard library imports ---
 import sys
 import signal
 import json
 import logging
 import logging.handlers
+import time
+import os
+# --- BOSS imports ---
 from boss.core.logger import get_logger
 from boss.core.app_manager import AppManager
 from boss.core.app_runner import AppRunner
@@ -16,11 +20,14 @@ from boss.core.event_bus_config import EventBusConfig
 from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
-from boss.hardware.screen import MockScreen
-from boss.hardware.pillow_screen import PillowScreen
+from boss.hardware.screen import get_screen
 from boss.core.paths import CONFIG_PATH
-import time
-from gpiozero import Device
+
+# --- Hardware import fallback logic ---
+try:
+    from gpiozero import Device
+except ImportError:
+    Device = None
 from boss.core.switch_monitor import SwitchMonitor
 
 
@@ -206,15 +213,9 @@ def initialize_hardware():
         except Exception as e:
             switch_reader = KeyboardSwitchReader(1)
             hardware_status['switch_reader'] = f"MOCK ({e})"
-        # Screen check
-        try:
-            # Use PillowScreen for HDMI framebuffer
-            from boss.hardware.pillow_screen import PillowScreen
-            screen = PillowScreen()
-            logger.info("Screen: PillowScreen initialized (HDMI framebuffer)")
-        except Exception as e:
-            screen = MockScreen()
-            logger.warning(f"Screen not detected: {e}. Using mock screen.")
+        # Screen: always use get_screen factory
+        screen = get_screen()
+        logger.info(f"Screen: {type(screen).__name__} initialized (HDMI framebuffer)")
     else:
         btn_red = PiButton("red")
         btn_yellow = PiButton("yellow")
@@ -227,14 +228,9 @@ def initialize_hardware():
         led_blue = PiLED("blue")
         display = MockSevenSegmentDisplay()
         switch_reader = KeyboardSwitchReader(1)
-        # Use PygameScreen for dev if available
-        try:
-            from boss.hardware.pillow_screen import PillowScreen
-            screen = PillowScreen()
-            logger.info("Screen: PillowScreen initialized (dev mode)")
-        except Exception as e:
-            screen = MockScreen()
-            logger.info("Screen: MockScreen initialized (dev mode)")
+        # Use get_screen for dev/mock as well
+        screen = get_screen()
+        logger.info(f"Screen: {type(screen).__name__} initialized (dev mode)")
         for k in ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button']:
             hardware_status[k] = 'MOCK (dev mode)'
     logger.info("Hardware initialized.")
