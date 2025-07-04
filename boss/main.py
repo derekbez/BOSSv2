@@ -1,3 +1,26 @@
+# --- Web UI for debugging (only in mock mode) ---
+def maybe_start_web_ui():
+    try:
+        from webui.main import start_web_ui
+    except ImportError:
+        return
+    # Build a mock hardware dict for the web UI
+    mock_hardware = {
+        'btn_red': btn_red,
+        'btn_yellow': btn_yellow,
+        'btn_green': btn_green,
+        'btn_blue': btn_blue,
+        'main_btn': main_btn,
+        'led_red': led_red,
+        'led_yellow': led_yellow,
+        'led_green': led_green,
+        'led_blue': led_blue,
+        'display': display,
+        'switch_reader': switch_reader,
+        'screen': screen,
+    }
+    start_web_ui(mock_hardware)
+    logger.info("[BOSS] Debug Web UI started at http://localhost:8000 (MOCK mode)")
 """
 B.O.S.S. Main Entry Point
 Initializes core systems, logging, hardware, and handles clean shutdown.
@@ -21,7 +44,16 @@ from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
 from boss.hardware.screen import get_screen
+
 from boss.core.paths import CONFIG_PATH
+
+# Web UI debug dashboard import (only used in mock mode)
+def start_web_ui(hardware):
+    try:
+        from webui.main import start_web_ui as _start_web_ui
+    except ImportError:
+        from boss.webui.main import start_web_ui as _start_web_ui
+    _start_web_ui(hardware)
 
 # --- Hardware import fallback logic ---
 try:
@@ -137,6 +169,8 @@ def initialize_hardware():
     for name, val in pin_info.items():
         print(f"  {name}: {val}")
         logger.info(f"  {name}: {val}")
+    started_webui = False
+    mock_hardware_dict = {}
     if REAL_HARDWARE:
         # Buttons
         try:
@@ -231,8 +265,20 @@ def initialize_hardware():
         # Use get_screen for dev/mock as well
         screen = get_screen()
         logger.info(f"Screen: {type(screen).__name__} initialized (dev mode)")
-        for k in ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button']:
+        for k, v in zip(
+            ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button'],
+            [btn_red, btn_yellow, btn_green, btn_blue, main_btn, led_red, led_yellow, led_green, led_blue, display, switch_reader, main_btn]
+        ):
             hardware_status[k] = 'MOCK (dev mode)'
+            mock_hardware_dict[k] = v
+        # Start web UI debug dashboard in mock mode
+        if not started_webui:
+            try:
+                start_web_ui(mock_hardware_dict)
+                logger.info("[BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)")
+                started_webui = True
+            except Exception as e:
+                logger.warning(f"Could not start web UI debug dashboard: {e}")
     logger.info("Hardware initialized.")
     logger.info("Hardware startup summary:")
     for k, v in hardware_status.items():
@@ -285,6 +331,9 @@ def main():
     hide_os_cursor()  # Hide cursor at startup
     try:
         initialize_hardware()
+        # If in MOCK mode (KeyboardSwitchReader or KeyboardGoButton detected), start web UI
+        if isinstance(switch_reader, KeyboardSwitchReader) or isinstance(main_btn, KeyboardGoButton):
+            maybe_start_web_ui()
         event_bus = EventBus(EventBusConfig(log_all_events=True))
         event_bus.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
         # Inject event_bus into display (for event-driven publishing)
