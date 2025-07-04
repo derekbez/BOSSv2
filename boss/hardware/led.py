@@ -29,6 +29,15 @@ class MockLED:
                 }
             )
 
+    def on(self):
+        self.set_state(True)
+
+    def off(self):
+        self.set_state(False)
+
+    def close(self):
+        pass  # No resources to release in mock
+
 try:
     from gpiozero import LED as GpiozeroLED
     HAS_GPIOZERO = True

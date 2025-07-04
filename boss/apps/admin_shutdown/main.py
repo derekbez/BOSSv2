@@ -21,7 +21,8 @@ def run(stop_event: Event, api: Any) -> None:
         "  [BLUE] Poweroff\n"
         "  [GREEN] Exit to OS\n"
     )
-    api.set_leds({'yellow': True, 'blue': True, 'green': True})
+    if hasattr(api, 'set_leds'):
+        api.set_leds({'yellow': True, 'blue': True, 'green': True})
     api.display_text(prompt)
 
     def on_button_press(event):
@@ -29,19 +30,22 @@ def run(stop_event: Event, api: Any) -> None:
         if button == 'yellow':
             api.display_text("Rebooting system...")
             api.log_event("AdminShutdown: Reboot triggered by user.")
-            api.set_leds({'yellow': False, 'blue': False, 'green': False})
+            if hasattr(api, 'set_leds'):
+                api.set_leds({'yellow': False, 'blue': False, 'green': False})
             os.system('sudo reboot')
             stop_event.set()
         elif button == 'blue':
             api.display_text("Shutting down system...")
             api.log_event("AdminShutdown: Poweroff triggered by user.")
-            api.set_leds({'yellow': False, 'blue': False, 'green': False})
+            if hasattr(api, 'set_leds'):
+                api.set_leds({'yellow': False, 'blue': False, 'green': False})
             os.system('sudo poweroff')
             stop_event.set()
         elif button == 'green':
             api.display_text("Exiting to OS shell...")
             api.log_event("AdminShutdown: Exit to OS triggered by user.")
-            api.set_leds({'yellow': False, 'blue': False, 'green': False})
+            if hasattr(api, 'set_leds'):
+                api.set_leds({'yellow': False, 'blue': False, 'green': False})
             stop_event.set()
 
     sub_id = api.event_bus.subscribe(
@@ -55,5 +59,6 @@ def run(stop_event: Event, api: Any) -> None:
             stop_event.wait(0.2)
     finally:
         api.event_bus.unsubscribe(sub_id)
-        api.set_leds({'yellow': False, 'blue': False, 'green': False})
+        if hasattr(api, 'set_leds'):
+            api.set_leds({'yellow': False, 'blue': False, 'green': False})
         api.display_text("")

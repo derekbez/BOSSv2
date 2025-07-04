@@ -102,3 +102,6 @@ class MockScreen:
                 }
             )
 
+    def close(self):
+        pass  # No resources to release in mock
+

@@ -361,24 +361,29 @@ def main():
 
         # Main loop: just keep the process alive, all logic is now event-driven
         last_btn_state = False
-        while True:
-            try:
-                btn_state = main_btn.is_pressed if main_btn else False
-                logger.debug(f"Go button state: {btn_state}")
-            except Exception as e:
-                logger.error(f"Exception in is_pressed(): {e}")
-                raise
-            # Debounce: detect rising edge
-            if btn_state and not last_btn_state:
-                app_name = app_mappings.get(str(switch.read_value()))
-                logger.info(f"Go button pressed. Switch value: {switch.read_value()}, launching app: {app_name}")
-                if app_name:
-                    api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
-                    app_runner.run_app(app_name, api=api)
-                else:
-                    logger.info(f"No app mapped for value {switch.read_value()}.")
-            last_btn_state = btn_state
-            time.sleep(0.1)
+        try:
+            while True:
+                try:
+                    btn_state = main_btn.is_pressed if main_btn else False
+                    logger.debug(f"Go button state: {btn_state}")
+                except Exception as e:
+                    logger.error(f"Exception in is_pressed(): {e}")
+                    raise
+                # Debounce: detect rising edge
+                if btn_state and not last_btn_state:
+                    app_name = app_mappings.get(str(switch.read_value()))
+                    logger.info(f"Go button pressed. Switch value: {switch.read_value()}, launching app: {app_name}")
+                    if app_name:
+                        api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
+                        app_runner.run_app(app_name, api=api)
+                    else:
+                        logger.info(f"No app mapped for value {switch.read_value()}.")
+                last_btn_state = btn_state
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            logger.info("KeyboardInterrupt received. Exiting main loop.")
+            cleanup()
+            sys.exit(0)
     except SystemExit:
         cleanup()
         logger.info("System exited cleanly.")

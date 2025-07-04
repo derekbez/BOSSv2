@@ -30,8 +30,12 @@ class MockSwitchReader:
                 }
             )
         self._prev_value = prev
+
     def read_value(self) -> int:
         return self._value
+
+    def close(self):
+        pass  # No resources to release in mock
 
 import sys
 import select

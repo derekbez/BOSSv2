@@ -48,6 +48,17 @@ class MockButton:
     def set_callback(self, callback: Callable[[], None]):
         self._callback = callback
 
+    def on(self):
+        """Simulate button press (for API compatibility)."""
+        self.press()
+
+    def off(self):
+        """Simulate button release (for API compatibility)."""
+        self.release()
+
+    def close(self):
+        pass
+
 try:
     from gpiozero import Button as GpiozeroButton
     HAS_GPIOZERO = True

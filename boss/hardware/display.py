@@ -43,6 +43,7 @@ class MockSevenSegmentDisplay:
                 }
             )
     def show_message(self, message: str):
+        self.last_value = message
         print(f"[MOCK DISPLAY] 7-segment message: {message}")
         if self.event_bus:
             self.event_bus.publish(
@@ -53,6 +54,9 @@ class MockSevenSegmentDisplay:
                     "source": "hardware.display.mock"
                 }
             )
+
+    def close(self):
+        pass  # No resources to release in mock
 
 
 

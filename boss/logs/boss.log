@@ -2043,3 +2043,183 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/B
 2025-07-03 12:42:07 [INFO] __main__: No app mapped for value 0.
 2025-07-03 12:42:24 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-07-03 12:42:24 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751542944.932785, 'source': 'hardware.display.mock'}
+2025-07-03 17:24:20 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-03 17:24:20 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-03 17:24:20 [INFO] __main__: Initializing hardware interfaces...
+2025-07-03 17:24:20 [INFO] __main__: Pin assignments:
+2025-07-03 17:24:20 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-03 17:24:20 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-03 17:24:20 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-03 17:24:20 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-03 17:24:20 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-03 17:24:20 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-03 17:24:20 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-03 17:24:20 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-03 17:24:20 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-03 17:24:20 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-03 17:24:20 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-03 17:24:20 [INFO] __main__:   MUX1_PIN: 23
+2025-07-03 17:24:20 [INFO] __main__:   MUX2_PIN: 24
+2025-07-03 17:24:20 [INFO] __main__:   MUX3_PIN: 25
+2025-07-03 17:24:20 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-03 17:24:20 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-03 17:24:20 [INFO] __main__: Hardware initialized.
+2025-07-03 17:24:20 [INFO] __main__: Hardware startup summary:
+2025-07-03 17:24:20 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-03 17:24:20 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-03 17:24:21 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-03 17:24:21,980] INFO AppRunner: Started app: admin_startup
+2025-07-03 17:24:21 [INFO] AppRunner: Started app: admin_startup
+2025-07-03 17:24:21 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-03T16:24:21Z'}
+2025-07-03 17:24:37 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': 1, 'timestamp': '2025-07-03T16:24:37Z'}
+2025-07-03 17:24:37 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751559877.194037, 'source': 'hardware.display.mock'}
+2025-07-03 17:24:53 [INFO] __main__: Go button pressed. Switch value: 255, launching app: admin_shutdown
+[2025-07-03 17:24:53,407] INFO AppRunner: Started app: admin_shutdown
+2025-07-03 17:24:53 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-03 17:24:53 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-03T16:24:53Z'}
+[2025-07-03 17:24:53,421] ERROR AppRunner: Error running app admin_shutdown: 'API' object has no attribute 'set_leds'
+2025-07-03 17:24:53 [ERROR] AppRunner: Error running app admin_shutdown: 'API' object has no attribute 'set_leds'
+2025-07-03 17:32:49 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-03 17:32:49 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-03 17:32:49 [INFO] __main__: Initializing hardware interfaces...
+2025-07-03 17:32:49 [INFO] __main__: Pin assignments:
+2025-07-03 17:32:49 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-03 17:32:49 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-03 17:32:49 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-03 17:32:49 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-03 17:32:49 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-03 17:32:49 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-03 17:32:49 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-03 17:32:49 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-03 17:32:49 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-03 17:32:49 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-03 17:32:49 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-03 17:32:49 [INFO] __main__:   MUX1_PIN: 23
+2025-07-03 17:32:49 [INFO] __main__:   MUX2_PIN: 24
+2025-07-03 17:32:49 [INFO] __main__:   MUX3_PIN: 25
+2025-07-03 17:32:49 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-03 17:32:49 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-03 17:32:49 [INFO] __main__: Hardware initialized.
+2025-07-03 17:32:49 [INFO] __main__: Hardware startup summary:
+2025-07-03 17:32:49 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-03 17:32:49 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-03 17:32:50 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-03 17:32:50,737] INFO AppRunner: Started app: admin_startup
+2025-07-03 17:32:50 [INFO] AppRunner: Started app: admin_startup
+2025-07-03 17:32:50 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-03T16:32:50Z'}
+2025-07-03 17:33:02 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': 1, 'timestamp': '2025-07-03T16:33:02Z'}
+2025-07-03 17:33:02 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751560382.514254, 'source': 'hardware.display.mock'}
+2025-07-03 17:33:04 [INFO] __main__: Go button pressed. Switch value: 255, launching app: admin_shutdown
+[2025-07-03 17:33:04,539] INFO AppRunner: Started app: admin_shutdown
+2025-07-03 17:33:04 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-03 17:33:04 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-03T16:33:04Z'}
+[2025-07-03 17:33:04,548] ERROR AppRunner: Error running app admin_shutdown: 'API' object has no attribute 'display_text'
+2025-07-03 17:33:04 [ERROR] AppRunner: Error running app admin_shutdown: 'API' object has no attribute 'display_text'
+2025-07-04 13:04:01 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 13:04:01 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-04 13:04:01 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 13:04:01 [INFO] __main__: Pin assignments:
+2025-07-04 13:04:01 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 13:04:01 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 13:04:01 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 13:04:01 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 13:04:01 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 13:04:01 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 13:04:01 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 13:04:01 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 13:04:01 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 13:04:01 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 13:04:01 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 13:04:01 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 13:04:01 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 13:04:01 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 13:04:01 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 13:04:01 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 13:04:01 [INFO] __main__: Hardware initialized.
+2025-07-04 13:04:01 [INFO] __main__: Hardware startup summary:
+2025-07-04 13:04:01 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 13:04:01 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-04 13:04:03 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 13:04:03,407] INFO AppRunner: Started app: admin_startup
+2025-07-04 13:04:03 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 13:04:03 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T12:04:03Z'}
+2025-07-04 13:04:19 [INFO] __main__: Go button pressed. Switch value: 1, launching app: None
+2025-07-04 13:04:27 [INFO] __main__: No app mapped for value 255.
+2025-07-04 13:04:33 [INFO] EventBus: Event published: switch_change | {'value': 254, 'previous_value': 1, 'timestamp': '2025-07-04T12:04:33Z'}
+2025-07-04 13:04:33 [INFO] EventBus: Event published: output.display.updated | {'value': ' 254', 'timestamp': 1751630673.6673362, 'source': 'hardware.display.mock'}
+2025-07-04 13:04:53 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-04 13:04:53 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751630693.2653706, 'source': 'hardware.display.mock'}
+2025-07-04 13:42:46 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 13:42:46 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-04 13:42:46 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 13:42:46 [INFO] __main__: Pin assignments:
+2025-07-04 13:42:46 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 13:42:46 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 13:42:46 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 13:42:46 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 13:42:46 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 13:42:46 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 13:42:46 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 13:42:46 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 13:42:46 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 13:42:46 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 13:42:46 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 13:42:46 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 13:42:46 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 13:42:46 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 13:42:46 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 13:42:46 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 13:42:46 [INFO] __main__: Hardware initialized.
+2025-07-04 13:42:46 [INFO] __main__: Hardware startup summary:
+2025-07-04 13:42:46 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 13:42:46 [INFO] __main__:   go_button: MOCK (dev mode)
+2025-07-04 13:42:48 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 13:42:48,472] INFO AppRunner: Started app: admin_startup
+2025-07-04 13:42:48 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 13:42:48 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T12:42:48Z'}
+2025-07-04 13:42:56 [INFO] __main__: Go button pressed. Switch value: 2, launching app: None
+2025-07-04 13:42:57 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-04T12:42:57Z'}
+2025-07-04 13:42:57 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751632977.8581376, 'source': 'hardware.display.mock'}
+2025-07-04 13:43:04 [INFO] __main__: No app mapped for value 5.
+2025-07-04 13:43:43 [INFO] __main__: Performing clean shutdown and resource cleanup...
+2025-07-04 13:43:43 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751633023.4427962, 'source': 'hardware.display.mock'}
