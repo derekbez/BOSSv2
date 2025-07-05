@@ -1,0 +1,10 @@
+body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+h1 { background: #222; color: #fff; margin: 0; padding: 1em; }
+.dashboard { display: flex; gap: 2em; padding: 1em; }
+section { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 1em; margin-bottom: 1em; flex: 1; }
+#hardware-state, #controls, #apps { margin-top: 1em; }
+.event-log { background: #222; color: #fff; height: 300px; overflow-y: auto; font-family: monospace; padding: 1em; border-radius: 8px; }
+.event-log .event { margin-bottom: 0.5em; }
+input[type="text"] { width: 100%; padding: 0.5em; margin-bottom: 0.5em; border-radius: 4px; border: 1px solid #ccc; }
+button { margin: 0.2em 0.5em 0.2em 0; padding: 0.4em 1em; border-radius: 4px; border: 1px solid #888; background: #eee; cursor: pointer; }
+button:active { background: #ddd; }

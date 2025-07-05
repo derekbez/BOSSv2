@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BOSS Web UI Debug Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>BOSS Web UI Debug Dashboard</h1>
+    <div id="status"></div>
+    <div class="dashboard">
+        <section>
+            <h2>Simulate Input</h2>
+            <div id="controls"></div>
+        </section>
+        <section>
+            <h2>Output</h2>
+            <div id="output-state"></div>
+        </section>
+        <section>
+            <h2>Screen</h2>
+            <canvas id="screen-emulator" width="480" height="320" style="background:#111; border-radius:8px; width:100%; max-width:480px; height:320px;"></canvas>
+        </section>
+    </div>
+    <script src="/static/main.js"></script>
+</body>
+</html>

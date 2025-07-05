@@ -3,16 +3,12 @@ Button abstraction for B.O.S.S. (with mock for dev)
 """
 from typing import Protocol, Callable
 
-class ButtonInterface(Protocol):
-    def is_pressed(self) -> bool:
-        ...
-    def set_callback(self, callback: Callable[[], None]):
-        ...
-
+# --- APIButton definition must come first ---
 
 import time
 
-class MockButton:
+class APIButton:
+    """Mock button for web UI/dev mode: can be pressed via API/web UI, not keyboard."""
     def __init__(self, name: str, event_bus=None, button_id=None):
         self.name = name
         self._pressed = False
@@ -27,7 +23,7 @@ class MockButton:
                 {
                     "button_id": self.button_id,
                     "timestamp": time.time(),
-                    "source": f"hardware.button.{self.button_id}"
+                    "source": f"hardware.button.api.{self.button_id}"
                 }
             )
         if self._callback:
@@ -40,7 +36,67 @@ class MockButton:
                 {
                     "button_id": self.button_id,
                     "timestamp": time.time(),
-                    "source": f"hardware.button.{self.button_id}"
+                    "source": f"hardware.button.api.{self.button_id}"
+                }
+            )
+    def is_pressed(self) -> bool:
+        return self._pressed
+    def set_callback(self, callback: Callable[[], None]):
+        self._callback = callback
+    def on(self):
+        self.press()
+    def off(self):
+        self.release()
+    def close(self):
+        pass
+
+# Legacy alias for APIButton for compatibility. Must be defined after APIButton.
+MockButton = APIButton
+"""
+Button abstraction for B.O.S.S. (with mock for dev)
+"""
+from typing import Protocol, Callable
+
+class ButtonInterface(Protocol):
+    def is_pressed(self) -> bool:
+        ...
+    def set_callback(self, callback: Callable[[], None]):
+        ...
+
+
+import time
+
+
+class APIButton:
+    """Mock button for web UI/dev mode: can be pressed via API/web UI, not keyboard."""
+    def __init__(self, name: str, event_bus=None, button_id=None):
+        self.name = name
+        self._pressed = False
+        self._callback = None
+        self.event_bus = event_bus
+        self.button_id = button_id or name
+    def press(self):
+        self._pressed = True
+        if self.event_bus:
+            self.event_bus.publish(
+                "input.button.pressed",
+                {
+                    "button_id": self.button_id,
+                    "timestamp": time.time(),
+                    "source": f"hardware.button.api.{self.button_id}"
+                }
+            )
+        if self._callback:
+            self._callback()
+    def release(self):
+        self._pressed = False
+        if self.event_bus:
+            self.event_bus.publish(
+                "input.button.released",
+                {
+                    "button_id": self.button_id,
+                    "timestamp": time.time(),
+                    "source": f"hardware.button.api.{self.button_id}"
                 }
             )
     def is_pressed(self) -> bool:
@@ -49,11 +105,9 @@ class MockButton:
         self._callback = callback
 
     def on(self):
-        """Simulate button press (for API compatibility)."""
         self.press()
 
     def off(self):
-        """Simulate button release (for API compatibility)."""
         self.release()
 
     def close(self):

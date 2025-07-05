@@ -54,6 +54,9 @@ class MockSevenSegmentDisplay:
                     "source": "hardware.display.mock"
                 }
             )
+    def is_on(self):
+        # For compatibility with web UI, always return last_value
+        return self.last_value
 
     def close(self):
         pass  # No resources to release in mock

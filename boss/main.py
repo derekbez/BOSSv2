@@ -1,26 +1,5 @@
 # --- Web UI for debugging (only in mock mode) ---
-def maybe_start_web_ui():
-    try:
-        from webui.main import start_web_ui
-    except ImportError:
-        return
-    # Build a mock hardware dict for the web UI
-    mock_hardware = {
-        'btn_red': btn_red,
-        'btn_yellow': btn_yellow,
-        'btn_green': btn_green,
-        'btn_blue': btn_blue,
-        'main_btn': main_btn,
-        'led_red': led_red,
-        'led_yellow': led_yellow,
-        'led_green': led_green,
-        'led_blue': led_blue,
-        'display': display,
-        'switch_reader': switch_reader,
-        'screen': screen,
-    }
-    start_web_ui(mock_hardware)
-    logger.info("[BOSS] Debug Web UI started at http://localhost:8000 (MOCK mode)")
+# (Removed maybe_start_web_ui, now handled in hardware init)
 """
 B.O.S.S. Main Entry Point
 Initializes core systems, logging, hardware, and handles clean shutdown.
@@ -34,6 +13,7 @@ import logging
 import logging.handlers
 import time
 import os
+
 # --- BOSS imports ---
 from boss.core.logger import get_logger
 from boss.core.app_manager import AppManager
@@ -42,39 +22,38 @@ from boss.core.event_bus import EventBus
 from boss.core.event_bus_config import EventBusConfig
 from boss.hardware.pins import *
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
-from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, KeyboardSwitchReader, KeyboardGoButton
+from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, APISwitchReader
+from boss.hardware.button import APIButton
 from boss.hardware.screen import get_screen
-
 from boss.core.paths import CONFIG_PATH
 
 # Web UI debug dashboard import (only used in mock mode)
 def start_web_ui(hardware):
     try:
-        from webui.main import start_web_ui as _start_web_ui
-    except ImportError:
         from boss.webui.main import start_web_ui as _start_web_ui
-    _start_web_ui(hardware)
+        _start_web_ui(hardware)
+    except Exception as e:
+        logger.warning(f"Could not start web UI debug dashboard: {e}")
 
 # --- Hardware import fallback logic ---
-try:
-    from gpiozero import Device
-except ImportError:
-    Device = None
-from boss.core.switch_monitor import SwitchMonitor
+
+# Import SwitchMonitor (no hardware dependency)
+from boss.hardware.switch_monitor import SwitchMonitor
 
 
 # Try to import real hardware libraries, fallback to mocks if unavailable
-try:
-    from gpiozero.pins.lgpio import LGPIOFactory
-    Device.pin_factory = LGPIOFactory()
-except ImportError:
-    pass  # Fallback to default pin factory if lgpio is not available
 
-try:
-    from gpiozero import Button as PiButton, LED as PiLED
-    #import rpi_tm1637
-    REAL_HARDWARE = True
-except ImportError:
+# Hardware abstraction: always use mocks on non-Linux or if import fails
+import platform
+if platform.system() == "Linux":
+    try:
+        from gpiozero import Button as PiButton, LED as PiLED
+        REAL_HARDWARE = True
+    except ImportError:
+        from boss.hardware.button import MockButton as PiButton
+        from boss.hardware.led import MockLED as PiLED
+        REAL_HARDWARE = False
+else:
     from boss.hardware.button import MockButton as PiButton
     from boss.hardware.led import MockLED as PiLED
     REAL_HARDWARE = False
@@ -123,25 +102,35 @@ screen = None
 def hide_os_cursor():
     """Hide the OS-level blinking cursor on the main console (tty1), only if running on tty1."""
     try:
-        if os.isatty(0):
-            tty = os.ttyname(0)
-            if tty == '/dev/tty1':
-                os.system('setterm -cursor off > /dev/tty1 2>/dev/null')
-                os.system('echo -ne "\033[999;999H" > /dev/tty1 2>/dev/null')
+        if hasattr(os, 'isatty') and os.isatty(0):
+            # Only attempt on Linux
+            if platform.system() == "Linux":
+                try:
+                    import tty
+                    import termios
+                    # Hide cursor using ANSI escape
+                    print("\033[?25l", end="", flush=True)
+                except Exception:
+                    pass
     except Exception as e:
         logger.warning(f"Failed to hide OS cursor: {e}")
 
 def show_os_cursor():
     """Re-enable the OS-level blinking cursor on the main console (tty1), only if running on tty1."""
     try:
-        if os.isatty(0):
-            tty = os.ttyname(0)
-            if tty == '/dev/tty1':
-                os.system('setterm -cursor on > /dev/tty1 2>/dev/null')
+        if hasattr(os, 'isatty') and os.isatty(0):
+            if platform.system() == "Linux":
+                try:
+                    print("\033[?25h", end="", flush=True)
+                except Exception:
+                    pass
     except Exception as e:
         logger.warning(f"Failed to re-enable OS cursor: {e}")
 
+
+# --- Refactored hardware initialization for lower complexity and no pygame ---
 def initialize_hardware():
+    """Initialize all hardware and start web UI in mock mode."""
     global btn_red, btn_yellow, btn_green, btn_blue, main_btn
     global led_red, led_yellow, led_green, led_blue
     global display, switch_reader, screen
@@ -164,129 +153,95 @@ def initialize_hardware():
         'MUX3_PIN': MUX3_PIN,
         'MUX_IN_PIN': MUX_IN_PIN,
     }
-    print("[BOSS] Pin assignments:")
+    #print("[BOSS] Pin assignments:")
     logger.info("Pin assignments:")
     for name, val in pin_info.items():
-        print(f"  {name}: {val}")
+        #print(f"  {name}: {val}")
         logger.info(f"  {name}: {val}")
-    started_webui = False
-    mock_hardware_dict = {}
+
+
+    def try_init(real_ctor, fallback_ctor, arg, status_key):
+        try:
+            obj = real_ctor(arg)
+            hardware_status[status_key] = 'OK'
+            return obj
+        except Exception as e:
+            obj = fallback_ctor(arg)
+            hardware_status[status_key] = f"MOCK ({e})"
+            return obj
+
     if REAL_HARDWARE:
-        # Buttons
+        btn_red = try_init(PiButton, APIButton, BTN_RED_PIN, 'btn_red')
+        btn_yellow = try_init(PiButton, APIButton, BTN_YELLOW_PIN, 'btn_yellow')
+        btn_green = try_init(PiButton, APIButton, BTN_GREEN_PIN, 'btn_green')
+        btn_blue = try_init(PiButton, APIButton, BTN_BLUE_PIN, 'btn_blue')
+        main_btn = try_init(PiButton, APIButton, MAIN_BTN_PIN, 'main_btn')
+        led_red = try_init(PiLED, PiLED, LED_RED_PIN, 'led_red')
+        led_yellow = try_init(PiLED, PiLED, LED_YELLOW_PIN, 'led_yellow')
+        led_green = try_init(PiLED, PiLED, LED_GREEN_PIN, 'led_green')
+        led_blue = try_init(PiLED, PiLED, LED_BLUE_PIN, 'led_blue')
         try:
-            btn_red = PiButton(BTN_RED_PIN)
-            hardware_status['btn_red'] = 'OK'
-        except Exception as e:
-            btn_red = KeyboardGoButton()
-            hardware_status['btn_red'] = f"MOCK ({e})"
-        try:
-            btn_yellow = PiButton(BTN_YELLOW_PIN)
-            hardware_status['btn_yellow'] = 'OK'
-        except Exception as e:
-            btn_yellow = KeyboardGoButton()
-            hardware_status['btn_yellow'] = f"MOCK ({e})"
-        try:
-            btn_green = PiButton(BTN_GREEN_PIN)
-            hardware_status['btn_green'] = 'OK'
-        except Exception as e:
-            btn_green = KeyboardGoButton()
-            hardware_status['btn_green'] = f"MOCK ({e})"
-        try:
-            btn_blue = PiButton(BTN_BLUE_PIN)
-            hardware_status['btn_blue'] = 'OK'
-        except Exception as e:
-            btn_blue = KeyboardGoButton()
-            hardware_status['btn_blue'] = f"MOCK ({e})"
-        try:
-            main_btn = PiButton(MAIN_BTN_PIN)
-            hardware_status['main_btn'] = 'OK'
-        except Exception as e:
-            main_btn = KeyboardGoButton()
-            hardware_status['main_btn'] = f"MOCK ({e})"
-        # LEDs
-        try:
-            led_red = PiLED(LED_RED_PIN)
-            hardware_status['led_red'] = 'OK'
-        except Exception as e:
-            led_red = PiLED("red")
-            hardware_status['led_red'] = f"MOCK ({e})"
-        try:
-            led_yellow = PiLED(LED_YELLOW_PIN)
-            hardware_status['led_yellow'] = 'OK'
-        except Exception as e:
-            led_yellow = PiLED("yellow")
-            hardware_status['led_yellow'] = f"MOCK ({e})"
-        try:
-            led_green = PiLED(LED_GREEN_PIN)
-            hardware_status['led_green'] = 'OK'
-        except Exception as e:
-            led_green = PiLED("green")
-            hardware_status['led_green'] = f"MOCK ({e})"
-        try:
-            led_blue = PiLED(LED_BLUE_PIN)
-            hardware_status['led_blue'] = 'OK'
-        except Exception as e:
-            led_blue = PiLED("blue")
-            hardware_status['led_blue'] = f"MOCK ({e})"
-        # 7-segment display
-        try:
-            # event_bus will be injected after EventBus is created
             display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
             display.show_message("BOSS")
             hardware_status['display'] = 'OK'
         except Exception as e:
             display = MockSevenSegmentDisplay()
+            display.show_message("MOCK")
             hardware_status['display'] = f"MOCK ({e})"
-        # Multiplexer
         try:
             switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
-            # Try reading multiple times to ensure the mux is responsive
-            test_vals = [switch_reader.read_value() for _ in range(3)]
-            # If all reads raise an exception, it will be caught below
+            switch_reader.read_value()
             hardware_status['switch_reader'] = 'OK'
         except Exception as e:
-            switch_reader = KeyboardSwitchReader(1)
+            switch_reader = APISwitchReader(1)
             hardware_status['switch_reader'] = f"MOCK ({e})"
-        # Screen: always use get_screen factory
         screen = get_screen()
         logger.info(f"Screen: {type(screen).__name__} initialized (HDMI framebuffer)")
     else:
-        btn_red = PiButton("red")
-        btn_yellow = PiButton("yellow")
-        btn_green = PiButton("green")
-        btn_blue = PiButton("blue")
-        main_btn = KeyboardGoButton()
-        led_red = PiLED("red")
-        led_yellow = PiLED("yellow")
-        led_green = PiLED("green")
-        led_blue = PiLED("blue")
+        # All mock/dev hardware
+        btn_red = APIButton("red")
+        btn_yellow = APIButton("yellow")
+        btn_green = APIButton("green")
+        btn_blue = APIButton("blue")
+        main_btn = APIButton("main")
+        from boss.hardware.led import MockLED
+        led_red = MockLED("red")
+        led_yellow = MockLED("yellow")
+        led_green = MockLED("green")
+        led_blue = MockLED("blue")
         display = MockSevenSegmentDisplay()
-        switch_reader = KeyboardSwitchReader(1)
-        # Use get_screen for dev/mock as well
+        switch_reader = APISwitchReader(1)
         screen = get_screen()
         logger.info(f"Screen: {type(screen).__name__} initialized (dev mode)")
-        for k, v in zip(
-            ['btn_red','btn_yellow','btn_green','btn_blue','main_btn','led_red','led_yellow','led_green','led_blue','display','switch_reader','go_button'],
-            [btn_red, btn_yellow, btn_green, btn_blue, main_btn, led_red, led_yellow, led_green, led_blue, display, switch_reader, main_btn]
-        ):
+        mock_hardware_dict = {
+            'btn_red': btn_red,
+            'btn_yellow': btn_yellow,
+            'btn_green': btn_green,
+            'btn_blue': btn_blue,
+            'main_btn': main_btn,
+            'led_red': led_red,
+            'led_yellow': led_yellow,
+            'led_green': led_green,
+            'led_blue': led_blue,
+            'display': display,
+            'switch_reader': switch_reader,
+            'switch': switch_reader,  # Add alias for web UI compatibility
+            'screen': screen,
+        }
+        try:
+            start_web_ui(mock_hardware_dict)
+            logger.info("[BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)")
+        except Exception as e:
+            logger.warning(f"Could not start web UI debug dashboard: {e}")
+        for k in mock_hardware_dict:
             hardware_status[k] = 'MOCK (dev mode)'
-            mock_hardware_dict[k] = v
-        # Start web UI debug dashboard in mock mode
-        if not started_webui:
-            try:
-                start_web_ui(mock_hardware_dict)
-                logger.info("[BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)")
-                started_webui = True
-            except Exception as e:
-                logger.warning(f"Could not start web UI debug dashboard: {e}")
+
     logger.info("Hardware initialized.")
     logger.info("Hardware startup summary:")
     for k, v in hardware_status.items():
         print(f"  {k}: {v}")
         logger.info(f"  {k}: {v}")
     # --- Startup LED blink and welcome message ---
-    # (Moved LED blinking to admin_startup mini-app)
-    # Show welcome message on 7-segment display
     try:
         display.show_message("BOSS")
         time.sleep(1.0)
@@ -300,7 +255,7 @@ def cleanup():
     # Show shutdown message on 7-segment display
     try:
         if display:
-            display.show_message("----")
+            display.show_message("-  -")
     except Exception:
         pass
     for dev in [btn_red, btn_yellow, btn_green, btn_blue, main_btn,
@@ -310,7 +265,7 @@ def cleanup():
                 dev.close()
             except Exception:
                 pass
-    # Ensure PygameScreen or PillowScreen is closed and thread joined
+    # Ensure PillowScreen is closed and thread joined 
     if screen and hasattr(screen, 'close'):
         try:
             screen.clear()
@@ -326,113 +281,48 @@ def cleanup():
     show_os_cursor()
     logger.info("Shutdown complete.")
 
-def main():
-    logger.info("B.O.S.S. system starting up.")
-    hide_os_cursor()  # Hide cursor at startup
+
+from boss.core.event_handlers import (
+    on_display_update,
+    on_go_button_pressed,
+    display_update_handler,
+    handle_led_set,
+    handle_switch_set
+)
+
+# --- Initialization Functions ---
+def setup_event_bus():
+    eb = EventBus(EventBusConfig(log_all_events=True))
+    eb.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
+    eb.register_event_type("input.switch.set", {"value": int, "timestamp": str})
+    eb.register_event_type("app_started", {"app_name": str, "version": str, "timestamp": str})
+    eb.register_event_type("app_stopped", {"app_name": str, "version": str, "timestamp": str})
+    eb.register_event_type("system_shutdown", {"reason": str, "timestamp": str})
+    eb.register_event_type("error", {"error_type": str, "message": str, "stack_trace": str, "timestamp": str})
+    return eb
+
+def setup_api(event_bus):
+    from boss.core.api import AppAPI
+    leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
+    buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
+    return AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+
+def load_config():
+    with open(CONFIG_PATH) as f:
+        config = json.load(f)
+    return config.get("app_mappings", {})
+
+def start_admin_startup_app(app_runner, api):
     try:
-        initialize_hardware()
-        # If in MOCK mode (KeyboardSwitchReader or KeyboardGoButton detected), start web UI
-        if isinstance(switch_reader, KeyboardSwitchReader) or isinstance(main_btn, KeyboardGoButton):
-            maybe_start_web_ui()
-        event_bus = EventBus(EventBusConfig(log_all_events=True))
-        event_bus.register_event_type("switch_change", {"value": int, "previous_value": int, "timestamp": str})
-        # Inject event_bus into display (for event-driven publishing)
-        if hasattr(display, 'event_bus'):
-            display.event_bus = event_bus
-        # Register core event types
-        event_bus.register_event_type("app_started", {"app_name": str, "version": str, "timestamp": str})
-        event_bus.register_event_type("app_stopped", {"app_name": str, "version": str, "timestamp": str})
-        # Register shutdown and error event types
-        event_bus.register_event_type("system_shutdown", {"reason": str, "timestamp": str})
-        event_bus.register_event_type("error", {"error_type": str, "message": str, "stack_trace": str, "timestamp": str})
+        app_runner.run_app("admin_startup", api=api)
+    except Exception as e:
+        logger.warning(f"Startup app failed: {e}")
 
-        # Subscribe display to output.display.updated events (event-driven display updates)
-        def on_display_update(event_type, payload):
-            val = payload.get("value")
-            if val is not None:
-                # Try to show as number if possible, else as message
-                try:
-                    n = int(val)
-                    display.show_number(n)
-                except Exception:
-                    display.show_message(str(val))
-        event_bus.subscribe("output.display.updated", on_display_update)
-
-        # Load app mappings and initialize managers
-        with open(CONFIG_PATH) as f:
-            config = json.load(f)
-        app_mappings = config.get("app_mappings", {})
-        switch = switch_reader if switch_reader else MockSwitchReader(1)
-        seg_display = display if display else MockSevenSegmentDisplay()
-        app_manager = AppManager(switch, seg_display, event_bus=event_bus)
-        app_runner = AppRunner(event_bus=event_bus)
-        logger.info("System running. Press Ctrl+C to exit.")
-        signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
-        from boss.core.api import AppAPI
-        leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
-        buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
-        api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
-
-        # Run startup mini-app before anything else
-        try:
-            # from boss.apps import admin_startup
-            # import threading
-            # from boss.core.api import AppAPI
-            # leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
-            # buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
-            # api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
-            # stop_event = threading.Event()
-            app_runner.run_app("admin_startup", api=api)
-        except Exception as e:
-            logger.warning(f"Startup app failed: {e}")
-
-        # --- Event-driven Go button logic ---
-        # Subscribe to main Go button press events via EventBus
-        def on_go_button_pressed(event_type, payload):
-            # Only handle the main Go button
-            if payload.get("button_id") == "main":
-                value = app_manager.poll_and_update_display()
-                app_name = app_mappings.get(str(value))
-                logger.info(f"Go button pressed (event). Switch value: {value}, launching app: {app_name}")
-                if app_name:
-                    app_runner.run_app(app_name, api=api)
-                else:
-                    logger.info(f"No app mapped for value {value}.")
-
-        event_bus.subscribe("input.button.pressed", on_go_button_pressed)
-
-        # --- Event-driven switch monitoring and display update ---
-        def display_update_handler(event_type, payload):
-            seg_display.show_number(payload["value"])
-        event_bus.subscribe("switch_change", display_update_handler)
-        switch_monitor = SwitchMonitor(switch, event_bus)
-        switch_monitor.start()
-
-        # Main loop: just keep the process alive, all logic is now event-driven
-        last_btn_state = False
-        try:
-            while True:
-                try:
-                    btn_state = main_btn.is_pressed if main_btn else False
-                    logger.debug(f"Go button state: {btn_state}")
-                except Exception as e:
-                    logger.error(f"Exception in is_pressed(): {e}")
-                    raise
-                # Debounce: detect rising edge
-                if btn_state and not last_btn_state:
-                    app_name = app_mappings.get(str(switch.read_value()))
-                    logger.info(f"Go button pressed. Switch value: {switch.read_value()}, launching app: {app_name}")
-                    if app_name:
-                        api = type('API', (), {'screen': screen, 'event_bus': event_bus})()
-                        app_runner.run_app(app_name, api=api)
-                    else:
-                        logger.info(f"No app mapped for value {switch.read_value()}.")
-                last_btn_state = btn_state
-                time.sleep(0.1)
-        except KeyboardInterrupt:
-            logger.info("KeyboardInterrupt received. Exiting main loop.")
-            cleanup()
-            sys.exit(0)
+from contextlib import contextmanager
+@contextmanager
+def boss_cleanup():
+    try:
+        yield
     except SystemExit:
         cleanup()
         logger.info("System exited cleanly.")
@@ -442,6 +332,74 @@ def main():
         logger.exception(f"Fatal error: {e}")
         cleanup()
         sys.exit(1)
+    # finally:
+    #     pass
+
+def main():
+    logger.info("B.O.S.S. system starting up.")
+    hide_os_cursor()  # Hide cursor at startup
+    global event_bus, app_mappings, switch, seg_display, app_runner, api
+    initialize_hardware()
+    event_bus = setup_event_bus()
+    # Inject event_bus into display if supported
+    if display and hasattr(display, 'event_bus'):
+        try:
+            display.event_bus = event_bus
+        except Exception:
+            pass
+    app_mappings = load_config()
+    switch = switch_reader if switch_reader else MockSwitchReader(1)
+    seg_display = display if display else MockSevenSegmentDisplay()
+    app_runner = AppRunner(event_bus=event_bus)
+    api = setup_api(event_bus)
+    logger.info("System running. Press Ctrl+C to exit.")
+    signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
+
+    # Register event handlers using imported functions (all async for non-blocking operation)
+    event_bus.subscribe(
+        "output.display.set",
+        lambda event_type, payload: display.show_message(str(payload.get("text"))) if display and hasattr(display, 'show_message') and payload.get("text") is not None else None,
+        mode="async"
+    )
+    event_bus.subscribe("output.led.set", handle_led_set(led_red, led_yellow, led_green, led_blue), mode="async")
+    event_bus.subscribe("input.button.pressed", on_go_button_pressed(switch, app_mappings, app_runner, api), mode="async")
+    event_bus.subscribe("switch_change", display_update_handler(seg_display), mode="async")
+    event_bus.subscribe("input.switch.set", handle_switch_set(switch, display), mode="async")
+
+    # --- Web UI event bus integration ---
+    try:
+        from boss.webui.server import ws_manager
+        def push_all_events(event_type, payload):
+            ws_manager.push_event({"type": event_type, "payload": payload})
+        event_bus.subscribe("*", push_all_events)  # Subscribe to all events
+        ws_manager.hardware["api"] = api
+        ws_manager.hardware["event_bus"] = event_bus
+    except Exception as e:
+        logger.warning(f"Web UI event bus integration failed: {e}")
+
+    # Start admin_startup app
+    start_admin_startup_app(app_runner, api)
+
+    # Start switch monitor
+    switch_monitor = SwitchMonitor(switch, event_bus)
+    switch_monitor.start()
+
+    # Main thread just waits for signals/events
+    try:
+        while True:
+            time.sleep(1)
+    except (KeyboardInterrupt, EOFError):
+        logger.info("Exit signal received (KeyboardInterrupt or EOF). Exiting main loop.")
+        cleanup()
+        sys.exit(0)
+    except Exception as e:
+        logger.error(f"Fatal error in main loop: {e}")
+        cleanup()
+        sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    # Ensure main() is defined before calling
+    try:
+        main()
+    except NameError as e:
+        logger.error(f"main() is not defined: {e}")

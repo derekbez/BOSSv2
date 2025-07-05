@@ -10,6 +10,8 @@ class SwitchInput(Protocol):
 
 import time
 
+SWITCH_CHANGED_EVENT = "input.switch.changed"
+
 class MockSwitchReader:
     """Mock switch reader for development/testing."""
     def __init__(self, value: int = 0, event_bus=None):
@@ -21,7 +23,7 @@ class MockSwitchReader:
         self._value = value
         if self.event_bus and prev != value:
             self.event_bus.publish(
-                "input.switch.changed",
+                SWITCH_CHANGED_EVENT,
                 {
                     "current_value": value,
                     "previous_value": prev,
@@ -61,7 +63,7 @@ class PiSwitchReader:
                 value |= (1 << i)
         if self._last_value is not None and value != self._last_value and self.event_bus:
             self.event_bus.publish(
-                "input.switch.changed",
+                SWITCH_CHANGED_EVENT,
                 {
                     "current_value": value,
                     "previous_value": self._last_value,
@@ -72,27 +74,28 @@ class PiSwitchReader:
         self._last_value = value
         return value
 
-class KeyboardSwitchReader:
-    """Mock switch reader: user types a number (0-255) in the terminal and blocks until input."""
-    def __init__(self, initial=0):
+class APISwitchReader:
+    """Mock switch reader for dev/web UI: value is set via API/web UI, not keyboard. Only KeyboardInterrupt/EOFError exits."""
+    def __init__(self, initial=0, event_bus=None):
         self._value = initial
+        self.event_bus = event_bus
+        self._prev_value = initial
     def read_value(self) -> int:
-        while True:
-            try:
-                line = input("Enter switch value (0-255) or press Enter to keep current: ").strip()
-                if not line:
-                    break
-                if line.isdigit():
-                    self._value = max(0, min(255, int(line)))
-                    break
-            except (EOFError, KeyboardInterrupt):
-                break
+        # In web UI/dev mode, just return the current value (no keyboard input)
         return self._value
-
-class KeyboardGoButton:
-    """Mock Go button: user presses Enter to simulate button press (blocks until Enter)."""
-    def __init__(self):
-        pass  # Remove any _pressed or is_pressed attribute
-    def is_pressed(self):
-        input("Press Enter to simulate Go button...")
-        return True
+    def set_value(self, value: int):
+        prev = self._value
+        self._value = value
+        # Always publish a switch_change event for web UI compatibility
+        if self.event_bus:
+            self.event_bus.publish(
+                "switch_change",
+                {
+                    "value": value,
+                    "previous_value": prev,
+                    "timestamp": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+                }
+            )
+        self._prev_value = prev
+    def close(self):
+        pass  # No resources to release in mock

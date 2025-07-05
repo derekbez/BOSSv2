@@ -2,7 +2,7 @@ import pytest
 import threading
 import time
 from boss.core.event_bus import EventBus
-from boss.core.switch_monitor import SwitchMonitor
+from boss.hardware.switch_monitor import SwitchMonitor
 
 class DummySwitch:
     def __init__(self, values):

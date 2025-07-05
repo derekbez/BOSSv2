@@ -13,10 +13,10 @@ import time
 class MockLED:
     def __init__(self, color: str, event_bus=None):
         self.color = color
-        self.state = False
+        self._state = False
         self.event_bus = event_bus
     def set_state(self, on: bool):
-        self.state = on
+        self._state = on
         print(f"[MOCK LED] {self.color} LED is now {'ON' if on else 'OFF'}")
         if self.event_bus:
             self.event_bus.publish(
@@ -34,6 +34,9 @@ class MockLED:
 
     def off(self):
         self.set_state(False)
+
+    def is_on(self):
+        return self._state
 
     def close(self):
         pass  # No resources to release in mock

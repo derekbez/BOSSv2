@@ -2223,3 +2223,1399 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/B
 2025-07-04 13:43:04 [INFO] __main__: No app mapped for value 5.
 2025-07-04 13:43:43 [INFO] __main__: Performing clean shutdown and resource cleanup...
 2025-07-04 13:43:43 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751633023.4427962, 'source': 'hardware.display.mock'}
+2025-07-04 14:36:00 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 14:36:00 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-04 14:36:00 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 14:36:00 [INFO] __main__: Pin assignments:
+2025-07-04 14:36:00 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 14:36:00 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 14:36:00 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 14:36:00 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 14:36:00 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 14:36:00 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 14:36:00 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 14:36:00 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 14:36:00 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 14:36:00 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 14:36:00 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 14:36:00 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 14:36:00 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 14:36:00 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 14:36:00 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 14:36:00 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 14:36:00 [WARNING] __main__: Could not start web UI debug dashboard: No module named 'boss.webui'
+2025-07-04 14:36:00 [INFO] __main__: Hardware initialized.
+2025-07-04 14:36:00 [INFO] __main__: Hardware startup summary:
+2025-07-04 14:36:00 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 14:36:00 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 14:36:01 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 14:36:01,922] INFO AppRunner: Started app: admin_startup
+2025-07-04 14:36:01 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 14:36:01 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T13:36:01Z'}
+2025-07-04 14:37:43 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 14:37:43 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-04 14:37:43 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 14:37:43 [INFO] __main__: Pin assignments:
+2025-07-04 14:37:43 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 14:37:43 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 14:37:43 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 14:37:43 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 14:37:43 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 14:37:43 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 14:37:43 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 14:37:43 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 14:37:43 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 14:37:43 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 14:37:43 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 14:37:43 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 14:37:43 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 14:37:43 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 14:37:43 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 14:37:43 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 14:37:43 [WARNING] __main__: Could not start web UI debug dashboard: No module named 'boss.web_ui'
+2025-07-04 14:37:43 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 14:37:43 [INFO] __main__: Hardware initialized.
+2025-07-04 14:37:43 [INFO] __main__: Hardware startup summary:
+2025-07-04 14:37:43 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 14:37:43 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 14:37:44 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 14:37:44,792] INFO AppRunner: Started app: admin_startup
+2025-07-04 14:37:44 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 14:37:44 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T13:37:44Z'}
+2025-07-04 16:04:21 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 16:04:21 [WARNING] __main__: Failed to hide OS cursor: module 'os' has no attribute 'ttyname'
+2025-07-04 16:04:21 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 16:04:21 [INFO] __main__: Pin assignments:
+2025-07-04 16:04:21 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 16:04:21 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 16:04:21 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 16:04:21 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 16:04:21 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 16:04:21 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 16:04:21 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 16:04:21 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 16:04:21 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 16:04:21 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 16:04:21 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 16:04:21 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 16:04:21 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 16:04:21 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 16:04:21 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 16:04:21 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 16:04:21 [WARNING] __main__: Could not start web UI debug dashboard: [Errno 2] No such file or directory: 'D:\\dev\\BOSSv2\\webui\\main.py'
+2025-07-04 16:04:21 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 16:04:21 [INFO] __main__: Hardware initialized.
+2025-07-04 16:04:21 [INFO] __main__: Hardware startup summary:
+2025-07-04 16:04:21 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 16:04:21 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 16:04:22 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 16:04:22,789] INFO AppRunner: Started app: admin_startup
+2025-07-04 16:04:22 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 16:04:22 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T15:04:22Z'}
+2025-07-04 16:29:51 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 16:29:51 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 16:29:51 [INFO] __main__: Pin assignments:
+2025-07-04 16:29:51 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 16:29:51 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 16:29:51 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 16:29:51 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 16:29:51 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 16:29:51 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 16:29:51 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 16:29:51 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 16:29:51 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 16:29:51 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 16:29:51 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 16:29:51 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 16:29:51 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 16:29:51 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 16:29:51 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 16:29:51 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 16:29:51 [WARNING] __main__: Could not start web UI debug dashboard: [Errno 2] No such file or directory: 'D:\\dev\\BOSSv2\\webui\\main.py'
+2025-07-04 16:29:51 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 16:29:51 [INFO] __main__: Hardware initialized.
+2025-07-04 16:29:51 [INFO] __main__: Hardware startup summary:
+2025-07-04 16:29:51 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 16:29:51 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 16:29:53 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 16:29:53,479] INFO AppRunner: Started app: admin_startup
+2025-07-04 16:29:53 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 16:29:53 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T15:29:53Z'}
+2025-07-04 16:30:00 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-04T15:30:00Z'}
+2025-07-04 16:30:00 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751643000.4404144, 'source': 'hardware.display.mock'}
+2025-07-04 16:43:45 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 16:43:45 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 16:43:45 [INFO] __main__: Pin assignments:
+2025-07-04 16:43:45 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 16:43:45 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 16:43:45 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 16:43:45 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 16:43:45 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 16:43:45 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 16:43:45 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 16:43:45 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 16:43:45 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 16:43:45 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 16:43:45 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 16:43:45 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 16:43:45 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 16:43:45 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 16:43:45 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 16:43:45 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 16:43:45 [WARNING] __main__: Could not start web UI debug dashboard: Could not import webui.main from any of: ['D:\\dev\\BOSSv2\\webui\\main.py', 'D:\\dev\\BOSSv2\\webui\\main.py']
+2025-07-04 16:43:45 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 16:43:45 [INFO] __main__: Hardware initialized.
+2025-07-04 16:43:45 [INFO] __main__: Hardware startup summary:
+2025-07-04 16:43:45 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 16:43:45 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 16:43:47 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 16:43:48,677] INFO AppRunner: Started app: admin_startup
+2025-07-04 16:43:48 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 16:43:48 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T15:43:48Z'}
+2025-07-04 16:48:33 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 16:48:33 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 16:48:33 [INFO] __main__: Pin assignments:
+2025-07-04 16:48:33 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 16:48:33 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 16:48:33 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 16:48:33 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 16:48:33 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 16:48:33 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 16:48:33 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 16:48:33 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 16:48:33 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 16:48:33 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 16:48:33 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 16:48:33 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 16:48:33 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 16:48:33 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 16:48:33 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 16:48:33 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 16:48:33 [WARNING] __main__: Could not start web UI debug dashboard: Could not import webui.main from any of: ['D:\\dev\\BOSSv2\\webui\\main.py', 'D:\\dev\\BOSSv2\\webui\\main.py']
+2025-07-04 16:48:33 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 16:48:33 [INFO] __main__: Hardware initialized.
+2025-07-04 16:48:33 [INFO] __main__: Hardware startup summary:
+2025-07-04 16:48:33 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 16:48:33 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 16:48:34 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 16:48:34,987] INFO AppRunner: Started app: admin_startup
+2025-07-04 16:48:34 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 16:48:34 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T15:48:34Z'}
+2025-07-04 16:54:55 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 16:54:55 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 16:54:55 [INFO] __main__: Pin assignments:
+2025-07-04 16:54:55 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 16:54:55 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 16:54:55 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 16:54:55 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 16:54:55 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 16:54:55 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 16:54:55 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 16:54:55 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 16:54:55 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 16:54:55 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 16:54:55 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 16:54:55 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 16:54:55 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 16:54:55 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 16:54:55 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 16:54:55 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 16:54:55 [WARNING] __main__: Could not start web UI debug dashboard: No module named 'boss.web_ui'
+2025-07-04 16:54:55 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 16:54:55 [INFO] __main__: Hardware initialized.
+2025-07-04 16:54:55 [INFO] __main__: Hardware startup summary:
+2025-07-04 16:54:55 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 16:54:55 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 16:54:56 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 16:54:56,879] INFO AppRunner: Started app: admin_startup
+2025-07-04 16:54:56 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 16:54:56 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T15:54:56Z'}
+2025-07-04 17:00:09 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:00:09 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:00:09 [INFO] __main__: Pin assignments:
+2025-07-04 17:00:09 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:00:09 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:00:09 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:00:09 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:00:09 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:00:09 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:00:09 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:00:09 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:00:09 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:00:09 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:00:09 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:00:09 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:00:09 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:00:09 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:00:09 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:00:09 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:00:10 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:00:10 [INFO] __main__: Hardware initialized.
+2025-07-04 17:00:10 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:00:10 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:00:10 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:00:11 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:00:11,930] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:00:11 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:00:11 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:00:11Z'}
+2025-07-04 17:01:43 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:01:43 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:01:43 [INFO] __main__: Pin assignments:
+2025-07-04 17:01:43 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:01:43 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:01:43 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:01:43 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:01:43 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:01:43 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:01:43 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:01:43 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:01:43 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:01:43 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:01:43 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:01:43 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:01:43 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:01:43 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:01:43 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:01:43 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:01:43 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:01:43 [INFO] __main__: Hardware initialized.
+2025-07-04 17:01:43 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:01:43 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:01:43 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:01:45 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:01:45,349] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:01:45 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:01:45 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:01:45Z'}
+2025-07-04 17:02:27 [INFO] EventBus: Event published: switch_change | {'value': 22, 'previous_value': 1, 'timestamp': '2025-07-04T16:02:27Z'}
+2025-07-04 17:02:27 [INFO] EventBus: Event published: output.display.updated | {'value': '  22', 'timestamp': 1751644947.3807292, 'source': 'hardware.display.mock'}
+2025-07-04 17:03:22 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:03:22 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:03:22 [INFO] __main__: Pin assignments:
+2025-07-04 17:03:22 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:03:22 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:03:22 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:03:22 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:03:22 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:03:22 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:03:22 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:03:22 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:03:22 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:03:22 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:03:22 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:03:22 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:03:22 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:03:22 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:03:22 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:03:22 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:03:22 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:03:22 [INFO] __main__: Hardware initialized.
+2025-07-04 17:03:22 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:03:22 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:03:22 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:03:24 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:03:24,387] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:03:24 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:03:24 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:03:24Z'}
+2025-07-04 17:04:28 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': 1, 'timestamp': '2025-07-04T16:04:28Z'}
+2025-07-04 17:04:28 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751645068.0693245, 'source': 'hardware.display.mock'}
+2025-07-04 17:05:34 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:05:34 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:05:34 [INFO] __main__: Pin assignments:
+2025-07-04 17:05:34 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:05:34 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:05:34 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:05:34 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:05:34 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:05:34 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:05:34 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:05:34 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:05:34 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:05:34 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:05:34 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:05:34 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:05:34 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:05:34 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:05:34 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:05:34 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:05:34 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:05:34 [INFO] __main__: Hardware initialized.
+2025-07-04 17:05:34 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:05:34 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:05:34 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:05:36 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:05:36,339] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:05:36 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:05:36 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:05:36Z'}
+2025-07-04 17:06:03 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:06:03 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:06:03 [INFO] __main__: Pin assignments:
+2025-07-04 17:06:03 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:06:03 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:06:03 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:06:03 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:06:03 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:06:03 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:06:03 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:06:03 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:06:03 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:06:03 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:06:03 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:06:03 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:06:03 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:06:03 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:06:03 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:06:03 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:06:03 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:06:03 [INFO] __main__: Hardware initialized.
+2025-07-04 17:06:03 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:06:03 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:06:03 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:06:05 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:06:05,165] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:06:05 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:06:05 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:06:05Z'}
+2025-07-04 17:07:54 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:07:54 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:07:54 [INFO] __main__: Pin assignments:
+2025-07-04 17:07:54 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:07:54 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:07:54 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:07:54 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:07:54 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:07:54 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:07:54 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:07:54 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:07:54 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:07:54 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:07:54 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:07:54 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:07:54 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:07:54 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:07:54 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:07:54 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:07:54 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:07:54 [INFO] __main__: Hardware initialized.
+2025-07-04 17:07:54 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:07:54 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:07:54 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:07:56 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:07:56,382] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:07:56 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:07:56 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:07:56Z'}
+2025-07-04 17:09:25 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:09:25 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:09:25 [INFO] __main__: Pin assignments:
+2025-07-04 17:09:25 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:09:25 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:09:25 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:09:25 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:09:25 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:09:25 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:09:25 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:09:25 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:09:25 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:09:25 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:09:25 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:09:25 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:09:25 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:09:25 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:09:25 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:09:25 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:09:25 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:09:25 [INFO] __main__: Hardware initialized.
+2025-07-04 17:09:25 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:09:25 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:09:25 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:09:27 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:09:27,460] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:09:27 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:09:27 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:09:27Z'}
+2025-07-04 17:12:09 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:12:09 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:12:09 [INFO] __main__: Pin assignments:
+2025-07-04 17:12:09 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:12:09 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:12:09 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:12:09 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:12:09 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:12:09 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:12:09 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:12:09 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:12:09 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:12:09 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:12:09 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:12:09 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:12:09 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:12:09 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:12:09 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:12:09 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:12:09 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:12:09 [INFO] __main__: Hardware initialized.
+2025-07-04 17:12:09 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:12:09 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-04 17:12:09 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:12:11 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:12:11,490] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:12:11 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:12:11 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:12:11Z'}
+2025-07-04 17:19:10 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-04T16:19:10Z'}
+2025-07-04 17:19:10 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751645950.102308, 'source': 'hardware.display.mock'}
+2025-07-04 17:19:57 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:19:57 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:19:57 [INFO] __main__: Pin assignments:
+2025-07-04 17:19:57 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:19:57 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:19:57 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:19:57 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:19:57 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:19:57 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:19:57 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:19:57 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:19:57 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:19:57 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:19:57 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:19:57 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:19:57 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:19:57 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:19:57 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:19:57 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:19:58 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:19:58 [INFO] __main__: Hardware initialized.
+2025-07-04 17:19:58 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:19:58 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-04 17:19:58 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:19:59 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:19:59,787] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:19:59 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:19:59 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:19:59Z'}
+2025-07-04 17:25:02 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:25:02 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:25:02 [INFO] __main__: Pin assignments:
+2025-07-04 17:25:02 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:25:02 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:25:02 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:25:02 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:25:02 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:25:02 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:25:02 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:25:02 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:25:02 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:25:02 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:25:02 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:25:02 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:25:02 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:25:02 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:25:02 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:25:02 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:25:02 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:25:02 [INFO] __main__: Hardware initialized.
+2025-07-04 17:25:02 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:25:02 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-04 17:25:02 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:25:04 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:25:04,323] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:25:04 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:25:04 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:25:04Z'}
+2025-07-04 17:35:14 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:35:14 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:35:14 [INFO] __main__: Pin assignments:
+2025-07-04 17:35:14 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:35:14 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:35:14 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:35:14 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:35:14 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:35:14 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:35:14 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:35:14 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:35:14 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:35:14 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:35:14 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:35:14 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:35:14 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:35:14 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:35:14 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:35:14 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:35:15 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:35:15 [INFO] __main__: Hardware initialized.
+2025-07-04 17:35:15 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:35:15 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-04 17:35:15 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:35:16 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:35:16,611] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:35:16 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:35:16 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:35:16Z'}
+2025-07-04 17:41:56 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-04 17:41:56 [INFO] __main__: Initializing hardware interfaces...
+2025-07-04 17:41:56 [INFO] __main__: Pin assignments:
+2025-07-04 17:41:56 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-04 17:41:56 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-04 17:41:56 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-04 17:41:56 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-04 17:41:56 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-04 17:41:56 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-04 17:41:56 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-04 17:41:56 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-04 17:41:56 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-04 17:41:56 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-04 17:41:56 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-04 17:41:56 [INFO] __main__:   MUX1_PIN: 23
+2025-07-04 17:41:56 [INFO] __main__:   MUX2_PIN: 24
+2025-07-04 17:41:56 [INFO] __main__:   MUX3_PIN: 25
+2025-07-04 17:41:56 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-04 17:41:56 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-04 17:41:56 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-04 17:41:56 [INFO] __main__: Hardware initialized.
+2025-07-04 17:41:56 [INFO] __main__: Hardware startup summary:
+2025-07-04 17:41:56 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-04 17:41:56 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-04 17:41:58 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-04 17:41:58,128] INFO AppRunner: Started app: admin_startup
+2025-07-04 17:41:58 [INFO] AppRunner: Started app: admin_startup
+2025-07-04 17:41:58 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-04T16:41:58Z'}
+2025-07-05 14:58:05 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 14:58:05 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 14:58:05 [INFO] __main__: Pin assignments:
+2025-07-05 14:58:05 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 14:58:05 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 14:58:05 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 14:58:05 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 14:58:05 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 14:58:05 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 14:58:05 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 14:58:05 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 14:58:05 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 14:58:05 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 14:58:05 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 14:58:05 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 14:58:05 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 14:58:05 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 14:58:05 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 14:58:05 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 14:58:06 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 14:58:06 [INFO] __main__: Hardware initialized.
+2025-07-05 14:58:06 [INFO] __main__: Hardware startup summary:
+2025-07-05 14:58:06 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 14:58:06 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 14:58:08 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 14:58:08,338] INFO AppRunner: Started app: admin_startup
+2025-07-05 14:58:08 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 14:58:08 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T13:58:08Z'}
+2025-07-05 15:08:38 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:08:38 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:08:38 [INFO] __main__: Pin assignments:
+2025-07-05 15:08:38 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:08:38 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:08:38 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:08:38 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:08:38 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:08:38 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:08:38 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:08:38 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:08:38 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:08:38 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:08:38 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:08:38 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:08:38 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:08:38 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:08:38 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:08:38 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:08:39 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:08:39 [INFO] __main__: Hardware initialized.
+2025-07-05 15:08:39 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:08:39 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:08:39 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:08:40 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:08:40,864] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:08:40 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:08:40 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:08:40Z'}
+2025-07-05 15:34:53 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:34:53 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:34:53 [INFO] __main__: Pin assignments:
+2025-07-05 15:34:53 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:34:53 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:34:53 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:34:53 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:34:53 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:34:53 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:34:53 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:34:53 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:34:53 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:34:53 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:34:53 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:34:53 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:34:53 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:34:53 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:34:53 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:34:53 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:34:54 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:34:54 [INFO] __main__: Hardware initialized.
+2025-07-05 15:34:54 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:34:54 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:34:54 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:34:55 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:34:55,601] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:34:55 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:34:55 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:34:55Z'}
+2025-07-05 15:38:46 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:38:46 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:38:46 [INFO] __main__: Pin assignments:
+2025-07-05 15:38:46 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:38:46 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:38:46 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:38:46 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:38:46 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:38:46 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:38:46 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:38:46 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:38:46 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:38:46 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:38:46 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:38:46 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:38:46 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:38:46 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:38:46 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:38:46 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:38:46 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:38:46 [INFO] __main__: Hardware initialized.
+2025-07-05 15:38:46 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:38:46 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:38:46 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:38:48 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:38:48,473] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:38:48 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:38:48 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:38:48Z'}
+2025-07-05 15:42:33 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:42:33 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:42:33 [INFO] __main__: Pin assignments:
+2025-07-05 15:42:33 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:42:33 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:42:33 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:42:33 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:42:33 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:42:33 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:42:33 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:42:33 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:42:33 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:42:33 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:42:33 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:42:33 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:42:33 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:42:33 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:42:33 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:42:33 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:42:33 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:42:33 [INFO] __main__: Hardware initialized.
+2025-07-05 15:42:33 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:42:33 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:42:33 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:42:34 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:42:34,914] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:42:34 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:42:34 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:42:34Z'}
+2025-07-05 15:42:40 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751726560.196428}
+2025-07-05 15:42:40 [INFO] __main__: [WebUI] Switch set to 0 via web UI.
+2025-07-05 15:42:40 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751726560.1974285, 'source': 'hardware.display.mock'}
+2025-07-05 15:42:40 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T14:42:40Z'}
+2025-07-05 15:54:00 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:54:00 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:54:00 [INFO] __main__: Pin assignments:
+2025-07-05 15:54:00 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:54:00 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:54:00 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:54:00 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:54:00 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:54:00 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:54:00 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:54:00 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:54:00 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:54:00 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:54:00 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:54:00 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:54:00 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:54:00 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:54:00 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:54:00 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:54:00 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:54:00 [INFO] __main__: Hardware initialized.
+2025-07-05 15:54:00 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:54:00 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:54:00 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:54:01 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:54:01,902] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:54:01 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:54:01 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:54:01Z'}
+2025-07-05 15:54:09 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751727249.2955465}
+2025-07-05 15:54:09 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 15:54:09 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751727249.2965465, 'source': 'hardware.display.mock'}
+2025-07-05 15:54:09 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-05T14:54:09Z'}
+2025-07-05 15:56:58 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:56:58 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:56:58 [INFO] __main__: Pin assignments:
+2025-07-05 15:56:58 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:56:58 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:56:58 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:56:58 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:56:58 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:56:58 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:56:58 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:56:58 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:56:58 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:56:58 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:56:58 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:56:58 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:56:58 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:56:58 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:56:58 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:56:58 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:56:58 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:56:58 [INFO] __main__: Hardware initialized.
+2025-07-05 15:56:58 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:56:58 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:56:58 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:56:59 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-05 15:57:51 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:57:51 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:57:51 [INFO] __main__: Pin assignments:
+2025-07-05 15:57:51 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:57:51 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:57:51 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:57:51 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:57:51 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:57:51 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:57:51 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:57:51 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:57:51 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:57:51 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:57:51 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:57:51 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:57:51 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:57:51 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:57:51 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:57:51 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:57:51 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:57:51 [INFO] __main__: Hardware initialized.
+2025-07-05 15:57:51 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:57:51 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:57:51 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:57:53 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:57:53,273] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:57:53 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:57:53 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:57:53Z'}
+2025-07-05 15:57:58 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751727478.7884452}
+2025-07-05 15:57:58 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 15:57:58 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751727478.7894435, 'source': 'hardware.display.mock'}
+2025-07-05 15:59:30 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 15:59:30 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 15:59:30 [INFO] __main__: Pin assignments:
+2025-07-05 15:59:30 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 15:59:30 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 15:59:30 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 15:59:30 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 15:59:30 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 15:59:30 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 15:59:30 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 15:59:30 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 15:59:30 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 15:59:30 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 15:59:30 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 15:59:30 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 15:59:30 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 15:59:30 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 15:59:30 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 15:59:30 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 15:59:30 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 15:59:30 [INFO] __main__: Hardware initialized.
+2025-07-05 15:59:30 [INFO] __main__: Hardware startup summary:
+2025-07-05 15:59:30 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 15:59:30 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 15:59:32 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 15:59:32,206] INFO AppRunner: Started app: admin_startup
+2025-07-05 15:59:32 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 15:59:32 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T14:59:32Z'}
+2025-07-05 15:59:38 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751727578.3237386}
+2025-07-05 15:59:38 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 15:59:38 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751727578.3247385, 'source': 'hardware.display.mock'}
+2025-07-05 15:59:38 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T14:59:38Z'}
+2025-07-05 16:06:28 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 16:06:28 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 16:06:28 [INFO] __main__: Pin assignments:
+2025-07-05 16:06:28 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 16:06:28 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 16:06:28 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 16:06:28 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 16:06:28 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 16:06:28 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 16:06:28 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 16:06:28 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 16:06:28 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 16:06:28 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 16:06:28 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 16:06:28 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 16:06:28 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 16:06:28 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 16:06:28 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 16:06:28 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 16:06:29 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 16:06:29 [INFO] __main__: Hardware initialized.
+2025-07-05 16:06:29 [INFO] __main__: Hardware startup summary:
+2025-07-05 16:06:29 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 16:06:29 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 16:06:30 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 16:06:30,563] INFO AppRunner: Started app: admin_startup
+2025-07-05 16:06:30 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 16:06:30 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T15:06:30Z'}
+2025-07-05 16:06:37 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751727997.3386226}
+2025-07-05 16:06:37 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 16:06:37 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751727997.3406196, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:40 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728000.379804}
+2025-07-05 16:06:40 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:06:40 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728000.380805, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:40 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T15:06:40Z'}
+2025-07-05 16:06:40 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728000.3943155, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:42 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728002.8573077}
+2025-07-05 16:06:42 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:06:42 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751728002.8583071, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:42 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 0, 'timestamp': '2025-07-05T15:06:42Z'}
+2025-07-05 16:06:42 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751728002.864814, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:46 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728006.7145844}
+2025-07-05 16:06:46 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:06:46 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728006.715575, 'source': 'hardware.display.mock'}
+2025-07-05 16:06:46 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-05T15:06:46Z'}
+2025-07-05 16:06:46 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728006.7480898, 'source': 'hardware.display.mock'}
+2025-07-05 16:08:54 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751728134.2896955}
+2025-07-05 16:08:54 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 16:08:54 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751728134.2906961, 'source': 'hardware.display.mock'}
+2025-07-05 16:08:54 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 0, 'timestamp': '2025-07-05T15:08:54Z'}
+2025-07-05 16:08:54 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751728134.3002012, 'source': 'hardware.display.mock'}
+2025-07-05 16:08:56 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751728136.272753}
+2025-07-05 16:08:56 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-05 16:08:56 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751728136.2737546, 'source': 'hardware.display.mock'}
+2025-07-05 16:08:56 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-05T15:08:56Z'}
+2025-07-05 16:08:56 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751728136.3182604, 'source': 'hardware.display.mock'}
+2025-07-05 16:09:00 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751728140.8074236}
+2025-07-05 16:09:00 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 16:09:00 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751728140.8094227, 'source': 'hardware.display.mock'}
+2025-07-05 16:09:00 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 3, 'timestamp': '2025-07-05T15:09:00Z'}
+2025-07-05 16:09:00 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751728140.854429, 'source': 'hardware.display.mock'}
+2025-07-05 16:10:53 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 16:10:53 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 16:10:53 [INFO] __main__: Pin assignments:
+2025-07-05 16:10:53 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 16:10:53 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 16:10:53 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 16:10:53 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 16:10:53 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 16:10:53 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 16:10:53 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 16:10:53 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 16:10:53 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 16:10:53 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 16:10:53 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 16:10:53 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 16:10:53 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 16:10:53 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 16:10:53 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 16:10:53 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 16:10:53 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 16:10:53 [INFO] __main__: Hardware initialized.
+2025-07-05 16:10:53 [INFO] __main__: Hardware startup summary:
+2025-07-05 16:10:53 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 16:10:53 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 16:10:55 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 16:10:55,134] INFO AppRunner: Started app: admin_startup
+2025-07-05 16:10:55 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 16:10:55 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T15:10:55Z'}
+2025-07-05 16:11:01 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728261.363666}
+2025-07-05 16:11:01 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:11:01 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T15:11:01Z'}
+2025-07-05 16:11:01 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728261.3971722, 'source': 'hardware.display.mock'}
+2025-07-05 16:11:04 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751728264.214914}
+2025-07-05 16:11:04 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 16:11:04 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 0, 'timestamp': '2025-07-05T15:11:04Z'}
+2025-07-05 16:11:04 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751728264.22091, 'source': 'hardware.display.mock'}
+2025-07-05 16:11:22 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728282.7037215}
+2025-07-05 16:11:22 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:11:22 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-05T15:11:22Z'}
+2025-07-05 16:11:22 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751728282.7557411, 'source': 'hardware.display.mock'}
+2025-07-05 16:11:25 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728285.0147958}
+2025-07-05 16:11:25 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:11:25 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-05T15:11:25Z'}
+2025-07-05 16:11:25 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728285.0207925, 'source': 'hardware.display.mock'}
+2025-07-05 16:11:26 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751728286.9667792}
+2025-07-05 16:11:26 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-05 16:11:26 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 0, 'timestamp': '2025-07-05T15:11:26Z'}
+2025-07-05 16:11:26 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751728286.9892828, 'source': 'hardware.display.mock'}
+2025-07-05 16:11:35 [INFO] EventBus: Event published: input.switch.set | {'value': 16, 'timestamp': 1751728295.2975895}
+2025-07-05 16:11:35 [INFO] boss.core.event_handlers: [WebUI] Switch set to 16 via web UI.
+2025-07-05 16:11:35 [INFO] EventBus: Event published: switch_change | {'value': 16, 'previous_value': 3, 'timestamp': '2025-07-05T15:11:35Z'}
+2025-07-05 16:11:35 [INFO] EventBus: Event published: output.display.updated | {'value': '  16', 'timestamp': 1751728295.3070977, 'source': 'hardware.display.mock'}
+2025-07-05 16:13:24 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728404.9246554}
+2025-07-05 16:13:24 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:13:24 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 16, 'timestamp': '2025-07-05T15:13:24Z'}
+2025-07-05 16:13:24 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728404.9396632, 'source': 'hardware.display.mock'}
+2025-07-05 16:13:33 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 16:13:33 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 16:13:33 [INFO] __main__: Pin assignments:
+2025-07-05 16:13:33 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 16:13:33 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 16:13:33 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 16:13:33 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 16:13:33 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 16:13:33 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 16:13:33 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 16:13:33 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 16:13:33 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 16:13:33 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 16:13:33 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 16:13:33 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 16:13:33 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 16:13:33 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 16:13:33 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 16:13:33 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 16:13:34 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 16:13:34 [INFO] __main__: Hardware initialized.
+2025-07-05 16:13:34 [INFO] __main__: Hardware startup summary:
+2025-07-05 16:13:34 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 16:13:34 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 16:13:35 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 16:13:35,731] INFO AppRunner: Started app: admin_startup
+2025-07-05 16:13:35 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 16:13:35 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T15:13:35Z'}
+2025-07-05 16:13:42 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728422.481863}
+2025-07-05 16:13:42 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:13:42 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T15:13:42Z'}
+2025-07-05 16:13:42 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728422.488367, 'source': 'hardware.display.mock'}
+2025-07-05 16:13:44 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728424.3010235}
+2025-07-05 16:13:44 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:13:44 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 0, 'timestamp': '2025-07-05T15:13:44Z'}
+2025-07-05 16:13:44 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751728424.3536527, 'source': 'hardware.display.mock'}
+2025-07-05 16:14:11 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728451.7147543}
+2025-07-05 16:14:11 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:14:11 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728451.8833845}
+2025-07-05 16:14:11 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:15:21 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728521.149591}
+2025-07-05 16:15:21 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:15:24 [INFO] EventBus: Event published: input.switch.set | {'value': 4, 'timestamp': 1751728524.2870157}
+2025-07-05 16:15:24 [INFO] boss.core.event_handlers: [WebUI] Switch set to 4 via web UI.
+2025-07-05 16:15:24 [INFO] EventBus: Event published: switch_change | {'value': 4, 'previous_value': 2, 'timestamp': '2025-07-05T15:15:24Z'}
+2025-07-05 16:15:24 [INFO] EventBus: Event published: output.display.updated | {'value': '   4', 'timestamp': 1751728524.3365345, 'source': 'hardware.display.mock'}
+2025-07-05 16:15:33 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-05 16:15:33 [INFO] __main__: Initializing hardware interfaces...
+2025-07-05 16:15:33 [INFO] __main__: Pin assignments:
+2025-07-05 16:15:33 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-05 16:15:33 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-05 16:15:33 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-05 16:15:33 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-05 16:15:33 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-05 16:15:33 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-05 16:15:33 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-05 16:15:33 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-05 16:15:33 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-05 16:15:33 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-05 16:15:33 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-05 16:15:33 [INFO] __main__:   MUX1_PIN: 23
+2025-07-05 16:15:33 [INFO] __main__:   MUX2_PIN: 24
+2025-07-05 16:15:33 [INFO] __main__:   MUX3_PIN: 25
+2025-07-05 16:15:33 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-05 16:15:33 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-05 16:15:33 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-05 16:15:33 [INFO] __main__: Hardware initialized.
+2025-07-05 16:15:33 [INFO] __main__: Hardware startup summary:
+2025-07-05 16:15:33 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-05 16:15:33 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-05 16:15:35 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-05 16:15:35,346] INFO AppRunner: Started app: admin_startup
+2025-07-05 16:15:35 [INFO] AppRunner: Started app: admin_startup
+2025-07-05 16:15:35 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-05T15:15:35Z'}
+2025-07-05 16:15:40 [INFO] EventBus: Event published: input.switch.set | {'value': 1, 'timestamp': 1751728540.7725332}
+2025-07-05 16:15:40 [INFO] boss.core.event_handlers: [WebUI] Switch set to 1 via web UI.
+2025-07-05 16:15:42 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751728542.1878073}
+2025-07-05 16:15:42 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-05 16:15:42 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 1, 'timestamp': '2025-07-05T15:15:42Z'}
+2025-07-05 16:15:42 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751728542.2003129, 'source': 'hardware.display.mock'}
+2025-07-05 16:15:44 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751728544.9825509}
+2025-07-05 16:15:44 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-05 16:15:44,984] INFO AppRunner: Started app: list_all_apps
+2025-07-05 16:15:44 [INFO] AppRunner: Started app: list_all_apps
+2025-07-05 16:15:44 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-05T15:15:44Z'}
+[2025-07-05 16:15:44,999] ERROR AppRunner: Error running app list_all_apps: 'MockScreen' object has no attribute 'set_cursor'
+2025-07-05 16:15:44 [ERROR] AppRunner: Error running app list_all_apps: 'MockScreen' object has no attribute 'set_cursor'
+2025-07-05 16:15:59 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751728559.9335346}
+2025-07-05 16:15:59 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-05 16:15:59 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 0, 'timestamp': '2025-07-05T15:15:59Z'}
+2025-07-05 16:15:59 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751728559.9780402, 'source': 'hardware.display.mock'}
+2025-07-05 16:16:01 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751728561.8017304}
+2025-07-05 16:16:01 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 2, launching app: None
+2025-07-05 16:16:01 [INFO] boss.core.event_handlers: No app mapped for value 2.
+2025-07-05 16:16:09 [INFO] EventBus: Event published: input.switch.set | {'value': 18, 'timestamp': 1751728569.244965}
+2025-07-05 16:16:09 [INFO] boss.core.event_handlers: [WebUI] Switch set to 18 via web UI.
+2025-07-05 16:16:09 [INFO] EventBus: Event published: switch_change | {'value': 18, 'previous_value': 2, 'timestamp': '2025-07-05T15:16:09Z'}
+2025-07-05 16:16:09 [INFO] EventBus: Event published: output.display.updated | {'value': '  18', 'timestamp': 1751728569.2524712, 'source': 'hardware.display.mock'}
+2025-07-05 16:16:09 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751728569.5090995}
+2025-07-05 16:16:09 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 18, launching app: today_in_music
+[2025-07-05 16:16:09,511] INFO AppRunner: Started app: today_in_music
+2025-07-05 16:16:09 [INFO] AppRunner: Started app: today_in_music
+2025-07-05 16:16:09 [INFO] EventBus: Event published: app_started | {'app_name': 'today_in_music', 'version': 'unknown', 'timestamp': '2025-07-05T15:16:09Z'}
+[2025-07-05 16:16:09,514] ERROR AppRunner: Error running app today_in_music: No module named 'requests'
+2025-07-05 16:16:09 [ERROR] AppRunner: Error running app today_in_music: No module named 'requests'
+2025-07-05 16:16:28 [INFO] EventBus: Event published: input.switch.set | {'value': 255, 'timestamp': 1751728588.8808064}
+2025-07-05 16:16:28 [INFO] boss.core.event_handlers: [WebUI] Switch set to 255 via web UI.
+2025-07-05 16:16:28 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': 18, 'timestamp': '2025-07-05T15:16:28Z'}
+2025-07-05 16:16:28 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751728588.9181068, 'source': 'hardware.display.mock'}
+2025-07-05 16:16:30 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751728590.7034733}
+2025-07-05 16:16:30 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-05 16:16:30,704] INFO AppRunner: Started app: admin_shutdown
+2025-07-05 16:16:30 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-05 16:16:30 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-05T15:16:30Z'}
+2025-07-05 16:16:36 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751728596.4237726}
+2025-07-05 16:16:41 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751728601.2180195}
+2025-07-05 16:16:42 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751728602.0998473}
+2025-07-05 16:16:44 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751728604.1996098}
+2025-07-05 16:16:44 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-05 16:16:44,200] INFO AppRunner: Stopping app: admin_shutdown
+2025-07-05 16:16:44 [INFO] AppRunner: Stopping app: admin_shutdown
+[2025-07-05 16:16:44,201] INFO AppRunner: App admin_shutdown stopped cleanly.
+2025-07-05 16:16:44 [INFO] AppRunner: App admin_shutdown stopped cleanly.
+2025-07-05 16:16:44 [INFO] EventBus: Event published: app_stopped | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-05T15:16:44Z'}
+[2025-07-05 16:16:44,202] INFO AppRunner: Started app: admin_shutdown
+2025-07-05 16:16:44 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-05 16:16:44 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-05T15:16:44Z'}
+2025-07-05 16:16:49 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751728609.8377438}
