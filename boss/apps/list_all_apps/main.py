@@ -45,7 +45,7 @@ def run(stop_event: Event, api: Any) -> None:
     """
     config_mgr = ConfigManager()
     config = config_mgr.get_manifest('list_all_apps').get('config', {})
-    per_page = config.get('entries_per_page', 15)
+    per_page = config.get('entries_per_page', 12)
     app_list = get_app_list()
     total_pages = (len(app_list) - 1) // per_page + 1
     page = 0
@@ -80,7 +80,7 @@ def run(stop_event: Event, api: Any) -> None:
         api.screen.clear()
         api.screen.set_cursor(0)
         for line in lines:
-            api.screen.print_line(line, size=api.FONT_SIZE_SMALLER, align='left')
+            api.screen.print_line(line, size=api.FONT_SIZE_SMALLEST, align='left')
         #api.screen.refresh()    
 
     display_page(page)

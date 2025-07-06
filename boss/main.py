@@ -249,7 +249,7 @@ def initialize_hardware(event_bus):
     logger.info("Hardware initialized.")
     logger.info("Hardware startup summary:")
     for k, v in hardware_status.items():
-        print(f"  {k}: {v}")
+        #print(f"  {k}: {v}")
         logger.info(f"  {k}: {v}")
     # --- Startup LED blink and welcome message ---
     try:
@@ -292,13 +292,8 @@ def cleanup():
     logger.info("Shutdown complete.")
 
 
-from boss.core.event_handlers import (
-    on_display_update,
-    on_go_button_pressed,
-    display_update_handler,
-    handle_led_set,
-    handle_switch_set
-)
+
+from boss.core import event_handlers
 
 # --- Initialization Functions ---
 def setup_event_bus():
@@ -315,7 +310,10 @@ def setup_api(event_bus):
     from boss.core.api import AppAPI
     leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
     buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
-    return AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+    # Always inject the real event_bus (main event_bus)
+    api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+    logger.info(f"[setup_api] Using event_bus id: {id(event_bus)} for AppAPI")
+    return api
 
 def load_config():
     with open(CONFIG_PATH) as f:
@@ -362,6 +360,8 @@ def main():
     seg_display = display if display else MockSevenSegmentDisplay()
     app_runner = AppRunner(event_bus=event_bus)
     api = setup_api(event_bus)
+    logger.info(f"[main] Main event_bus id: {id(event_bus)}")
+    logger.info(f"[main] AppAPI.event_bus id: {id(getattr(api, 'event_bus', None))}")
     logger.info("System running. Press Ctrl+C to exit.")
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
 
@@ -371,10 +371,18 @@ def main():
         lambda event_type, payload: display.show_message(str(payload.get("text"))) if display and hasattr(display, 'show_message') and payload.get("text") is not None else None,
         mode="async"
     )
-    event_bus.subscribe("output.led.set", handle_led_set(led_red, led_yellow, led_green, led_blue), mode="async")
-    event_bus.subscribe("input.button.pressed", on_go_button_pressed(switch, app_mappings, app_runner, api), mode="async")
-    event_bus.subscribe("switch_change", display_update_handler(seg_display), mode="async")
-    event_bus.subscribe("input.switch.set", handle_switch_set(switch, display), mode="async")
+    event_bus.subscribe("output.led.set", event_handlers.handle_led_set(led_red, led_yellow, led_green, led_blue), mode="async")
+    # Subscribe generic button handler for all button presses (logs and enables global actions)
+    event_bus.subscribe("input.button.pressed", event_handlers.handle_button_pressed(), mode="async")
+    # Subscribe go button handler for launching apps (main button only)
+    event_bus.subscribe("input.button.pressed", event_handlers.on_go_button_pressed(switch, app_mappings, app_runner, api), mode="async")
+    event_bus.subscribe("switch_change", event_handlers.handle_display_update(seg_display), mode="async")
+    event_bus.subscribe("input.switch.set", event_handlers.handle_switch_set(switch, display), mode="async")
+    event_bus.subscribe(
+        "system_shutdown",
+        event_handlers.handle_system_shutdown(app_runner, cleanup, logger),
+        mode="async"
+    )
 
     # --- Web UI event bus integration ---
     try:

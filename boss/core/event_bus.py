@@ -78,7 +78,8 @@ class EventBus:
                         sub["callback"](event_type, payload)
                     except Exception as e:
                         self._logger.error(f"Error in subscriber for {event_type}: {e}")
-# System shutdown and error event publishing helpers
+
+    # System shutdown and error event publishing helpers
     def publish_system_shutdown(self, reason: str):
         self.publish("system_shutdown", {
             "reason": reason,

@@ -4382,3 +4382,940 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/B
 2025-07-06 14:08:15 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751807295.5711713, 'source': 'hardware.button.green'}
 2025-07-06 14:08:15 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
 2025-07-06 14:08:15 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751807295.7789326}
+2025-07-06 14:18:06 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 14:18:06 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 14:18:06 [INFO] __main__: Pin assignments:
+2025-07-06 14:18:06 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 14:18:06 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 14:18:06 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 14:18:06 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 14:18:06 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 14:18:06 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 14:18:06 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 14:18:06 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 14:18:06 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 14:18:06 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 14:18:06 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 14:18:06 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 14:18:06 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 14:18:06 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 14:18:06 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 14:18:08 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 14:18:08 [INFO] __main__: Hardware initialized.
+2025-07-06 14:18:08 [INFO] __main__: Hardware startup summary:
+2025-07-06 14:18:08 [INFO] __main__:   btn_red: OK
+2025-07-06 14:18:08 [INFO] __main__:   btn_yellow: OK
+2025-07-06 14:18:08 [INFO] __main__:   btn_green: OK
+2025-07-06 14:18:08 [INFO] __main__:   btn_blue: OK
+2025-07-06 14:18:08 [INFO] __main__:   main_btn: OK
+2025-07-06 14:18:08 [INFO] __main__:   led_red: OK
+2025-07-06 14:18:08 [INFO] __main__:   led_yellow: OK
+2025-07-06 14:18:08 [INFO] __main__:   led_green: OK
+2025-07-06 14:18:08 [INFO] __main__:   led_blue: OK
+2025-07-06 14:18:08 [INFO] __main__:   display: OK
+2025-07-06 14:18:08 [INFO] __main__:   switch_reader: OK
+2025-07-06 14:18:09 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 14:18:10 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 14:18:10,030] INFO AppRunner: Started app: admin_startup
+2025-07-06 14:18:10 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 14:18:10 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T13:18:10Z'}
+2025-07-06 14:18:10 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T13:18:10Z'}
+2025-07-06 14:18:10 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751807890.1188679, 'source': 'hardware.display.pi'}
+2025-07-06 14:18:13 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751807893.770473, 'source': 'hardware.button.main'}
+2025-07-06 14:18:13 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 14:18:13,802] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 14:18:13 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 14:18:13 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T13:18:13Z'}
+2025-07-06 14:18:14 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751807894.008848, 'source': 'hardware.button.main'}
+2025-07-06 14:18:16 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751807896.5890558, 'source': 'hardware.button.green'}
+2025-07-06 14:18:16 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 14:18:16 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751807896.7815895}
+2025-07-06 14:19:05 [INFO] EventBus: Event published: switch_change | {'value': 253, 'previous_value': 255, 'timestamp': '2025-07-06T13:19:05Z'}
+2025-07-06 14:23:17 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 14:23:17 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 14:23:17 [INFO] __main__: Pin assignments:
+2025-07-06 14:23:17 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 14:23:17 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 14:23:17 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 14:23:17 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 14:23:17 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 14:23:17 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 14:23:17 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 14:23:17 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 14:23:17 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 14:23:17 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 14:23:17 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 14:23:17 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 14:23:17 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 14:23:17 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 14:23:17 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 14:23:19 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 14:23:19 [INFO] __main__: Hardware initialized.
+2025-07-06 14:23:19 [INFO] __main__: Hardware startup summary:
+2025-07-06 14:23:19 [INFO] __main__:   btn_red: OK
+2025-07-06 14:23:19 [INFO] __main__:   btn_yellow: OK
+2025-07-06 14:23:19 [INFO] __main__:   btn_green: OK
+2025-07-06 14:23:19 [INFO] __main__:   btn_blue: OK
+2025-07-06 14:23:19 [INFO] __main__:   main_btn: OK
+2025-07-06 14:23:19 [INFO] __main__:   led_red: OK
+2025-07-06 14:23:19 [INFO] __main__:   led_yellow: OK
+2025-07-06 14:23:19 [INFO] __main__:   led_green: OK
+2025-07-06 14:23:19 [INFO] __main__:   led_blue: OK
+2025-07-06 14:23:19 [INFO] __main__:   display: OK
+2025-07-06 14:23:19 [INFO] __main__:   switch_reader: OK
+2025-07-06 14:23:20 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 14:23:20 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 14:23:20,941] INFO AppRunner: Started app: admin_startup
+2025-07-06 14:23:20 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 14:23:20 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T13:23:20Z'}
+2025-07-06 14:23:20 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T13:23:20Z'}
+2025-07-06 14:23:21 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751808201.0317235, 'source': 'hardware.display.pi'}
+2025-07-06 14:23:23 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751808203.5690246, 'source': 'hardware.button.main'}
+2025-07-06 14:23:23 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 14:23:23,596] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 14:23:23 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 14:23:23 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T13:23:23Z'}
+2025-07-06 14:23:23 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751808203.7376678, 'source': 'hardware.button.main'}
+2025-07-06 14:23:25 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751808205.4282045, 'source': 'hardware.button.green'}
+2025-07-06 14:23:25 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 14:23:25 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751808205.6256382}
+2025-07-06 14:30:47 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 14:30:47 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 14:30:47 [INFO] __main__: Pin assignments:
+2025-07-06 14:30:47 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 14:30:47 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 14:30:47 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 14:30:47 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 14:30:47 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 14:30:47 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 14:30:47 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 14:30:47 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 14:30:47 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 14:30:47 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 14:30:47 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 14:30:47 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 14:30:47 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 14:30:47 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 14:30:47 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 14:30:49 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 14:30:49 [INFO] __main__: Hardware initialized.
+2025-07-06 14:30:49 [INFO] __main__: Hardware startup summary:
+2025-07-06 14:30:49 [INFO] __main__:   btn_red: OK
+2025-07-06 14:30:49 [INFO] __main__:   btn_yellow: OK
+2025-07-06 14:30:49 [INFO] __main__:   btn_green: OK
+2025-07-06 14:30:49 [INFO] __main__:   btn_blue: OK
+2025-07-06 14:30:49 [INFO] __main__:   main_btn: OK
+2025-07-06 14:30:49 [INFO] __main__:   led_red: OK
+2025-07-06 14:30:49 [INFO] __main__:   led_yellow: OK
+2025-07-06 14:30:49 [INFO] __main__:   led_green: OK
+2025-07-06 14:30:49 [INFO] __main__:   led_blue: OK
+2025-07-06 14:30:49 [INFO] __main__:   display: OK
+2025-07-06 14:30:49 [INFO] __main__:   switch_reader: OK
+2025-07-06 14:30:50 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 14:30:50 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 14:30:50,609] INFO AppRunner: Started app: admin_startup
+2025-07-06 14:30:50 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 14:30:50 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T13:30:50Z'}
+2025-07-06 14:30:50 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T13:30:50Z'}
+2025-07-06 14:30:50 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751808650.7076685, 'source': 'hardware.display.pi'}
+2025-07-06 14:30:53 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751808653.0318034, 'source': 'hardware.button.main'}
+2025-07-06 14:30:53 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 14:30:53,059] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 14:30:53 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 14:30:53 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T13:30:53Z'}
+2025-07-06 14:30:53 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751808653.3297064, 'source': 'hardware.button.main'}
+2025-07-06 14:30:54 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751808654.5804079, 'source': 'hardware.button.green'}
+2025-07-06 14:30:54 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 14:30:54 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751808654.780351}
+2025-07-06 14:42:32 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 14:42:32 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 14:42:32 [INFO] __main__: Pin assignments:
+2025-07-06 14:42:32 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 14:42:32 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 14:42:32 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 14:42:32 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 14:42:32 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 14:42:32 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 14:42:32 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 14:42:32 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 14:42:32 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 14:42:32 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 14:42:32 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 14:42:32 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 14:42:32 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 14:42:32 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 14:42:32 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 14:42:34 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 14:42:34 [INFO] __main__: Hardware initialized.
+2025-07-06 14:42:34 [INFO] __main__: Hardware startup summary:
+2025-07-06 14:42:34 [INFO] __main__:   btn_red: OK
+2025-07-06 14:42:34 [INFO] __main__:   btn_yellow: OK
+2025-07-06 14:42:34 [INFO] __main__:   btn_green: OK
+2025-07-06 14:42:34 [INFO] __main__:   btn_blue: OK
+2025-07-06 14:42:34 [INFO] __main__:   main_btn: OK
+2025-07-06 14:42:34 [INFO] __main__:   led_red: OK
+2025-07-06 14:42:34 [INFO] __main__:   led_yellow: OK
+2025-07-06 14:42:34 [INFO] __main__:   led_green: OK
+2025-07-06 14:42:34 [INFO] __main__:   led_blue: OK
+2025-07-06 14:42:34 [INFO] __main__:   display: OK
+2025-07-06 14:42:34 [INFO] __main__:   switch_reader: OK
+2025-07-06 14:42:35 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 14:42:35 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 14:42:35,866] INFO AppRunner: Started app: admin_startup
+2025-07-06 14:42:35 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 14:42:35 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T13:42:35Z'}
+2025-07-06 14:42:35 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T13:42:35Z'}
+2025-07-06 14:42:35 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751809355.9619079, 'source': 'hardware.display.pi'}
+2025-07-06 14:42:37 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751809357.8145883, 'source': 'hardware.button.main'}
+2025-07-06 14:42:37 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 14:42:37,850] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 14:42:37 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 14:42:37 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T13:42:37Z'}
+2025-07-06 14:42:37 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7f9171ad50>
+2025-07-06 14:42:38 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751809358.0075567, 'source': 'hardware.button.main'}
+2025-07-06 14:42:39 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751809359.7577124, 'source': 'hardware.button.green'}
+2025-07-06 14:42:39 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 14:42:39 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751809359.9498804}
+2025-07-06 14:52:31 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 14:52:31 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 14:52:31 [INFO] __main__: Pin assignments:
+2025-07-06 14:52:31 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 14:52:31 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 14:52:31 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 14:52:31 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 14:52:31 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 14:52:31 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 14:52:31 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 14:52:31 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 14:52:31 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 14:52:31 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 14:52:31 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 14:52:31 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 14:52:31 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 14:52:31 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 14:52:31 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 14:52:33 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 14:52:33 [INFO] __main__: Hardware initialized.
+2025-07-06 14:52:33 [INFO] __main__: Hardware startup summary:
+2025-07-06 14:52:33 [INFO] __main__:   btn_red: OK
+2025-07-06 14:52:33 [INFO] __main__:   btn_yellow: OK
+2025-07-06 14:52:33 [INFO] __main__:   btn_green: OK
+2025-07-06 14:52:33 [INFO] __main__:   btn_blue: OK
+2025-07-06 14:52:33 [INFO] __main__:   main_btn: OK
+2025-07-06 14:52:33 [INFO] __main__:   led_red: OK
+2025-07-06 14:52:33 [INFO] __main__:   led_yellow: OK
+2025-07-06 14:52:33 [INFO] __main__:   led_green: OK
+2025-07-06 14:52:33 [INFO] __main__:   led_blue: OK
+2025-07-06 14:52:33 [INFO] __main__:   display: OK
+2025-07-06 14:52:33 [INFO] __main__:   switch_reader: OK
+2025-07-06 14:52:34 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 14:52:34 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 14:52:34,658] INFO AppRunner: Started app: admin_startup
+2025-07-06 14:52:34 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 14:52:34 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T13:52:34Z'}
+2025-07-06 14:52:34 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T13:52:34Z'}
+2025-07-06 14:52:34 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751809954.7725213, 'source': 'hardware.display.pi'}
+2025-07-06 14:52:37 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751809957.6200554, 'source': 'hardware.button.main'}
+2025-07-06 14:52:37 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 14:52:37,651] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 14:52:37 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 14:52:37 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T13:52:37Z'}
+2025-07-06 14:52:37 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7f964dad50>
+2025-07-06 14:52:37 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751809957.8310275, 'source': 'hardware.button.main'}
+2025-07-06 14:52:39 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751809959.4168363, 'source': 'hardware.button.green'}
+2025-07-06 14:52:39 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 14:52:39 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751809959.611264}
+2025-07-06 15:07:51 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:07:51 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:07:51 [INFO] __main__: Pin assignments:
+2025-07-06 15:07:51 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:07:51 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:07:51 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:07:51 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:07:51 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:07:51 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:07:51 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:07:51 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:07:51 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:07:51 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:07:51 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:07:51 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:07:51 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:07:51 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:07:51 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:07:52 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:07:52 [INFO] __main__: Hardware initialized.
+2025-07-06 15:07:52 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:07:52 [INFO] __main__:   btn_red: OK
+2025-07-06 15:07:52 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:07:52 [INFO] __main__:   btn_green: OK
+2025-07-06 15:07:52 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:07:52 [INFO] __main__:   main_btn: OK
+2025-07-06 15:07:52 [INFO] __main__:   led_red: OK
+2025-07-06 15:07:52 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:07:52 [INFO] __main__:   led_green: OK
+2025-07-06 15:07:52 [INFO] __main__:   led_blue: OK
+2025-07-06 15:07:52 [INFO] __main__:   display: OK
+2025-07-06 15:07:52 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:07:54 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:07:54 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:07:54,547] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:07:54 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:07:54 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:07:54Z'}
+2025-07-06 15:07:54 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:07:54Z'}
+2025-07-06 15:07:54 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751810874.6461864, 'source': 'hardware.display.pi'}
+2025-07-06 15:07:56 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751810876.3900611, 'source': 'hardware.button.main'}
+2025-07-06 15:07:56 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:07:56,418] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:07:56 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:07:56 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:07:56Z'}
+2025-07-06 15:07:56 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fb7b98350>
+2025-07-06 15:07:56 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751810876.6515226, 'source': 'hardware.button.main'}
+2025-07-06 15:07:58 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751810878.2269506, 'source': 'hardware.button.green'}
+2025-07-06 15:07:58 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:07:58 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751810878.429764}
+2025-07-06 15:10:24 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:10:24 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:10:24 [INFO] __main__: Pin assignments:
+2025-07-06 15:10:24 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:10:24 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:10:24 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:10:24 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:10:24 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:10:24 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:10:24 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:10:24 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:10:24 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:10:24 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:10:24 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:10:24 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:10:24 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:10:24 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:10:24 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:10:25 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:10:25 [INFO] __main__: Hardware initialized.
+2025-07-06 15:10:25 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:10:25 [INFO] __main__:   btn_red: OK
+2025-07-06 15:10:25 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:10:25 [INFO] __main__:   btn_green: OK
+2025-07-06 15:10:25 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:10:25 [INFO] __main__:   main_btn: OK
+2025-07-06 15:10:25 [INFO] __main__:   led_red: OK
+2025-07-06 15:10:25 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:10:25 [INFO] __main__:   led_green: OK
+2025-07-06 15:10:25 [INFO] __main__:   led_blue: OK
+2025-07-06 15:10:25 [INFO] __main__:   display: OK
+2025-07-06 15:10:25 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:10:26 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:10:26 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:10:26,669] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:10:26 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:10:26 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:10:26Z'}
+2025-07-06 15:10:26 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:10:26Z'}
+2025-07-06 15:10:26 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751811026.7838454, 'source': 'hardware.display.pi'}
+2025-07-06 15:10:31 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751811031.2557046, 'source': 'hardware.button.main'}
+2025-07-06 15:10:31 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:10:31,286] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:10:31 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:10:31 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:10:31Z'}
+2025-07-06 15:10:31 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7f895d8350>
+2025-07-06 15:10:31 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751811031.454211, 'source': 'hardware.button.main'}
+2025-07-06 15:10:32 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751811032.781598, 'source': 'hardware.button.green'}
+2025-07-06 15:10:32 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:10:32 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751811032.985898}
+2025-07-06 15:18:24 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:18:24 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:18:24 [INFO] __main__: Pin assignments:
+2025-07-06 15:18:24 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:18:24 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:18:24 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:18:24 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:18:24 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:18:24 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:18:24 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:18:24 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:18:24 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:18:24 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:18:24 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:18:24 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:18:24 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:18:24 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:18:24 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:18:25 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:18:25 [INFO] __main__: Hardware initialized.
+2025-07-06 15:18:25 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:18:25 [INFO] __main__:   btn_red: OK
+2025-07-06 15:18:25 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:18:25 [INFO] __main__:   btn_green: OK
+2025-07-06 15:18:25 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:18:25 [INFO] __main__:   main_btn: OK
+2025-07-06 15:18:25 [INFO] __main__:   led_red: OK
+2025-07-06 15:18:25 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:18:25 [INFO] __main__:   led_green: OK
+2025-07-06 15:18:25 [INFO] __main__:   led_blue: OK
+2025-07-06 15:18:25 [INFO] __main__:   display: OK
+2025-07-06 15:18:25 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:18:27 [INFO] __main__: [setup_api] Using event_bus id: 548366304912 for AppAPI
+2025-07-06 15:18:27 [INFO] __main__: [main] Main event_bus id: 548366304912
+2025-07-06 15:18:27 [INFO] __main__: [main] AppAPI.event_bus id: 548366304912
+2025-07-06 15:18:27 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:18:27 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:18:27,337] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:18:27 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:18:27 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:18:27Z'}
+2025-07-06 15:18:27 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:18:27Z'}
+2025-07-06 15:18:27 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751811507.4287088, 'source': 'hardware.display.pi'}
+2025-07-06 15:18:29 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751811509.0370927, 'source': 'hardware.button.main'}
+2025-07-06 15:18:29 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:18:29,066] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:18:29 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:18:29 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:18:29Z'}
+2025-07-06 15:18:29 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fad2dc690>
+2025-07-06 15:18:29 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751811509.2751439, 'source': 'hardware.button.main'}
+2025-07-06 15:18:30 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751811510.583885, 'source': 'hardware.button.green'}
+2025-07-06 15:18:30 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:18:30 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751811510.7744386}
+2025-07-06 15:19:35 [INFO] EventBus: Event published: switch_change | {'value': 253, 'previous_value': 255, 'timestamp': '2025-07-06T14:19:35Z'}
+2025-07-06 15:21:34 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:21:34 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:21:34 [INFO] __main__: Pin assignments:
+2025-07-06 15:21:34 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:21:34 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:21:34 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:21:34 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:21:34 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:21:34 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:21:34 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:21:34 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:21:34 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:21:34 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:21:34 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:21:34 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:21:34 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:21:34 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:21:34 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:21:35 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:21:35 [INFO] __main__: Hardware initialized.
+2025-07-06 15:21:35 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:21:35 [INFO] __main__:   btn_red: OK
+2025-07-06 15:21:35 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:21:35 [INFO] __main__:   btn_green: OK
+2025-07-06 15:21:35 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:21:35 [INFO] __main__:   main_btn: OK
+2025-07-06 15:21:35 [INFO] __main__:   led_red: OK
+2025-07-06 15:21:35 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:21:35 [INFO] __main__:   led_green: OK
+2025-07-06 15:21:35 [INFO] __main__:   led_blue: OK
+2025-07-06 15:21:35 [INFO] __main__:   display: OK
+2025-07-06 15:21:35 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:21:37 [INFO] __main__: [setup_api] Using event_bus id: 548370237072 for AppAPI
+2025-07-06 15:21:37 [INFO] __main__: [main] Main event_bus id: 548370237072
+2025-07-06 15:21:37 [INFO] __main__: [main] AppAPI.event_bus id: 548370237072
+2025-07-06 15:21:37 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:21:37 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:21:37,188] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:21:37 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:21:37 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:21:37Z'}
+2025-07-06 15:21:37 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:21:37Z'}
+2025-07-06 15:21:37 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751811697.2839584, 'source': 'hardware.display.pi'}
+2025-07-06 15:21:39 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751811699.415468, 'source': 'hardware.button.main'}
+2025-07-06 15:21:39 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:21:39,451] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:21:39 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:21:39 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:21:39Z'}
+2025-07-06 15:21:39 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fad69c690>
+2025-07-06 15:21:39 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751811699.6447632, 'source': 'hardware.button.main'}
+2025-07-06 15:21:42 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751811702.1716874, 'source': 'hardware.button.green'}
+2025-07-06 15:21:42 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:21:42 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751811702.3636734}
+2025-07-06 15:30:10 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:30:10 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:30:10 [INFO] __main__: Pin assignments:
+2025-07-06 15:30:10 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:30:10 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:30:10 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:30:10 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:30:10 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:30:10 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:30:10 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:30:10 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:30:10 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:30:10 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:30:10 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:30:10 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:30:10 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:30:10 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:30:10 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:30:12 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:30:12 [INFO] __main__: Hardware initialized.
+2025-07-06 15:30:12 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:30:12 [INFO] __main__:   btn_red: OK
+2025-07-06 15:30:12 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:30:12 [INFO] __main__:   btn_green: OK
+2025-07-06 15:30:12 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:30:12 [INFO] __main__:   main_btn: OK
+2025-07-06 15:30:12 [INFO] __main__:   led_red: OK
+2025-07-06 15:30:12 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:30:12 [INFO] __main__:   led_green: OK
+2025-07-06 15:30:12 [INFO] __main__:   led_blue: OK
+2025-07-06 15:30:12 [INFO] __main__:   display: OK
+2025-07-06 15:30:12 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:30:13 [INFO] __main__: [setup_api] Using event_bus id: 547899438160 for AppAPI
+2025-07-06 15:30:13 [INFO] __main__: [main] Main event_bus id: 547899438160
+2025-07-06 15:30:13 [INFO] __main__: [main] AppAPI.event_bus id: 547899438160
+2025-07-06 15:30:13 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:30:13 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:30:13,831] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:30:13 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:30:13 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:30:13Z'}
+2025-07-06 15:30:13 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:30:13Z'}
+2025-07-06 15:30:13 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751812213.9300785, 'source': 'hardware.display.pi'}
+2025-07-06 15:30:18 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751812218.673355, 'source': 'hardware.button.main'}
+2025-07-06 15:30:18 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:30:18,705] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:30:18 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:30:18 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:30:18Z'}
+2025-07-06 15:30:18 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7f9159f450>
+2025-07-06 15:30:18 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751812218.8613005, 'source': 'hardware.button.main'}
+2025-07-06 15:30:24 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751812224.3805027, 'source': 'hardware.button.green'}
+2025-07-06 15:30:24 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:30:24 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751812224.585215}
+2025-07-06 15:30:29 [INFO] EventBus: Event published: switch_change | {'value': 254, 'previous_value': 255, 'timestamp': '2025-07-06T14:30:29Z'}
+2025-07-06 15:35:48 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:35:48 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:35:48 [INFO] __main__: Pin assignments:
+2025-07-06 15:35:48 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:35:48 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:35:48 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:35:48 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:35:48 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:35:48 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:35:48 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:35:48 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:35:48 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:35:48 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:35:48 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:35:48 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:35:48 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:35:48 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:35:48 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:35:49 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:35:49 [INFO] __main__: Hardware initialized.
+2025-07-06 15:35:49 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:35:49 [INFO] __main__:   btn_red: OK
+2025-07-06 15:35:49 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:35:49 [INFO] __main__:   btn_green: OK
+2025-07-06 15:35:49 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:35:49 [INFO] __main__:   main_btn: OK
+2025-07-06 15:35:49 [INFO] __main__:   led_red: OK
+2025-07-06 15:35:49 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:35:49 [INFO] __main__:   led_green: OK
+2025-07-06 15:35:49 [INFO] __main__:   led_blue: OK
+2025-07-06 15:35:49 [INFO] __main__:   display: OK
+2025-07-06 15:35:49 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:35:51 [INFO] __main__: [setup_api] Using event_bus id: 548310439440 for AppAPI
+2025-07-06 15:35:51 [INFO] __main__: [main] Main event_bus id: 548310439440
+2025-07-06 15:35:51 [INFO] __main__: [main] AppAPI.event_bus id: 548310439440
+2025-07-06 15:35:51 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:35:51 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:35:51,066] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:35:51 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:35:51 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:35:51Z'}
+2025-07-06 15:35:51 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:35:51Z'}
+2025-07-06 15:35:51 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751812551.2471344, 'source': 'hardware.display.pi'}
+2025-07-06 15:35:54 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751812554.4410813, 'source': 'hardware.button.main'}
+2025-07-06 15:35:54 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:35:54,508] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:35:54 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:35:54 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fa9d95610>
+2025-07-06 15:35:54 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:35:54Z'}
+2025-07-06 15:35:54 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751812554.6696675, 'source': 'hardware.button.main'}
+2025-07-06 15:35:56 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751812556.8657856, 'source': 'hardware.button.green'}
+2025-07-06 15:35:57 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:35:57 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751812557.0895028}
+2025-07-06 15:37:40 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:37:40 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:37:40 [INFO] __main__: Pin assignments:
+2025-07-06 15:37:40 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:37:40 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:37:40 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:37:40 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:37:40 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:37:40 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:37:40 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:37:40 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:37:40 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:37:40 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:37:40 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:37:40 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:37:40 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:37:40 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:37:40 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:37:41 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:37:41 [INFO] __main__: Hardware initialized.
+2025-07-06 15:37:41 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:37:41 [INFO] __main__:   btn_red: OK
+2025-07-06 15:37:41 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:37:41 [INFO] __main__:   btn_green: OK
+2025-07-06 15:37:41 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:37:41 [INFO] __main__:   main_btn: OK
+2025-07-06 15:37:41 [INFO] __main__:   led_red: OK
+2025-07-06 15:37:41 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:37:41 [INFO] __main__:   led_green: OK
+2025-07-06 15:37:41 [INFO] __main__:   led_blue: OK
+2025-07-06 15:37:41 [INFO] __main__:   display: OK
+2025-07-06 15:37:41 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:37:43 [INFO] __main__: [setup_api] Using event_bus id: 548638321680 for AppAPI
+2025-07-06 15:37:43 [INFO] __main__: [main] Main event_bus id: 548638321680
+2025-07-06 15:37:43 [INFO] __main__: [main] AppAPI.event_bus id: 548638321680
+2025-07-06 15:37:43 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:37:43 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:37:43,205] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:37:43 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:37:43 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:37:43Z'}
+2025-07-06 15:37:43 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:37:43Z'}
+2025-07-06 15:37:43 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751812663.3036144, 'source': 'hardware.display.pi'}
+2025-07-06 15:37:45 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751812665.7390008, 'source': 'hardware.button.main'}
+2025-07-06 15:37:45 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:37:45,767] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:37:45 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:37:45 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:37:45Z'}
+2025-07-06 15:37:45 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fbd646c10>
+2025-07-06 15:37:45 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751812665.9364288, 'source': 'hardware.button.main'}
+2025-07-06 15:37:47 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751812667.318974, 'source': 'hardware.button.green'}
+2025-07-06 15:37:47 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:37:47 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751812667.5151858}
+2025-07-06 15:40:17 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 15:40:17 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 15:40:17 [INFO] __main__: Pin assignments:
+2025-07-06 15:40:17 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 15:40:17 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 15:40:17 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 15:40:17 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 15:40:17 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 15:40:17 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 15:40:17 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 15:40:17 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 15:40:17 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 15:40:17 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 15:40:17 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 15:40:17 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 15:40:17 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 15:40:17 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 15:40:17 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 15:40:18 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 15:40:18 [INFO] __main__: Hardware initialized.
+2025-07-06 15:40:18 [INFO] __main__: Hardware startup summary:
+2025-07-06 15:40:18 [INFO] __main__:   btn_red: OK
+2025-07-06 15:40:18 [INFO] __main__:   btn_yellow: OK
+2025-07-06 15:40:18 [INFO] __main__:   btn_green: OK
+2025-07-06 15:40:18 [INFO] __main__:   btn_blue: OK
+2025-07-06 15:40:18 [INFO] __main__:   main_btn: OK
+2025-07-06 15:40:18 [INFO] __main__:   led_red: OK
+2025-07-06 15:40:18 [INFO] __main__:   led_yellow: OK
+2025-07-06 15:40:18 [INFO] __main__:   led_green: OK
+2025-07-06 15:40:18 [INFO] __main__:   led_blue: OK
+2025-07-06 15:40:18 [INFO] __main__:   display: OK
+2025-07-06 15:40:18 [INFO] __main__:   switch_reader: OK
+2025-07-06 15:40:19 [INFO] __main__: [setup_api] Using event_bus id: 548560000528 for AppAPI
+2025-07-06 15:40:19 [INFO] __main__: [main] Main event_bus id: 548560000528
+2025-07-06 15:40:19 [INFO] __main__: [main] AppAPI.event_bus id: 548560000528
+2025-07-06 15:40:19 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 15:40:19 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 15:40:19,770] INFO AppRunner: Started app: admin_startup
+2025-07-06 15:40:19 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 15:40:19 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T14:40:19Z'}
+2025-07-06 15:40:19 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T14:40:19Z'}
+2025-07-06 15:40:19 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751812819.8842454, 'source': 'hardware.display.pi'}
+2025-07-06 15:40:21 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751812821.6992419, 'source': 'hardware.button.main'}
+2025-07-06 15:40:21 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 255, launching app: admin_shutdown
+[2025-07-06 15:40:21,727] INFO AppRunner: Started app: admin_shutdown
+2025-07-06 15:40:21 [INFO] AppRunner: Started app: admin_shutdown
+2025-07-06 15:40:21 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_shutdown', 'version': 'unknown', 'timestamp': '2025-07-06T14:40:21Z'}
+2025-07-06 15:40:21 [INFO] __main__: [admin_shutdown] api.event_bus is: <boss.core.event_bus.EventBus object at 0x7fb8b95610>
+2025-07-06 15:40:21 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751812821.900078, 'source': 'hardware.button.main'}
+2025-07-06 15:40:23 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751812823.5233173, 'source': 'hardware.button.green'}
+2025-07-06 15:40:23 [INFO] __main__: AdminShutdown: Exit to OS triggered by user.
+2025-07-06 15:40:23 [INFO] EventBus: Event published: app_event | {'message': 'AdminShutdown: Exit to OS triggered by user.', 'timestamp': 1751812823.7214963}
+2025-07-06 16:15:23 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 16:15:23 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 16:15:23 [INFO] __main__: Pin assignments:
+2025-07-06 16:15:23 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 16:15:23 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 16:15:23 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 16:15:23 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 16:15:23 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 16:15:23 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 16:15:23 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 16:15:23 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 16:15:23 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 16:15:23 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 16:15:23 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 16:15:23 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 16:15:23 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 16:15:23 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 16:15:23 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 16:15:24 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 16:15:24 [INFO] __main__: Hardware initialized.
+2025-07-06 16:15:24 [INFO] __main__: Hardware startup summary:
+2025-07-06 16:15:24 [INFO] __main__:   btn_red: OK
+2025-07-06 16:15:24 [INFO] __main__:   btn_yellow: OK
+2025-07-06 16:15:24 [INFO] __main__:   btn_green: OK
+2025-07-06 16:15:24 [INFO] __main__:   btn_blue: OK
+2025-07-06 16:15:24 [INFO] __main__:   main_btn: OK
+2025-07-06 16:15:24 [INFO] __main__:   led_red: OK
+2025-07-06 16:15:24 [INFO] __main__:   led_yellow: OK
+2025-07-06 16:15:24 [INFO] __main__:   led_green: OK
+2025-07-06 16:15:24 [INFO] __main__:   led_blue: OK
+2025-07-06 16:15:24 [INFO] __main__:   display: OK
+2025-07-06 16:15:24 [INFO] __main__:   switch_reader: OK
+2025-07-06 16:15:26 [INFO] __main__: [setup_api] Using event_bus id: 548022740432 for AppAPI
+2025-07-06 16:15:26 [INFO] __main__: [main] Main event_bus id: 548022740432
+2025-07-06 16:15:26 [INFO] __main__: [main] AppAPI.event_bus id: 548022740432
+2025-07-06 16:15:26 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 16:17:28 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 16:17:28 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 16:17:28 [INFO] __main__: Pin assignments:
+2025-07-06 16:17:28 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 16:17:28 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 16:17:28 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 16:17:28 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 16:17:28 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 16:17:28 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 16:17:28 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 16:17:28 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 16:17:28 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 16:17:28 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 16:17:28 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 16:17:28 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 16:17:28 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 16:17:28 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 16:17:28 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 16:17:29 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 16:17:29 [INFO] __main__: Hardware initialized.
+2025-07-06 16:17:29 [INFO] __main__: Hardware startup summary:
+2025-07-06 16:17:29 [INFO] __main__:   btn_red: OK
+2025-07-06 16:17:29 [INFO] __main__:   btn_yellow: OK
+2025-07-06 16:17:29 [INFO] __main__:   btn_green: OK
+2025-07-06 16:17:29 [INFO] __main__:   btn_blue: OK
+2025-07-06 16:17:29 [INFO] __main__:   main_btn: OK
+2025-07-06 16:17:29 [INFO] __main__:   led_red: OK
+2025-07-06 16:17:29 [INFO] __main__:   led_yellow: OK
+2025-07-06 16:17:29 [INFO] __main__:   led_green: OK
+2025-07-06 16:17:29 [INFO] __main__:   led_blue: OK
+2025-07-06 16:17:29 [INFO] __main__:   display: OK
+2025-07-06 16:17:29 [INFO] __main__:   switch_reader: OK
+2025-07-06 16:17:30 [INFO] __main__: [setup_api] Using event_bus id: 547863454736 for AppAPI
+2025-07-06 16:17:30 [INFO] __main__: [main] Main event_bus id: 547863454736
+2025-07-06 16:17:30 [INFO] __main__: [main] AppAPI.event_bus id: 547863454736
+2025-07-06 16:17:30 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 16:17:30 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 16:17:30,823] INFO AppRunner: Started app: admin_startup
+2025-07-06 16:17:30 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 16:17:30 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T15:17:30Z'}
+2025-07-06 16:17:30 [INFO] EventBus: Event published: switch_change | {'value': 255, 'previous_value': None, 'timestamp': '2025-07-06T15:17:30Z'}
+2025-07-06 16:17:30 [INFO] EventBus: Event published: output.display.updated | {'value': ' 255', 'timestamp': 1751815050.9073644, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:32 [INFO] EventBus: Event published: switch_change | {'value': 247, 'previous_value': 255, 'timestamp': '2025-07-06T15:17:32Z'}
+2025-07-06 16:17:32 [INFO] EventBus: Event published: output.display.updated | {'value': ' 247', 'timestamp': 1751815052.542689, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:32 [INFO] EventBus: Event published: switch_change | {'value': 246, 'previous_value': 247, 'timestamp': '2025-07-06T15:17:32Z'}
+2025-07-06 16:17:32 [INFO] EventBus: Event published: output.display.updated | {'value': ' 246', 'timestamp': 1751815052.840513, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:33 [INFO] EventBus: Event published: switch_change | {'value': 242, 'previous_value': 246, 'timestamp': '2025-07-06T15:17:33Z'}
+2025-07-06 16:17:33 [INFO] EventBus: Event published: output.display.updated | {'value': ' 242', 'timestamp': 1751815053.929472, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:35 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815055.7689319, 'source': 'hardware.button.main'}
+2025-07-06 16:17:35 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815055.7689319, 'source': 'hardware.button.main'}
+2025-07-06 16:17:35 [INFO] EventBus: Event published: switch_change | {'value': 82, 'previous_value': 242, 'timestamp': '2025-07-06T15:17:35Z'}
+2025-07-06 16:17:35 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 240, launching app: None
+2025-07-06 16:17:35 [INFO] boss.core.event_handlers: No app mapped for value 240.
+2025-07-06 16:17:35 [INFO] EventBus: Event published: output.display.updated | {'value': '  82', 'timestamp': 1751815055.8178551, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:35 [INFO] EventBus: Event published: switch_change | {'value': 242, 'previous_value': 82, 'timestamp': '2025-07-06T15:17:35Z'}
+2025-07-06 16:17:35 [INFO] EventBus: Event published: output.display.updated | {'value': ' 242', 'timestamp': 1751815055.8907833, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:35 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815055.9839244, 'source': 'hardware.button.main'}
+2025-07-06 16:17:37 [INFO] EventBus: Event published: switch_change | {'value': 240, 'previous_value': 242, 'timestamp': '2025-07-06T15:17:37Z'}
+2025-07-06 16:17:37 [INFO] EventBus: Event published: output.display.updated | {'value': ' 240', 'timestamp': 1751815057.888531, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: switch_change | {'value': 224, 'previous_value': 240, 'timestamp': '2025-07-06T15:17:38Z'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: output.display.updated | {'value': ' 224', 'timestamp': 1751815058.5446482, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: switch_change | {'value': 160, 'previous_value': 224, 'timestamp': '2025-07-06T15:17:38Z'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: output.display.updated | {'value': ' 160', 'timestamp': 1751815058.7617679, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: switch_change | {'value': 128, 'previous_value': 160, 'timestamp': '2025-07-06T15:17:38Z'}
+2025-07-06 16:17:38 [INFO] EventBus: Event published: output.display.updated | {'value': ' 128', 'timestamp': 1751815058.9812272, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:39 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 128, 'timestamp': '2025-07-06T15:17:39Z'}
+2025-07-06 16:17:39 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815059.2034152, 'source': 'hardware.display.pi'}
+2025-07-06 16:17:40 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815060.500803, 'source': 'hardware.button.main'}
+2025-07-06 16:17:40 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815060.500803, 'source': 'hardware.button.main'}
+2025-07-06 16:17:40 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:17:40,532] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:17:40 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:17:40 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:17:40Z'}
+2025-07-06 16:17:40 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815060.7126591, 'source': 'hardware.button.main'}
+2025-07-06 16:17:51 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751815071.6422508, 'source': 'hardware.button.blue'}
+2025-07-06 16:17:51 [INFO] boss.core.event_handlers: Button pressed: blue | Payload: {'button_id': 'blue', 'timestamp': 1751815071.6422508, 'source': 'hardware.button.blue'}
+2025-07-06 16:17:51 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751815071.6422508, 'source': 'hardware.button.blue'}
+2025-07-06 16:17:53 [INFO] EventBus: Event published: input.button.released | {'button_id': 'blue', 'timestamp': 1751815073.5716484, 'source': 'hardware.button.blue'}
+2025-07-06 16:17:59 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'yellow', 'timestamp': 1751815079.8854148, 'source': 'hardware.button.yellow'}
+2025-07-06 16:17:59 [INFO] boss.core.event_handlers: Button pressed: yellow | Payload: {'button_id': 'yellow', 'timestamp': 1751815079.8854148, 'source': 'hardware.button.yellow'}
+2025-07-06 16:17:59 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'yellow', 'timestamp': 1751815079.8854148, 'source': 'hardware.button.yellow'}
+2025-07-06 16:18:01 [INFO] EventBus: Event published: input.button.released | {'button_id': 'yellow', 'timestamp': 1751815081.8945608, 'source': 'hardware.button.yellow'}
+2025-07-06 16:20:18 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815218.651549, 'source': 'hardware.button.main'}
+2025-07-06 16:20:18 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815218.651549, 'source': 'hardware.button.main'}
+2025-07-06 16:20:18 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815218.651549, 'source': 'hardware.button.main'}
+2025-07-06 16:20:18 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:20:18,697] INFO AppRunner: Stopping app: list_all_apps
+2025-07-06 16:20:18 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-06 16:20:18,701] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:20:18 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:20:18 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:20:18Z'}
+[2025-07-06 16:20:18,707] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:20:18 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:20:18 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:20:18Z'}
+2025-07-06 16:20:18 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815218.982212, 'source': 'hardware.button.main'}
+2025-07-06 16:20:29 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 16:20:29 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 16:20:29 [INFO] __main__: Pin assignments:
+2025-07-06 16:20:29 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 16:20:29 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 16:20:29 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 16:20:29 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 16:20:29 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 16:20:29 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 16:20:29 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 16:20:29 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 16:20:29 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 16:20:29 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 16:20:29 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 16:20:29 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 16:20:29 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 16:20:29 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 16:20:29 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 16:20:31 [INFO] __main__: Screen: PillowScreen initialized (HDMI framebuffer)
+2025-07-06 16:20:31 [INFO] __main__: Hardware initialized.
+2025-07-06 16:20:31 [INFO] __main__: Hardware startup summary:
+2025-07-06 16:20:31 [INFO] __main__:   btn_red: OK
+2025-07-06 16:20:31 [INFO] __main__:   btn_yellow: OK
+2025-07-06 16:20:31 [INFO] __main__:   btn_green: OK
+2025-07-06 16:20:31 [INFO] __main__:   btn_blue: OK
+2025-07-06 16:20:31 [INFO] __main__:   main_btn: OK
+2025-07-06 16:20:31 [INFO] __main__:   led_red: OK
+2025-07-06 16:20:31 [INFO] __main__:   led_yellow: OK
+2025-07-06 16:20:31 [INFO] __main__:   led_green: OK
+2025-07-06 16:20:31 [INFO] __main__:   led_blue: OK
+2025-07-06 16:20:31 [INFO] __main__:   display: OK
+2025-07-06 16:20:31 [INFO] __main__:   switch_reader: OK
+2025-07-06 16:20:33 [INFO] __main__: [setup_api] Using event_bus id: 548290680336 for AppAPI
+2025-07-06 16:20:33 [INFO] __main__: [main] Main event_bus id: 548290680336
+2025-07-06 16:20:33 [INFO] __main__: [main] AppAPI.event_bus id: 548290680336
+2025-07-06 16:20:33 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-06 16:20:33 [WARNING] __main__: Web UI event bus integration failed: No module named 'fastapi'
+[2025-07-06 16:20:33,564] INFO AppRunner: Started app: admin_startup
+2025-07-06 16:20:33 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 16:20:33 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T15:20:33Z'}
+2025-07-06 16:20:33 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': None, 'timestamp': '2025-07-06T15:20:33Z'}
+2025-07-06 16:20:33 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815233.660528, 'source': 'hardware.display.pi'}
+2025-07-06 16:20:36 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815236.0337746, 'source': 'hardware.button.main'}
+2025-07-06 16:20:36 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815236.0337746, 'source': 'hardware.button.main'}
+2025-07-06 16:20:36 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:20:36,075] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:20:36 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:20:36 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:20:36Z'}
+2025-07-06 16:20:36 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815236.2808297, 'source': 'hardware.button.main'}
+2025-07-06 16:21:02 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751815262.4137092, 'source': 'hardware.button.blue'}
+2025-07-06 16:21:02 [INFO] boss.core.event_handlers: Button pressed: blue | Payload: {'button_id': 'blue', 'timestamp': 1751815262.4137092, 'source': 'hardware.button.blue'}
+2025-07-06 16:21:02 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751815262.4137092, 'source': 'hardware.button.blue'}
+2025-07-06 16:21:04 [INFO] EventBus: Event published: input.button.released | {'button_id': 'blue', 'timestamp': 1751815264.2989392, 'source': 'hardware.button.blue'}
+2025-07-06 16:21:09 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'yellow', 'timestamp': 1751815269.943295, 'source': 'hardware.button.yellow'}
+2025-07-06 16:21:09 [INFO] boss.core.event_handlers: Button pressed: yellow | Payload: {'button_id': 'yellow', 'timestamp': 1751815269.943295, 'source': 'hardware.button.yellow'}
+2025-07-06 16:21:09 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'yellow', 'timestamp': 1751815269.943295, 'source': 'hardware.button.yellow'}
+2025-07-06 16:21:11 [INFO] EventBus: Event published: input.button.released | {'button_id': 'yellow', 'timestamp': 1751815271.9977047, 'source': 'hardware.button.yellow'}
+2025-07-06 16:21:18 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 0, 'timestamp': '2025-07-06T15:21:18Z'}
+2025-07-06 16:21:18 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751815278.241128, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:18 [INFO] EventBus: Event published: switch_change | {'value': 7, 'previous_value': 3, 'timestamp': '2025-07-06T15:21:18Z'}
+2025-07-06 16:21:18 [INFO] EventBus: Event published: output.display.updated | {'value': '   7', 'timestamp': 1751815278.8950498, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:19 [INFO] EventBus: Event published: switch_change | {'value': 15, 'previous_value': 7, 'timestamp': '2025-07-06T15:21:19Z'}
+2025-07-06 16:21:19 [INFO] EventBus: Event published: output.display.updated | {'value': '  15', 'timestamp': 1751815279.0434701, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:22 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815282.5789876, 'source': 'hardware.button.main'}
+2025-07-06 16:21:22 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815282.5789876, 'source': 'hardware.button.main'}
+2025-07-06 16:21:22 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815282.5789876, 'source': 'hardware.button.main'}
+2025-07-06 16:21:22 [INFO] EventBus: Event published: switch_change | {'value': 239, 'previous_value': 15, 'timestamp': '2025-07-06T15:21:22Z'}
+2025-07-06 16:21:22 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 15, launching app: on_this_day
+[2025-07-06 16:21:22,622] INFO AppRunner: Stopping app: list_all_apps
+2025-07-06 16:21:22 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-06 16:21:22,626] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:21:22 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:21:22 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:21:22Z'}
+[2025-07-06 16:21:22,632] INFO AppRunner: Started app: on_this_day
+2025-07-06 16:21:22 [INFO] AppRunner: Started app: on_this_day
+2025-07-06 16:21:22 [INFO] EventBus: Event published: app_started | {'app_name': 'on_this_day', 'version': 'unknown', 'timestamp': '2025-07-06T15:21:22Z'}
+2025-07-06 16:21:22 [INFO] EventBus: Event published: output.display.updated | {'value': ' 239', 'timestamp': 1751815282.6489005, 'source': 'hardware.display.pi'}
+[2025-07-06 16:21:22,654] ERROR AppRunner: Error running app on_this_day: No module named 'requests'
+2025-07-06 16:21:22 [ERROR] AppRunner: Error running app on_this_day: No module named 'requests'
+2025-07-06 16:21:22 [INFO] EventBus: Event published: switch_change | {'value': 15, 'previous_value': 239, 'timestamp': '2025-07-06T15:21:22Z'}
+2025-07-06 16:21:22 [INFO] EventBus: Event published: output.display.updated | {'value': '  15', 'timestamp': 1751815282.716253, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:22 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815282.8792093, 'source': 'hardware.button.main'}
+2025-07-06 16:21:28 [INFO] EventBus: Event published: switch_change | {'value': 6, 'previous_value': 15, 'timestamp': '2025-07-06T15:21:28Z'}
+2025-07-06 16:21:28 [INFO] EventBus: Event published: output.display.updated | {'value': '   6', 'timestamp': 1751815288.5661821, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:28 [INFO] EventBus: Event published: switch_change | {'value': 4, 'previous_value': 6, 'timestamp': '2025-07-06T15:21:28Z'}
+2025-07-06 16:21:28 [INFO] EventBus: Event published: output.display.updated | {'value': '   4', 'timestamp': 1751815288.99907, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:29 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 4, 'timestamp': '2025-07-06T15:21:29Z'}
+2025-07-06 16:21:29 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815289.4306173, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:30 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815290.358787, 'source': 'hardware.button.main'}
+2025-07-06 16:21:30 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815290.358787, 'source': 'hardware.button.main'}
+2025-07-06 16:21:30 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:21:30,389] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:21:30 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:21:30 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:21:30Z'}
+2025-07-06 16:21:30 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815290.557953, 'source': 'hardware.button.main'}
+2025-07-06 16:21:37 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 0, 'timestamp': '2025-07-06T15:21:37Z'}
+2025-07-06 16:21:37 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751815297.398112, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:38 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815298.4520342, 'source': 'hardware.button.main'}
+2025-07-06 16:21:38 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815298.4520342, 'source': 'hardware.button.main'}
+2025-07-06 16:21:38 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815298.4520342, 'source': 'hardware.button.main'}
+2025-07-06 16:21:38 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 2, launching app: None
+2025-07-06 16:21:38 [INFO] boss.core.event_handlers: No app mapped for value 2.
+2025-07-06 16:21:38 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815298.657154, 'source': 'hardware.button.main'}
+2025-07-06 16:21:41 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-06T15:21:41Z'}
+2025-07-06 16:21:41 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815301.1403174, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:47 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': 0, 'timestamp': '2025-07-06T15:21:47Z'}
+2025-07-06 16:21:47 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751815307.9687698, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:48 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-06T15:21:48Z'}
+2025-07-06 16:21:48 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751815308.5498137, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:49 [INFO] EventBus: Event published: switch_change | {'value': 7, 'previous_value': 3, 'timestamp': '2025-07-06T15:21:49Z'}
+2025-07-06 16:21:49 [INFO] EventBus: Event published: output.display.updated | {'value': '   7', 'timestamp': 1751815309.0582569, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: switch_change | {'value': 6, 'previous_value': 7, 'timestamp': '2025-07-06T15:21:50Z'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: output.display.updated | {'value': '   6', 'timestamp': 1751815310.1413367, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: switch_change | {'value': 14, 'previous_value': 6, 'timestamp': '2025-07-06T15:21:50Z'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: output.display.updated | {'value': '  14', 'timestamp': 1751815310.2223227, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: switch_change | {'value': 12, 'previous_value': 14, 'timestamp': '2025-07-06T15:21:50Z'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: output.display.updated | {'value': '  12', 'timestamp': 1751815310.6540205, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:50 [INFO] EventBus: Event published: switch_change | {'value': 8, 'previous_value': 12, 'timestamp': '2025-07-06T15:21:50Z'}
+2025-07-06 16:21:51 [INFO] EventBus: Event published: output.display.updated | {'value': '   8', 'timestamp': 1751815311.0202913, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815314.4924529, 'source': 'hardware.button.main'}
+2025-07-06 16:21:54 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815314.4924529, 'source': 'hardware.button.main'}
+2025-07-06 16:21:54 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815314.4924529, 'source': 'hardware.button.main'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 8, 'timestamp': '2025-07-06T15:21:54Z'}
+2025-07-06 16:21:54 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:21:54,539] INFO AppRunner: Stopping app: list_all_apps
+2025-07-06 16:21:54 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-06 16:21:54,542] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:21:54 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:21:54 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:21:54Z'}
+[2025-07-06 16:21:54,549] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:21:54 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:21:54 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:21:54Z'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815314.5811384, 'source': 'hardware.display.pi'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: switch_change | {'value': 8, 'previous_value': 0, 'timestamp': '2025-07-06T15:21:54Z'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815314.7232625, 'source': 'hardware.button.main'}
+2025-07-06 16:21:54 [INFO] EventBus: Event published: output.display.updated | {'value': '   8', 'timestamp': 1751815314.7780006, 'source': 'hardware.display.pi'}
+2025-07-06 16:22:07 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 8, 'timestamp': '2025-07-06T15:22:07Z'}
+2025-07-06 16:22:07 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751815327.1439478, 'source': 'hardware.display.pi'}
+2025-07-06 16:22:08 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815328.3698673, 'source': 'hardware.button.main'}
+2025-07-06 16:22:08 [INFO] boss.core.event_handlers: Button pressed: main | Payload: {'button_id': 'main', 'timestamp': 1751815328.3698673, 'source': 'hardware.button.main'}
+2025-07-06 16:22:08 [INFO] __main__: [list_all_apps] Button event received: input.button.pressed | {'button_id': 'main', 'timestamp': 1751815328.3698673, 'source': 'hardware.button.main'}
+2025-07-06 16:22:08 [INFO] boss.core.event_handlers: Go button pressed (event). Switch value: 0, launching app: list_all_apps
+[2025-07-06 16:22:08,401] INFO AppRunner: Stopping app: list_all_apps
+2025-07-06 16:22:08 [INFO] AppRunner: Stopping app: list_all_apps
+[2025-07-06 16:22:08,403] INFO AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:22:08 [INFO] AppRunner: App list_all_apps stopped cleanly.
+2025-07-06 16:22:08 [INFO] EventBus: Event published: app_stopped | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:22:08Z'}
+[2025-07-06 16:22:08,408] INFO AppRunner: Started app: list_all_apps
+2025-07-06 16:22:08 [INFO] AppRunner: Started app: list_all_apps
+2025-07-06 16:22:08 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:22:08Z'}
+2025-07-06 16:22:08 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815328.596282, 'source': 'hardware.button.main'}

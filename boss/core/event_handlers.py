@@ -2,6 +2,9 @@
 Event Handlers for B.O.S.S. system
 All event-driven logic for hardware and app events is centralized here for maintainability.
 """
+
+import sys
+import os
 from typing import Any, Callable
 import time
 import logging
@@ -25,6 +28,16 @@ def on_display_update(display):
                     logger.warning("Display object missing show_message method.")
     return handler
 
+def handle_button_pressed():
+    """
+    Generic handler for all button presses. Logs the button and event.
+    Extend this for global button actions if needed.
+    """
+    def handler(event_type: str, payload: dict):
+        button_id = payload.get("button_id")
+        logger.info(f"Button pressed: {button_id} | Payload: {payload}")
+    return handler
+
 def on_go_button_pressed(switch, app_mappings, app_runner, api):
     def handler(event_type: str, payload: dict):
         if payload.get("button_id") == "main":
@@ -37,7 +50,12 @@ def on_go_button_pressed(switch, app_mappings, app_runner, api):
                 logger.info(f"No app mapped for value {value}.")
     return handler
 
-def display_update_handler(seg_display):
+def handle_display_update(seg_display):
+    """
+    Handles 'switch_change' events to update the 7-segment display.
+    Args:
+        seg_display: The display object to update.
+    """
     def handler(event_type: str, payload: dict):
         if seg_display and hasattr(seg_display, 'show_number'):
             seg_display.show_number(payload["value"])
@@ -73,4 +91,33 @@ def handle_switch_set(switch, display):
                 switch.set_value(value)
         # Do NOT update the display here; display_update_handler (on switch_change) will handle it.
         # Do NOT publish another switch_change event here; APISwitchReader.set_value does it.
+    return handler
+
+
+def handle_system_shutdown(app_runner, cleanup, logger):
+    def handler(event_type, payload):
+        reason = payload.get('reason', 'unknown')
+        logger.critical(f"[SHUTDOWN HANDLER] System shutdown event received. Reason: {reason}")
+        try:
+            cleanup()
+        except Exception as e:
+            logger.error(f"[SHUTDOWN HANDLER] Cleanup error: {e}")
+        if app_runner and hasattr(app_runner, 'stop_app'):
+            try:
+                app_runner.stop_app()
+            except Exception as e:
+                logger.warning(f"Error stopping app_runner during shutdown: {e}")
+        logger.critical(f"[SHUTDOWN HANDLER] After app_runner.stop_app(). About to exit for reason: {reason}")
+        if reason == 'reboot':
+            logger.critical("[SHUTDOWN HANDLER] Rebooting system now...")
+            os.system('sudo reboot')
+        elif reason == 'poweroff':
+            logger.critical("[SHUTDOWN HANDLER] Powering off system now...")
+            os.system('sudo poweroff')
+        elif reason == 'exit_to_os':
+            logger.critical("[SHUTDOWN HANDLER] Exiting BOSS to OS shell...")
+            sys.exit(0)
+        else:
+            logger.critical(f"[SHUTDOWN HANDLER] Unknown shutdown reason: {reason}. Exiting BOSS main loop.")
+            sys.exit(0)
     return handler
