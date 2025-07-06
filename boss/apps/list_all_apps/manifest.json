@@ -10,5 +10,5 @@
   },
   "assets_required": [],
   "api_keys": [],
-  "instructions": "Reads bossconfiguration.json and each mini-app's manifest.json. Configurable entries per page. Uses yellow/blue buttons for navigation."
+  "instructions": "Reads app_mappings.json and each mini-app's manifest.json. Configurable entries per page. Uses yellow/blue buttons for navigation."
 }

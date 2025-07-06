@@ -3,7 +3,6 @@ Mini-app: Admin Shutdown
 Provides UI for graceful shutdown, reboot, or exit to OS.
 Entry point: run(stop_event, api)
 """
-import os
 from threading import Event
 from typing import Any
 
@@ -25,33 +24,34 @@ def run(stop_event: Event, api: Any) -> None:
         api.set_leds({'yellow': True, 'blue': True, 'green': True})
     api.display_text(prompt)
 
-    def on_button_press(event):
-        button = event.get('button_id')
+    def on_button_press(event_type, event):
+        # Only respond to button press, not release
+        if event_type != 'input.button.pressed':
+            return
+        button = event.get('button_id') or event.get('button')
         if button == 'yellow':
             api.display_text("Rebooting system...")
             api.log_event("AdminShutdown: Reboot triggered by user.")
-            if hasattr(api, 'set_leds'):
-                api.set_leds({'yellow': False, 'blue': False, 'green': False})
-            os.system('sudo reboot')
+            if api.event_bus:
+                api.event_bus.publish('system_shutdown', {'reason': 'reboot'})
             stop_event.set()
         elif button == 'blue':
             api.display_text("Shutting down system...")
             api.log_event("AdminShutdown: Poweroff triggered by user.")
-            if hasattr(api, 'set_leds'):
-                api.set_leds({'yellow': False, 'blue': False, 'green': False})
-            os.system('sudo poweroff')
+            if api.event_bus:
+                api.event_bus.publish('system_shutdown', {'reason': 'poweroff'})
             stop_event.set()
         elif button == 'green':
             api.display_text("Exiting to OS shell...")
             api.log_event("AdminShutdown: Exit to OS triggered by user.")
-            if hasattr(api, 'set_leds'):
-                api.set_leds({'yellow': False, 'blue': False, 'green': False})
+            if api.event_bus:
+                api.event_bus.publish('system_shutdown', {'reason': 'exit_to_os'})
             stop_event.set()
 
     sub_id = api.event_bus.subscribe(
         'input.button.pressed',
         on_button_press,
-        filter={"button_id": ["yellow", "blue", "green"]}
+        filter=None  # Let handler filter for robustness
     )
 
     try:

@@ -85,7 +85,7 @@ class PillowScreen:
             if self.image is not None:
                 self.image.paste(color, [0, 0, self.width, self.height])
             self.cursor_y = 0  # Reset cursor on clear
-            self._update_fb()
+            self.refresh()
 
     def display_text(self, text, color=(255,255,255), size=48, align='center', font_name=None):
         with self.lock:
@@ -107,7 +107,7 @@ class PillowScreen:
                     x = 10
                 draw.text((x, y), line, font=font, fill=color)
                 y += h
-            self._update_fb()
+            self.refresh()
 
     def display_image(self, img):
         with self.lock:
@@ -115,7 +115,7 @@ class PillowScreen:
                 if img.size != (self.width, self.height):
                     img = img.resize((self.width, self.height), Image.LANCZOS)
                 self.image.paste(img)
-            self._update_fb()
+            self.refresh()
 
     def render_text_to_image(self, text, color=(255,255,255), size=48, align='center', font_name=None, bg=(0,0,0)):
         font = self._get_font(font_name, size)
@@ -207,9 +207,10 @@ class PillowScreen:
             if self.fb is not None:
                 self.fb.close()
 
-    def print_line(self, text, color=(255,255,255), size=None, font_name=None, x=None, spacing=10):
+    def print_line(self, text, color=(255,255,255), size=None, font_name=None, x=None, spacing=10, align='left'):
         """
         Print text at the current cursor_y, optionally at x (default center), then advance cursor_y.
+        align: 'left', 'center', or 'right'.
         """
         if size is None:
             size = self.FONT_SIZE_DEFAULT
@@ -218,10 +219,17 @@ class PillowScreen:
             if self.image is not None and font is not None and ImageDraw is not None and hasattr(ImageDraw, 'Draw'):
                 draw = ImageDraw.Draw(self.image)
                 w, h = draw.textbbox((0,0), text, font=font)[2:4]
-                if x is None:
-                    x = (self.width - w) // 2
-                draw.text((x, self.cursor_y), text, font=font, fill=color)
+                if x is not None:
+                    xpos = x
+                elif align == 'center':
+                    xpos = (self.width - w) // 2
+                elif align == 'right':
+                    xpos = self.width - w - 10
+                else:
+                    xpos = 10
+                draw.text((xpos, self.cursor_y), text, font=font, fill=color)
                 self.cursor_y += h + spacing
+                self.refresh()
             else:
                 print("[PillowScreen] WARNING: Cannot print_line, image/font/ImageDraw/Draw is None or missing.")
 
@@ -252,3 +260,9 @@ class PillowScreen:
         """
         with self.lock:
             self.cursor_y = 0
+
+    def refresh(self):
+        """
+        Public method to update the framebuffer after drawing operations.
+        """
+        self._update_fb()

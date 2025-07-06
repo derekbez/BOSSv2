@@ -13,4 +13,4 @@ ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
 LOGS_DIR = os.path.join(PROJECT_ROOT, "logs")
 
 # Key files
-CONFIG_PATH = os.path.join(CONFIG_DIR, "BOSSsettings.json")
+CONFIG_PATH = os.path.join(CONFIG_DIR, "app_mappings.json")

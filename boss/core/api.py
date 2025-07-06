@@ -5,6 +5,13 @@ from typing import Dict, Any, List, Optional
 import time
 
 class AppAPI:
+    # Font size constants for all screens (real or mock)
+    FONT_SIZE_LARGEST = 64
+    FONT_SIZE_LARGER = 48
+    FONT_SIZE_DEFAULT = 32
+    FONT_SIZE_SMALLER = 24
+    FONT_SIZE_SMALLEST = 16
+
     def __init__(self, screen, buttons: Dict[str, Any], leds: Dict[str, Any], event_bus=None, logger=None):
         self.screen = screen
         self.buttons = buttons  # dict: color -> button instance

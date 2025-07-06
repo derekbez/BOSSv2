@@ -29,7 +29,7 @@ class SwitchMonitor:
     def _run(self):
         while not self._stop.is_set():
             value = self.switch_reader.read_value()
-            if self._last_value is not None and value != self._last_value:
+            if self._last_value is None or (self._last_value is not None and value != self._last_value):
                 self.event_bus.publish("switch_change", {
                     "value": value,
                     "previous_value": self._last_value,

@@ -37,10 +37,14 @@ class ScreenInterface(Protocol):
 import time
 
 class MockScreen:
-    def __init__(self, event_bus=None):
+    def __init__(self, event_bus=None, width=1024, height=600):
         self.last_status = None
         self.last_output = None
         self.event_bus = event_bus
+        self.width = width
+        self.height = height
+        self.cursor_y = 0
+        self.lines = []
     def show_status(self, message: str):
         self.last_status = message
         print(f"[MOCK SCREEN] STATUS: {message}")
@@ -67,10 +71,11 @@ class MockScreen:
                     "source": "hardware.screen.mock"
                 }
             )
-    def clear(self):
-        # Clear the mock screen output
+    def clear(self, color=(0,0,0)):
         self.last_status = None
         self.last_output = None
+        self.lines = []
+        self.cursor_y = 0
         print("[MOCK SCREEN] CLEARED")
         if self.event_bus:
             self.event_bus.publish(
@@ -81,17 +86,11 @@ class MockScreen:
                     "source": "hardware.screen.mock"
                 }
             )
-    def display_text(self, text: str, **kwargs):
-        """
-        Display arbitrary text on the mock screen, print all advanced options for dev/test.
-        """
+    def display_text(self, text: str, color=(255,255,255), size=32, align='center', font_name=None):
         self.last_output = text
         print(f"[MOCK SCREEN] DISPLAY: {text}")
-        if kwargs:
-            print(f"[MOCK SCREEN] OPTIONS: {kwargs}")
         if self.event_bus:
-            details = {"text": text}
-            details.update(kwargs)
+            details = {"text": text, "color": color, "size": size, "align": align, "font_name": font_name}
             self.event_bus.publish(
                 "output.screen.updated",
                 {
@@ -101,7 +100,24 @@ class MockScreen:
                     "source": "hardware.screen.mock"
                 }
             )
-
+    def print_line(self, text, color=(255,255,255), size=None, font_name=None, x=None, spacing=10, align='left'):
+        print(f"[MOCK SCREEN] PRINT_LINE: {text} (align={align})")
+        self.lines.append(text)
+        self.cursor_y += 1
+    def draw_text(self, x, y, text, color=(255,255,255), size=None, font_name=None):
+        print(f"[MOCK SCREEN] DRAW_TEXT at ({x},{y}): {text}")
+    def set_cursor(self, y=0):
+        self.cursor_y = y
+        print(f"[MOCK SCREEN] SET_CURSOR: {y}")
+    def reset_cursor(self):
+        self.cursor_y = 0
+        print("[MOCK SCREEN] RESET_CURSOR")
+    def refresh(self):
+        print("[MOCK SCREEN] REFRESH (would update framebuffer in real screen)")
+    def display_image(self, img):
+        print(f"[MOCK SCREEN] DISPLAY_IMAGE: {img}")
+    def save_to_file(self, path):
+        print(f"[MOCK SCREEN] SAVE_TO_FILE: {path}")
     def close(self):
-        pass  # No resources to release in mock
+        print("[MOCK SCREEN] CLOSE")
 

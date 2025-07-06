@@ -129,8 +129,8 @@ def show_os_cursor():
 
 
 # --- Refactored hardware initialization for lower complexity and no pygame ---
-def initialize_hardware():
-    """Initialize all hardware and start web UI in mock mode."""
+def initialize_hardware(event_bus):
+    """Initialize all hardware and start web UI in mock mode. Requires event_bus as argument."""
     global btn_red, btn_yellow, btn_green, btn_blue, main_btn
     global led_red, led_yellow, led_green, led_blue
     global display, switch_reader, screen
@@ -153,29 +153,41 @@ def initialize_hardware():
         'MUX3_PIN': MUX3_PIN,
         'MUX_IN_PIN': MUX_IN_PIN,
     }
-    #print("[BOSS] Pin assignments:")
     logger.info("Pin assignments:")
     for name, val in pin_info.items():
-        #print(f"  {name}: {val}")
         logger.info(f"  {name}: {val}")
 
-
-    def try_init(real_ctor, fallback_ctor, arg, status_key):
+    def try_init(real_ctor, fallback_ctor, arg, status_key, event_bus=None, button_id=None):
         try:
-            obj = real_ctor(arg)
+            # If the constructor supports event_bus, pass it
+            if event_bus is not None and button_id is not None:
+                obj = real_ctor(arg, event_bus=event_bus, button_id=button_id)
+            elif event_bus is not None:
+                obj = real_ctor(arg, event_bus=event_bus)
+            else:
+                obj = real_ctor(arg)
             hardware_status[status_key] = 'OK'
             return obj
         except Exception as e:
-            obj = fallback_ctor(arg)
+            # Fallback to mock
+            if event_bus is not None and button_id is not None:
+                obj = fallback_ctor(button_id, event_bus=event_bus, button_id=button_id)
+            elif event_bus is not None:
+                obj = fallback_ctor(button_id, event_bus=event_bus)
+            else:
+                obj = fallback_ctor(button_id)
             hardware_status[status_key] = f"MOCK ({e})"
             return obj
 
+    # event_bus must be set before calling this function
+    from boss.hardware.button import APIButton, PiButton
+    from boss.hardware.led import MockLED, PiLED
     if REAL_HARDWARE:
-        btn_red = try_init(PiButton, APIButton, BTN_RED_PIN, 'btn_red')
-        btn_yellow = try_init(PiButton, APIButton, BTN_YELLOW_PIN, 'btn_yellow')
-        btn_green = try_init(PiButton, APIButton, BTN_GREEN_PIN, 'btn_green')
-        btn_blue = try_init(PiButton, APIButton, BTN_BLUE_PIN, 'btn_blue')
-        main_btn = try_init(PiButton, APIButton, MAIN_BTN_PIN, 'main_btn')
+        btn_red = try_init(PiButton, APIButton, BTN_RED_PIN, 'btn_red', event_bus=event_bus, button_id="red")
+        btn_yellow = try_init(PiButton, APIButton, BTN_YELLOW_PIN, 'btn_yellow', event_bus=event_bus, button_id="yellow")
+        btn_green = try_init(PiButton, APIButton, BTN_GREEN_PIN, 'btn_green', event_bus=event_bus, button_id="green")
+        btn_blue = try_init(PiButton, APIButton, BTN_BLUE_PIN, 'btn_blue', event_bus=event_bus, button_id="blue")
+        main_btn = try_init(PiButton, APIButton, MAIN_BTN_PIN, 'main_btn', event_bus=event_bus, button_id="main")
         led_red = try_init(PiLED, PiLED, LED_RED_PIN, 'led_red')
         led_yellow = try_init(PiLED, PiLED, LED_YELLOW_PIN, 'led_yellow')
         led_green = try_init(PiLED, PiLED, LED_GREEN_PIN, 'led_green')
@@ -198,13 +210,11 @@ def initialize_hardware():
         screen = get_screen()
         logger.info(f"Screen: {type(screen).__name__} initialized (HDMI framebuffer)")
     else:
-        # All mock/dev hardware
-        btn_red = APIButton("red")
-        btn_yellow = APIButton("yellow")
-        btn_green = APIButton("green")
-        btn_blue = APIButton("blue")
-        main_btn = APIButton("main")
-        from boss.hardware.led import MockLED
+        btn_red = APIButton("red", event_bus=event_bus, button_id="red")
+        btn_yellow = APIButton("yellow", event_bus=event_bus, button_id="yellow")
+        btn_green = APIButton("green", event_bus=event_bus, button_id="green")
+        btn_blue = APIButton("blue", event_bus=event_bus, button_id="blue")
+        main_btn = APIButton("main", event_bus=event_bus, button_id="main")
         led_red = MockLED("red")
         led_yellow = MockLED("yellow")
         led_green = MockLED("green")
@@ -339,8 +349,8 @@ def main():
     logger.info("B.O.S.S. system starting up.")
     hide_os_cursor()  # Hide cursor at startup
     global event_bus, app_mappings, switch, seg_display, app_runner, api
-    initialize_hardware()
     event_bus = setup_event_bus()
+    initialize_hardware(event_bus)  # Pass event_bus to hardware init
     # Inject event_bus into display if supported
     if display and hasattr(display, 'event_bus'):
         try:
