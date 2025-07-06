@@ -11,7 +11,13 @@ import logging
 
 logger = logging.getLogger("boss.core.event_handlers")
 
-def on_display_update(display):
+def handle_display_update(display):
+    """
+    Handles display updates for 'switch_change' or similar events.
+    Tries to use show_number, falls back to show_message.
+    Args:
+        display: The display object to update.
+    """
     def handler(event_type: str, payload: dict):
         val = payload.get("value")
         if val is not None and display:
@@ -50,16 +56,7 @@ def on_go_button_pressed(switch, app_mappings, app_runner, api):
                 logger.info(f"No app mapped for value {value}.")
     return handler
 
-def handle_display_update(seg_display):
-    """
-    Handles 'switch_change' events to update the 7-segment display.
-    Args:
-        seg_display: The display object to update.
-    """
-    def handler(event_type: str, payload: dict):
-        if seg_display and hasattr(seg_display, 'show_number'):
-            seg_display.show_number(payload["value"])
-    return handler
+## Removed duplicate handle_display_update definition (consolidated above)
 
 def handle_led_set(led_red, led_yellow, led_green, led_blue):
     def handler(event_type: str, payload: dict):

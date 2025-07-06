@@ -46,17 +46,37 @@ function connectWS() {
 
 // Update output state (LEDs, display, etc) in real time from events
 function updateOutputState(state) {
-    let html = '';
-    // Show LEDs
+    console.log('[UI] updateOutputState called with:', state); // DEBUG
+    // Update LED indicators
     ['red','yellow','green','blue'].forEach(color => {
-        let led = state[`led_${color}`];
-        html += `<div><b>LED ${color}:</b> <span style="color:${color};font-weight:bold">${led ? 'ON' : 'OFF'}</span></div>`;
+        const ledElem = document.getElementById(`led-${color}`);
+        if (ledElem) {
+            const led = state[`led_${color}`];
+            ledElem.textContent = led ? 'ON' : 'OFF';
+            ledElem.style.color = color;
+            ledElem.style.fontWeight = 'bold';
+        }
     });
-    // Show display value
+    // Update 7-segment display
     if (state.display !== undefined) {
-        html += `<div><b>7-Segment Display:</b> <span>${state.display}</span></div>`;
+        const displayElem = document.getElementById('display-value');
+        if (displayElem) {
+            displayElem.textContent = state.display;
+        }
     }
-    document.getElementById('output-state').innerHTML = html;
+    // Fallback: if output-state element exists and no per-LED/display elements, update legacy HTML
+    const outputStateElem = document.getElementById('output-state');
+    if (outputStateElem && !document.getElementById('led-red')) {
+        let html = '';
+        ['red','yellow','green','blue'].forEach(color => {
+            let led = state[`led_${color}`];
+            html += `<div><b>LED ${color}:</b> <span style="color:${color};font-weight:bold">${led ? 'ON' : 'OFF'}</span></div>`;
+        });
+        if (state.display !== undefined) {
+            html += `<div><b>7-Segment Display:</b> <span>${state.display}</span></div>`;
+        }
+        outputStateElem.innerHTML = html;
+    }
 }
 
 // Emulate the screen (draw text or image to canvas)

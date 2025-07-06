@@ -5319,3 +5319,285 @@ FileNotFoundError: [Errno 2] No such file or directory: '/home/rpi/boss/config/B
 2025-07-06 16:22:08 [INFO] AppRunner: Started app: list_all_apps
 2025-07-06 16:22:08 [INFO] EventBus: Event published: app_started | {'app_name': 'list_all_apps', 'version': 'unknown', 'timestamp': '2025-07-06T15:22:08Z'}
 2025-07-06 16:22:08 [INFO] EventBus: Event published: input.button.released | {'button_id': 'main', 'timestamp': 1751815328.596282, 'source': 'hardware.button.main'}
+2025-07-06 16:50:00 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 16:50:00 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 16:50:00 [INFO] __main__: Pin assignments:
+2025-07-06 16:50:00 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 16:50:00 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 16:50:00 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 16:50:00 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 16:50:00 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 16:50:00 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 16:50:00 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 16:50:00 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 16:50:00 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 16:50:00 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 16:50:00 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 16:50:00 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 16:50:00 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 16:50:00 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 16:50:00 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 16:50:00 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-06 16:50:01 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-06 16:50:01 [INFO] __main__: Hardware initialized.
+2025-07-06 16:50:01 [INFO] __main__: Hardware startup summary:
+2025-07-06 16:50:01 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-06 16:50:01 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-06 16:50:03 [INFO] __main__: [setup_api] Using event_bus id: 2803338907216 for AppAPI
+2025-07-06 16:50:03 [INFO] __main__: [main] Main event_bus id: 2803338907216
+2025-07-06 16:50:03 [INFO] __main__: [main] AppAPI.event_bus id: 2803338907216
+2025-07-06 16:50:03 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-06 16:50:03,353] INFO AppRunner: Started app: admin_startup
+2025-07-06 16:50:03 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 16:50:03 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T15:50:03Z'}
+2025-07-06 16:50:03 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-06T15:50:03Z'}
+2025-07-06 16:50:03 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751817003.3557425, 'source': 'hardware.display.mock'}
+2025-07-06 16:50:22 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751817022.6660461}
+2025-07-06 16:50:22 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-06 16:50:22 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-06T15:50:22Z'}
+2025-07-06 16:50:22 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751817022.6986039, 'source': 'hardware.display.mock'}
+2025-07-06 16:50:25 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751817025.0894597}
+2025-07-06 16:50:25 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-06 16:50:25 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-06T15:50:25Z'}
+2025-07-06 16:50:25 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751817025.1096406, 'source': 'hardware.display.mock'}
+2025-07-06 16:52:32 [INFO] EventBus: Event published: input.switch.set | {'value': 6, 'timestamp': 1751817152.6611536}
+2025-07-06 16:52:32 [INFO] boss.core.event_handlers: [WebUI] Switch set to 6 via web UI.
+2025-07-06 16:52:32 [INFO] EventBus: Event published: switch_change | {'value': 6, 'previous_value': 0, 'timestamp': '2025-07-06T15:52:32Z'}
+2025-07-06 16:52:32 [INFO] EventBus: Event published: output.display.updated | {'value': '   6', 'timestamp': 1751817152.699754, 'source': 'hardware.display.mock'}
+2025-07-06 16:56:10 [INFO] EventBus: Event published: input.switch.set | {'value': 10, 'timestamp': 1751817370.5022116}
+2025-07-06 16:56:10 [INFO] boss.core.event_handlers: [WebUI] Switch set to 10 via web UI.
+2025-07-06 16:56:10 [INFO] EventBus: Event published: switch_change | {'value': 10, 'previous_value': 6, 'timestamp': '2025-07-06T15:56:10Z'}
+2025-07-06 16:56:10 [INFO] EventBus: Event published: output.display.updated | {'value': '  10', 'timestamp': 1751817370.507722, 'source': 'hardware.display.mock'}
+2025-07-06 16:58:05 [INFO] EventBus: Event published: input.switch.set | {'value': 10, 'timestamp': 1751817485.1357894}
+2025-07-06 16:58:05 [INFO] boss.core.event_handlers: [WebUI] Switch set to 10 via web UI.
+2025-07-06 16:58:50 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751817530.4867501}
+2025-07-06 16:58:50 [INFO] boss.core.event_handlers: Button pressed: blue | Payload: {'button_id': 'blue', 'timestamp': 1751817530.4867501}
+2025-07-06 16:58:51 [INFO] EventBus: Event published: input.switch.set | {'value': 10, 'timestamp': 1751817531.518793}
+2025-07-06 16:58:51 [INFO] boss.core.event_handlers: [WebUI] Switch set to 10 via web UI.
+2025-07-06 16:58:56 [INFO] EventBus: Event published: input.switch.set | {'value': 6, 'timestamp': 1751817536.5569837}
+2025-07-06 16:58:56 [INFO] boss.core.event_handlers: [WebUI] Switch set to 6 via web UI.
+2025-07-06 16:58:56 [INFO] EventBus: Event published: switch_change | {'value': 6, 'previous_value': 10, 'timestamp': '2025-07-06T15:58:56Z'}
+2025-07-06 16:58:56 [INFO] EventBus: Event published: output.display.updated | {'value': '   6', 'timestamp': 1751817536.5880175, 'source': 'hardware.display.mock'}
+2025-07-06 17:02:21 [INFO] EventBus: Event published: input.switch.set | {'value': 5, 'timestamp': 1751817741.0810218}
+2025-07-06 17:02:21 [INFO] boss.core.event_handlers: [WebUI] Switch set to 5 via web UI.
+2025-07-06 17:02:21 [INFO] EventBus: Event published: switch_change | {'value': 5, 'previous_value': 6, 'timestamp': '2025-07-06T16:02:21Z'}
+2025-07-06 17:02:21 [INFO] EventBus: Event published: output.display.updated | {'value': '   5', 'timestamp': 1751817741.1090744, 'source': 'hardware.display.mock'}
+2025-07-06 17:05:57 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 17:05:57 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 17:05:57 [INFO] __main__: Pin assignments:
+2025-07-06 17:05:57 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 17:05:57 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 17:05:57 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 17:05:57 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 17:05:57 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 17:05:57 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 17:05:57 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 17:05:57 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 17:05:57 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 17:05:57 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 17:05:57 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 17:05:57 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 17:05:57 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 17:05:57 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 17:05:57 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 17:05:57 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-06 17:05:58 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-06 17:05:58 [INFO] __main__: Hardware initialized.
+2025-07-06 17:05:58 [INFO] __main__: Hardware startup summary:
+2025-07-06 17:05:58 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-06 17:05:58 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-06 17:05:59 [INFO] __main__: [setup_api] Using event_bus id: 1545587224016 for AppAPI
+2025-07-06 17:05:59 [INFO] __main__: [main] Main event_bus id: 1545587224016
+2025-07-06 17:05:59 [INFO] __main__: [main] AppAPI.event_bus id: 1545587224016
+2025-07-06 17:05:59 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-06 17:05:59,752] INFO AppRunner: Started app: admin_startup
+2025-07-06 17:05:59 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 17:05:59 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T16:05:59Z'}
+2025-07-06 17:05:59 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-06T16:05:59Z'}
+2025-07-06 17:05:59 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751817959.7549026, 'source': 'hardware.display.mock'}
+2025-07-06 17:06:13 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751817973.9549305}
+2025-07-06 17:06:13 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-06 17:06:13 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-06T16:06:13Z'}
+2025-07-06 17:06:13 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751817973.9759467, 'source': 'hardware.display.mock'}
+2025-07-06 17:06:16 [INFO] EventBus: Event published: input.switch.set | {'value': 4, 'timestamp': 1751817976.814592}
+2025-07-06 17:06:16 [INFO] boss.core.event_handlers: [WebUI] Switch set to 4 via web UI.
+2025-07-06 17:06:16 [INFO] EventBus: Event published: switch_change | {'value': 4, 'previous_value': 2, 'timestamp': '2025-07-06T16:06:16Z'}
+2025-07-06 17:06:16 [INFO] EventBus: Event published: output.display.updated | {'value': '   4', 'timestamp': 1751817976.8404555, 'source': 'hardware.display.mock'}
+2025-07-06 17:06:22 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751817982.5206509}
+2025-07-06 17:06:22 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-06 17:06:22 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 4, 'timestamp': '2025-07-06T16:06:22Z'}
+2025-07-06 17:06:22 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751817982.5669427, 'source': 'hardware.display.mock'}
+2025-07-06 17:06:25 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751817985.9469955}
+2025-07-06 17:06:25 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-06 17:06:25 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 0, 'timestamp': '2025-07-06T16:06:25Z'}
+2025-07-06 17:06:25 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751817985.9841168, 'source': 'hardware.display.mock'}
+2025-07-06 17:06:50 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751818010.0133169}
+2025-07-06 17:06:50 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-06 17:06:50 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 2, 'timestamp': '2025-07-06T16:06:50Z'}
+2025-07-06 17:06:50 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751818010.0489175, 'source': 'hardware.display.mock'}
+2025-07-06 17:07:27 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751818047.6885796}
+2025-07-06 17:07:27 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-06 17:07:36 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751818056.3138404}
+2025-07-06 17:07:36 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:07:36 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 0, 'timestamp': '2025-07-06T16:07:36Z'}
+2025-07-06 17:07:36 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751818056.3290212, 'source': 'hardware.display.mock'}
+2025-07-06 17:10:50 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751818250.6341965}
+2025-07-06 17:10:50 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:10:57 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751818257.8826375}
+2025-07-06 17:10:57 [INFO] boss.core.event_handlers: Button pressed: blue | Payload: {'button_id': 'blue', 'timestamp': 1751818257.8826375}
+2025-07-06 17:11:02 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751818262.400669}
+2025-07-06 17:11:02 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:24:08 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 17:24:08 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 17:24:08 [INFO] __main__: Pin assignments:
+2025-07-06 17:24:08 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 17:24:08 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 17:24:08 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 17:24:08 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 17:24:08 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 17:24:08 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 17:24:08 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 17:24:08 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 17:24:08 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 17:24:08 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 17:24:08 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 17:24:08 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 17:24:08 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 17:24:08 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 17:24:08 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 17:24:08 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-06 17:24:08 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-06 17:24:08 [INFO] __main__: Hardware initialized.
+2025-07-06 17:24:08 [INFO] __main__: Hardware startup summary:
+2025-07-06 17:24:08 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-06 17:24:08 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-06 17:24:09 [INFO] __main__: [setup_api] Using event_bus id: 2774095435472 for AppAPI
+2025-07-06 17:24:09 [INFO] __main__: [main] Main event_bus id: 2774095435472
+2025-07-06 17:24:09 [INFO] __main__: [main] AppAPI.event_bus id: 2774095435472
+2025-07-06 17:24:09 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-06 17:24:09,989] INFO AppRunner: Started app: admin_startup
+2025-07-06 17:24:09 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 17:24:09 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T16:24:09Z'}
+2025-07-06 17:24:09 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-06T16:24:09Z'}
+2025-07-06 17:24:09 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751819049.9926589, 'source': 'hardware.display.mock'}
+2025-07-06 17:24:16 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751819056.6395772}
+2025-07-06 17:24:16 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:24:16 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-06T16:24:16Z'}
+2025-07-06 17:24:16 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751819056.6770995, 'source': 'hardware.display.mock'}
+2025-07-06 17:24:31 [INFO] EventBus: Event published: input.switch.set | {'value': 5, 'timestamp': 1751819071.6053073}
+2025-07-06 17:24:31 [INFO] boss.core.event_handlers: [WebUI] Switch set to 5 via web UI.
+2025-07-06 17:24:31 [INFO] EventBus: Event published: switch_change | {'value': 5, 'previous_value': 3, 'timestamp': '2025-07-06T16:24:31Z'}
+2025-07-06 17:24:31 [INFO] EventBus: Event published: output.display.updated | {'value': '   5', 'timestamp': 1751819071.6482913, 'source': 'hardware.display.mock'}
+2025-07-06 17:24:38 [INFO] EventBus: Event published: input.switch.set | {'value': 6, 'timestamp': 1751819078.834607}
+2025-07-06 17:24:38 [INFO] boss.core.event_handlers: [WebUI] Switch set to 6 via web UI.
+2025-07-06 17:24:38 [INFO] EventBus: Event published: switch_change | {'value': 6, 'previous_value': 5, 'timestamp': '2025-07-06T16:24:38Z'}
+2025-07-06 17:24:38 [INFO] EventBus: Event published: output.display.updated | {'value': '   6', 'timestamp': 1751819078.83711, 'source': 'hardware.display.mock'}
+2025-07-06 17:24:41 [INFO] EventBus: Event published: input.switch.set | {'value': 4, 'timestamp': 1751819081.895076}
+2025-07-06 17:24:41 [INFO] boss.core.event_handlers: [WebUI] Switch set to 4 via web UI.
+2025-07-06 17:24:41 [INFO] EventBus: Event published: switch_change | {'value': 4, 'previous_value': 6, 'timestamp': '2025-07-06T16:24:41Z'}
+2025-07-06 17:24:41 [INFO] EventBus: Event published: output.display.updated | {'value': '   4', 'timestamp': 1751819081.9006119, 'source': 'hardware.display.mock'}
+2025-07-06 17:27:28 [INFO] EventBus: Event published: input.switch.set | {'value': 4, 'timestamp': 1751819248.139943}
+2025-07-06 17:27:28 [INFO] boss.core.event_handlers: [WebUI] Switch set to 4 via web UI.
+2025-07-06 17:29:25 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751819365.2333353}
+2025-07-06 17:29:25 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:29:25 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 4, 'timestamp': '2025-07-06T16:29:25Z'}
+2025-07-06 17:29:25 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751819365.2560117, 'source': 'hardware.display.mock'}
+2025-07-06 17:29:28 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'blue', 'timestamp': 1751819368.991075}
+2025-07-06 17:29:28 [INFO] boss.core.event_handlers: Button pressed: blue | Payload: {'button_id': 'blue', 'timestamp': 1751819368.991075}
+2025-07-06 17:29:29 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'green', 'timestamp': 1751819369.4148254}
+2025-07-06 17:29:29 [INFO] boss.core.event_handlers: Button pressed: green | Payload: {'button_id': 'green', 'timestamp': 1751819369.4148254}
+2025-07-06 17:29:30 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'yellow', 'timestamp': 1751819370.283637}
+2025-07-06 17:29:30 [INFO] boss.core.event_handlers: Button pressed: yellow | Payload: {'button_id': 'yellow', 'timestamp': 1751819370.283637}
+2025-07-06 17:29:30 [INFO] EventBus: Event published: input.button.pressed | {'button_id': 'red', 'timestamp': 1751819370.6671374}
+2025-07-06 17:29:30 [INFO] boss.core.event_handlers: Button pressed: red | Payload: {'button_id': 'red', 'timestamp': 1751819370.6671374}
+2025-07-06 17:29:38 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751819378.2630203}
+2025-07-06 17:29:38 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:32:26 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-06 17:32:26 [INFO] __main__: Initializing hardware interfaces...
+2025-07-06 17:32:26 [INFO] __main__: Pin assignments:
+2025-07-06 17:32:26 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-06 17:32:26 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-06 17:32:26 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-06 17:32:26 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-06 17:32:26 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-06 17:32:26 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-06 17:32:26 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-06 17:32:26 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-06 17:32:26 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-06 17:32:26 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-06 17:32:26 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-06 17:32:26 [INFO] __main__:   MUX1_PIN: 23
+2025-07-06 17:32:26 [INFO] __main__:   MUX2_PIN: 24
+2025-07-06 17:32:26 [INFO] __main__:   MUX3_PIN: 25
+2025-07-06 17:32:26 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-06 17:32:26 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-06 17:32:26 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-06 17:32:26 [INFO] __main__: Hardware initialized.
+2025-07-06 17:32:26 [INFO] __main__: Hardware startup summary:
+2025-07-06 17:32:26 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-06 17:32:26 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-06 17:32:28 [INFO] __main__: [setup_api] Using event_bus id: 2616066476176 for AppAPI
+2025-07-06 17:32:28 [INFO] __main__: [main] Main event_bus id: 2616066476176
+2025-07-06 17:32:28 [INFO] __main__: [main] AppAPI.event_bus id: 2616066476176
+2025-07-06 17:32:28 [INFO] __main__: System running. Press Ctrl+C to exit.
+[2025-07-06 17:32:28,025] INFO AppRunner: Started app: admin_startup
+2025-07-06 17:32:28 [INFO] AppRunner: Started app: admin_startup
+2025-07-06 17:32:28 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-06T16:32:28Z'}
+2025-07-06 17:32:28 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-06T16:32:28Z'}
+2025-07-06 17:32:28 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751819548.0280402, 'source': 'hardware.display.mock'}
+2025-07-06 17:32:35 [INFO] EventBus: Event published: input.switch.set | {'value': 3, 'timestamp': 1751819555.0225139}
+2025-07-06 17:32:35 [INFO] boss.core.event_handlers: [WebUI] Switch set to 3 via web UI.
+2025-07-06 17:32:35 [INFO] EventBus: Event published: switch_change | {'value': 3, 'previous_value': 1, 'timestamp': '2025-07-06T16:32:35Z'}
+2025-07-06 17:32:35 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751819555.0623739, 'source': 'hardware.display.mock'}
+2025-07-06 17:32:37 [INFO] EventBus: Event published: input.switch.set | {'value': 5, 'timestamp': 1751819557.6033304}
+2025-07-06 17:32:37 [INFO] boss.core.event_handlers: [WebUI] Switch set to 5 via web UI.
+2025-07-06 17:32:37 [INFO] EventBus: Event published: switch_change | {'value': 5, 'previous_value': 3, 'timestamp': '2025-07-06T16:32:37Z'}
+2025-07-06 17:32:37 [INFO] EventBus: Event published: output.display.updated | {'value': '   5', 'timestamp': 1751819557.6254668, 'source': 'hardware.display.mock'}
+2025-07-06 17:32:43 [INFO] EventBus: Event published: input.switch.set | {'value': 0, 'timestamp': 1751819563.7189105}
+2025-07-06 17:32:43 [INFO] boss.core.event_handlers: [WebUI] Switch set to 0 via web UI.
+2025-07-06 17:32:43 [INFO] EventBus: Event published: switch_change | {'value': 0, 'previous_value': 5, 'timestamp': '2025-07-06T16:32:43Z'}
+2025-07-06 17:32:43 [INFO] EventBus: Event published: output.display.updated | {'value': '   0', 'timestamp': 1751819563.7590132, 'source': 'hardware.display.mock'}

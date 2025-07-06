@@ -14,6 +14,7 @@ B.O.S.S. is a modular, hardware-driven Python application designed for Raspberry
 - Remote management via a **secure REST API**
 - Emulated mode for development on non-RPi systems
 
+
 ## 🚀 Getting Started
 
 1. Clone this repo:
@@ -37,7 +38,12 @@ B.O.S.S. is a modular, hardware-driven Python application designed for Raspberry
    python3 -m boss.main
    ```
 
-## 🧩 Mini-App Examples
+5. Open the Web UI debug dashboard in your browser:
+   ```
+   http://localhost:8070/
+   ```
+
+## 🛩️ Mini-App Examples
 
 Mini-apps can be anything—simple games, jokes, fractal displays, soundboards, clocks, text-to-speech, or interactive toys.
 

@@ -40,16 +40,10 @@ class WebSocketManager:
                 state[k] = str(v)
         return state
 
-    def push_event(self, event):
-        import asyncio
+    async def push_event(self, event):
         # Always push the event itself
-        task1 = asyncio.create_task(self.broadcast({"event": event}))
+        await self.broadcast({"event": event})
         # Always push the latest hardware state after any event
         state = self.get_full_state()
-        task2 = asyncio.create_task(self.broadcast({"event": "hardware_state", "state": state}))
-        # Save tasks to prevent premature garbage collection
-        if not hasattr(self, '_tasks'):
-            self._tasks = set()
-        self._tasks.update([task1, task2])
-        task1.add_done_callback(lambda t: self._tasks.discard(t))
-        task2.add_done_callback(lambda t: self._tasks.discard(t))
+        print("[WS] hardware_state:", state)  # DEBUG: print hardware state being sent
+        await self.broadcast({"event": "hardware_state", "state": state})

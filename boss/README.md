@@ -13,6 +13,7 @@ This is the main application package for B.O.S.S., a modular, hardware-interfaci
 - `scripts/`: Utility scripts
 - `docs/`: Documentation
 
+
 ## Getting Started
 1. Install Python 3.11+ and create a virtual environment.
 2. Install dependencies from `requirements.txt`.
@@ -20,6 +21,9 @@ This is the main application package for B.O.S.S., a modular, hardware-interfaci
 4. Ensure the pigpio daemon is running for GPIO hardware:
    sudo systemctl start pigpiod
 5. Run `python -m boss.main` from the project root to start the system.
+
+6. Open the Web UI debug dashboard in your browser:
+   http://localhost:8070/
 
 **Note:**
 - Always run the app from the project root (not from inside the boss/boss subfolder).

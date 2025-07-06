@@ -366,8 +366,7 @@ def main():
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
 
     # Register event handlers using imported functions (all async for non-blocking operation)
-    event_bus.subscribe(
-        "output.display.set",
+    event_bus.subscribe("output.display.set",
         lambda event_type, payload: display.show_message(str(payload.get("text"))) if display and hasattr(display, 'show_message') and payload.get("text") is not None else None,
         mode="async"
     )
@@ -376,7 +375,9 @@ def main():
     event_bus.subscribe("input.button.pressed", event_handlers.handle_button_pressed(), mode="async")
     # Subscribe go button handler for launching apps (main button only)
     event_bus.subscribe("input.button.pressed", event_handlers.on_go_button_pressed(switch, app_mappings, app_runner, api), mode="async")
+    # Use consolidated display update handler for switch_change only (input.switch.set triggers switch_change via APISwitchReader)
     event_bus.subscribe("switch_change", event_handlers.handle_display_update(seg_display), mode="async")
+    # Remove redundant input.switch.set display update; only update switch state
     event_bus.subscribe("input.switch.set", event_handlers.handle_switch_set(switch, display), mode="async")
     event_bus.subscribe(
         "system_shutdown",
@@ -386,10 +387,16 @@ def main():
 
     # --- Web UI event bus integration ---
     try:
+        import asyncio
         from boss.webui.server import ws_manager
+        loop = asyncio.get_event_loop()
         def push_all_events(event_type, payload):
-            ws_manager.push_event({"type": event_type, "payload": payload})
-        event_bus.subscribe("*", push_all_events)  # Subscribe to all events
+            coro = ws_manager.push_event({"type": event_type, "payload": payload})
+            try:
+                asyncio.run_coroutine_threadsafe(coro, loop)
+            except Exception as e:
+                logger.warning(f"Failed to schedule ws_manager.push_event: {e}")
+        event_bus.subscribe("*", push_all_events, mode="async")  # Subscribe to all events
         ws_manager.hardware["api"] = api
         ws_manager.hardware["event_bus"] = event_bus
     except Exception as e:

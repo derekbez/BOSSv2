@@ -145,6 +145,7 @@ muxInpin = 8  #          blue
 
 - **Startup:**
   - Run from project root: `python3 -m boss.main`
+  - Open the Web UI debug dashboard at [http://localhost:8070/](http://localhost:8070/) for live hardware and event inspection
   - Can be started manually or as a systemd service (see `docs/install-steps.md`)
 
 - **Testing:**
