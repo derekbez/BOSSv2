@@ -38,6 +38,7 @@ class WebSocketManager:
         self.active_connections: List[WebSocket] = []
         self.hardware_dict: Dict[str, Any] = {}
         self.event_bus = None
+        self.loop = None
         
     def set_hardware(self, hardware_dict: Dict[str, Any], event_bus):
         """Set the hardware dictionary and event bus reference."""
@@ -50,16 +51,39 @@ class WebSocketManager:
             event_bus.subscribe("output.display.updated", self._on_display_changed)
             event_bus.subscribe("output.screen.updated", self._on_screen_changed)
             event_bus.subscribe("input.switch.changed", self._on_switch_changed)
+            event_bus.subscribe("switch_change", self._on_switch_changed)  # Also listen for switch_change events
+            # Additional screen events
+            event_bus.subscribe("screen.update", self._on_screen_changed)
+            event_bus.subscribe("screen.display", self._on_screen_changed)
+            event_bus.subscribe("screen.output", self._on_screen_changed)
+            # Display events
+            event_bus.subscribe("display.update", self._on_display_changed)
+            event_bus.subscribe("output.display.set", self._on_display_changed)
     
     async def connect(self, websocket: WebSocket):
         """Accept a new WebSocket connection."""
-        await websocket.accept()
-        self.active_connections.append(websocket)
-        logger.info(f"WebSocket connected. Total connections: {len(self.active_connections)}")
-        
-        # Send initial hardware state
-        await self._send_initial_state(websocket)
-    
+        try:
+            await websocket.accept()
+            self.active_connections.append(websocket)
+            
+            # Store the event loop when we first get an async context
+            if self.loop is None:
+                import asyncio
+                try:
+                    self.loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    self.loop = asyncio.get_event_loop()
+            
+            logger.info(f"WebSocket connected. Total connections: {len(self.active_connections)}")
+            
+            # Send initial hardware state
+            await self._send_initial_state(websocket)
+            
+        except Exception as e:
+            logger.error(f"Failed to connect WebSocket: {e}")
+            if websocket in self.active_connections:
+                self.active_connections.remove(websocket)
+
     def disconnect(self, websocket: WebSocket):
         """Remove a WebSocket connection."""
         if websocket in self.active_connections:
@@ -76,7 +100,7 @@ class WebSocketManager:
             try:
                 await connection.send_text(json.dumps(message))
             except Exception as e:
-                logger.warning(f"Failed to send message to client: {e}")
+                logger.debug(f"Failed to send message to client: {e}")
                 disconnected.append(connection)
         
         # Remove disconnected clients
@@ -121,71 +145,86 @@ class WebSocketManager:
         else:
             state['switch_value'] = 0
         
-        # Screen state (basic text content)
+        # Screen state (check multiple possible attributes)
         screen = self.hardware_dict.get('screen')
-        if screen and hasattr(screen, 'last_output'):
-            state['screen_content'] = str(screen.last_output or "")
+        if screen:
+            # Try different attributes that might contain screen content
+            content = ""
+            if hasattr(screen, 'last_output'):
+                content = str(screen.last_output or "")
+            elif hasattr(screen, 'current_content'):
+                content = str(screen.current_content or "")
+            elif hasattr(screen, 'buffer'):
+                content = str(screen.buffer or "")
+            elif hasattr(screen, 'content'):
+                content = str(screen.content or "")
+            state['screen_content'] = content
         else:
             state['screen_content'] = ""
         
         return state
     
+    def _schedule_broadcast(self, message: dict):
+        """Schedule a broadcast message, handling different thread contexts."""
+        import asyncio
+        
+        if not self.active_connections:
+            return  # No connections, skip broadcast
+            
+        try:
+            # Try to get the current running loop
+            try:
+                current_loop = asyncio.get_running_loop()
+                # If we're in the same loop as stored, create task directly
+                if self.loop and current_loop == self.loop:
+                    asyncio.create_task(self.broadcast(message))
+                elif self.loop and self.loop.is_running():
+                    # We're in a different thread, schedule on the stored loop
+                    asyncio.run_coroutine_threadsafe(self.broadcast(message), self.loop)
+                else:
+                    logger.warning("No valid event loop available for broadcast")
+            except RuntimeError:
+                # No running loop in current thread
+                if self.loop and self.loop.is_running():
+                    # Schedule on the stored loop from another thread
+                    asyncio.run_coroutine_threadsafe(self.broadcast(message), self.loop)
+                else:
+                    logger.warning("No event loop available for WebSocket broadcast")
+        except Exception as e:
+            logger.error(f"Failed to schedule broadcast: {e}")
+
     # Event handlers for real-time updates
     def _on_led_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle LED state change events."""
-        try:
-            import asyncio
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.create_task(self.broadcast({
-                    "event": "led_changed",
-                    "payload": payload,
-                    "timestamp": time.time()
-                }))
-        except Exception as e:
-            logger.warning(f"Failed to broadcast LED event: {e}")
-    
+        self._schedule_broadcast({
+            "event": "led_changed",
+            "payload": payload,
+            "timestamp": time.time()
+        })
+
     def _on_display_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle display update events."""
-        try:
-            import asyncio
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.create_task(self.broadcast({
-                    "event": "display_changed", 
-                    "payload": payload,
-                    "timestamp": time.time()
-                }))
-        except Exception as e:
-            logger.warning(f"Failed to broadcast display event: {e}")
-    
+        self._schedule_broadcast({
+            "event": "display_changed",
+            "payload": payload,
+            "timestamp": time.time()
+        })
+
     def _on_screen_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle screen update events."""
-        try:
-            import asyncio
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.create_task(self.broadcast({
-                    "event": "screen_changed",
-                    "payload": payload, 
-                    "timestamp": time.time()
-                }))
-        except Exception as e:
-            logger.warning(f"Failed to broadcast screen event: {e}")
-    
+        self._schedule_broadcast({
+            "event": "screen_changed",
+            "payload": payload,
+            "timestamp": time.time()
+        })
+
     def _on_switch_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle switch change events."""
-        try:
-            import asyncio
-            loop = asyncio.get_event_loop()
-            if loop.is_running():
-                asyncio.create_task(self.broadcast({
-                    "event": "switch_changed",
-                    "payload": payload,
-                    "timestamp": time.time()
-                }))
-        except Exception as e:
-            logger.warning(f"Failed to broadcast switch event: {e}")
+        self._schedule_broadcast({
+            "event": "switch_changed",
+            "payload": payload,
+            "timestamp": time.time()
+        })
 
 # Global WebSocket manager instance
 ws_manager = WebSocketManager()
@@ -207,7 +246,7 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         """Serve the main HTML page."""
         html_path = static_path / "index.html"
         if html_path.exists():
-            return html_path.read_text()
+            return html_path.read_text(encoding="utf-8")
         else:
             return """
             <html>
@@ -239,7 +278,12 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if button_id not in valid_buttons:
             raise HTTPException(status_code=400, detail=f"Invalid button: {button_id}")
         
-        button = hardware_dict.get(f'btn_{button_id}')
+        # Handle the special case for main button which is stored as 'main_btn'
+        if button_id == 'main':
+            button = hardware_dict.get('main_btn')
+        else:
+            button = hardware_dict.get(f'btn_{button_id}')
+            
         if not button:
             raise HTTPException(status_code=404, detail=f"Button {button_id} not found")
         
@@ -310,9 +354,21 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if not screen:
             raise HTTPException(status_code=404, detail="Screen not found")
         
-        # Set screen content
+        # Set screen content using various methods
         if hasattr(screen, 'display_text'):
             screen.display_text(request.text)
+        elif hasattr(screen, 'show_text'):
+            screen.show_text(request.text)
+        elif hasattr(screen, 'print'):
+            screen.print(request.text)
+        
+        # Manually trigger screen update event for web UI
+        if event_bus:
+            event_bus.publish("screen_update", {
+                "text": request.text,
+                "screen_content": request.text,
+                "timestamp": time.time()
+            })
         
         return {"status": "success", "text": request.text}
     
@@ -326,6 +382,15 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         # Clear screen
         if hasattr(screen, 'clear'):
             screen.clear()
+        
+        # Manually trigger screen clear event for web UI
+        if event_bus:
+            event_bus.publish("screen_update", {
+                "text": "",
+                "screen_content": "",
+                "action": "clear",
+                "timestamp": time.time()
+            })
         
         return {"status": "success", "action": "cleared"}
     
