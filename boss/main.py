@@ -188,26 +188,26 @@ def initialize_hardware(event_bus):
         btn_green = try_init(PiButton, APIButton, BTN_GREEN_PIN, 'btn_green', event_bus=event_bus, button_id="green")
         btn_blue = try_init(PiButton, APIButton, BTN_BLUE_PIN, 'btn_blue', event_bus=event_bus, button_id="blue")
         main_btn = try_init(PiButton, APIButton, MAIN_BTN_PIN, 'main_btn', event_bus=event_bus, button_id="main")
-        led_red = try_init(PiLED, PiLED, LED_RED_PIN, 'led_red')
-        led_yellow = try_init(PiLED, PiLED, LED_YELLOW_PIN, 'led_yellow')
-        led_green = try_init(PiLED, PiLED, LED_GREEN_PIN, 'led_green')
-        led_blue = try_init(PiLED, PiLED, LED_BLUE_PIN, 'led_blue')
+        led_red = try_init(lambda pin: PiLED(pin, "red", event_bus), lambda pin: MockLED("red", event_bus), LED_RED_PIN, 'led_red')
+        led_yellow = try_init(lambda pin: PiLED(pin, "yellow", event_bus), lambda pin: MockLED("yellow", event_bus), LED_YELLOW_PIN, 'led_yellow')
+        led_green = try_init(lambda pin: PiLED(pin, "green", event_bus), lambda pin: MockLED("green", event_bus), LED_GREEN_PIN, 'led_green')
+        led_blue = try_init(lambda pin: PiLED(pin, "blue", event_bus), lambda pin: MockLED("blue", event_bus), LED_BLUE_PIN, 'led_blue')
         try:
-            display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN)
+            display = PiSevenSegmentDisplay(TM_CLK_PIN, TM_DIO_PIN, event_bus=event_bus)
             display.show_message("BOSS")
             hardware_status['display'] = 'OK'
         except Exception as e:
-            display = MockSevenSegmentDisplay()
+            display = MockSevenSegmentDisplay(event_bus=event_bus)
             display.show_message("MOCK")
             hardware_status['display'] = f"MOCK ({e})"
         try:
-            switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN)
+            switch_reader = PiSwitchReader([MUX1_PIN, MUX2_PIN, MUX3_PIN], MUX_IN_PIN, event_bus=event_bus)
             switch_reader.read_value()
             hardware_status['switch_reader'] = 'OK'
         except Exception as e:
-            switch_reader = APISwitchReader(1)
+            switch_reader = APISwitchReader(1, event_bus=event_bus)
             hardware_status['switch_reader'] = f"MOCK ({e})"
-        screen = get_screen()
+        screen = get_screen(event_bus=event_bus)
         logger.info(f"Screen: {type(screen).__name__} initialized (HDMI framebuffer)")
     else:
         btn_red = APIButton("red", event_bus=event_bus, button_id="red")
@@ -215,13 +215,13 @@ def initialize_hardware(event_bus):
         btn_green = APIButton("green", event_bus=event_bus, button_id="green")
         btn_blue = APIButton("blue", event_bus=event_bus, button_id="blue")
         main_btn = APIButton("main", event_bus=event_bus, button_id="main")
-        led_red = MockLED("red")
-        led_yellow = MockLED("yellow")
-        led_green = MockLED("green")
-        led_blue = MockLED("blue")
-        display = MockSevenSegmentDisplay()
-        switch_reader = APISwitchReader(1)
-        screen = get_screen()
+        led_red = MockLED("red", event_bus=event_bus)
+        led_yellow = MockLED("yellow", event_bus=event_bus)
+        led_green = MockLED("green", event_bus=event_bus)
+        led_blue = MockLED("blue", event_bus=event_bus)
+        display = MockSevenSegmentDisplay(event_bus=event_bus)
+        switch_reader = APISwitchReader(1, event_bus=event_bus)
+        screen = get_screen(event_bus=event_bus)
         logger.info(f"Screen: {type(screen).__name__} initialized (dev mode)")
         mock_hardware_dict = {
             'btn_red': btn_red,
@@ -251,14 +251,6 @@ def initialize_hardware(event_bus):
     for k, v in hardware_status.items():
         #print(f"  {k}: {v}")
         logger.info(f"  {k}: {v}")
-    # --- Startup LED blink and welcome message ---
-    try:
-        display.show_message("BOSS")
-        time.sleep(1.0)
-        display.show_message("----")
-        time.sleep(0.5)
-    except Exception as e:
-        logger.warning(f"Display welcome message failed: {e}")
 
 def cleanup():
     logger.info("Performing clean shutdown and resource cleanup...")
@@ -349,15 +341,9 @@ def main():
     global event_bus, app_mappings, switch, seg_display, app_runner, api
     event_bus = setup_event_bus()
     initialize_hardware(event_bus)  # Pass event_bus to hardware init
-    # Inject event_bus into display if supported
-    if display and hasattr(display, 'event_bus'):
-        try:
-            display.event_bus = event_bus
-        except Exception:
-            pass
     app_mappings = load_config()
     switch = switch_reader if switch_reader else MockSwitchReader(1)
-    seg_display = display if display else MockSevenSegmentDisplay()
+    seg_display = display  # Use the display object from initialize_hardware
     app_runner = AppRunner(event_bus=event_bus)
     api = setup_api(event_bus)
     logger.info(f"[main] Main event_bus id: {id(event_bus)}")
@@ -367,7 +353,7 @@ def main():
 
     # Register event handlers using imported functions (all async for non-blocking operation)
     event_bus.subscribe("output.display.set",
-        lambda event_type, payload: display.show_message(str(payload.get("text"))) if display and hasattr(display, 'show_message') and payload.get("text") is not None else None,
+        lambda event_type, payload: display.show_message(str(payload.get("text", payload.get("value", "")))) if display and hasattr(display, 'show_message') and (payload.get("text") is not None or payload.get("value") is not None) else None,
         mode="async"
     )
     event_bus.subscribe("output.led.set", event_handlers.handle_led_set(led_red, led_yellow, led_green, led_blue), mode="async")
@@ -391,16 +377,34 @@ def main():
         from boss.webui.server import ws_manager
         loop = asyncio.get_event_loop()
         def push_all_events(event_type, payload):
+            logger.info(f"[DEBUG] push_all_events called for event_type={event_type}, payload={payload}")
+            print(f"[DEBUG] push_all_events called for event_type={event_type}, payload={payload}")
             coro = ws_manager.push_event({"type": event_type, "payload": payload})
             try:
-                asyncio.run_coroutine_threadsafe(coro, loop)
+                fut = asyncio.run_coroutine_threadsafe(coro, loop)
+                fut.add_done_callback(lambda f: logger.info(f"[DEBUG] ws_manager.push_event done for event_type={event_type}"))
             except Exception as e:
                 logger.warning(f"Failed to schedule ws_manager.push_event: {e}")
         event_bus.subscribe("*", push_all_events, mode="async")  # Subscribe to all events
         ws_manager.hardware["api"] = api
         ws_manager.hardware["event_bus"] = event_bus
+        # Register all hardware objects for state tracking
+        ws_manager.hardware["display"] = display
+        ws_manager.hardware["led_red"] = led_red
+        ws_manager.hardware["led_yellow"] = led_yellow
+        ws_manager.hardware["led_green"] = led_green
+        ws_manager.hardware["led_blue"] = led_blue
+        ws_manager.hardware["switch"] = switch
+        logger.info(f"[DEBUG] Registered hardware objects with WebSocket manager")
     except Exception as e:
         logger.warning(f"Web UI event bus integration failed: {e}")
+
+    # --- Display welcome message after all setup is complete ---
+    try:
+        if display:
+            display.show_message("----")  # Simple default state, single event
+    except Exception as e:
+        logger.warning(f"Display welcome message failed: {e}")
 
     # Start admin_startup app
     start_admin_startup_app(app_runner, api)

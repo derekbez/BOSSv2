@@ -54,7 +54,7 @@ class EventBus:
         return False
 
     def publish(self, event_type: str, payload: dict):
-        """Publish an event to all subscribers. Adds timestamp if not present. Honors logging config, filtering, and async mode."""
+        """Publish an event to all subscribers. Adds timestamp if not present. Honors logging config, filtering, and async mode. Supports '*' wildcard subscriptions."""
         import threading
         payload = dict(payload)  # Copy to avoid mutation
         if "timestamp" not in payload:
@@ -64,6 +64,7 @@ class EventBus:
         if log_this_event:
             self._logger.info(f"Event published: {event_type} | {payload}")
         with self._lock:
+            # Subscribers for this event type
             for sub in self._subscribers.get(event_type, []):
                 filt = sub.get("filter")
                 if filt:
@@ -78,6 +79,20 @@ class EventBus:
                         sub["callback"](event_type, payload)
                     except Exception as e:
                         self._logger.error(f"Error in subscriber for {event_type}: {e}")
+            # Subscribers for all events ('*')
+            for sub in self._subscribers.get("*", []):
+                filt = sub.get("filter")
+                if filt:
+                    if not all(payload.get(k) == v for k, v in filt.items()):
+                        continue
+                mode = sub.get("mode", "sync")
+                if mode == "async":
+                    threading.Thread(target=sub["callback"], args=(event_type, payload), daemon=True).start()
+                else:
+                    try:
+                        sub["callback"](event_type, payload)
+                    except Exception as e:
+                        self._logger.error(f"Error in subscriber for *: {e}")
 
     # System shutdown and error event publishing helpers
     def publish_system_shutdown(self, reason: str):

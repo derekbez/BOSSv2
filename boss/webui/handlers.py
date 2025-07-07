@@ -1,4 +1,5 @@
 from fastapi import Request
+import platform
 
 
 # --- Web UI API route handlers for BOSS debug dashboard ---

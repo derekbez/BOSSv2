@@ -74,5 +74,7 @@ class PiLED:
         self.set_state(True)
     def off(self):
         self.set_state(False)
+    def is_on(self):
+        return self._led.is_on()
     def close(self):
         self._led.close()

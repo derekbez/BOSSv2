@@ -25,10 +25,20 @@ function connectWS() {
             if (msg.event === "hardware_state" && msg.state) {
                 updateOutputState(msg.state);
                 if (msg.state.screen) updateScreenEmulator(msg.state.screen);
-            } else if (msg.event === "output.display.updated" && msg.event) {
-                // Also update display directly if event is output.display.updated
-                if (msg.event && msg.payload && msg.payload.value !== undefined) {
+            } else if (msg.event === "output.display.updated") {
+                // Handle display update events
+                if (msg.payload && msg.payload.value !== undefined) {
                     updateOutputState({ display: msg.payload.value });
+                } else if (msg.type === "output.display.updated" && msg.payload && msg.payload.value !== undefined) {
+                    updateOutputState({ display: msg.payload.value });
+                }
+                addEvent(msg);
+            } else if (msg.event === "output.led.state_changed" && msg.payload) {
+                // Handle LED state change events
+                if (msg.payload.led_id && msg.payload.state !== undefined) {
+                    const ledState = {};
+                    ledState[`led_${msg.payload.led_id}`] = msg.payload.state === "on";
+                    updateOutputState(ledState);
                 }
                 addEvent(msg);
             } else if (msg.event === "screen_update" && msg.screen) {
@@ -47,36 +57,20 @@ function connectWS() {
 // Update output state (LEDs, display, etc) in real time from events
 function updateOutputState(state) {
     console.log('[UI] updateOutputState called with:', state); // DEBUG
+    // Update 7-segment display
+    const displayElem = document.getElementById('display-value');
+    if (displayElem && state.display !== undefined) {
+        displayElem.textContent = state.display;
+    }
     // Update LED indicators
     ['red','yellow','green','blue'].forEach(color => {
         const ledElem = document.getElementById(`led-${color}`);
         if (ledElem) {
             const led = state[`led_${color}`];
             ledElem.textContent = led ? 'ON' : 'OFF';
-            ledElem.style.color = color;
-            ledElem.style.fontWeight = 'bold';
+            ledElem.classList.toggle('on', !!led);
         }
     });
-    // Update 7-segment display
-    if (state.display !== undefined) {
-        const displayElem = document.getElementById('display-value');
-        if (displayElem) {
-            displayElem.textContent = state.display;
-        }
-    }
-    // Fallback: if output-state element exists and no per-LED/display elements, update legacy HTML
-    const outputStateElem = document.getElementById('output-state');
-    if (outputStateElem && !document.getElementById('led-red')) {
-        let html = '';
-        ['red','yellow','green','blue'].forEach(color => {
-            let led = state[`led_${color}`];
-            html += `<div><b>LED ${color}:</b> <span style="color:${color};font-weight:bold">${led ? 'ON' : 'OFF'}</span></div>`;
-        });
-        if (state.display !== undefined) {
-            html += `<div><b>7-Segment Display:</b> <span>${state.display}</span></div>`;
-        }
-        outputStateElem.innerHTML = html;
-    }
 }
 
 // Emulate the screen (draw text or image to canvas)
