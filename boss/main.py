@@ -1,5 +1,3 @@
-# --- Web UI for debugging (only in mock mode) ---
-# (Removed maybe_start_web_ui, now handled in hardware init)
 """
 B.O.S.S. Main Entry Point
 Initializes core systems, logging, hardware, and handles clean shutdown.
@@ -13,6 +11,7 @@ import logging
 import logging.handlers
 import time
 import os
+import platform
 
 # --- BOSS imports ---
 from boss.core.logger import get_logger
@@ -21,42 +20,29 @@ from boss.core.app_runner import AppRunner
 from boss.core.event_bus import EventBus
 from boss.core.event_bus_config import EventBusConfig
 from boss.hardware.pins import *
+from boss.core.config import CONFIG_PATH
 from boss.hardware.display import MockSevenSegmentDisplay, PiSevenSegmentDisplay
 from boss.hardware.switch_reader import MockSwitchReader, PiSwitchReader, APISwitchReader
-from boss.hardware.button import APIButton
 from boss.hardware.screen import get_screen
-from boss.core.paths import CONFIG_PATH
+from boss.apps.admin_startup.main import run as run_admin_startup
 
-# Web UI debug dashboard import (only used in mock mode)
-def start_web_ui(hardware):
-    try:
-        from boss.webui.main import start_web_ui as _start_web_ui
-        _start_web_ui(hardware)
-    except Exception as e:
-        logger.warning(f"Could not start web UI debug dashboard: {e}")
-
-# --- Hardware import fallback logic ---
-
-# Import SwitchMonitor (no hardware dependency)
-from boss.hardware.switch_monitor import SwitchMonitor
-
-
-# Try to import real hardware libraries, fallback to mocks if unavailable
-
-# Hardware abstraction: always use mocks on non-Linux or if import fails
-import platform
-if platform.system() == "Linux":
-    try:
-        from gpiozero import Button as PiButton, LED as PiLED
-        REAL_HARDWARE = True
-    except ImportError:
-        from boss.hardware.button import MockButton as PiButton
-        from boss.hardware.led import MockLED as PiLED
-        REAL_HARDWARE = False
-else:
-    from boss.hardware.button import MockButton as PiButton
-    from boss.hardware.led import MockLED as PiLED
-    REAL_HARDWARE = False
+# --- Global variables ---
+# (Note: Globals are used here for simplicity in a single-threaded main script.
+# In a more complex app, consider a state management class.)
+# Hardware device instances (global for cleanup)
+btn_red = None
+btn_yellow = None
+btn_green = None
+btn_blue = None
+main_btn = None
+led_red = None
+led_yellow = None
+led_green = None
+led_blue = None
+display = None
+switch_reader = None
+screen = None
+api = None
 
 # Configure logging ONCE for the whole application
 def setup_logging():
@@ -85,19 +71,20 @@ def setup_logging():
 setup_logging()
 logger = logging.getLogger(__name__)
 
-# Hardware device instances (global for cleanup)
-btn_red = None
-btn_yellow = None
-btn_green = None
-btn_blue = None
-main_btn = None
-led_red = None
-led_yellow = None
-led_green = None
-led_blue = None
-display = None
-switch_reader = None
-screen = None
+# --- Define constants and fallbacks ---
+# Default to False for REAL_HARDWARE if not available from pins module
+REAL_HARDWARE = False
+
+# Define SwitchMonitor fallback
+class SwitchMonitor:
+    """Fallback SwitchMonitor for when the real implementation is not available"""
+    def __init__(self, switch_reader, event_bus):
+        self.switch_reader = switch_reader
+        self.event_bus = event_bus
+        logger.info("Fallback SwitchMonitor initialized")
+    
+    def start(self):
+        logger.info("Fallback SwitchMonitor.start() called - no monitoring active")
 
 def hide_os_cursor():
     """Hide the OS-level blinking cursor on the main console (tty1), only if running on tty1."""
@@ -128,61 +115,64 @@ def show_os_cursor():
         logger.warning(f"Failed to re-enable OS cursor: {e}")
 
 
-# --- Refactored hardware initialization for lower complexity and no pygame ---
+# --- Hardware Initialization ---
 def initialize_hardware(event_bus):
-    """Initialize all hardware and start web UI in mock mode. Requires event_bus as argument."""
+    """
+    Initialize all hardware and start web UI in mock mode. Requires event_bus as argument.
+    """
     global btn_red, btn_yellow, btn_green, btn_blue, main_btn
     global led_red, led_yellow, led_green, led_blue
-    global display, switch_reader, screen
-    logger.info("Initializing hardware interfaces...")
+    global display, switch_reader, screen, api
     hardware_status = {}
-    pin_info = {
-        'BTN_RED_PIN': BTN_RED_PIN,
-        'BTN_YELLOW_PIN': BTN_YELLOW_PIN,
-        'BTN_GREEN_PIN': BTN_GREEN_PIN,
-        'BTN_BLUE_PIN': BTN_BLUE_PIN,
-        'MAIN_BTN_PIN': MAIN_BTN_PIN,
-        'LED_RED_PIN': LED_RED_PIN,
-        'LED_YELLOW_PIN': LED_YELLOW_PIN,
-        'LED_GREEN_PIN': LED_GREEN_PIN,
-        'LED_BLUE_PIN': LED_BLUE_PIN,
-        'TM_CLK_PIN': TM_CLK_PIN,
-        'TM_DIO_PIN': TM_DIO_PIN,
-        'MUX1_PIN': MUX1_PIN,
-        'MUX2_PIN': MUX2_PIN,
-        'MUX3_PIN': MUX3_PIN,
-        'MUX_IN_PIN': MUX_IN_PIN,
-    }
-    logger.info("Pin assignments:")
-    for name, val in pin_info.items():
-        logger.info(f"  {name}: {val}")
 
-    def try_init(real_ctor, fallback_ctor, arg, status_key, event_bus=None, button_id=None):
-        try:
-            # If the constructor supports event_bus, pass it
-            if event_bus is not None and button_id is not None:
-                obj = real_ctor(arg, event_bus=event_bus, button_id=button_id)
-            elif event_bus is not None:
-                obj = real_ctor(arg, event_bus=event_bus)
-            else:
-                obj = real_ctor(arg)
-            hardware_status[status_key] = 'OK'
-            return obj
-        except Exception as e:
-            # Fallback to mock
-            if event_bus is not None and button_id is not None:
-                obj = fallback_ctor(button_id, event_bus=event_bus, button_id=button_id)
-            elif event_bus is not None:
-                obj = fallback_ctor(button_id, event_bus=event_bus)
-            else:
-                obj = fallback_ctor(button_id)
-            hardware_status[status_key] = f"MOCK ({e})"
-            return obj
-
-    # event_bus must be set before calling this function
-    from boss.hardware.button import APIButton, PiButton
-    from boss.hardware.led import MockLED, PiLED
     if REAL_HARDWARE:
+        logger.info("Initializing real hardware interfaces...")
+        pin_info = {
+            'BTN_RED_PIN': BTN_RED_PIN,
+            'BTN_YELLOW_PIN': BTN_YELLOW_PIN,
+            'BTN_GREEN_PIN': BTN_GREEN_PIN,
+            'BTN_BLUE_PIN': BTN_BLUE_PIN,
+            'MAIN_BTN_PIN': MAIN_BTN_PIN,
+            'LED_RED_PIN': LED_RED_PIN,
+            'LED_YELLOW_PIN': LED_YELLOW_PIN,
+            'LED_GREEN_PIN': LED_GREEN_PIN,
+            'LED_BLUE_PIN': LED_BLUE_PIN,
+            'TM_CLK_PIN': TM_CLK_PIN,
+            'TM_DIO_PIN': TM_DIO_PIN,
+            'MUX1_PIN': MUX1_PIN,
+            'MUX2_PIN': MUX2_PIN,
+            'MUX3_PIN': MUX3_PIN,
+            'MUX_IN_PIN': MUX_IN_PIN,
+        }
+        logger.info("Pin assignments:")
+        for name, val in pin_info.items():
+            logger.info(f"  {name}: {val}")
+
+        def try_init(real_ctor, fallback_ctor, arg, status_key, event_bus=None, button_id=None):
+            try:
+                # If the constructor supports event_bus, pass it
+                if event_bus is not None and button_id is not None:
+                    obj = real_ctor(arg, event_bus=event_bus, button_id=button_id)
+                elif event_bus is not None:
+                    obj = real_ctor(arg, event_bus=event_bus)
+                else:
+                    obj = real_ctor(arg)
+                hardware_status[status_key] = 'OK'
+                return obj
+            except Exception as e:
+                # Fallback to mock
+                if event_bus is not None and button_id is not None:
+                    obj = fallback_ctor(button_id, event_bus=event_bus, button_id=button_id)
+                elif event_bus is not None:
+                    obj = fallback_ctor(button_id, event_bus=event_bus)
+                else:
+                    obj = fallback_ctor(button_id)
+                hardware_status[status_key] = f"MOCK ({e})"
+                return obj
+
+        # event_bus must be set before calling this function
+        from boss.hardware.button import APIButton, PiButton
+        from boss.hardware.led import MockLED, PiLED
         btn_red = try_init(PiButton, APIButton, BTN_RED_PIN, 'btn_red', event_bus=event_bus, button_id="red")
         btn_yellow = try_init(PiButton, APIButton, BTN_YELLOW_PIN, 'btn_yellow', event_bus=event_bus, button_id="yellow")
         btn_green = try_init(PiButton, APIButton, BTN_GREEN_PIN, 'btn_green', event_bus=event_bus, button_id="green")
@@ -210,6 +200,12 @@ def initialize_hardware(event_bus):
         screen = get_screen(event_bus=event_bus)
         logger.info(f"Screen: {type(screen).__name__} initialized (HDMI framebuffer)")
     else:
+        # --- Mock Hardware Initialization for Dev/Testing ---
+        logger.info("Real hardware not detected or running in dev mode. Using mock hardware.")
+        # Import mock classes locally
+        from boss.hardware.button import APIButton
+        from boss.hardware.led import MockLED
+        
         btn_red = APIButton("red", event_bus=event_bus, button_id="red")
         btn_yellow = APIButton("yellow", event_bus=event_bus, button_id="yellow")
         btn_green = APIButton("green", event_bus=event_bus, button_id="green")
@@ -223,34 +219,9 @@ def initialize_hardware(event_bus):
         switch_reader = APISwitchReader(1, event_bus=event_bus)
         screen = get_screen(event_bus=event_bus)
         logger.info(f"Screen: {type(screen).__name__} initialized (dev mode)")
-        mock_hardware_dict = {
-            'btn_red': btn_red,
-            'btn_yellow': btn_yellow,
-            'btn_green': btn_green,
-            'btn_blue': btn_blue,
-            'main_btn': main_btn,
-            'led_red': led_red,
-            'led_yellow': led_yellow,
-            'led_green': led_green,
-            'led_blue': led_blue,
-            'display': display,
-            'switch_reader': switch_reader,
-            'switch': switch_reader,  # Add alias for web UI compatibility
-            'screen': screen,
-        }
-        try:
-            start_web_ui(mock_hardware_dict)
-            logger.info("[BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)")
-        except Exception as e:
-            logger.warning(f"Could not start web UI debug dashboard: {e}")
-        for k in mock_hardware_dict:
-            hardware_status[k] = 'MOCK (dev mode)'
 
     logger.info("Hardware initialized.")
-    logger.info("Hardware startup summary:")
-    for k, v in hardware_status.items():
-        #print(f"  {k}: {v}")
-        logger.info(f"  {k}: {v}")
+    return hardware_status
 
 def cleanup():
     logger.info("Performing clean shutdown and resource cleanup...")
@@ -302,8 +273,9 @@ def setup_api(event_bus):
     from boss.core.api import AppAPI
     leds = {'red': led_red, 'yellow': led_yellow, 'green': led_green, 'blue': led_blue}
     buttons = {'red': btn_red, 'yellow': btn_yellow, 'green': btn_green, 'blue': btn_blue}
-    # Always inject the real event_bus (main event_bus)
-    api = AppAPI(screen=screen, buttons=buttons, leds=leds, event_bus=event_bus, logger=logger)
+    # Always inject the real event_bus (main event_bus) and include display/switch_reader
+    api = AppAPI(screen=screen, buttons=buttons, leds=leds, display=display, 
+                 switch_reader=switch_reader, event_bus=event_bus, logger=logger)
     logger.info(f"[setup_api] Using event_bus id: {id(event_bus)} for AppAPI")
     return api
 
@@ -351,6 +323,40 @@ def main():
     logger.info("System running. Press Ctrl+C to exit.")
     signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
 
+    # --- Web UI integration for development mode ---
+    if not REAL_HARDWARE:
+        try:
+            # Try to start web UI if available
+            from boss.webui.main import start_web_ui
+            mock_hardware_dict = {
+                'btn_red': btn_red,
+                'btn_yellow': btn_yellow,
+                'btn_green': btn_green,
+                'btn_blue': btn_blue,
+                'main_btn': main_btn,
+                'led_red': led_red,
+                'led_yellow': led_yellow,
+                'led_green': led_green,
+                'led_blue': led_blue,
+                'display': display,
+                'switch_reader': switch_reader,
+                'switch': switch_reader,
+                'screen': screen,
+                'api': api,
+                'event_bus': event_bus
+            }
+            start_web_ui(mock_hardware_dict, event_bus)
+            logger.info("[BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)")
+        except ImportError as e:
+            logger.info(f"Web UI debug dashboard not available: {e}")
+            logger.info("Running in mock mode without web UI - all hardware events will be logged")
+        except AttributeError as e:
+            logger.info(f"Web UI function not found: {e}")
+            logger.info("Running in mock mode without web UI - all hardware events will be logged")
+        except Exception as e:
+            logger.warning(f"Could not start web UI debug dashboard: {e}")
+            logger.info("Continuing without web UI - all hardware events will be logged")
+
     # Register event handlers using imported functions (all async for non-blocking operation)
     event_bus.subscribe("output.display.set",
         lambda event_type, payload: display.show_message(str(payload.get("text", payload.get("value", "")))) if display and hasattr(display, 'show_message') and (payload.get("text") is not None or payload.get("value") is not None) else None,
@@ -370,34 +376,6 @@ def main():
         event_handlers.handle_system_shutdown(app_runner, cleanup, logger),
         mode="async"
     )
-
-    # --- Web UI event bus integration ---
-    try:
-        import asyncio
-        from boss.webui.server import ws_manager
-        loop = asyncio.get_event_loop()
-        def push_all_events(event_type, payload):
-            logger.info(f"[DEBUG] push_all_events called for event_type={event_type}, payload={payload}")
-            print(f"[DEBUG] push_all_events called for event_type={event_type}, payload={payload}")
-            coro = ws_manager.push_event({"type": event_type, "payload": payload})
-            try:
-                fut = asyncio.run_coroutine_threadsafe(coro, loop)
-                fut.add_done_callback(lambda f: logger.info(f"[DEBUG] ws_manager.push_event done for event_type={event_type}"))
-            except Exception as e:
-                logger.warning(f"Failed to schedule ws_manager.push_event: {e}")
-        event_bus.subscribe("*", push_all_events, mode="async")  # Subscribe to all events
-        ws_manager.hardware["api"] = api
-        ws_manager.hardware["event_bus"] = event_bus
-        # Register all hardware objects for state tracking
-        ws_manager.hardware["display"] = display
-        ws_manager.hardware["led_red"] = led_red
-        ws_manager.hardware["led_yellow"] = led_yellow
-        ws_manager.hardware["led_green"] = led_green
-        ws_manager.hardware["led_blue"] = led_blue
-        ws_manager.hardware["switch"] = switch
-        logger.info(f"[DEBUG] Registered hardware objects with WebSocket manager")
-    except Exception as e:
-        logger.warning(f"Web UI event bus integration failed: {e}")
 
     # --- Display welcome message after all setup is complete ---
     try:

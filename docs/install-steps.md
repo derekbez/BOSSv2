@@ -64,3 +64,6 @@ echo "cd ~/boss"
 echo "python3 -m boss.main"
 
 
+On Windows, for the WebUi debugging app these need to be installed:
+pip install fastapi uvicorn websockets pydantic
+

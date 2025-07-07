@@ -4,3 +4,7 @@ rpi-tm1637
 pytest
 Pillow
 numpy
+fastapi
+uvicorn
+websockets
+pydantic

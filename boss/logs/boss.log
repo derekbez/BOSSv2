@@ -375,3 +375,440 @@
 2025-07-07 20:15:50 [INFO] EventBus: Event published: output.display.updated | {'value': '   3', 'timestamp': 1751915750.103831, 'source': 'hardware.display.mock'}
 2025-07-07 20:15:50 [INFO] __main__: [DEBUG] push_all_events called for event_type=switch_change, payload={'value': 3, 'previous_value': 1, 'timestamp': '2025-07-07T19:15:50Z'}
 2025-07-07 20:15:50 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.display.updated, payload={'value': '   3', 'timestamp': 1751915750.103831, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:02 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 20:52:02 [INFO] __main__: Initializing hardware interfaces...
+2025-07-07 20:52:02 [INFO] __main__: Pin assignments:
+2025-07-07 20:52:02 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-07 20:52:02 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-07 20:52:02 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-07 20:52:02 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-07 20:52:02 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-07 20:52:02 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-07 20:52:02 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-07 20:52:02 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-07 20:52:02 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-07 20:52:02 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-07 20:52:02 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-07 20:52:02 [INFO] __main__:   MUX1_PIN: 23
+2025-07-07 20:52:02 [INFO] __main__:   MUX2_PIN: 24
+2025-07-07 20:52:02 [INFO] __main__:   MUX3_PIN: 25
+2025-07-07 20:52:02 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-07 20:52:02 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 20:52:02 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8000 (web UI for mock/dev mode)
+2025-07-07 20:52:02 [INFO] __main__: Hardware initialized.
+2025-07-07 20:52:02 [INFO] __main__: Hardware startup summary:
+2025-07-07 20:52:02 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-07 20:52:02 [INFO] __main__: [setup_api] Using event_bus id: 2297656887440 for AppAPI
+2025-07-07 20:52:02 [INFO] __main__: [main] Main event_bus id: 2297656887440
+2025-07-07 20:52:02 [INFO] __main__: [main] AppAPI.event_bus id: 2297656887440
+2025-07-07 20:52:02 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] Registered hardware objects with WebSocket manager
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751917922.7743697, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.display.updated, payload={'value': '----', 'timestamp': 1751917922.7743697, 'source': 'hardware.display.mock'}
+[2025-07-07 20:52:02,775] INFO AppRunner: Started app: admin_startup
+2025-07-07 20:52:02 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 20:52:02 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T19:52:02Z'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=app_started, payload={'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T19:52:02Z'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-07T19:52:02Z'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751917922.780367, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=switch_change, payload={'value': 1, 'previous_value': None, 'timestamp': '2025-07-07T19:52:02Z'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.display.updated, payload={'value': '   1', 'timestamp': 1751917922.780367, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751917922.7833683, 'source': 'hardware.screen.mock'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.screen.updated, payload={'action': 'clear', 'timestamp': 1751917922.7833683, 'source': 'hardware.screen.mock'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751917922.7843676, 'source': 'hardware.led.red'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'red', 'state': 'on', 'timestamp': 1751917922.7843676, 'source': 'hardware.led.red'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751917922.785368, 'source': 'hardware.led.yellow'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'yellow', 'state': 'on', 'timestamp': 1751917922.785368, 'source': 'hardware.led.yellow'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751917922.7863686, 'source': 'hardware.led.green'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'green', 'state': 'on', 'timestamp': 1751917922.7863686, 'source': 'hardware.led.green'}
+2025-07-07 20:52:02 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751917922.7873697, 'source': 'hardware.led.blue'}
+2025-07-07 20:52:02 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'blue', 'state': 'on', 'timestamp': 1751917922.7873697, 'source': 'hardware.led.blue'}
+2025-07-07 20:52:03 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751917923.2890697, 'source': 'hardware.led.red'}
+2025-07-07 20:52:03 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'red', 'state': 'off', 'timestamp': 1751917923.2890697, 'source': 'hardware.led.red'}
+2025-07-07 20:52:03 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751917923.2890697, 'source': 'hardware.led.yellow'}
+2025-07-07 20:52:03 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'yellow', 'state': 'off', 'timestamp': 1751917923.2890697, 'source': 'hardware.led.yellow'}
+2025-07-07 20:52:03 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751917923.290299, 'source': 'hardware.led.green'}
+2025-07-07 20:52:03 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'green', 'state': 'off', 'timestamp': 1751917923.290299, 'source': 'hardware.led.green'}
+2025-07-07 20:52:03 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751917923.2912984, 'source': 'hardware.led.blue'}
+2025-07-07 20:52:03 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.led.state_changed, payload={'led_id': 'blue', 'state': 'off', 'timestamp': 1751917923.2912984, 'source': 'hardware.led.blue'}
+2025-07-07 20:52:03 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751917923.2912984, 'source': 'hardware.screen.mock'}
+2025-07-07 20:52:03 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.screen.updated, payload={'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751917923.2912984, 'source': 'hardware.screen.mock'}
+2025-07-07 20:52:46 [INFO] EventBus: Event published: input.switch.set | {'value': 2, 'timestamp': 1751917966.7387955}
+2025-07-07 20:52:46 [INFO] boss.core.event_handlers: [WebUI] Switch set to 2 via web UI.
+2025-07-07 20:52:46 [INFO] __main__: [DEBUG] push_all_events called for event_type=input.switch.set, payload={'value': 2, 'timestamp': 1751917966.7387955}
+2025-07-07 20:52:46 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-07T19:52:46Z'}
+2025-07-07 20:52:46 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751917966.7407923, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:46 [INFO] __main__: [DEBUG] push_all_events called for event_type=switch_change, payload={'value': 2, 'previous_value': 1, 'timestamp': '2025-07-07T19:52:46Z'}
+2025-07-07 20:52:46 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.display.updated, payload={'value': '   2', 'timestamp': 1751917966.7407923, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:46 [INFO] EventBus: Event published: switch_change | {'value': 2, 'previous_value': 1, 'timestamp': '2025-07-07T19:52:46Z'}
+2025-07-07 20:52:46 [INFO] EventBus: Event published: output.display.updated | {'value': '   2', 'timestamp': 1751917966.7523062, 'source': 'hardware.display.mock'}
+2025-07-07 20:52:46 [INFO] __main__: [DEBUG] push_all_events called for event_type=switch_change, payload={'value': 2, 'previous_value': 1, 'timestamp': '2025-07-07T19:52:46Z'}
+2025-07-07 20:52:46 [INFO] __main__: [DEBUG] push_all_events called for event_type=output.display.updated, payload={'value': '   2', 'timestamp': 1751917966.7523062, 'source': 'hardware.display.mock'}
+2025-07-07 21:12:09 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:12:09 [INFO] __main__: Initializing hardware interfaces...
+2025-07-07 21:12:09 [INFO] __main__: Pin assignments:
+2025-07-07 21:12:09 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-07 21:12:09 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-07 21:12:09 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-07 21:12:09 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-07 21:12:09 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-07 21:12:09 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-07 21:12:09 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-07 21:12:09 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-07 21:12:09 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-07 21:12:09 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-07 21:12:09 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-07 21:12:09 [INFO] __main__:   MUX1_PIN: 23
+2025-07-07 21:12:09 [INFO] __main__:   MUX2_PIN: 24
+2025-07-07 21:12:09 [INFO] __main__:   MUX3_PIN: 25
+2025-07-07 21:12:09 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-07 21:12:09 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:12:09 [WARNING] __main__: Could not start web UI debug dashboard: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:12:09 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)
+2025-07-07 21:12:09 [INFO] __main__: Hardware initialized.
+2025-07-07 21:12:09 [INFO] __main__: Hardware startup summary:
+2025-07-07 21:12:09 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-07 21:12:09 [INFO] __main__: [setup_api] Using event_bus id: 1848008055888 for AppAPI
+2025-07-07 21:12:09 [INFO] __main__: [main] Main event_bus id: 1848008055888
+2025-07-07 21:12:09 [INFO] __main__: [main] AppAPI.event_bus id: 1848008055888
+2025-07-07 21:12:09 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751919129.416283, 'source': 'hardware.display.mock'}
+[2025-07-07 21:12:09,417] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:12:09 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:12:09 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:12:09Z'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-07T20:12:09Z'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751919129.4182837, 'source': 'hardware.display.mock'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751919129.4192815, 'source': 'hardware.screen.mock'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751919129.4192815, 'source': 'hardware.led.red'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751919129.4192815, 'source': 'hardware.led.yellow'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751919129.4202824, 'source': 'hardware.led.green'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751919129.4202824, 'source': 'hardware.led.blue'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751919129.92117, 'source': 'hardware.led.red'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751919129.92117, 'source': 'hardware.led.yellow'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751919129.9222913, 'source': 'hardware.led.green'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751919129.9222913, 'source': 'hardware.led.blue'}
+2025-07-07 21:12:09 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751919129.9222913, 'source': 'hardware.screen.mock'}
+2025-07-07 21:16:43 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:16:43 [INFO] __main__: Initializing hardware interfaces...
+2025-07-07 21:16:43 [INFO] __main__: Pin assignments:
+2025-07-07 21:16:43 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-07 21:16:43 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-07 21:16:43 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-07 21:16:43 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-07 21:16:43 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-07 21:16:43 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-07 21:16:43 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-07 21:16:43 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-07 21:16:43 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-07 21:16:43 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-07 21:16:43 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-07 21:16:43 [INFO] __main__:   MUX1_PIN: 23
+2025-07-07 21:16:43 [INFO] __main__:   MUX2_PIN: 24
+2025-07-07 21:16:43 [INFO] __main__:   MUX3_PIN: 25
+2025-07-07 21:16:43 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-07 21:16:43 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:16:43 [WARNING] __main__: Could not start web UI debug dashboard: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:16:43 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)
+2025-07-07 21:16:43 [INFO] __main__: Hardware initialized.
+2025-07-07 21:16:43 [INFO] __main__: Hardware startup summary:
+2025-07-07 21:16:43 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-07 21:16:43 [INFO] __main__: [setup_api] Using event_bus id: 1493030794960 for AppAPI
+2025-07-07 21:16:43 [INFO] __main__: [main] Main event_bus id: 1493030794960
+2025-07-07 21:16:43 [INFO] __main__: [main] AppAPI.event_bus id: 1493030794960
+2025-07-07 21:16:43 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751919403.2820075, 'source': 'hardware.display.mock'}
+[2025-07-07 21:16:43,283] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:16:43 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:16:43 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:16:43Z'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-07T20:16:43Z'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751919403.2840068, 'source': 'hardware.display.mock'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751919403.2850082, 'source': 'hardware.screen.mock'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751919403.2850082, 'source': 'hardware.led.red'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751919403.2860057, 'source': 'hardware.led.yellow'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751919403.2860057, 'source': 'hardware.led.green'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751919403.2860057, 'source': 'hardware.led.blue'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751919403.7871718, 'source': 'hardware.led.red'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751919403.7871718, 'source': 'hardware.led.yellow'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751919403.7881777, 'source': 'hardware.led.green'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751919403.7881777, 'source': 'hardware.led.blue'}
+2025-07-07 21:16:43 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751919403.7891786, 'source': 'hardware.screen.mock'}
+2025-07-07 21:20:52 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:20:52 [INFO] __main__: Initializing hardware interfaces...
+2025-07-07 21:20:52 [INFO] __main__: Pin assignments:
+2025-07-07 21:20:52 [INFO] __main__:   BTN_RED_PIN: 26
+2025-07-07 21:20:52 [INFO] __main__:   BTN_YELLOW_PIN: 19
+2025-07-07 21:20:52 [INFO] __main__:   BTN_GREEN_PIN: 13
+2025-07-07 21:20:52 [INFO] __main__:   BTN_BLUE_PIN: 6
+2025-07-07 21:20:52 [INFO] __main__:   MAIN_BTN_PIN: 17
+2025-07-07 21:20:52 [INFO] __main__:   LED_RED_PIN: 21
+2025-07-07 21:20:52 [INFO] __main__:   LED_YELLOW_PIN: 20
+2025-07-07 21:20:52 [INFO] __main__:   LED_GREEN_PIN: 16
+2025-07-07 21:20:52 [INFO] __main__:   LED_BLUE_PIN: 12
+2025-07-07 21:20:52 [INFO] __main__:   TM_CLK_PIN: 5
+2025-07-07 21:20:52 [INFO] __main__:   TM_DIO_PIN: 4
+2025-07-07 21:20:52 [INFO] __main__:   MUX1_PIN: 23
+2025-07-07 21:20:52 [INFO] __main__:   MUX2_PIN: 24
+2025-07-07 21:20:52 [INFO] __main__:   MUX3_PIN: 25
+2025-07-07 21:20:52 [INFO] __main__:   MUX_IN_PIN: 8
+2025-07-07 21:20:52 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:20:52 [WARNING] __main__: Could not start web UI debug dashboard: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:20:52 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)
+2025-07-07 21:20:52 [INFO] __main__: Hardware initialized.
+2025-07-07 21:20:52 [INFO] __main__: Hardware startup summary:
+2025-07-07 21:20:52 [INFO] __main__:   btn_red: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   btn_yellow: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   btn_green: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   btn_blue: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   main_btn: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   led_red: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   led_yellow: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   led_green: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   led_blue: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   display: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   switch_reader: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   switch: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__:   screen: MOCK (dev mode)
+2025-07-07 21:20:52 [INFO] __main__: [setup_api] Using event_bus id: 2705006047184 for AppAPI
+2025-07-07 21:20:52 [INFO] __main__: [main] Main event_bus id: 2705006047184
+2025-07-07 21:20:52 [INFO] __main__: [main] AppAPI.event_bus id: 2705006047184
+2025-07-07 21:20:52 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751919652.1932368, 'source': 'hardware.display.mock'}
+[2025-07-07 21:20:52,194] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:20:52 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:20:52 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:20:52Z'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: switch_change | {'value': 1, 'previous_value': None, 'timestamp': '2025-07-07T20:20:52Z'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.display.updated | {'value': '   1', 'timestamp': 1751919652.196235, 'source': 'hardware.display.mock'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751919652.196235, 'source': 'hardware.screen.mock'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751919652.197234, 'source': 'hardware.led.red'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751919652.197234, 'source': 'hardware.led.yellow'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751919652.197234, 'source': 'hardware.led.green'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751919652.198234, 'source': 'hardware.led.blue'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751919652.699253, 'source': 'hardware.led.red'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751919652.699253, 'source': 'hardware.led.yellow'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751919652.7002618, 'source': 'hardware.led.green'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751919652.7002618, 'source': 'hardware.led.blue'}
+2025-07-07 21:20:52 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751919652.7002618, 'source': 'hardware.screen.mock'}
+2025-07-07 21:28:08 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:28:08 [WARNING] __main__: Failed to hide OS cursor: name 'platform' is not defined
+2025-07-07 21:28:08 [ERROR] __main__: main() is not defined: name 'REAL_HARDWARE' is not defined
+2025-07-07 21:34:01 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:34:01 [ERROR] __main__: main() is not defined: name 'REAL_HARDWARE' is not defined
+2025-07-07 21:38:04 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:38:04 [INFO] __main__: Real hardware not detected or running in dev mode. Using mock hardware.
+2025-07-07 21:38:04 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:38:04 [INFO] __main__: Hardware initialized.
+2025-07-07 21:38:04 [INFO] __main__: [setup_api] Using event_bus id: 2712321981392 for AppAPI
+2025-07-07 21:38:04 [INFO] __main__: [main] Main event_bus id: 2712321981392
+2025-07-07 21:38:04 [INFO] __main__: [main] AppAPI.event_bus id: 2712321981392
+2025-07-07 21:38:04 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:38:04 [WARNING] __main__: Could not start web UI debug dashboard: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751920684.6021817, 'source': 'hardware.display.mock'}
+[2025-07-07 21:38:04,603] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751920684.6031823, 'source': 'hardware.screen.mock'}
+2025-07-07 21:38:04 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751920684.6031823, 'source': 'hardware.led.red'}
+2025-07-07 21:38:04 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:38:04Z'}
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751920684.6041846, 'source': 'hardware.led.yellow'}
+2025-07-07 21:38:04 [INFO] __main__: Fallback SwitchMonitor initialized
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751920684.6041846, 'source': 'hardware.led.green'}
+2025-07-07 21:38:04 [INFO] __main__: Fallback SwitchMonitor.start() called - no monitoring active
+2025-07-07 21:38:04 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751920684.605185, 'source': 'hardware.led.blue'}
+2025-07-07 21:38:05 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751920685.1065965, 'source': 'hardware.led.red'}
+2025-07-07 21:38:05 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751920685.1065965, 'source': 'hardware.led.yellow'}
+2025-07-07 21:38:05 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751920685.1072237, 'source': 'hardware.led.green'}
+2025-07-07 21:38:05 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751920685.1072237, 'source': 'hardware.led.blue'}
+2025-07-07 21:38:05 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751920685.108242, 'source': 'hardware.screen.mock'}
+2025-07-07 21:39:43 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:39:43 [INFO] __main__: Real hardware not detected or running in dev mode. Using mock hardware.
+2025-07-07 21:39:43 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:39:43 [INFO] __main__: Hardware initialized.
+2025-07-07 21:39:43 [INFO] __main__: [setup_api] Using event_bus id: 2158788930320 for AppAPI
+2025-07-07 21:39:43 [INFO] __main__: [main] Main event_bus id: 2158788930320
+2025-07-07 21:39:43 [INFO] __main__: [main] AppAPI.event_bus id: 2158788930320
+2025-07-07 21:39:43 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:39:43 [INFO] __main__: Web UI debug dashboard not available: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:39:43 [INFO] __main__: Running in mock mode without web UI - all hardware events will be logged
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751920783.6790152, 'source': 'hardware.display.mock'}
+[2025-07-07 21:39:43,679] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751920783.6790152, 'source': 'hardware.screen.mock'}
+2025-07-07 21:39:43 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751920783.6800153, 'source': 'hardware.led.red'}
+2025-07-07 21:39:43 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:39:43Z'}
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751920783.6800153, 'source': 'hardware.led.yellow'}
+2025-07-07 21:39:43 [INFO] __main__: Fallback SwitchMonitor initialized
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751920783.681013, 'source': 'hardware.led.green'}
+2025-07-07 21:39:43 [INFO] __main__: Fallback SwitchMonitor.start() called - no monitoring active
+2025-07-07 21:39:43 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751920783.681013, 'source': 'hardware.led.blue'}
+2025-07-07 21:39:44 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751920784.1821854, 'source': 'hardware.led.red'}
+2025-07-07 21:39:44 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751920784.1821854, 'source': 'hardware.led.yellow'}
+2025-07-07 21:39:44 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751920784.1831899, 'source': 'hardware.led.green'}
+2025-07-07 21:39:44 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751920784.1831899, 'source': 'hardware.led.blue'}
+2025-07-07 21:39:44 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751920784.1841903, 'source': 'hardware.screen.mock'}
+2025-07-07 21:41:38 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:41:38 [INFO] __main__: Real hardware not detected or running in dev mode. Using mock hardware.
+2025-07-07 21:41:38 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:41:38 [INFO] __main__: Hardware initialized.
+2025-07-07 21:41:38 [INFO] __main__: [setup_api] Using event_bus id: 2065365747216 for AppAPI
+2025-07-07 21:41:38 [INFO] __main__: [main] Main event_bus id: 2065365747216
+2025-07-07 21:41:38 [INFO] __main__: [main] AppAPI.event_bus id: 2065365747216
+2025-07-07 21:41:38 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:41:38 [INFO] __main__: Web UI debug dashboard not available: cannot import name 'start_web_ui' from 'boss.webui.main' (D:\dev\BOSSv2\boss\webui\main.py)
+2025-07-07 21:41:38 [INFO] __main__: Running in mock mode without web UI - all hardware events will be logged
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751920898.9235363, 'source': 'hardware.display.mock'}
+[2025-07-07 21:41:38,924] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751920898.9245358, 'source': 'hardware.screen.mock'}
+2025-07-07 21:41:38 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751920898.9245358, 'source': 'hardware.led.red'}
+2025-07-07 21:41:38 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:41:38Z'}
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751920898.925537, 'source': 'hardware.led.yellow'}
+2025-07-07 21:41:38 [INFO] __main__: Fallback SwitchMonitor initialized
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751920898.925537, 'source': 'hardware.led.green'}
+2025-07-07 21:41:38 [INFO] __main__: Fallback SwitchMonitor.start() called - no monitoring active
+2025-07-07 21:41:38 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751920898.925537, 'source': 'hardware.led.blue'}
+2025-07-07 21:41:39 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751920899.4272995, 'source': 'hardware.led.red'}
+2025-07-07 21:41:39 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751920899.4272995, 'source': 'hardware.led.yellow'}
+2025-07-07 21:41:39 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751920899.4279273, 'source': 'hardware.led.green'}
+2025-07-07 21:41:39 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751920899.4279273, 'source': 'hardware.led.blue'}
+2025-07-07 21:41:39 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751920899.4279273, 'source': 'hardware.screen.mock'}
+2025-07-07 21:43:11 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:43:12 [INFO] __main__: Real hardware not detected or running in dev mode. Using mock hardware.
+2025-07-07 21:43:12 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:43:12 [INFO] __main__: Hardware initialized.
+2025-07-07 21:43:12 [INFO] __main__: [setup_api] Using event_bus id: 2878341793296 for AppAPI
+2025-07-07 21:43:12 [INFO] __main__: [main] Main event_bus id: 2878341793296
+2025-07-07 21:43:12 [INFO] __main__: [main] AppAPI.event_bus id: 2878341793296
+2025-07-07 21:43:12 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:43:12 [INFO] boss.webui.main: BOSS Web UI started at http://localhost:8070
+2025-07-07 21:43:12 [INFO] boss.webui.main: Web UI debug dashboard initialized
+2025-07-07 21:43:12 [INFO] boss.webui.main: Available hardware devices:
+2025-07-07 21:43:12 [INFO] boss.webui.main:   btn_red: APIButton
+2025-07-07 21:43:12 [INFO] boss.webui.main:   btn_yellow: APIButton
+2025-07-07 21:43:12 [INFO] boss.webui.main:   btn_green: APIButton
+2025-07-07 21:43:12 [INFO] boss.webui.main:   btn_blue: APIButton
+2025-07-07 21:43:12 [INFO] boss.webui.main:   main_btn: APIButton
+2025-07-07 21:43:12 [INFO] boss.webui.main:   led_red: MockLED
+2025-07-07 21:43:12 [INFO] boss.webui.main:   led_yellow: MockLED
+2025-07-07 21:43:12 [INFO] boss.webui.main:   led_green: MockLED
+2025-07-07 21:43:12 [INFO] boss.webui.main:   led_blue: MockLED
+2025-07-07 21:43:12 [INFO] boss.webui.main:   display: MockSevenSegmentDisplay
+2025-07-07 21:43:12 [INFO] boss.webui.main:   switch_reader: APISwitchReader
+2025-07-07 21:43:12 [INFO] boss.webui.main:   switch: APISwitchReader
+2025-07-07 21:43:12 [INFO] boss.webui.main:   screen: MockScreen
+2025-07-07 21:43:12 [INFO] boss.webui.main:   api: AppAPI
+2025-07-07 21:43:12 [INFO] boss.webui.main:   event_bus: EventBus
+2025-07-07 21:43:12 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751920992.377106, 'source': 'hardware.display.mock'}
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751920992.3781068, 'source': 'hardware.screen.mock'}
+[2025-07-07 21:43:12,378] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast screen event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751920992.3791082, 'source': 'hardware.led.red'}
+2025-07-07 21:43:12 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:43:12Z'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] __main__: Fallback SwitchMonitor initialized
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751920992.3801088, 'source': 'hardware.led.yellow'}
+2025-07-07 21:43:12 [INFO] __main__: Fallback SwitchMonitor.start() called - no monitoring active
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751920992.3821077, 'source': 'hardware.led.green'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751920992.3821077, 'source': 'hardware.led.blue'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751920992.8841498, 'source': 'hardware.led.red'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751920992.8851764, 'source': 'hardware.led.yellow'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751920992.886177, 'source': 'hardware.led.green'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751920992.886177, 'source': 'hardware.led.blue'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:43:12 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751920992.8871799, 'source': 'hardware.screen.mock'}
+2025-07-07 21:43:12 [WARNING] boss.webui.server: Failed to broadcast screen event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] __main__: B.O.S.S. system starting up.
+2025-07-07 21:45:47 [INFO] __main__: Real hardware not detected or running in dev mode. Using mock hardware.
+2025-07-07 21:45:47 [INFO] __main__: Screen: MockScreen initialized (dev mode)
+2025-07-07 21:45:47 [INFO] __main__: Hardware initialized.
+2025-07-07 21:45:47 [INFO] __main__: [setup_api] Using event_bus id: 1972320978384 for AppAPI
+2025-07-07 21:45:47 [INFO] __main__: [main] Main event_bus id: 1972320978384
+2025-07-07 21:45:47 [INFO] __main__: [main] AppAPI.event_bus id: 1972320978384
+2025-07-07 21:45:47 [INFO] __main__: System running. Press Ctrl+C to exit.
+2025-07-07 21:45:47 [INFO] boss.webui.main: BOSS Web UI started at http://localhost:8070
+2025-07-07 21:45:47 [INFO] boss.webui.main: Web UI debug dashboard initialized
+2025-07-07 21:45:47 [INFO] boss.webui.main: Available hardware devices:
+2025-07-07 21:45:47 [INFO] boss.webui.main:   btn_red: APIButton
+2025-07-07 21:45:47 [INFO] boss.webui.main:   btn_yellow: APIButton
+2025-07-07 21:45:47 [INFO] boss.webui.main:   btn_green: APIButton
+2025-07-07 21:45:47 [INFO] boss.webui.main:   btn_blue: APIButton
+2025-07-07 21:45:47 [INFO] boss.webui.main:   main_btn: APIButton
+2025-07-07 21:45:47 [INFO] boss.webui.main:   led_red: MockLED
+2025-07-07 21:45:47 [INFO] boss.webui.main:   led_yellow: MockLED
+2025-07-07 21:45:47 [INFO] boss.webui.main:   led_green: MockLED
+2025-07-07 21:45:47 [INFO] boss.webui.main:   led_blue: MockLED
+2025-07-07 21:45:47 [INFO] boss.webui.main:   display: MockSevenSegmentDisplay
+2025-07-07 21:45:47 [INFO] boss.webui.main:   switch_reader: APISwitchReader
+2025-07-07 21:45:47 [INFO] boss.webui.main:   switch: APISwitchReader
+2025-07-07 21:45:47 [INFO] boss.webui.main:   screen: MockScreen
+2025-07-07 21:45:47 [INFO] boss.webui.main:   api: AppAPI
+2025-07-07 21:45:47 [INFO] boss.webui.main:   event_bus: EventBus
+2025-07-07 21:45:47 [INFO] __main__: [BOSS] Debug dashboard started at http://localhost:8070 (web UI for mock/dev mode)
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.display.updated | {'value': '----', 'timestamp': 1751921147.4458663, 'source': 'hardware.display.mock'}
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.screen.updated | {'action': 'clear', 'timestamp': 1751921147.4478683, 'source': 'hardware.screen.mock'}
+[2025-07-07 21:45:47,446] INFO AppRunner: Started app: admin_startup
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast screen event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] AppRunner: Started app: admin_startup
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'on', 'timestamp': 1751921147.4488673, 'source': 'hardware.led.red'}
+2025-07-07 21:45:47 [INFO] EventBus: Event published: app_started | {'app_name': 'admin_startup', 'version': 'unknown', 'timestamp': '2025-07-07T20:45:47Z'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] __main__: Fallback SwitchMonitor initialized
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'on', 'timestamp': 1751921147.4498713, 'source': 'hardware.led.yellow'}
+2025-07-07 21:45:47 [INFO] __main__: Fallback SwitchMonitor.start() called - no monitoring active
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'on', 'timestamp': 1751921147.4508667, 'source': 'hardware.led.green'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'on', 'timestamp': 1751921147.4528697, 'source': 'hardware.led.blue'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'red', 'state': 'off', 'timestamp': 1751921147.953957, 'source': 'hardware.led.red'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'yellow', 'state': 'off', 'timestamp': 1751921147.9549687, 'source': 'hardware.led.yellow'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'green', 'state': 'off', 'timestamp': 1751921147.955969, 'source': 'hardware.led.green'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.led.state_changed | {'led_id': 'blue', 'state': 'off', 'timestamp': 1751921147.955969, 'source': 'hardware.led.blue'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast LED event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
+2025-07-07 21:45:47 [INFO] EventBus: Event published: output.screen.updated | {'action': 'display_text', 'details': {'text': 'ready', 'color': (0, 255, 0), 'size': 64, 'align': 'center', 'font_name': None}, 'timestamp': 1751921147.9569676, 'source': 'hardware.screen.mock'}
+2025-07-07 21:45:47 [WARNING] boss.webui.server: Failed to broadcast screen event: There is no current event loop in thread 'Thread-2 (_app_thread_func)'.
