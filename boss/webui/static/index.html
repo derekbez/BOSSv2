@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOSS Web UI - Hardware Emulator</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        h1 { color: #2c3e50; }
+        #hardware-state { margin-top: 1em; }
+        .led { display: inline-block; width: 20px; height: 20px; border-radius: 50%; margin-right: 8px; }
+        .on { background: #27ae60; }
+        .off { background: #c0392b; }
+        .label { margin-right: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎛️ BOSS Hardware Emulator</h1>
+            <div class="status-bar">
+                <span id="connection-status" class="status disconnected">Connecting...</span>
+                <span id="system-status">System: Ready</span>
+            </div>
+        </header>
+
+        <main class="dashboard">
+            <!-- Input Controls Section -->
+            <section class="panel input-panel">
+                <h2>🔘 Input Controls</h2>
+                
+                <!-- Buttons -->
+                <div class="control-group">
+                    <h3>Color Buttons</h3>
+                    <div class="button-grid">
+                        <button class="hw-button red" data-button="red">
+                            <span class="button-label">RED</span>
+                            <span class="button-shortcut">1</span>
+                        </button>
+                        <button class="hw-button yellow" data-button="yellow">
+                            <span class="button-label">YELLOW</span>
+                            <span class="button-shortcut">2</span>
+                        </button>
+                        <button class="hw-button green" data-button="green">
+                            <span class="button-label">GREEN</span>
+                            <span class="button-shortcut">3</span>
+                        </button>
+                        <button class="hw-button blue" data-button="blue">
+                            <span class="button-label">BLUE</span>
+                            <span class="button-shortcut">4</span>
+                        </button>
+                    </div>
+                    
+                    <div class="main-button-container">
+                        <button class="hw-button main-button" data-button="main">
+                            <span class="button-label">GO</span>
+                            <span class="button-shortcut">SPACE</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Switch Controls -->
+                <div class="control-group">
+                    <h3>Toggle Switches (0-255)</h3>
+                    
+                    <div class="switch-input">
+                        <label for="switch-value">Decimal Value:</label>
+                        <input type="number" id="switch-value" min="0" max="255" value="0">
+                        <button id="set-switch-btn">Set</button>
+                    </div>
+                    
+                    <div class="binary-display">
+                        <span class="binary-label">Binary:</span>
+                        <span id="binary-value">00000000</span>
+                    </div>
+                    
+                    <div class="bit-switches">
+                        <div class="bit-switch" data-bit="7">
+                            <input type="checkbox" id="bit7" data-bit="7">
+                            <label for="bit7">Bit 7 (128)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="6">
+                            <input type="checkbox" id="bit6" data-bit="6">
+                            <label for="bit6">Bit 6 (64)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="5">
+                            <input type="checkbox" id="bit5" data-bit="5">
+                            <label for="bit5">Bit 5 (32)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="4">
+                            <input type="checkbox" id="bit4" data-bit="4">
+                            <label for="bit4">Bit 4 (16)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="3">
+                            <input type="checkbox" id="bit3" data-bit="3">
+                            <label for="bit3">Bit 3 (8)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="2">
+                            <input type="checkbox" id="bit2" data-bit="2">
+                            <label for="bit2">Bit 2 (4)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="1">
+                            <input type="checkbox" id="bit1" data-bit="1">
+                            <label for="bit1">Bit 1 (2)</label>
+                        </div>
+                        <div class="bit-switch" data-bit="0">
+                            <input type="checkbox" id="bit0" data-bit="0">
+                            <label for="bit0">Bit 0 (1)</label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Output Indicators Section -->
+            <section class="panel output-panel">
+                <h2>💡 Output Indicators</h2>
+                
+                <!-- LEDs -->
+                <div class="control-group">
+                    <h3>Status LEDs</h3>
+                    <div class="led-grid">
+                        <div class="led-indicator" data-color="red">
+                            <div class="led-light red" id="led-red"></div>
+                            <span class="led-label">RED</span>
+                            <span class="led-status" id="status-red">OFF</span>
+                        </div>
+                        <div class="led-indicator" data-color="yellow">
+                            <div class="led-light yellow" id="led-yellow"></div>
+                            <span class="led-label">YELLOW</span>
+                            <span class="led-status" id="status-yellow">OFF</span>
+                        </div>
+                        <div class="led-indicator" data-color="green">
+                            <div class="led-light green" id="led-green"></div>
+                            <span class="led-label">GREEN</span>
+                            <span class="led-status" id="status-green">OFF</span>
+                        </div>
+                        <div class="led-indicator" data-color="blue">
+                            <div class="led-light blue" id="led-blue"></div>
+                            <span class="led-label">BLUE</span>
+                            <span class="led-status" id="status-blue">OFF</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7-Segment Display -->
+                <div class="control-group">
+                    <h3>7-Segment Display</h3>
+                    <div class="seven-segment-display">
+                        <span id="display-value">----</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screen Emulator Section -->
+            <section class="panel screen-panel">
+                <h2>🖥️ Main Screen</h2>
+                <div class="screen-container">
+                    <canvas id="screen-canvas" width="800" height="480"></canvas>
+                    <div class="screen-overlay" id="screen-text"></div>
+                </div>
+            </section>
+
+            <!-- Event Monitor Section -->
+            <section class="panel event-panel">
+                <h2>📊 Event Monitor</h2>
+                <div class="event-controls">
+                    <button id="clear-events-btn">Clear</button>
+                    <label>
+                        Filter: 
+                        <select id="event-filter">
+                            <option value="">All Events</option>
+                            <option value="input">Input Events</option>
+                            <option value="output">Output Events</option>
+                            <option value="system">System Events</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="event-log" id="event-log"></div>
+            </section>
+
+            <!-- Hardware State Section -->
+            <section class="panel hardware-state-panel">
+                <h2>🔧 Hardware State</h2>
+                <div id="hardware-state">
+                    <div id="leds"></div>
+                    <div id="display"></div>
+                    <div id="switch"></div>
+                    <div id="screen"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+        const ws = new WebSocket(`ws://${location.host}/ws`);
+        ws.onmessage = function(event) {
+            const msg = JSON.parse(event.data);
+            if (msg.event === 'initial_state' || msg.event.endsWith('_changed')) {
+                updateState(msg.payload);
+            }
+        };
+        function updateState(state) {
+            // LEDs
+            const leds = ['red','yellow','green','blue'];
+            let ledHtml = '<b>LEDs:</b> ';
+            leds.forEach(color => {
+                const on = state[`led_${color}`];
+                ledHtml += `<span class="led ${on ? 'on' : 'off'}"></span><span class="label">${color}</span>`;
+            });
+            document.getElementById('leds').innerHTML = ledHtml;
+            // Display
+            document.getElementById('display').innerHTML = `<b>7-Segment:</b> ${state.display || '----'}`;
+            // Switch
+            document.getElementById('switch').innerHTML = `<b>Switch Value:</b> ${state.switch_value}`;
+            // Screen
+            document.getElementById('screen').innerHTML = `<b>Screen:</b> ${state.screen_content || ''}`;
+        }
+    </script>
+</body>
+</html>
