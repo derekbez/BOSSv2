@@ -30,35 +30,7 @@
             <section class="panel input-panel">
                 <h2>🔘 Input Controls</h2>
                 
-                <!-- Buttons -->
-                <div class="control-group">
-                    <h3>Color Buttons</h3>
-                    <div class="button-grid">
-                        <button class="hw-button red" data-button="red">
-                            <span class="button-label">RED</span>
-                            <span class="button-shortcut">1</span>
-                        </button>
-                        <button class="hw-button yellow" data-button="yellow">
-                            <span class="button-label">YELLOW</span>
-                            <span class="button-shortcut">2</span>
-                        </button>
-                        <button class="hw-button green" data-button="green">
-                            <span class="button-label">GREEN</span>
-                            <span class="button-shortcut">3</span>
-                        </button>
-                        <button class="hw-button blue" data-button="blue">
-                            <span class="button-label">BLUE</span>
-                            <span class="button-shortcut">4</span>
-                        </button>
-                    </div>
-                    
-                    <div class="main-button-container">
-                        <button class="hw-button main-button" data-button="main">
-                            <span class="button-label">GO</span>
-                            <span class="button-shortcut">SPACE</span>
-                        </button>
-                    </div>
-                </div>
+              
 
                 <!-- Switch Controls -->
                 <div class="control-group">
@@ -68,11 +40,10 @@
                         <label for="switch-value">Decimal Value:</label>
                         <input type="number" id="switch-value" min="0" max="255" value="0">
                         <button id="set-switch-btn">Set</button>
-                    </div>
-                    
-                    <div class="binary-display">
-                        <span class="binary-label">Binary:</span>
-                        <span id="binary-value">00000000</span>
+                        <div class="binary-display">
+                            <span class="binary-label">Binary:</span>
+                            <span id="binary-value">00000000</span>
+                        </div>
                     </div>
                     
                     <div class="bit-switches">
@@ -110,11 +81,24 @@
                         </div>
                     </div>
                 </div>
+                <div class="control-group">
+         
+                    <button class="hw-button main-button" data-button="main">
+                        <span class="button-label">GO</span>
+                        <span class="button-shortcut">SPACE</span>
+                    </button>
+                    <!-- 7-Segment Display -->
+                    <div class="seven-segment-display">
+                        <span id="display-value">----</span>
+                    </div>
+             
+                </div>
+
             </section>
 
             <!-- Output Indicators Section -->
             <section class="panel output-panel">
-                <h2>💡 Output Indicators</h2>
+                <h2>💡 Mini-app buttons</h2>
                 
                 <!-- LEDs -->
                 <div class="control-group">
@@ -141,15 +125,27 @@
                             <span class="led-status" id="status-blue">OFF</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- 7-Segment Display -->
-                <div class="control-group">
-                    <h3>7-Segment Display</h3>
-                    <div class="seven-segment-display">
-                        <span id="display-value">----</span>
+                    <div class="button-grid">
+                        <button class="hw-button red" data-button="red">
+                            <span class="button-label">RED</span>
+                            <span class="button-shortcut">1</span>
+                        </button>
+                        <button class="hw-button yellow" data-button="yellow">
+                            <span class="button-label">YELLOW</span>
+                            <span class="button-shortcut">2</span>
+                        </button>
+                        <button class="hw-button green" data-button="green">
+                            <span class="button-label">GREEN</span>
+                            <span class="button-shortcut">3</span>
+                        </button>
+                        <button class="hw-button blue" data-button="blue">
+                            <span class="button-label">BLUE</span>
+                            <span class="button-shortcut">4</span>
+                        </button>
                     </div>
                 </div>
+
+
             </section>
 
             <!-- Screen Emulator Section -->

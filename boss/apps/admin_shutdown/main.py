@@ -7,7 +7,7 @@ from threading import Event
 from typing import Any
 
 def run(stop_event: Event, api: Any) -> None:
-    api.logger.info(f"[admin_shutdown] api.event_bus is: {repr(getattr(api, 'event_bus', None))}")
+    api.log_event(f"[admin_shutdown] api.event_bus is: {repr(getattr(api, 'event_bus', None))}")
     """
     Presents shutdown options and handles button presses (event-driven).
     Args:
@@ -35,25 +35,25 @@ def run(stop_event: Event, api: Any) -> None:
             api.display_text("Rebooting system...")
             api.log_event("AdminShutdown: Reboot triggered by user.")
             if api.event_bus:
-                api.logger.info("Publishing system_shutdown event: reboot")
+                api.log_event("Publishing system_shutdown event: reboot")
                 api.event_bus.publish('system_shutdown', {'reason': 'reboot'})
-                api.logger.info("Published system_shutdown event: reboot")
+                api.log_event("Published system_shutdown event: reboot")
             stop_event.set()
         elif button == 'blue':
             api.display_text("Shutting down system...")
             api.log_event("AdminShutdown: Poweroff triggered by user.")
             if api.event_bus:
-                api.logger.info("Publishing system_shutdown event: poweroff")
+                api.log_event("Publishing system_shutdown event: poweroff")
                 api.event_bus.publish('system_shutdown', {'reason': 'poweroff'})
-                api.logger.info("Published system_shutdown event: poweroff")
+                api.log_event("Published system_shutdown event: poweroff")
             stop_event.set()
         elif button == 'green':
             api.display_text("Exiting to OS shell...")
             api.log_event("AdminShutdown: Exit to OS triggered by user.")
             if api.event_bus:
-                api.logger.info("Publishing system_shutdown event: exit_to_os")
+                api.log_event("Publishing system_shutdown event: exit_to_os")
                 api.event_bus.publish('system_shutdown', {'reason': 'exit_to_os'})
-                api.logger.info("Published system_shutdown event: exit_to_os")
+                api.log_event("Published system_shutdown event: exit_to_os")
             stop_event.set()
 
     sub_id = api.event_bus.subscribe(
