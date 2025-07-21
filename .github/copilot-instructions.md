@@ -22,63 +22,114 @@ B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It prov
 ## Directory Structure
 ```
 boss/
-  __init__.py
-  main.py
-  core/
-    __init__.py
-    app_manager.py
-    event_bus.py
-    config.py
-    logger.py
-    api.py
-    remote.py
-  hardware/
-    __init__.py
-    switch_reader.py
-    button.py
-    led.py
-    display.py
-    screen.py
-    speaker.py
-  apps/
-    app_matrixrain/
-      __init__.py
-      main.py
-      manifest.json
-      assets/
-    ...
-  assets/
-    images/
-    sounds/
-  config/
-    BOSSsettings.json
-  tests/
-    core/
-    hardware/
-    apps/
-  scripts/
-  docs/
-  requirements.txt
-  README.md
+├── __init__.py
+├── main.py                     # Entry point with dependency injection setup
+├── presentation/              # UI/API interfaces (no business logic)
+│   ├── __init__.py
+│   ├── physical_ui/
+│   │   ├── __init__.py
+│   │   ├── button_handler.py   # Physical button event handling
+│   │   └── switch_handler.py   # Switch state monitoring
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── rest_api.py        # REST endpoints for remote management
+│   │   ├── websocket_api.py   # Real-time event streaming
+│   │   └── web_ui.py          # Development web interface
+│   └── cli/
+│       ├── __init__.py
+│       └── debug_cli.py       # Debug and maintenance commands
+├── application/               # Service classes and business logic
+│   ├── __init__.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── app_manager.py     # App lifecycle management
+│   │   ├── app_runner.py      # Thread management for mini-apps
+│   │   ├── switch_monitor.py  # Switch state monitoring and events
+│   │   ├── hardware_service.py # Hardware coordination
+│   │   └── system_service.py  # System health and shutdown
+│   ├── events/
+│   │   ├── __init__.py
+│   │   ├── event_bus.py       # Simple, robust event bus
+│   │   └── event_handlers.py  # System event handlers
+│   └── api/
+│       ├── __init__.py
+│       └── app_api.py         # API provided to mini-apps
+├── domain/                    # Core models and business rules
+│   ├── __init__.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── app.py            # App entity and business rules
+│   │   ├── hardware_state.py # Hardware state models
+│   │   └── config.py         # Configuration models
+│   ├── events/
+│   │   ├── __init__.py
+│   │   └── domain_events.py  # Domain event definitions
+│   └── interfaces/
+│       ├── __init__.py
+│       ├── hardware.py       # Hardware abstraction interfaces
+│       ├── app_api.py        # App API interface
+│       └── services.py       # Service interfaces
+├── infrastructure/           # Hardware, config, logging implementations
+│   ├── __init__.py
+│   ├── hardware/
+│   │   ├── __init__.py
+│   │   ├── factory.py        # Hardware factory (GPIO/WebUI/Mock)
+│   │   ├── gpio/             # Real hardware implementations
+│   │   │   ├── __init__.py
+│   │   │   ├── buttons.py
+│   │   │   ├── leds.py
+│   │   │   ├── display.py
+│   │   │   ├── switches.py
+│   │   │   ├── screen.py
+│   │   │   └── speaker.py
+│   │   ├── webui/           # Web UI implementations for development
+│   │   │   ├── __init__.py
+│   │   │   ├── webui_buttons.py
+│   │   │   ├── webui_leds.py
+│   │   │   └── webui_display.py
+│   │   └── mocks/           # Mock implementations for testing
+│   │       ├── __init__.py
+│   │       ├── mock_buttons.py
+│   │       ├── mock_leds.py
+│   │       ├── mock_display.py
+│   │       └── mock_switches.py
+│   ├── config/
+│   │   ├── __init__.py
+│   │   ├── config_loader.py  # JSON config loading and validation
+│   │   └── config_manager.py # Runtime config management
+│   └── logging/
+│       ├── __init__.py
+│       ├── logger.py         # Centralized logging setup
+│       └── formatters.py     # Log formatting
+├── apps/                     # Mini-apps directory
+│   ├── __init__.py
+│   ├── app_template/         # Template for new apps
+│   └── app_matrixrain/       # Example app
+└── tests/                    # Test structure mirrors main structure
+    ├── __init__.py
+    ├── unit/
+    ├── integration/
+    └── test_fixtures/
 ```
 
 ## Key Principles & Coding Guidelines
-- **Event-Driven:** All hardware and app events are published to the event bus. Display, LED, and screen updates are event-driven (no polling in production code).
-- **Hardware Abstraction:** All hardware (buttons, LEDs, display, screen, speaker) is abstracted in `hardware/` with real and mock implementations. Fallback to mocks if hardware is not detected, enabling dev/testing on any platform.
-- **App API:** Mini-apps must not access hardware directly. All hardware and display access is via the provided API object.
-- **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout. Use `stop_event` for clean shutdown.
-- **Configuration:** All app mappings and parameters are in `config/BOSSsettings.json` (JSON format). If missing, auto-generated with defaults.
-- **Logging:** Use the central logger for all events and errors. All hardware and app events are logged for auditing.
-- **Remote Management:** The system exposes a secure API for remote configuration and status.
-- **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`, mirroring the main structure. Use `pytest` and ensure coverage.
+- **Clean Architecture:** Layer separation (Presentation, Application, Domain, Infrastructure) with dependency inversion
+- **Event-Driven:** All hardware and app events are published to the event bus. Display, LED, and screen updates are event-driven (no polling in production code)
+- **Hardware Abstraction:** All hardware (buttons, LEDs, display, screen, speaker) is abstracted with real, WebUI, and mock implementations. Fallback to mocks if hardware is not detected, enabling dev/testing on any platform
+- **App API:** Mini-apps must not access hardware directly. All hardware and display access is via the provided API object
+- **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout. Use `stop_event` for clean shutdown
+- **Configuration:** All app mappings and parameters are in `config/BOSSsettings.json` (JSON format). If missing, auto-generated with defaults
+- **Logging:** Use the central logger for all events and errors. All hardware and app events are logged for auditing
+- **Remote Management:** The system exposes a secure API for remote configuration and status
+- **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`, mirroring the main structure. Use `pytest` and ensure coverage
 - **Extensibility:**
-  - Add new apps by creating a new subdirectory in `apps/` with `main.py`, `manifest.json`, and any assets.
-  - Add new hardware by extending the hardware abstraction layer.
-  - Register new event types with the event bus as needed.
-- **Type Hints & Docstrings:** Use type hints and docstrings throughout for clarity and maintainability.
-- **Validation:** Validate all configuration and user input.
-- **Single Responsibility:** Keep code modular and follow the single-responsibility principle.
-- **Dependency Injection:** Pass dependencies (e.g., hardware, event bus) into constructors instead of creating them inside classes.
+  - Add new apps by creating a new subdirectory in `apps/` with `main.py`, `manifest.json`, and any assets
+  - Add new hardware by extending the hardware abstraction layer
+  - Register new event types with the event bus as needed
+- **Type Hints & Docstrings:** Use type hints and docstrings throughout for clarity and maintainability
+- **Validation:** Validate all configuration and user input
+- **Single Responsibility:** Keep code modular and follow the single-responsibility principle
+- **Dependency Injection:** Pass dependencies (e.g., hardware, event bus) into constructors instead of creating them inside classes
 
 ## Best Practices
 - Print/log all pin assignments and a hardware startup summary at launch, indicating which devices are real or mocked.
