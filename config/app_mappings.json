@@ -1,0 +1,12 @@
+{
+    "0": "list_all_apps",
+    "hello_world": 1,
+    "button_test": 2,
+    "led_test": 3,
+    "current_weather": 10,
+    "joke_of_the_moment": 15,
+    "quote_of_the_day": 20,
+    "253": "admin_wifi_configuration",
+    "254": "admin_boss_admin",
+    "255": "admin_shutdown"
+}

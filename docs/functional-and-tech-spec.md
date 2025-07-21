@@ -1,13 +1,16 @@
 # B.O.S.S. (Board Of Switches and Screen)
 ## Functional & Technical Specification
-**Version:** 1.0  
-**Date:** 2025-06-18  
-**Author:** [Business Analyst/Product Owner Name]
+**Version:** 2.0  
+**Date:** 2025-07-21  
+**Author:** BOSS Development Team  
+**Status:** IMPLEMENTED - New Simplified Architecture
 
 ---
 
 ## 1. Purpose
-Re-implement the B.O.S.S. application for Raspberry Pi, providing a robust, maintainable, and extensible platform for physical interaction with mini-apps via switches, buttons, LEDs, a 7-segment display, and a screen. The new implementation will follow modern software engineering best practices and design patterns.
+Implement a robust, maintainable, and extensible B.O.S.S. application for Raspberry Pi, providing a physical interface for selecting and running mini-apps via switches, buttons, LEDs, a 7-segment display, and a screen. The new implementation follows Clean Architecture principles with simplified patterns appropriate for the project scale.
+
+**Note**: This specification reflects the **implemented system** using the new simplified architecture that removed over-engineered patterns like CQRS while maintaining Clean Architecture benefits.
 
 ---
 
@@ -43,18 +46,21 @@ User stories and personas are now maintained in [docs/user-stories.md](./user-st
 
 ## 3. Technical Specification
 
-### 3.1. Architecture Overview
+### 3.1. Architecture Overview ✅ **IMPLEMENTED**
 - **Language:** Python 3.11+
 - **Platform:** Raspberry Pi OS 64bit Lite (no GUI)
 - **Hardware:** RPi, 8 toggle switches (via 74HC151), 7-segment display (TM1637), 7" screen, 4 color buttons, 4 color LEDs, main "Go" button, speaker.
+- **Architecture**: Clean Architecture with simplified patterns:
+  - **Domain Layer**: Core models, events, and interfaces
+  - **Application Layer**: Service classes and event bus (no CQRS)
+  - **Infrastructure Layer**: Hardware abstraction (GPIO/WebUI/Mock)
+  - **Presentation Layer**: Physical UI, API endpoints (future)
 - **Design Patterns:**
   - Dependency Injection for hardware abstraction
-  - Observer/Event pattern for button/switch events
-  - Plugin pattern for mini-apps
-  - Singleton for configuration and logging
-  - Factory for hardware interface instantiation
-  - API Layer for all app-hardware interaction
-  - OOP/class-based design for maintainability
+  - Simple Event Bus for system communication
+  - Factory pattern for hardware implementations
+  - App API for hardware isolation
+  - Service-oriented design for business logic
 
 ### 3.2. System Components
 

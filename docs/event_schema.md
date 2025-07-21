@@ -1,178 +1,247 @@
-# B.O.S.S. Event Schema Definition
+# B.O.S.S. Event Schema - New Architecture
 
 ## Overview
-This document is the single source of truth for all event types and their payload structures within the B.O.S.S. system. All components (core, hardware, apps) that publish or subscribe to events MUST adhere to these schemas.
+The new B.O.S.S. architecture uses a simplified event bus for system communication. All hardware events, system events, and app events flow through a single, robust event bus.
 
----
+## Event Bus Implementation
+- **Location**: `boss/application/events/event_bus.py`
+- **Pattern**: Simple publish/subscribe with synchronous delivery
+- **Thread Safety**: All methods are thread-safe
+- **Error Handling**: Robust error handling with logging
 
-## General Payload Structure
-All event payloads should, where possible, include these top-level keys:
+## Core Events
 
-- `timestamp` (float): A `time.time()` timestamp for when the event was generated.
-- `source` (str): A string identifying the origin of the event (e.g., 'hardware.button', 'core.app_manager', 'app.app_matrixrain').
+### Hardware Events
 
----
-
-## Filtering Example
-To subscribe only to events from a specific source or with certain payload fields, use the `source` and payload keys in your event bus filter. For example, to receive only red button presses from hardware:
-
+#### Button Events
 ```python
-api.event_bus.subscribe(
-    'input.button.pressed',
-    callback,
-    filter={"button_id": "red", "source": "hardware.button"}
+# Published when a colored button is pressed
+event_type: "button_pressed"
+payload: {
+    "button": "red" | "yellow" | "green" | "blue",
+    "timestamp": float
+}
+
+# Published when a colored button is released
+event_type: "button_released" 
+payload: {
+    "button": "red" | "yellow" | "green" | "blue",
+    "timestamp": float
+}
+
+# Published when the main Go button is pressed
+event_type: "go_button_pressed"
+payload: {
+    "timestamp": float
+}
+```
+
+#### Switch Events
+```python
+# Published when switch value changes
+event_type: "switch_changed"
+payload: {
+    "old_value": int,  # Previous switch value (0-255)
+    "new_value": int,  # New switch value (0-255)
+    "timestamp": float
+}
+```
+
+### Hardware Output Events
+
+#### LED Control
+```python
+# Request LED state change
+event_type: "led_update"
+payload: {
+    "led": "red" | "yellow" | "green" | "blue",
+    "state": bool,  # True = on, False = off
+    "brightness": float  # 0.0 to 1.0 (optional)
+}
+```
+
+#### Display Control
+```python
+# Update 7-segment display
+event_type: "display_update"
+payload: {
+    "value": int | None,  # Number to display (0-255) or None to clear
+    "brightness": float   # 0.0 to 1.0 (optional)
+}
+```
+
+#### Screen Control
+```python
+# Update main screen content
+event_type: "screen_update"
+payload: {
+    "content_type": "text" | "image" | "clear",
+    "data": str,           # Text content or image path
+    "x": int,             # X position (optional)
+    "y": int,             # Y position (optional)
+    "font_size": int,     # Font size for text (optional)
+    "color": str,         # Text/background color (optional)
+    "align": str          # Text alignment (optional)
+}
+```
+
+### System Events
+
+#### Application Lifecycle
+```python
+# App launch requested (usually from Go button)
+event_type: "app_launch_requested"
+payload: {
+    "switch_value": int,   # Current switch value
+    "timestamp": float
+}
+
+# App started successfully
+event_type: "app_started"
+payload: {
+    "app_name": str,
+    "switch_value": int,
+    "timestamp": float
+}
+
+# App stopped (normal or forced)
+event_type: "app_stopped" 
+payload: {
+    "app_name": str,
+    "switch_value": int,
+    "reason": "normal" | "timeout" | "error" | "user_stop",
+    "duration": float,     # How long app ran (seconds)
+    "timestamp": float
+}
+
+# App encountered an error
+event_type: "app_error"
+payload: {
+    "app_name": str,
+    "switch_value": int,
+    "error": str,          # Error message
+    "timestamp": float
+}
+```
+
+#### System Lifecycle
+```python
+# System started successfully
+event_type: "system_started"
+payload: {
+    "hardware_type": "gpio" | "webui" | "mock",
+    "timestamp": float
+}
+
+# System shutdown initiated
+event_type: "system_shutdown"
+payload: {
+    "reason": "user" | "signal" | "error",
+    "timestamp": float
+}
+```
+
+## Event Bus API
+
+### Publishing Events
+```python
+# Publish an event
+event_bus.publish(event_type: str, payload: dict)
+
+# Example
+event_bus.publish("button_pressed", {
+    "button": "red",
+    "timestamp": time.time()
+})
+```
+
+### Subscribing to Events
+```python
+# Subscribe to all events of a type
+subscription_id = event_bus.subscribe(event_type: str, handler: callable)
+
+# Subscribe with payload filtering
+subscription_id = event_bus.subscribe(
+    event_type: str, 
+    handler: callable,
+    filter_dict: dict  # Only events matching this dict will be delivered
+)
+
+# Example
+def on_button_press(event_type, payload):
+    button = payload["button"]
+    print(f"{button} button pressed")
+
+# Subscribe to all button presses
+sub_id = event_bus.subscribe("button_pressed", on_button_press)
+
+# Subscribe only to red button presses
+red_sub_id = event_bus.subscribe(
+    "button_pressed", 
+    on_button_press,
+    filter_dict={"button": "red"}
 )
 ```
 
----
+### Unsubscribing
+```python
+# Unsubscribe from events
+event_bus.unsubscribe(subscription_id)
+```
 
-## 1. System Events
-Events related to the core application's state.
+## Event Flow Architecture
 
-### `system.startup`
-- **Description:** Published once when the main application has successfully initialized all components.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `mode`      | `str`   | Yes      | 'real' or 'mock' for hardware status.     |
+```
+Hardware Layer (GPIO/WebUI/Mock)
+    │
+    │ (publishes hardware events)
+    ▼
+Event Bus (application/events/event_bus.py)
+    │
+    ├─► System Service (handles system events)
+    ├─► Hardware Service (handles output events) 
+    ├─► App Manager (handles app lifecycle events)
+    └─► Mini-Apps (via App API)
+```
 
-### `system.shutdown`
-- **Description:** Published when the application is beginning its shutdown sequence.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `reason`    | `str`   | No       | Optional reason for shutdown (e.g., 'user_request', 'error'). |
+## Implementation Notes
 
-### `system.error`
-- **Description:** Published when an unhandled exception or critical error occurs.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `component` | `str`   | Yes      | The component where the error originated. |
-  | `message`   | `str`   | Yes      | The error message.                        |
-  | `traceback` | `str`   | No       | A formatted traceback string, if available. |
-  | `severity`  | `str`   | No       | 'warning', 'error', or 'critical'.        |
+### Thread Safety
+- All event bus operations are thread-safe
+- Events are delivered synchronously in the calling thread
+- Hardware monitoring runs in background threads
 
----
+### Error Handling
+- Event handler exceptions are caught and logged
+- Failed event delivery doesn't stop other handlers
+- Event bus continues operating even with handler errors
 
-## 2. Hardware Input Events
-Events generated by user interaction with physical controls.
+### Performance
+- Events are delivered immediately (no queuing)
+- Simple dict-based filtering for efficiency
+- Minimal overhead for publish/subscribe operations
 
-### `input.button.pressed` / `input.button.released`
-- **Description:** Published when a color button or the main "Go" button is pressed or released.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `button_id` | `str`   | Yes      | 'red', 'yellow', 'green', 'blue', 'main'. |
+### Testing
+- Mock hardware publishes same events as real hardware
+- Event bus can be easily mocked for unit tests
+- All events are logged for debugging and testing
 
-### `input.switch.changed`
-- **Description:** Published whenever the 8-switch value changes.
-- **Payload:**
-  | Field          | Type    | Required | Description                               |
-  |----------------|---------|----------|-------------------------------------------|
-  | `current_value`| `int`   | Yes      | The new value from the switches (0-255).  |
-  | `previous_value`| `int`   | Yes      | The previous value.                       |
+## Migration from Old Event Bus
 
----
+The new event bus is much simpler than the previous over-engineered version:
 
-## 3. App Lifecycle Events
-Events published by the `AppManager` as it controls mini-apps.
+### Removed Complexity
+- ❌ CQRS command/query separation
+- ❌ Complex mediator patterns  
+- ❌ Async event handling
+- ❌ Event sourcing and replay
+- ❌ Complex event hierarchies
 
-### `app.starting`
-- **Description:** Published just before a mini-app is loaded and started.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `app_name`  | `str`   | Yes      | The name of the app being started.        |
-  | `switch_value`| `int` | Yes      | The switch value that triggered the launch. |
+### Kept Simplicity
+- ✅ Simple publish/subscribe
+- ✅ Type-safe event definitions
+- ✅ Robust error handling
+- ✅ Event filtering
+- ✅ Comprehensive logging
 
-### `app.started`
-- **Description:** Published immediately after an app's thread has been started.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `app_name`  | `str`   | Yes      | The name of the app that started.         |
-
-### `app.stopping`
-- **Description:** Published when a request to stop an app has been initiated (e.g., stop event set).
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `app_name`  | `str`   | Yes      | The name of the app being stopped.        |
-  | `reason`    | `str`   | Yes      | 'user_request', 'timeout', 'shutdown'.    |
-
-### `app.stopped`
-- **Description:** Published after an app's thread has terminated.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `app_name`  | `str`   | Yes      | The name of the app that stopped.         |
-
----
-
-## 4. Hardware Output Events (for Auditing/Logging)
-These events are published by the hardware abstraction layer to confirm an action was taken. This is useful for logging, debugging, and remote monitoring.
-
-### `output.led.state_changed`
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `led_id`    | `str`   | Yes      | 'red', 'yellow', 'green', 'blue'.         |
-  | `state`     | `str`   | Yes      | 'on', 'off', 'blink'.                     |
-
-### `output.display.updated`
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `value`     | `str`   | Yes      | The 4-character string sent to the display. |
-
-### `output.screen.updated`
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `action`    | `str`   | Yes      | 'clear', 'display_text', 'display_image'. |
-  | `details`   | `dict`  | No       | A dictionary of parameters used for the action. See below. |
-
-#### Common Keys for `details` in `output.screen.updated`
-- For `display_text`:
-  - `text` (str): The text to display.
-  - `position` (tuple or list): (x, y) coordinates (optional).
-  - `color` (str): Text color (optional).
-  - `font` (str): Font name or style (optional).
-- For `display_image`:
-  - `image_path` (str): Path to the image file.
-  - `position` (tuple or list): (x, y) coordinates (optional).
-  - `scale` (float): Scaling factor (optional).
-- For `clear`:
-  - No additional keys required.
-
----
-
-## 5. Custom/Mini-App Events
-Mini-apps may define and publish their own events for inter-app or system communication. Use the `app.<appname>.<event>` naming convention.
-
-### Example: `app.quiz.completed`
-- **Description:** Published by a quiz mini-app when a quiz is completed.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `score`     | `int`   | Yes      | The user's score.                         |
-  | `max_score` | `int`   | Yes      | The maximum possible score.               |
-  | `user_id`   | `str`   | No       | Optional user identifier.                 |
-
----
-
-## 6. Command Events (Future/Proposed)
-
-**Note:** The primary mechanism for mini-apps to control hardware is the direct `Mini-App API` (e.g., `api.leds['red'].on()`). This provides a simple, imperative way to issue commands.
-
-Command events are a more advanced pattern for highly decoupled systems. They are not used by default but could be implemented for specific use cases. A component would publish a "command" event, and a handler somewhere else in the system would subscribe to it and execute the action.
-
-### Example: `command.led.set_state` (Not Implemented)
-- **Description:** A hypothetical event to request a change to an LED's state.
-- **Payload:**
-  | Field       | Type    | Required | Description                               |
-  |-------------|---------|----------|-------------------------------------------|
-  | `led_id`    | `str`   | Yes      | 'red', 'yellow', 'green', 'blue'.         |
-  | `state`     | `str`   | Yes      | 'on', 'off', 'blink'.                     |
-  | `params`    | `dict`  | No       | Optional parameters for blinking (e.g., `{'on_time': 0.2}`). |
+This simplified approach provides all the functionality needed for B.O.S.S. while being much easier to understand, test, and maintain.

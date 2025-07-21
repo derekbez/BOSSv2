@@ -13,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-logger = logging.getLogger("boss.webui.server")
+logger = logging.getLogger("boss.presentation.api.web_ui")
 
 # Request/Response Models
 class ButtonPressRequest(BaseModel):
@@ -124,28 +124,49 @@ class WebSocketManager:
         state = {}
         
         # LED states
-        for color in ['red', 'yellow', 'green', 'blue']:
-            led = self.hardware_dict.get(f'led_{color}')
-            if led and hasattr(led, 'is_on'):
-                state[f'led_{color}'] = led.is_on()
-            else:
+        leds = self.hardware_dict.get('leds')
+        if leds:
+            try:
+                from boss.domain.models.hardware_state import LedColor
+                for color in ['red', 'yellow', 'green', 'blue']:
+                    led_color = LedColor(color)
+                    if hasattr(leds, 'get_led_state'):
+                        led_state = leds.get_led_state(led_color)
+                        state[f'led_{color}'] = led_state.is_on if led_state else False
+                    else:
+                        state[f'led_{color}'] = False
+            except Exception as e:
+                logger.debug(f"Error getting LED states: {e}")
+                for color in ['red', 'yellow', 'green', 'blue']:
+                    state[f'led_{color}'] = False
+        else:
+            for color in ['red', 'yellow', 'green', 'blue']:
                 state[f'led_{color}'] = False
         
         # Display state
         display = self.hardware_dict.get('display')
-        if display and hasattr(display, 'last_value'):
-            state['display'] = str(display.last_value or "----")
+        if display:
+            if hasattr(display, '_current_value') and display._current_value is not None:
+                state['display'] = str(display._current_value)
+            else:
+                state['display'] = "----"
         else:
             state['display'] = "----"
         
         # Switch state
-        switch_reader = self.hardware_dict.get('switch_reader')
-        if switch_reader and hasattr(switch_reader, 'read_value'):
-            state['switch_value'] = switch_reader.read_value()
+        switches = self.hardware_dict.get('switches')
+        if switches:
+            if hasattr(switches, 'read_switches'):
+                switch_state = switches.read_switches()
+                state['switch_value'] = switch_state.value if switch_state else 0
+            elif hasattr(switches, '_switch_value'):
+                state['switch_value'] = switches._switch_value
+            else:
+                state['switch_value'] = 0
         else:
             state['switch_value'] = 0
         
-        # Screen state (check multiple possible attributes)
+        # Screen state
         screen = self.hardware_dict.get('screen')
         if screen:
             # Try different attributes that might contain screen content
@@ -158,6 +179,8 @@ class WebSocketManager:
                 content = str(screen.buffer or "")
             elif hasattr(screen, 'content'):
                 content = str(screen.content or "")
+            elif hasattr(screen, '_content'):
+                content = str(screen._content or "")
             state['screen_content'] = content
         else:
             state['screen_content'] = ""
@@ -278,18 +301,23 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if button_id not in valid_buttons:
             raise HTTPException(status_code=400, detail=f"Invalid button: {button_id}")
         
-        # Handle the special case for main button which is stored as 'main_btn'
+        # Handle button presses through the hardware components
         if button_id == 'main':
-            button = hardware_dict.get('main_btn')
+            # Main Go button
+            go_button = hardware_dict.get('go_button')
+            if go_button and hasattr(go_button, 'handle_press'):
+                go_button.handle_press()
+            elif go_button and hasattr(go_button, '_press_callback') and go_button._press_callback:
+                go_button._press_callback()
+            else:
+                logger.warning("Go button not properly connected")
         else:
-            button = hardware_dict.get(f'btn_{button_id}')
-            
-        if not button:
-            raise HTTPException(status_code=404, detail=f"Button {button_id} not found")
-        
-        # Simulate button press
-        if hasattr(button, 'press'):
-            button.press()
+            # Color buttons  
+            buttons = hardware_dict.get('buttons')
+            if buttons and hasattr(buttons, 'handle_button_press'):
+                buttons.handle_button_press(button_id)
+            else:
+                logger.warning(f"Button {button_id} not properly connected")
         
         return {"status": "success", "button": button_id, "action": "pressed"}
     
@@ -300,13 +328,20 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if not 0 <= request.value <= 255:
             raise HTTPException(status_code=400, detail="Switch value must be between 0 and 255")
         
-        switch_reader = hardware_dict.get('switch_reader')
-        if not switch_reader:
-            raise HTTPException(status_code=404, detail="Switch reader not found")
+        switches = hardware_dict.get('switches')
+        if not switches:
+            raise HTTPException(status_code=404, detail="Switches not found")
         
-        # Set switch value
-        if hasattr(switch_reader, 'set_value'):
-            switch_reader.set_value(request.value)
+        # Set switch value using the WebUI hardware method
+        if hasattr(switches, 'handle_switch_change'):
+            switches.handle_switch_change(request.value)
+        else:
+            logger.warning("Switch handle_switch_change method not available")
+        
+        # Also trigger display update (switches should update display)
+        display = hardware_dict.get('display')
+        if display and hasattr(display, 'show_number'):
+            display.show_number(request.value)
         
         return {"status": "success", "value": request.value}
     
@@ -318,17 +353,20 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if color not in valid_colors:
             raise HTTPException(status_code=400, detail=f"Invalid LED color: {color}")
         
-        led = hardware_dict.get(f'led_{color}')
-        if not led:
-            raise HTTPException(status_code=404, detail=f"LED {color} not found")
+        leds = hardware_dict.get('leds')
+        if not leds:
+            raise HTTPException(status_code=404, detail=f"LEDs not found")
         
-        # Set LED state
-        if request.state:
-            if hasattr(led, 'on'):
-                led.on()
-        else:
-            if hasattr(led, 'off'):
-                led.off()
+        # Set LED state using the proper LED interface
+        try:
+            from boss.domain.models.hardware_state import LedColor
+            led_color = LedColor(color)
+            if hasattr(leds, 'set_led'):
+                leds.set_led(led_color, request.state)
+            else:
+                logger.warning(f"LED set_led method not available")
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid LED color: {color}")
         
         return {"status": "success", "color": color, "state": request.state}
     
@@ -340,9 +378,18 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if not display:
             raise HTTPException(status_code=404, detail="Display not found")
         
-        # Set display content
-        if hasattr(display, 'show_message'):
-            display.show_message(request.text)
+        # Try to parse as number first, then fallback to text
+        try:
+            # If it's a number, use show_number
+            number = int(request.text)
+            if hasattr(display, 'show_number') and 0 <= number <= 9999:
+                display.show_number(number)
+            elif hasattr(display, 'show_text'):
+                display.show_text(request.text)
+        except ValueError:
+            # Not a number, show as text
+            if hasattr(display, 'show_text'):
+                display.show_text(request.text)
         
         return {"status": "success", "text": request.text}
     
