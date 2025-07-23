@@ -17,7 +17,9 @@ B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It prov
   - Python 3.11+
   - Use a Python virtual environment
   - Install dependencies:  `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
-  - All configuration is in `config/BOSSsettings.json`
+  - All configuration is in `boss/config/` (co-located with main code for modularity)
+    - `boss/config/boss_config.json` - Hardware pins, system settings
+    - `boss/config/app_mappings.json` - Switch-to-app mappings
 
 ## Directory Structure
 ```
@@ -118,12 +120,12 @@ boss/
 - **Hardware Abstraction:** All hardware (buttons, LEDs, display, screen, speaker) is abstracted with real, WebUI, and mock implementations. Fallback to mocks if hardware is not detected, enabling dev/testing on any platform
 - **App API:** Mini-apps must not access hardware directly. All hardware and display access is via the provided API object
 - **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout. Use `stop_event` for clean shutdown
-- **Configuration:** All app mappings and parameters are in `config/BOSSsettings.json` (JSON format). If missing, auto-generated with defaults
+- **Configuration:** System config in `boss/config/boss_config.json`, app mappings in `boss/config/app_mappings.json` (JSON format). Co-located with main code for modularity. If missing, auto-generated with defaults
 - **Logging:** Use the central logger for all events and errors. All hardware and app events are logged for auditing
 - **Remote Management:** The system exposes a secure API for remote configuration and status
 - **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`, mirroring the main structure. Use `pytest` and ensure coverage
 - **Extensibility:**
-  - Add new apps by creating a new subdirectory in `apps/` with `main.py`, `manifest.json`, and any assets
+  - Add new apps by creating a new subdirectory in `boss/apps/` with `main.py`, `manifest.json`, and any assets
   - Add new hardware by extending the hardware abstraction layer
   - Register new event types with the event bus as needed
 - **Type Hints & Docstrings:** Use type hints and docstrings throughout for clarity and maintainability
@@ -136,18 +138,53 @@ boss/
 - Use event-driven patterns for all hardware events and outputs.
 - Document all new apps and hardware modules.
 - All code is inside the `boss/` package for import clarity.
-- Each app is a subdirectory with its own code, manifest, and assets.
-- All configuration is in `config/`.
+- Each app is a subdirectory in `boss/apps/` with its own code, manifest, and assets.
+- All configuration is co-located in `boss/config/`.
 - All documentation is in `docs/`.
 - All tests are in `tests/`, mirroring the main structure.
 
 ## App Structure
-- Each mini-app is a subdirectory under `apps/`, e.g.:
+- Each mini-app is a subdirectory under `boss/apps/`, e.g.:
   - `main.py`: Entry point, must implement `run(stop_event, api)`
-  - `manifest.json`: Metadata (name, description, etc.)
+  - `manifest.json`: Metadata (name, description, etc.) - supports both standard and legacy formats with auto-conversion
   - `assets/`: Data files (e.g., images, sounds, JSON)
 - Apps load assets at runtime and use the API for all hardware/display access.
 - All mini-apps and tests use real or mock hardware as appropriate.
+
+## Configuration Files Structure
+
+### System Configuration (`boss/config/boss_config.json`)
+```json
+{
+  "hardware": {
+    "switch_data_pin": 18,
+    "button_pins": {"red": 5, "yellow": 6, "green": 13, "blue": 19},
+    "led_pins": {"red": 21, "yellow": 20, "green": 26, "blue": 12},
+    "display_clk_pin": 2,
+    "display_dio_pin": 3,
+    "screen_width": 800,
+    "screen_height": 480,
+    "enable_audio": true
+  },
+  "system": {
+    "apps_directory": "apps",
+    "log_level": "INFO",
+    "app_timeout_seconds": 300
+  }
+}
+```
+
+### App Mappings (`boss/config/app_mappings.json`)
+```json
+{
+  "app_mappings": {
+    "0": "list_all_apps",
+    "1": "hello_world",
+    "255": "admin_shutdown"
+  },
+  "parameters": {}
+}
+```
 
 ## Workflow & Usage
 - Always run the BOSS app from the project root for correct module resolution:

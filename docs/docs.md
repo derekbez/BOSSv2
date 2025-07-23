@@ -90,9 +90,10 @@ muxInpin = 8  #          blue
   - Handles clean shutdown and resource cleanup
 
 - **Configuration:**
-  - All app mappings and parameters are in `config/BOSSsettings.json` (JSON)
-  - If missing, auto-generated with defaults
-  - Validated at startup
+  - System configuration is in `boss/config/boss_config.json` (hardware pins, system settings)
+  - App mappings are in `boss/config/app_mappings.json` (switch-to-app assignments)
+  - Configuration is co-located with the main code for modularity
+  - If missing, auto-generated with defaults and validated at startup
 
 - **App Management:**
   - Apps are Python modules or packages under `apps/`, each with a standard interface (`run(stop_event, api)`)
@@ -140,12 +141,14 @@ muxInpin = 8  #          blue
   - Designed for Raspberry Pi OS 64bit Lite (no GUI)
   - Use Python 3.11+ and a virtual environment
   - Install dependencies: `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
-  - All configuration is in `config/BOSSsettings.json`
+  - All configuration is in `boss/config/` (co-located with main code)
   - For Windows/dev, hardware is mocked automatically
 
 - **Startup:**
   - Run from project root: `python3 -m boss.main`
-  - Open the Web UI debug dashboard at [http://localhost:8070/](http://localhost:8070/) for live hardware and event inspection
+  - Configuration is automatically loaded from `boss/config/boss_config.json`
+  - App mappings are loaded from `boss/config/app_mappings.json`
+  - Open the Web UI debug dashboard at [http://localhost:8080/](http://localhost:8080/) for live hardware and event inspection (when webui hardware mode is enabled)
   - Can be started manually or as a systemd service (see `docs/install-steps.md`)
 
 - **Testing:**
@@ -164,54 +167,118 @@ The project is organized for modularity, scalability, and maintainability:
 ```
 boss/
   __init__.py
-  main.py
-  core/
+  main.py                     # Entry point with dependency injection setup
+  presentation/              # UI/API interfaces (no business logic)
     __init__.py
-    app_manager.py
-    event_bus.py
-    config.py
-    logger.py
-    api.py
-    remote.py
-  hardware/
-    __init__.py
-    switch_reader.py
-    button.py
-    led.py
-    display.py
-    screen.py
-    speaker.py
-  apps/
-    app_matrixrain/
+    physical_ui/
       __init__.py
-      main.py
-      manifest.json
-      assets/
-    ...
-  assets/
-    images/
-    sounds/
-  config/
-    BOSSsettings.json
-  tests/
-    core/
+      button_handler.py       # Physical button event handling
+      switch_handler.py       # Switch state monitoring
+    api/
+      __init__.py
+      rest_api.py            # REST endpoints for remote management
+      websocket_api.py       # Real-time event streaming
+      web_ui.py              # Development web interface
+    cli/
+      __init__.py
+      debug_cli.py           # Debug and maintenance commands
+  application/               # Service classes and business logic
+    __init__.py
+    services/
+      __init__.py
+      app_manager.py         # App lifecycle management
+      app_runner.py          # Thread management for mini-apps
+      switch_monitor.py      # Switch state monitoring and events
+      hardware_service.py    # Hardware coordination
+      system_service.py      # System health and shutdown
+    events/
+      __init__.py
+      event_bus.py           # Simple, robust event bus
+      event_handlers.py      # System event handlers
+    api/
+      __init__.py
+      app_api.py             # API provided to mini-apps
+  domain/                    # Core models and business rules
+    __init__.py
+    models/
+      __init__.py
+      app.py                # App entity and business rules
+      hardware_state.py     # Hardware state models
+      config.py             # Configuration models
+    events/
+      __init__.py
+      domain_events.py      # Domain event definitions
+    interfaces/
+      __init__.py
+      hardware.py           # Hardware abstraction interfaces
+      app_api.py            # App API interface
+      services.py           # Service interfaces
+  infrastructure/           # Hardware, config, logging implementations
+    __init__.py
     hardware/
-    apps/
-  scripts/
-  docs/
-  requirements.txt
-  README.md
+      __init__.py
+      factory.py            # Hardware factory (GPIO/WebUI/Mock)
+      gpio/                 # Real hardware implementations
+        __init__.py
+        buttons.py
+        leds.py
+        display.py
+        switches.py
+        screen.py
+        speaker.py
+      webui/               # Web UI implementations for development
+        __init__.py
+        webui_buttons.py
+        webui_leds.py
+        webui_display.py
+      mocks/               # Mock implementations for testing
+        __init__.py
+        mock_buttons.py
+        mock_leds.py
+        mock_display.py
+        mock_switches.py
+    config/
+      __init__.py
+      config_loader.py      # JSON config loading and validation
+      config_manager.py     # Runtime config management
+    logging/
+      __init__.py
+      logger.py             # Centralized logging setup
+      formatters.py         # Log formatting
+  apps/                     # Mini-apps directory
+    __init__.py
+    app_template/           # Template for new apps
+    list_all_apps/          # System app for browsing available apps
+    hello_world/            # Example app
+    admin_startup/          # System startup feedback app
+    admin_shutdown/         # System shutdown app
+    admin_wifi_configuration/ # WiFi management app
+    admin_boss_admin/       # System administration app
+    # ... other mini-apps
+  config/                   # Configuration files (co-located with code)
+    boss_config.json        # Main system configuration
+    app_mappings.json       # Switch-to-app mappings
+  logs/                     # Log files directory
+    boss.log               # Main application log
+tests/                      # Test structure mirrors main structure
+  __init__.py
+  unit/
+  integration/
+  test_fixtures/
+scripts/                    # Utility scripts
+docs/                       # Documentation
+requirements.txt            # Python dependencies
 ```
 
 **Best Practices:**
-- All code is inside the `boss/` package for import clarity
-- Each app is a subdirectory with its own code, manifest, and assets
-- All configuration is in `config/`
-- All documentation is in `docs/`
-- All tests are in `tests/`, mirroring the main structure
-- Use dependency injection and mocks for all hardware in tests
-- Use type hints and docstrings throughout
-- All hardware and display access by apps is via the provided API only
+- **Clean Architecture:** Layer separation (Presentation, Application, Domain, Infrastructure) with dependency inversion
+- **Co-location:** All code, config, and mini-apps are inside the `boss/` package for import clarity and modularity
+- **Configuration:** All system configuration is in `boss/config/` - no external config directories
+- **Mini-apps:** All mini-apps are in `boss/apps/` with standardized structure (main.py, manifest.json, assets/)
+- **Testing:** All tests are in `tests/`, mirroring the main structure with mocks for hardware
+- **Type Safety:** Use type hints and docstrings throughout for clarity and maintainability
+- **Event-Driven:** All hardware and app events use the event bus - no direct hardware access in apps
+- **Hardware Abstraction:** Real, WebUI, and mock implementations enable dev/testing on any platform
 
 ---
 
@@ -241,37 +308,107 @@ boss/
 ---
 
 
-## Mini-App Structure & Assets
+## Mini-App Structure & Configuration
 
-Each mini-app is a subdirectory under `apps/`, e.g.:
+### Mini-App Directory Structure
+Each mini-app is a subdirectory under `boss/apps/`, e.g.:
 
 ```
-apps/
-  app_jokes/
+boss/apps/
+  list_all_apps/           # System app for browsing available apps
     __init__.py
+    main.py               # Entry point with run(stop_event, api)
+    manifest.json         # App metadata and configuration
+    assets/               # Optional: images, sounds, data files
+  hello_world/            # Example basic app
+    main.py
+    manifest.json
+  current_weather/        # Example network-enabled app
     main.py
     manifest.json
     assets/
-      jokes.json
+      weather_icons/
 ```
 
-- **main.py**: Entry point, must implement `run(stop_event, api)`
-- **manifest.json**: Metadata (name, description, etc.)
-- **assets/**: Data files (e.g., `jokes.json`)
+### Manifest File Structure
+Apps use `manifest.json` for metadata. The system supports two formats:
 
-**Example `jokes.json`:**
+**Standard Format (Recommended):**
 ```json
 {
-  "jokes": [
-    "Why did the scarecrow win an award? Because he was outstanding in his field!",
-    "Why don't scientists trust atoms? Because they make up everything!",
-    "I told my computer I needed a break, and it said 'No problem, I'll go to sleep.'"
-  ]
+  "name": "Hello World",
+  "description": "Simple hello world app demonstrating event-driven API",
+  "version": "1.0.0",
+  "author": "BOSS Team",
+  "entry_point": "main.py",
+  "timeout_seconds": 60,
+  "requires_network": false,
+  "requires_audio": false,
+  "tags": ["example", "basic"]
 }
 ```
 
-- Apps load assets at runtime and use the API for all hardware/display access
-- All mini-apps and tests use real or mock hardware as appropriate
+**Legacy Format (Auto-converted):**
+```json
+{
+  "id": "list_all_apps",
+  "title": "Mini-App Directory Viewer",
+  "description": "Displays a paginated list of all available mini-apps",
+  "entry_point": "main.py",
+  "config": {
+    "entries_per_page": 15
+  },
+  "instructions": "Uses yellow/blue buttons for navigation"
+}
+```
+
+### Configuration Files
+
+**System Configuration (`boss/config/boss_config.json`):**
+```json
+{
+  "hardware": {
+    "switch_data_pin": 18,
+    "button_pins": {"red": 5, "yellow": 6, "green": 13, "blue": 19},
+    "led_pins": {"red": 21, "yellow": 20, "green": 26, "blue": 12},
+    "display_clk_pin": 2,
+    "display_dio_pin": 3,
+    "screen_width": 800,
+    "screen_height": 480,
+    "enable_audio": true
+  },
+  "system": {
+    "apps_directory": "apps",
+    "log_level": "INFO",
+    "log_file": "logs/boss.log",
+    "event_queue_size": 1000,
+    "app_timeout_seconds": 300
+  }
+}
+```
+
+**App Mappings (`boss/config/app_mappings.json`):**
+```json
+{
+  "app_mappings": {
+    "0": "list_all_apps",
+    "1": "hello_world",
+    "8": "joke_of_the_moment",
+    "10": "current_weather",
+    "252": "admin_wifi_configuration",
+    "254": "admin_boss_admin", 
+    "255": "admin_shutdown"
+  },
+  "parameters": {}
+}
+```
+
+### App Development Notes
+- Apps load assets at runtime using `api.get_asset_path("filename")`
+- All hardware/display access must use the provided API object
+- Apps run in separate threads with clean shutdown via `stop_event`
+- Both standard and legacy manifest formats are supported with auto-conversion
+- Use the `boss/apps/app_template/` directory as a starting point for new apps
 
 ---
 

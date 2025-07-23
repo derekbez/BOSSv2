@@ -4929,3 +4929,15 @@ Go button to exit' (size: 32, color: white, align: center)
 2025-07-23 09:19:08,126 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
 2025-07-23 09:19:08,126 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
 2025-07-23 09:19:08,126 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 09:35:44,774 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 09:35:44,774 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 09:35:44,775 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 09:35:44,775 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 09:35:44,775 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 09:35:44,809 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 09:35:44,809 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 09:35:44,809 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 09:35:44,810 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 09:35:44,810 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 09:35:44,810 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 09:35:44,810 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped

@@ -1,15 +1,34 @@
 # B.O.S.S. Mini-App Development: Event-Driven API
 
 ## Overview
-All mini-apps in the new B.O.S.S. architecture use a clean, event-driven API that provides access to hardware, screen, and system events. This enables apps to react to hardware changes without polling or direct hardware access.
+All mini-apps in the B.O.S.S. architecture use a clean, event-driven API that provides access to hardware, screen, and system events. Mini-apps are located in `boss/apps/` and are co-located with the main system code for modularity. This enables apps to react to hardware changes without polling or direct hardware access.
 
-## App Structure
-Each mini-app should have:
-- `manifest.json` - App metadata and configuration
+## App Structure & Location
+Each mini-app should be located in `boss/apps/` and have:
 - `main.py` - Main entry point with `run(stop_event, api)` function
-- Optional `assets/` directory for images, sounds, etc.
+- `manifest.json` - App metadata and configuration (supports both standard and legacy formats)
+- Optional `assets/` directory for images, sounds, data files, etc.
 
-## Manifest Example
+### Example Directory Structure
+```
+boss/apps/
+  list_all_apps/           # System app for browsing available apps
+    main.py
+    manifest.json
+    assets/
+  hello_world/            # Example basic app
+    main.py
+    manifest.json
+  current_weather/        # Example network-enabled app
+    main.py
+    manifest.json
+    assets/
+      weather_icons/
+```
+
+## Manifest Examples
+
+### Standard Format (Recommended)
 ```json
 {
   "name": "Hello World",
@@ -23,6 +42,22 @@ Each mini-app should have:
   "tags": ["example", "basic"]
 }
 ```
+
+### Legacy Format (Auto-converted)
+The system also supports legacy manifest formats for compatibility:
+```json
+{
+  "id": "list_all_apps",
+  "title": "Mini-App Directory Viewer", 
+  "description": "Displays a paginated list of all available mini-apps",
+  "entry_point": "main.py",
+  "config": {
+    "entries_per_page": 15
+  },
+  "instructions": "Uses yellow/blue buttons for navigation"
+}
+```
+*Note: Legacy manifests are automatically converted to the standard format at runtime.*
 
 ## Main App Function
 ```python
@@ -96,8 +131,10 @@ api.log_error("Something went wrong")
 # Get app directory path
 app_path = api.get_app_path()
 
-# Get asset file path
+# Get asset file path (automatically resolves from boss/apps/your_app/assets/)
 sound_file = api.get_asset_path("sounds/beep.wav")
+image_file = api.get_asset_path("images/logo.png")
+data_file = api.get_asset_path("data.json")
 ```
 
 ## Available Events
@@ -172,23 +209,56 @@ def run(stop_event, api):
         api.log_info("App stopping")
 ```
 
+## Configuration & App Mappings
+
+Apps are mapped to switch values in `boss/config/app_mappings.json`:
+```json
+{
+  "app_mappings": {
+    "0": "list_all_apps",
+    "1": "hello_world", 
+    "8": "joke_of_the_moment",
+    "10": "current_weather",
+    "255": "admin_shutdown"
+  },
+  "parameters": {}
+}
+```
+
+When a user sets the switches to a value (0-255) and presses the Go button, BOSS loads and runs the corresponding app. If no mapping exists for a switch value, the user will see a "No app mapped" message.
+
 ## Migration from Old Architecture
-1. Update `manifest.json` with new format
-2. Change main function signature to `run(stop_event, api)`
-3. Replace hardware polling with event subscriptions
-4. Use `api.screen.*` instead of direct screen access
-5. Use `api.hardware.*` for LED/display control
-6. Use `api.log_*` for logging
+1. Move apps from top-level `apps/` to `boss/apps/` 
+2. Update `manifest.json` with new format (or keep legacy format - auto-conversion supported)
+3. Change main function signature to `run(stop_event, api)`
+4. Replace hardware polling with event subscriptions
+5. Use `api.screen.*` instead of direct screen access
+6. Use `api.hardware.*` for LED/display control
+7. Use `api.log_*` for logging
+8. Update asset loading to use `api.get_asset_path()`
 
 ## Best Practices
-- Always subscribe to events rather than polling
-- Clean up resources in the `finally` block
-- Use `stop_event.wait()` for the main loop
-- Log important events for debugging
-- Keep the main loop simple - let events drive behavior
-- Test apps using the mock hardware mode
-- Replace polling or direct hardware access with event subscriptions.
-- See the example above and the migration guide for details.
+- **Location:** Always place apps in `boss/apps/` for proper module resolution and co-location
+- **Events:** Always subscribe to events rather than polling hardware
+- **Cleanup:** Clean up resources in the `finally` block
+- **Main Loop:** Use `stop_event.wait()` for the main loop instead of while loops
+- **Logging:** Log important events for debugging using `api.log_*` methods
+- **Hardware:** Keep the main loop simple - let events drive behavior
+- **Testing:** Test apps using the mock hardware mode (`--hardware mock`)
+- **Assets:** Use `api.get_asset_path()` to load files from your app's assets directory
+- **Manifest:** Use the standard manifest format for new apps, legacy format is auto-converted
+- **Dependencies:** Declare network/audio requirements in manifest for proper system validation
+
+## Development Workflow
+1. Create new app directory in `boss/apps/your_app_name/`
+2. Add `main.py` with `run(stop_event, api)` function
+3. Add `manifest.json` with app metadata
+4. Create `assets/` directory for any data files
+5. Add entry to `boss/config/app_mappings.json` to map to a switch value
+6. Test with `python -m boss.main --hardware mock`
+7. Use the WebUI development interface for visual debugging
 
 ## More Examples
-- See the `templates/` directory for more event-driven mini-app templates.
+- See the `boss/apps/` directory for complete working examples
+- Use `boss/apps/hello_world/` as a simple starting template
+- See `boss/apps/list_all_apps/` for a more complex example with assets and event handling
