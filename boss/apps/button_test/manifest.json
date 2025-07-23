@@ -1,0 +1,17 @@
+{
+    "name": "Button Test",
+    "description": "Tests colored button functionality and LED responses",
+    "version": "1.0.0",
+    "author": "BOSS System",
+    "category": "testing",
+    "requires_hardware": [
+        "buttons",
+        "leds",
+        "screen"
+    ],
+    "tags": [
+        "test",
+        "buttons",
+        "interactive"
+    ]
+}

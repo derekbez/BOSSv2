@@ -73,6 +73,12 @@ class HardwareManager(HardwareService):
             # Set up hardware callbacks
             self._setup_callbacks()
             
+            # For WebUI hardware, set the event bus
+            self._setup_webui_event_bus()
+            
+            # Subscribe to app API events
+            self._setup_event_subscriptions()
+            
             # Update initial state
             self._update_hardware_state()
             
@@ -132,7 +138,60 @@ class HardwareManager(HardwareService):
             self._monitoring_thread.join(timeout=2.0)
         
         logger.info("Hardware monitoring stopped")
+
+    def _setup_webui_event_bus(self) -> None:
+        """Set up event bus for WebUI hardware components."""
+        # Check if we're using WebUI hardware and set event bus
+        if self.display and hasattr(self.display, 'set_event_bus'):
+            self.display.set_event_bus(self.event_bus)  # type: ignore
+            logger.debug("Event bus set for WebUI display")
+        
+        if self.screen and hasattr(self.screen, 'set_event_bus'):
+            self.screen.set_event_bus(self.event_bus)  # type: ignore
+            logger.debug("Event bus set for WebUI screen")
+        
+        if self.leds and hasattr(self.leds, 'set_event_bus'):
+            self.leds.set_event_bus(self.event_bus)  # type: ignore
+            logger.debug("Event bus set for WebUI LEDs")
+
+    def _setup_event_subscriptions(self) -> None:
+        """Subscribe to app API events."""
+        # Subscribe to screen events from apps
+        self.event_bus.subscribe("screen_update", self._on_screen_update)
+        self.event_bus.subscribe("display_update", self._on_display_update)
+        logger.debug("Subscribed to app API events")
     
+    def _on_screen_update(self, event_type: str, payload: dict, source: Optional[str] = None) -> None:
+        """Handle screen update events from apps."""
+        if not self.screen:
+            return
+            
+        content_type = payload.get("content_type", "text")
+        if content_type == "text":
+            text = payload.get("content", "")
+            font_size = payload.get("font_size", 24)
+            color = payload.get("color", "white")
+            background = payload.get("background", "black")
+            align = payload.get("align", "center")
+            
+            self.screen.display_text(text, font_size, color, background, align)
+            logger.debug(f"Screen updated with text from {source}: '{text[:50]}...'")
+    
+    def _on_display_update(self, event_type: str, payload: dict, source: Optional[str] = None) -> None:
+        """Handle display update events from apps."""
+        if not self.display:
+            return
+            
+        if "value" in payload:
+            value = payload["value"]
+            if isinstance(value, int) and 0 <= value <= 9999:
+                self.display.show_number(value)
+                logger.debug(f"Display updated with number from {source}: {value}")
+        elif "text" in payload:
+            text = payload["text"]
+            self.display.show_text(text)
+            logger.debug(f"Display updated with text from {source}: '{text}'")
+
     def _setup_callbacks(self) -> None:
         """Set up hardware event callbacks."""
         try:

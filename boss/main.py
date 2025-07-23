@@ -4,6 +4,7 @@ Main entry point for B.O.S.S. system with new architecture.
 
 import sys
 import os
+import signal
 from pathlib import Path
 from typing import Optional
 
@@ -62,7 +63,7 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     # Create services
     hardware_service = HardwareManager(hardware_factory, event_bus)
     
-    apps_directory = Path(__file__).parent.parent / config.system.apps_directory
+    apps_directory = Path(__file__).parent / config.system.apps_directory
     app_manager = AppManager(apps_directory, event_bus)
     
     # Create app API factory function
@@ -119,7 +120,12 @@ def main():
             logger.info("BOSS system running - Press Ctrl+C to stop")
             system_manager.wait_for_shutdown()
         except KeyboardInterrupt:
-            logger.info("Keyboard interrupt received")
+            logger.info("Keyboard interrupt received - shutting down...")
+            # Make sure the shutdown event is set
+            system_manager._shutdown_event.set()
+        except Exception as e:
+            logger.error(f"Unexpected error in main loop: {e}")
+            system_manager._shutdown_event.set()
         
     except Exception as e:
         # Set up basic logging if system creation failed
@@ -131,9 +137,20 @@ def main():
     finally:
         if system_manager is not None:
             try:
+                # Get logger for shutdown messages
+                import logging
+                shutdown_logger = logging.getLogger(__name__)
+                shutdown_logger.info("Initiating system shutdown...")
                 system_manager.stop()
+                shutdown_logger.info("System shutdown complete")
             except Exception as e:
                 print(f"Error during shutdown: {e}")
+        
+        # Force exit if needed (shouldn't be necessary with proper daemon threads)
+        import time
+        time.sleep(0.5)  # Give threads a moment to finish
+        print("BOSS shutdown complete")
+        sys.exit(0)
 
 
 if __name__ == "__main__":

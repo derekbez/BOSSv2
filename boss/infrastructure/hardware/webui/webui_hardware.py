@@ -225,10 +225,15 @@ class WebUISwitches(SwitchInterface):
 class WebUIDisplay(DisplayInterface):
     """WebUI 7-segment display implementation."""
     
-    def __init__(self):
+    def __init__(self, event_bus=None):
         self._current_value: Optional[int] = None
         self._brightness = 1.0
         self._available = False
+        self._event_bus = event_bus
+    
+    def set_event_bus(self, event_bus):
+        """Set the event bus for publishing display updates."""
+        self._event_bus = event_bus
     
     def initialize(self) -> bool:
         """Initialize WebUI display."""
@@ -253,34 +258,81 @@ class WebUIDisplay(DisplayInterface):
         self._current_value = value
         self._brightness = brightness
         logger.debug(f"WebUI display: {value} (brightness: {brightness})")
-        # TODO: Send to web interface
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.display.updated", {
+                "type": "number",
+                "value": value,
+                "brightness": brightness,
+                "text": str(value)
+            })
+            self._event_bus.publish("display.update", {
+                "value": value,
+                "text": str(value)
+            })
     
     def show_text(self, text: str, brightness: float = 1.0) -> None:
         """Display text (limited characters)."""
         self._brightness = brightness
         logger.debug(f"WebUI display text: '{text}' (brightness: {brightness})")
-        # TODO: Send to web interface
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.display.updated", {
+                "type": "text",
+                "text": text,
+                "brightness": brightness
+            })
+            self._event_bus.publish("display.update", {
+                "value": None,
+                "text": text
+            })
     
     def clear(self) -> None:
         """Clear the display."""
         self._current_value = None
         logger.debug("WebUI display cleared")
-        # TODO: Send to web interface
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.display.updated", {
+                "type": "clear",
+                "text": "",
+                "brightness": self._brightness
+            })
+            self._event_bus.publish("display.update", {
+                "value": None,
+                "text": ""
+            })
     
     def set_brightness(self, brightness: float) -> None:
         """Set display brightness (0.0-1.0)."""
         self._brightness = brightness
         logger.debug(f"WebUI display brightness: {brightness}")
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.display.updated", {
+                "type": "brightness",
+                "brightness": brightness,
+                "text": str(self._current_value) if self._current_value is not None else ""
+            })
 
 
 class WebUIScreen(ScreenInterface):
     """WebUI screen implementation - shows screen content in web interface."""
     
-    def __init__(self, width: int = 800, height: int = 480):
+    def __init__(self, width: int = 800, height: int = 480, event_bus=None):
         self._width = width
         self._height = height
         self._current_content = "BOSS WebUI Screen Ready"
         self._available = False
+        self._event_bus = event_bus
+    
+    def set_event_bus(self, event_bus):
+        """Set the event bus for publishing screen updates."""
+        self._event_bus = event_bus
     
     def initialize(self) -> bool:
         """Initialize WebUI screen."""
@@ -301,6 +353,23 @@ class WebUIScreen(ScreenInterface):
                     background: str = "black", align: str = "center") -> None:
         """Display text on screen."""
         self._current_content = text
+        logger.debug(f"WebUI screen text: '{text}' (size: {font_size}, color: {color}, align: {align})")
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.screen.updated", {
+                "text": text,
+                "size": font_size,
+                "color": color,
+                "background": background,
+                "align": align
+            })
+            self._event_bus.publish("screen.update", {
+                "text": text,
+                "size": font_size,
+                "color": color,
+                "align": align
+            })
         logger.info(f"WebUI screen text: '{text}' (size: {font_size}, color: {color}, align: {align})")
         # TODO: Send to web interface via WebSocket
     

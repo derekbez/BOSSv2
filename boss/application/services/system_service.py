@@ -3,6 +3,7 @@ System Service - Manages overall system lifecycle and coordination.
 """
 
 import logging
+import os
 import signal
 import sys
 import threading
@@ -141,9 +142,9 @@ class SystemManager(SystemService):
         """Stop WebUI development interface if it's running."""
         if self._webui_port:
             try:
-                # The WebUI runs in daemon threads, so it will stop automatically
-                # when the main process exits. We just log the shutdown.
-                logger.info(f"WebUI development interface on port {self._webui_port} will shutdown with main process")
+                from boss.presentation.api.web_ui_main import stop_web_ui
+                stop_web_ui()
+                logger.info(f"WebUI development interface on port {self._webui_port} stopped")
                 self._webui_port = None
             except Exception as e:
                 logger.warning(f"Error stopping WebUI: {e}")
@@ -156,8 +157,8 @@ class SystemManager(SystemService):
             
             # Try to find the startup app by name
             all_apps = self.app_manager.get_all_apps()
-            for app in all_apps:
-                if app.manifest.name == "admin_startup" or app.app_dir.name == "admin_startup":
+            for app in all_apps.values():  # Iterate over App objects, not dictionary keys
+                if app.manifest.name == "admin_startup" or app.app_path.name == "admin_startup":
                     startup_app = app
                     break
             
@@ -244,7 +245,15 @@ class SystemManager(SystemService):
     
     def wait_for_shutdown(self) -> None:
         """Wait for system shutdown to complete."""
-        self._shutdown_event.wait()
+        try:
+            # Wait for shutdown event with periodic timeout to allow interruption
+            while not self._shutdown_event.is_set():
+                # Wait in short intervals to allow KeyboardInterrupt to be caught
+                if self._shutdown_event.wait(timeout=0.5):
+                    break  # Shutdown event was set
+        except KeyboardInterrupt:
+            logger.info("KeyboardInterrupt in wait_for_shutdown - setting shutdown event")
+            self._shutdown_event.set()
     
     def _setup_event_handlers(self) -> None:
         """Set up system event handlers."""
@@ -356,7 +365,26 @@ class SystemManager(SystemService):
         logger.info(f"Received {signal_name}, shutting down gracefully")
         
         # Set the shutdown event to wake up the main thread
-        self._shutdown_event.set()
+        if not self._shutdown_event.is_set():
+            self._shutdown_event.set()
         
         # Stop the system gracefully
-        self.stop()
+        try:
+            self.stop()
+        except Exception as e:
+            logger.error(f"Error during signal-triggered shutdown: {e}")
+        
+        # Force exit after a shorter delay on Windows (signals can be unreliable)
+        def force_exit():
+            import time
+            time.sleep(1.0)  # Shorter timeout for Windows
+            logger.warning("Forcing exit due to shutdown timeout")
+            os._exit(0)
+        
+        threading.Thread(target=force_exit, daemon=True).start()
+        
+        # On Windows, also try to exit immediately after setting shutdown event
+        if sys.platform.startswith('win'):
+            import time
+            time.sleep(0.1)  # Brief delay to allow logging
+            os._exit(0)

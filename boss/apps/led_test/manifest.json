@@ -1,0 +1,16 @@
+{
+    "name": "LED Test",
+    "description": "Automatically cycles through all LEDs to test functionality",
+    "version": "1.0.0",
+    "author": "BOSS System",
+    "category": "testing",
+    "requires_hardware": [
+        "leds",
+        "screen"
+    ],
+    "tags": [
+        "test",
+        "leds",
+        "automatic"
+    ]
+}

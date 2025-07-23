@@ -18,9 +18,9 @@ def get_config_path() -> Path:
     if config_path:
         return Path(config_path)
     
-    # Default to config/boss_config.json in project root
+    # Default to boss/config/boss_config.json (co-located with main code)
     current_dir = Path(__file__).parent.parent.parent
-    return current_dir / "config" / "boss_config.json"
+    return current_dir / "boss" / "config" / "boss_config.json"
 
 
 def load_config(config_path: Optional[Path] = None) -> BossConfig:

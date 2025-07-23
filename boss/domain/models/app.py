@@ -41,7 +41,28 @@ class AppManifest:
         try:
             with open(manifest_path, 'r') as f:
                 data = json.load(f)
-            return cls(**data)
+            
+            # Handle different manifest formats
+            # Map legacy format fields to new format
+            if "id" in data and "name" not in data:
+                data["name"] = data.get("title", data["id"])
+            if "title" in data and "name" not in data:
+                data["name"] = data["title"]
+            
+            # Provide defaults for required fields if missing
+            if "version" not in data:
+                data["version"] = "1.0.0"
+            if "author" not in data:
+                data["author"] = "Unknown"
+            
+            # Remove unknown fields that would cause TypeError
+            known_fields = {
+                "name", "description", "version", "author", "entry_point", 
+                "timeout_seconds", "requires_network", "requires_audio", "tags"
+            }
+            filtered_data = {k: v for k, v in data.items() if k in known_fields}
+            
+            return cls(**filtered_data)
         except (FileNotFoundError, json.JSONDecodeError, TypeError) as e:
             raise ValueError(f"Invalid manifest file {manifest_path}: {e}")
     

@@ -4103,3 +4103,829 @@ Go button to exit' (size: 32, color: white, align: center)
 
 Press colored buttons to see events
 Go button to exit' (size: 32, color: white, align: center)
+2025-07-22 19:51:26,783 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-22 19:51:26,783 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-22 19:51:26,783 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-22 19:51:26,784 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-22 19:51:26,784 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-22 19:51:26,784 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-22 19:51:26,785 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-22 19:51:26,785 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-22 19:51:26,785 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-22 19:51:26,785 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-22 19:51:26,785 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-22 19:51:26,786 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-22 19:51:26,786 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-22 19:51:26,815 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-22 19:51:26,816 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-22 19:51:26,816 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-22 19:51:26,816 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-22 19:51:26,816 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-22 19:51:26,817 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: webui
+2025-07-22 19:51:26,835 - boss.infrastructure.hardware.webui.webui_factory - INFO - __init__:19 - WebUI hardware factory initialized
+2025-07-22 19:51:26,835 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-22 19:51:26,836 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-22 19:51:26,836 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-22 19:51:26,836 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: webui
+2025-07-22 19:51:26,836 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-22 19:51:26,837 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:100 - Web UI Configuration:
+2025-07-22 19:51:26,837 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:101 -   Development interface available for testing
+2025-07-22 19:51:26,837 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:102 -   Screen Size: 800x480
+2025-07-22 19:51:26,837 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-22 19:51:26,838 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-22 19:51:26,838 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-22 19:51:26,838 - __main__ - INFO - main:112 - BOSS system created successfully
+2025-07-22 19:51:26,839 - boss.application.services.system_service - INFO - start:41 - Starting BOSS system
+2025-07-22 19:51:26,839 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-22 19:51:26,839 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-22 19:51:26,840 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing webui hardware
+2025-07-22 19:51:26,840 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:36 - WebUI buttons initialized - check web interface for controls
+2025-07-22 19:51:26,840 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-22 19:51:26,840 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:96 - WebUI Go button initialized
+2025-07-22 19:51:26,841 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-22 19:51:26,841 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:143 - WebUI LEDs initialized - LED states will show in web interface
+2025-07-22 19:51:26,841 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-22 19:51:26,841 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:183 - WebUI switches initialized - use web interface to change switch values
+2025-07-22 19:51:26,841 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-22 19:51:26,842 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:236 - WebUI display initialized - display will show in web interface
+2025-07-22 19:51:26,842 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-22 19:51:26,842 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:288 - WebUI screen initialized (800x480) - content will show in web interface
+2025-07-22 19:51:26,842 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-22 19:51:26,843 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:334 - WebUI speaker initialized - audio will play in web interface
+2025-07-22 19:51:26,843 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-22 19:51:26,843 - boss.application.services.hardware_service - INFO - initialize:79 - Hardware initialization complete
+2025-07-22 19:51:26,843 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-22 19:51:26,855 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 1 apps
+2025-07-22 19:51:26,856 - boss.application.services.hardware_service - INFO - _monitor_hardware:185 - Hardware monitoring thread started
+2025-07-22 19:51:26,856 - boss.application.services.hardware_service - INFO - start_monitoring:122 - Hardware monitoring started
+2025-07-22 19:51:29,070 - boss.presentation.api.web_ui_main - INFO - start_web_ui:88 - BOSS Web UI started at http://localhost:8070
+2025-07-22 19:51:29,070 - boss.presentation.api.web_ui_main - INFO - start_web_ui:89 - Web UI debug dashboard initialized
+2025-07-22 19:51:29,071 - boss.presentation.api.web_ui_main - INFO - start_web_ui:90 - Available hardware devices:
+2025-07-22 19:51:29,071 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   buttons: WebUIButtons
+2025-07-22 19:51:29,071 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   go_button: WebUIGoButton
+2025-07-22 19:51:29,072 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   leds: WebUILeds
+2025-07-22 19:51:29,072 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   switches: WebUISwitches
+2025-07-22 19:51:29,072 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   display: WebUIDisplay
+2025-07-22 19:51:29,072 - boss.presentation.api.web_ui_main - INFO - start_web_ui:93 -   screen: WebUIScreen
+2025-07-22 19:51:29,073 - boss.application.services.system_service - INFO - start_webui_if_needed:133 - WebUI development interface started at http://localhost:8070
+2025-07-22 19:51:29,073 - boss.application.services.system_service - WARNING - _run_startup_app:178 - Error running startup app: 'int' object has no attribute 'manifest'
+2025-07-22 19:51:29,374 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:220 - Basic startup feedback completed
+2025-07-22 19:51:29,374 - boss.application.services.system_service - INFO - start:69 - BOSS system started successfully
+2025-07-22 19:51:29,374 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with webui hardware
+2025-07-22 19:51:29,374 - __main__ - INFO - main:119 - BOSS system running - Press Ctrl+C to stop
+2025-07-22 19:51:42,614 - boss.presentation.api.web_ui - INFO - connect:77 - WebSocket connected. Total connections: 1
+2025-07-22 19:51:50,072 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 1
+2025-07-22 19:51:50,705 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 1 to 17
+2025-07-22 19:51:51,899 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 17 to 16
+2025-07-22 19:51:52,287 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 16 to 0
+2025-07-22 19:51:52,876 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 16
+2025-07-22 19:51:55,120 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 16 to 0
+2025-07-22 19:51:55,776 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 1
+2025-07-22 19:51:58,075 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 19:51:58,076 - boss.application.services.system_service - INFO - _on_app_launch_requested:274 - Launching app for switch 1: Hello World
+2025-07-22 19:51:58,076 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Hello World (switch 1)
+2025-07-22 19:51:58,076 - boss.application.services.system_service - INFO - _on_app_launch_requested:274 - Launching app for switch 1: Hello World
+2025-07-22 19:51:58,077 - boss.application.services.app_runner - INFO - stop_current_app:67 - Stopping app: Hello World
+2025-07-22 19:51:58,083 - boss.application.services.app_runner - INFO - _run_app_thread:125 - Running app: Hello World
+2025-07-22 19:51:58,084 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app starting
+2025-07-22 19:51:58,084 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app running - waiting for events
+2025-07-22 19:51:58,085 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app stopping
+2025-07-22 19:51:58,085 - boss.application.services.app_runner - INFO - _run_app_thread:145 - App Hello World finished normally after 0.0 seconds
+2025-07-22 19:51:58,085 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Hello World (switch 1)
+2025-07-22 19:51:58,086 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:304 - WebUI screen text: 'Hello World!
+
+Press colored buttons to see events
+Go button to exit' (size: 32, color: white, align: center)
+2025-07-22 19:51:58,086 - boss.application.services.app_runner - INFO - _run_app_thread:125 - Running app: Hello World
+2025-07-22 19:51:58,087 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app starting
+2025-07-22 19:51:58,087 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app running - waiting for events
+2025-07-22 19:51:58,087 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:304 - WebUI screen text: 'Hello World!
+
+Press colored buttons to see events
+Go button to exit' (size: 32, color: white, align: center)
+2025-07-22 19:52:58,089 - boss.application.services.app_runner - WARNING - timeout_monitor:131 - App Hello World timed out after 60 seconds
+2025-07-22 19:52:58,089 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app stopping
+2025-07-22 19:52:58,090 - boss.application.services.app_runner - INFO - _run_app_thread:145 - App Hello World finished normally after 60.0 seconds
+2025-07-22 19:58:06,286 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 1 to 0
+2025-07-22 19:58:06,286 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Switch value changed to: 0
+2025-07-22 19:58:06,287 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Switch value changed to: 0
+2025-07-22 19:58:06,813 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 19:58:06,813 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:06,813 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:11,073 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 19:58:11,073 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:11,074 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:11,851 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 19:58:11,852 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:11,852 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:12,490 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 19:58:12,490 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 19:58:12,491 - boss.application.services.system_service - WARNING - _on_app_launch_requested:278 - No app mapped to switch value 0
+2025-07-22 20:21:24,285 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-22 20:21:24,285 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-22 20:21:24,286 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-22 20:21:24,286 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-22 20:21:24,286 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-22 20:21:24,287 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-22 20:21:24,287 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-22 20:21:24,287 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-22 20:21:24,287 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-22 20:21:24,288 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-22 20:21:24,288 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-22 20:21:24,288 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-22 20:21:24,288 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-22 20:21:24,311 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-22 20:21:24,311 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-22 20:21:24,312 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-22 20:21:24,312 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-22 20:21:24,312 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-22 20:21:24,313 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: webui
+2025-07-22 20:21:24,318 - boss.infrastructure.hardware.webui.webui_factory - INFO - __init__:19 - WebUI hardware factory initialized
+2025-07-22 20:21:24,318 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-22 20:21:24,318 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-22 20:21:24,318 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-22 20:21:24,319 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: webui
+2025-07-22 20:21:24,319 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-22 20:21:24,319 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:100 - Web UI Configuration:
+2025-07-22 20:21:24,319 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:101 -   Development interface available for testing
+2025-07-22 20:21:24,320 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:102 -   Screen Size: 800x480
+2025-07-22 20:21:24,320 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-22 20:21:24,320 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-22 20:21:24,320 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-22 20:21:24,321 - __main__ - INFO - main:128 - BOSS system created successfully
+2025-07-22 20:21:24,321 - boss.application.services.system_service - INFO - start:41 - Starting BOSS system
+2025-07-22 20:21:24,322 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-22 20:21:24,322 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-22 20:21:24,322 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing webui hardware
+2025-07-22 20:21:24,322 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:36 - WebUI buttons initialized - check web interface for controls
+2025-07-22 20:21:24,323 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-22 20:21:24,323 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:96 - WebUI Go button initialized
+2025-07-22 20:21:24,323 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-22 20:21:24,323 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:143 - WebUI LEDs initialized - LED states will show in web interface
+2025-07-22 20:21:24,324 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-22 20:21:24,324 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:183 - WebUI switches initialized - use web interface to change switch values
+2025-07-22 20:21:24,324 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-22 20:21:24,324 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:241 - WebUI display initialized - display will show in web interface
+2025-07-22 20:21:24,325 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-22 20:21:24,325 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:340 - WebUI screen initialized (800x480) - content will show in web interface
+2025-07-22 20:21:24,325 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-22 20:21:24,325 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:403 - WebUI speaker initialized - audio will play in web interface
+2025-07-22 20:21:24,325 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-22 20:21:24,326 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-22 20:21:24,326 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-22 20:21:24,327 - boss.application.services.app_manager - WARNING - _load_app:90 - No switch mapping found for app: hello_world
+2025-07-22 20:21:24,327 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 0 apps
+2025-07-22 20:21:24,327 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-22 20:21:24,327 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-22 20:21:25,667 - boss.presentation.api.web_ui_main - INFO - start_web_ui:98 - BOSS Web UI started at http://localhost:8070
+2025-07-22 20:21:25,668 - boss.presentation.api.web_ui_main - INFO - start_web_ui:99 - Web UI debug dashboard initialized
+2025-07-22 20:21:25,668 - boss.presentation.api.web_ui_main - INFO - start_web_ui:100 - Available hardware devices:
+2025-07-22 20:21:25,668 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   buttons: WebUIButtons
+2025-07-22 20:21:25,669 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   go_button: WebUIGoButton
+2025-07-22 20:21:25,669 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   leds: WebUILeds
+2025-07-22 20:21:25,669 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   switches: WebUISwitches
+2025-07-22 20:21:25,670 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   display: WebUIDisplay
+2025-07-22 20:21:25,670 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   screen: WebUIScreen
+2025-07-22 20:21:25,670 - boss.application.services.system_service - INFO - start_webui_if_needed:133 - WebUI development interface started at http://localhost:8070
+2025-07-22 20:21:25,671 - boss.application.services.system_service - INFO - _run_startup_app:173 - No admin_startup app found - skipping startup feedback
+2025-07-22 20:21:25,971 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:220 - Basic startup feedback completed
+2025-07-22 20:21:25,971 - boss.application.services.system_service - INFO - start:69 - BOSS system started successfully
+2025-07-22 20:21:25,971 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with webui hardware
+2025-07-22 20:21:25,972 - __main__ - INFO - main:135 - BOSS system running - Press Ctrl+C to stop
+2025-07-22 20:21:26,156 - boss.presentation.api.web_ui - INFO - connect:77 - WebSocket connected. Total connections: 1
+2025-07-22 20:21:28,312 - boss.presentation.api.web_ui - INFO - connect:77 - WebSocket connected. Total connections: 2
+2025-07-22 20:21:32,771 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 16
+2025-07-22 20:21:34,716 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 16 to 0
+2025-07-22 20:21:35,494 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 1
+2025-07-22 20:21:36,395 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 1 to 0
+2025-07-22 20:21:39,357 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 20:21:39,358 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 0
+2025-07-22 20:21:39,358 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 0
+2025-07-22 20:21:49,745 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 16
+2025-07-22 20:21:54,867 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 20:21:54,868 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 16
+2025-07-22 20:21:54,868 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 16
+2025-07-22 20:22:03,725 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 16 to 0
+2025-07-22 20:22:04,956 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 1
+2025-07-22 20:22:06,624 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 20:22:06,625 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 1
+2025-07-22 20:22:06,625 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 1
+2025-07-22 20:22:08,908 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 1 to 0
+2025-07-22 20:22:18,480 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 2
+2025-07-22 20:22:21,042 - boss.application.events.event_handlers - INFO - on_go_button_pressed:53 - Go button pressed - requesting app launch
+2025-07-22 20:22:21,043 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 2
+2025-07-22 20:22:21,043 - boss.application.services.system_service - WARNING - _on_app_launch_requested:284 - No app mapped to switch value 2
+2025-07-22 20:22:24,281 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 2 to 0
+2025-07-22 20:34:54,385 - boss.presentation.api.web_ui - INFO - disconnect:91 - WebSocket disconnected. Total connections: 1
+2025-07-22 20:34:54,386 - boss.presentation.api.web_ui - INFO - disconnect:91 - WebSocket disconnected. Total connections: 0
+2025-07-23 00:04:35,995 - boss.presentation.api.web_ui - INFO - connect:77 - WebSocket connected. Total connections: 1
+2025-07-23 01:21:16,785 - boss.presentation.api.web_ui - INFO - disconnect:91 - WebSocket disconnected. Total connections: 0
+2025-07-23 08:33:41,103 - boss.presentation.api.web_ui - INFO - connect:77 - WebSocket connected. Total connections: 1
+2025-07-23 08:38:46,396 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 08:38:46,397 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 08:38:46,397 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 08:38:46,397 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 08:38:46,397 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 08:38:46,398 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 08:38:46,398 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 08:38:46,398 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 08:38:46,399 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 08:38:46,399 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 08:38:46,400 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 08:38:46,400 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 08:38:46,400 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 08:38:46,425 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 08:38:46,426 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 08:38:46,426 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 08:38:46,426 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 08:38:46,427 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 08:38:46,427 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 08:38:46,448 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 08:38:46,448 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 08:38:46,449 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 08:38:46,449 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 08:38:46,449 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 08:38:46,450 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 08:38:46,450 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 08:38:46,450 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 08:38:46,451 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 08:38:46,451 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 08:38:46,451 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 08:38:46,452 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 08:38:46,452 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 08:38:46,452 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 08:38:46,453 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 08:38:46,453 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 08:38:46,453 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 08:38:46,453 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 08:38:46,454 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 08:38:46,454 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 08:38:46,454 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 08:38:46,455 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 08:38:46,455 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 08:38:46,455 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 08:38:46,456 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-23 08:38:46,463 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 1 apps
+2025-07-23 08:38:46,464 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 08:38:46,464 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 08:38:46,464 - boss.application.services.system_service - WARNING - _run_startup_app:179 - Error running startup app: 'int' object has no attribute 'manifest'
+2025-07-23 08:38:46,766 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 08:38:46,766 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 08:38:46,766 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 08:38:46,766 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 08:41:13,233 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 08:41:13,234 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 08:41:13,234 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 08:41:13,234 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 08:41:13,234 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 08:41:13,235 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 08:41:13,237 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 08:41:13,237 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 08:41:13,260 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 08:41:13,261 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 08:41:13,261 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 08:41:13,262 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 08:41:13,262 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 08:41:13,264 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 08:41:13,265 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 08:41:13,265 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 08:41:13,265 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 08:41:13,266 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 08:41:13,266 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 08:41:13,267 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 08:41:13,267 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 08:41:13,267 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 08:41:13,268 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 08:41:13,268 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 08:41:13,268 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 08:41:13,269 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 08:41:13,269 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 08:41:13,269 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 08:41:13,270 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 08:41:13,270 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 08:41:13,270 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 08:41:13,271 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 08:41:13,271 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 08:41:13,271 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 08:41:13,271 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 08:41:13,272 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 08:41:13,272 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 08:41:13,272 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 08:41:13,272 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-23 08:41:13,273 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 1 apps
+2025-07-23 08:41:13,274 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 08:41:13,274 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 08:41:13,275 - boss.application.services.system_service - WARNING - _run_startup_app:179 - Error running startup app: 'App' object has no attribute 'app_dir'
+2025-07-23 08:41:13,576 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 08:41:13,576 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 08:41:13,576 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 08:41:13,576 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 08:41:26,215 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 08:41:26,215 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 08:41:26,216 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 08:41:26,216 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 08:41:26,216 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 08:41:26,222 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 08:41:26,222 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 08:41:26,222 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 08:41:26,222 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 08:41:26,223 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 08:41:26,223 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 08:41:26,223 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 08:43:38,528 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 08:43:38,528 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 08:43:38,529 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 08:43:38,529 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 08:43:38,529 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 08:43:38,529 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 08:43:38,530 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 08:43:38,530 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 08:43:38,530 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 08:43:38,531 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 08:43:38,531 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 08:43:38,531 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 08:43:38,531 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 08:43:38,556 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 08:43:38,556 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 08:43:38,556 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 08:43:38,558 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 08:43:38,558 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 08:43:38,559 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 08:43:38,561 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 08:43:38,561 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 08:43:38,562 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 08:43:38,562 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 08:43:38,562 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 08:43:38,563 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 08:43:38,563 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 08:43:38,563 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 08:43:38,564 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 08:43:38,564 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 08:43:38,564 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 08:43:38,565 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 08:43:38,565 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 08:43:38,566 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 08:43:38,566 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 08:43:38,566 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 08:43:38,567 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 08:43:38,567 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 08:43:38,567 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 08:43:38,567 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 08:43:38,568 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 08:43:38,568 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 08:43:38,568 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 08:43:38,569 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 08:43:38,569 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-23 08:43:38,570 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 1 apps
+2025-07-23 08:43:38,570 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 08:43:38,570 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 08:43:38,571 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 08:43:38,872 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 08:43:38,872 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 08:43:38,872 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 08:43:38,873 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 08:45:40,213 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 08:45:40,213 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 08:45:40,214 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 08:45:40,214 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 08:45:40,215 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 08:45:40,283 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 08:45:40,283 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 08:45:40,285 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 08:45:40,285 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 08:45:40,286 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 08:45:40,286 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 08:45:40,286 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 08:50:15,362 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 08:50:15,362 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 08:50:15,362 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 08:50:15,363 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 08:50:15,363 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 08:50:15,363 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 08:50:15,364 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 08:50:15,364 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 08:50:15,364 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 08:50:15,365 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 08:50:15,365 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 08:50:15,365 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 08:50:15,365 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 08:50:15,392 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 08:50:15,392 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 08:50:15,392 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 08:50:15,393 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 08:50:15,393 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 08:50:15,393 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 08:50:15,396 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 08:50:15,397 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 08:50:15,397 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 08:50:15,397 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 08:50:15,398 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 08:50:15,398 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 08:50:15,398 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 08:50:15,399 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 08:50:15,399 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 08:50:15,399 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 08:50:15,400 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 08:50:15,400 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 08:50:15,401 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 08:50:15,401 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 08:50:15,401 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 08:50:15,402 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 08:50:15,402 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 08:50:15,402 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 08:50:15,402 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 08:50:15,404 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\apps
+2025-07-23 08:50:15,405 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 1 apps
+2025-07-23 08:50:15,405 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 08:50:15,405 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 08:50:15,406 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 08:50:15,706 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 08:50:15,706 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 08:50:15,706 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 08:50:15,706 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 08:55:50,076 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 08:55:50,076 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 08:55:50,077 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 08:55:50,077 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 08:55:50,077 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 08:55:50,159 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 08:55:50,159 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 08:55:50,159 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 08:55:50,160 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 08:55:50,160 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 08:55:50,160 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 08:55:50,161 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 08:57:16,926 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 08:57:16,926 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 08:57:16,926 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 08:57:16,927 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 08:57:16,927 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 08:57:16,928 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 08:57:16,930 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 08:57:16,930 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 08:57:16,956 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 08:57:16,956 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 08:57:16,957 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 08:57:16,957 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 08:57:16,957 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 08:57:16,958 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 08:57:16,960 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 08:57:16,960 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 08:57:16,961 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 08:57:16,961 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 08:57:16,961 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 08:57:16,961 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 08:57:16,962 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 08:57:16,962 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 08:57:16,962 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 08:57:16,963 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 08:57:16,963 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 08:57:16,964 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 08:57:16,964 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 08:57:16,965 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 08:57:16,965 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 08:57:16,965 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 08:57:16,966 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 08:57:16,966 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 08:57:16,966 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 08:57:16,966 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 08:57:16,967 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 08:57:16,967 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 08:57:16,967 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 08:57:16,968 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 08:57:16,968 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-07-23 08:57:16,969 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: admin_boss_admin
+2025-07-23 08:57:16,969 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: admin_shutdown
+2025-07-23 08:57:16,969 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: admin_startup
+2025-07-23 08:57:16,970 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: admin_wifi_configuration
+2025-07-23 08:57:16,970 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: app_jokes
+2025-07-23 08:57:16,971 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: bird_sightings_near_me
+2025-07-23 08:57:16,971 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: breaking_news
+2025-07-23 08:57:16,971 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: button_test
+2025-07-23 08:57:16,972 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: color_of_the_day
+2025-07-23 08:57:16,972 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: constellation_of_the_night
+2025-07-23 08:57:16,973 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: current_weather
+2025-07-23 08:57:16,973 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: dad_joke_generator
+2025-07-23 08:57:16,973 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: flights_leaving_heathrow
+2025-07-23 08:57:16,974 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: flight_status_favorite_airline
+2025-07-23 08:57:16,974 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: hello_world
+2025-07-23 08:57:16,974 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: internet_speed_check
+2025-07-23 08:57:16,975 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: joke_of_the_moment
+2025-07-23 08:57:16,975 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: led_test
+2025-07-23 08:57:16,976 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: list_all_apps
+2025-07-23 08:57:16,976 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: local_tide_times
+2025-07-23 08:57:16,976 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: moon_phase
+2025-07-23 08:57:16,977 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: name_that_animal
+2025-07-23 08:57:16,977 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: on_this_day
+2025-07-23 08:57:16,977 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: public_domain_book_snippet
+2025-07-23 08:57:16,978 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: quote_of_the_day
+2025-07-23 08:57:16,978 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: random_emoji_combo
+2025-07-23 08:57:16,978 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: random_local_place_name
+2025-07-23 08:57:16,979 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: random_useless_fact
+2025-07-23 08:57:16,979 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: space_update
+2025-07-23 08:57:16,979 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: tiny_poem
+2025-07-23 08:57:16,980 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: today_in_music
+2025-07-23 08:57:16,980 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: top_trending_search
+2025-07-23 08:57:16,980 - boss.application.services.app_manager - WARNING - _load_app:99 - No switch mapping found for app: word_of_the_day
+2025-07-23 08:57:16,981 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 0 apps
+2025-07-23 08:57:16,981 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 08:57:16,981 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 08:57:16,982 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 08:57:17,283 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 08:57:17,283 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 08:57:17,283 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 08:57:17,283 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 08:58:24,705 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 08:58:24,705 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 08:58:24,706 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 08:58:24,706 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 08:58:24,706 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 08:58:24,731 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 08:58:24,731 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 08:58:24,732 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 08:58:24,732 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 08:58:24,732 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 08:58:24,732 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 08:58:24,733 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 09:10:39,797 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 09:10:39,798 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 09:10:39,798 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 09:10:39,798 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 09:10:39,799 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 09:10:39,799 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 09:10:39,799 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 09:10:39,799 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 09:10:39,800 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 09:10:39,800 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 09:10:39,800 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 09:10:39,801 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 09:10:39,801 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 09:10:39,825 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 09:10:39,826 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 09:10:39,826 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 09:10:39,826 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 09:10:39,827 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 09:10:39,828 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 09:10:39,830 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 09:10:39,830 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 09:10:39,830 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 09:10:39,830 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 09:10:39,831 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 09:10:39,831 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 09:10:39,831 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 09:10:39,832 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 09:10:39,832 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 09:10:39,832 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 09:10:39,833 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 09:10:39,833 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 09:10:39,833 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 09:10:39,834 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 09:10:39,834 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 09:10:39,834 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 09:10:39,835 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 09:10:39,835 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 09:10:39,835 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 09:10:39,836 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 09:10:39,836 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 09:10:39,836 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 09:10:39,836 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 09:10:39,836 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 09:10:39,837 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-07-23 09:10:39,844 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app admin_boss_admin: Invalid manifest file D:\dev\BOSSv2\boss\apps\admin_boss_admin\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,853 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app admin_shutdown: Invalid manifest file D:\dev\BOSSv2\boss\apps\admin_shutdown\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,853 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: admin_startup
+2025-07-23 09:10:39,860 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app admin_wifi_configuration: Invalid manifest file D:\dev\BOSSv2\boss\apps\admin_wifi_configuration\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,861 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: app_jokes
+2025-07-23 09:10:39,870 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app bird_sightings_near_me: Invalid manifest file D:\dev\BOSSv2\boss\apps\bird_sightings_near_me\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,878 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app breaking_news: Invalid manifest file D:\dev\BOSSv2\boss\apps\breaking_news\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,878 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: button_test
+2025-07-23 09:10:39,887 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app color_of_the_day: Invalid manifest file D:\dev\BOSSv2\boss\apps\color_of_the_day\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,894 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app constellation_of_the_night: Invalid manifest file D:\dev\BOSSv2\boss\apps\constellation_of_the_night\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,903 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app current_weather: Invalid manifest file D:\dev\BOSSv2\boss\apps\current_weather\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,909 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app dad_joke_generator: Invalid manifest file D:\dev\BOSSv2\boss\apps\dad_joke_generator\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,917 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app flights_leaving_heathrow: Invalid manifest file D:\dev\BOSSv2\boss\apps\flights_leaving_heathrow\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,924 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app flight_status_favorite_airline: Invalid manifest file D:\dev\BOSSv2\boss\apps\flight_status_favorite_airline\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,924 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: hello_world
+2025-07-23 09:10:39,930 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app internet_speed_check: Invalid manifest file D:\dev\BOSSv2\boss\apps\internet_speed_check\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,939 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app joke_of_the_moment: Invalid manifest file D:\dev\BOSSv2\boss\apps\joke_of_the_moment\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,939 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: led_test
+2025-07-23 09:10:39,945 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app list_all_apps: Invalid manifest file D:\dev\BOSSv2\boss\apps\list_all_apps\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,953 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app local_tide_times: Invalid manifest file D:\dev\BOSSv2\boss\apps\local_tide_times\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,960 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app moon_phase: Invalid manifest file D:\dev\BOSSv2\boss\apps\moon_phase\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,969 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app name_that_animal: Invalid manifest file D:\dev\BOSSv2\boss\apps\name_that_animal\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,976 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app on_this_day: Invalid manifest file D:\dev\BOSSv2\boss\apps\on_this_day\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,984 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app public_domain_book_snippet: Invalid manifest file D:\dev\BOSSv2\boss\apps\public_domain_book_snippet\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:39,992 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app quote_of_the_day: Invalid manifest file D:\dev\BOSSv2\boss\apps\quote_of_the_day\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,000 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app random_emoji_combo: Invalid manifest file D:\dev\BOSSv2\boss\apps\random_emoji_combo\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,007 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app random_local_place_name: Invalid manifest file D:\dev\BOSSv2\boss\apps\random_local_place_name\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,014 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app random_useless_fact: Invalid manifest file D:\dev\BOSSv2\boss\apps\random_useless_fact\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,021 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app space_update: Invalid manifest file D:\dev\BOSSv2\boss\apps\space_update\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,028 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app tiny_poem: Invalid manifest file D:\dev\BOSSv2\boss\apps\tiny_poem\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,036 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app today_in_music: Invalid manifest file D:\dev\BOSSv2\boss\apps\today_in_music\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,044 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app top_trending_search: Invalid manifest file D:\dev\BOSSv2\boss\apps\top_trending_search\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,052 - boss.application.services.app_manager - ERROR - _load_app:116 - Invalid manifest for app word_of_the_day: Invalid manifest file D:\dev\BOSSv2\boss\apps\word_of_the_day\manifest.json: AppManifest.__init__() got an unexpected keyword argument 'id'
+2025-07-23 09:10:40,053 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 0 apps
+2025-07-23 09:10:40,053 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 09:10:40,053 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 09:10:40,054 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 09:10:40,355 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 09:10:40,355 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 09:10:40,355 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 09:10:40,355 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 09:13:00,155 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 09:13:00,155 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 09:13:00,156 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 09:13:00,156 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 09:13:00,156 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 09:13:00,233 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 09:13:00,233 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 09:13:00,233 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 09:13:00,235 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 09:13:00,235 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 09:13:00,235 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 09:13:00,235 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 09:13:04,616 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 09:13:04,617 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 09:13:04,617 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 09:13:04,617 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 09:13:04,618 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 09:13:04,618 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 09:13:04,618 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 09:13:04,618 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 09:13:04,619 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 09:13:04,619 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 09:13:04,619 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 09:13:04,619 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 09:13:04,620 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 09:13:04,646 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 09:13:04,646 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 09:13:04,646 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 09:13:04,647 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 09:13:04,647 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 09:13:04,648 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 09:13:04,650 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 09:13:04,650 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 09:13:04,651 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 09:13:04,651 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 09:13:04,651 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 09:13:04,652 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 09:13:04,652 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 09:13:04,652 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 09:13:04,652 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 09:13:04,653 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 09:13:04,653 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 09:13:04,653 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 09:13:04,654 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 09:13:04,654 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 09:13:04,654 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 09:13:04,655 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 09:13:04,655 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 09:13:04,656 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 09:13:04,656 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 09:13:04,656 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 09:13:04,657 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 09:13:04,657 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 09:13:04,657 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 09:13:04,657 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 09:13:04,657 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-07-23 09:13:04,658 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: admin_startup
+2025-07-23 09:13:04,658 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: app_jokes
+2025-07-23 09:13:04,660 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for bird_sightings_near_me: Entry point does not exist: D:\dev\BOSSv2\boss\apps\bird_sightings_near_me\main.py:run
+2025-07-23 09:13:04,660 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for breaking_news: Entry point does not exist: D:\dev\BOSSv2\boss\apps\breaking_news\main.py:run
+2025-07-23 09:13:04,661 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: button_test
+2025-07-23 09:13:04,662 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for color_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\color_of_the_day\main.py:run
+2025-07-23 09:13:04,662 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for constellation_of_the_night: Entry point does not exist: D:\dev\BOSSv2\boss\apps\constellation_of_the_night\main.py:run
+2025-07-23 09:13:04,663 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for current_weather: Entry point does not exist: D:\dev\BOSSv2\boss\apps\current_weather\main.py:run
+2025-07-23 09:13:04,664 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for dad_joke_generator: Entry point does not exist: D:\dev\BOSSv2\boss\apps\dad_joke_generator\main.py:run
+2025-07-23 09:13:04,665 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for flights_leaving_heathrow: Entry point does not exist: D:\dev\BOSSv2\boss\apps\flights_leaving_heathrow\main.py:run
+2025-07-23 09:13:04,666 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for flight_status_favorite_airline: Entry point does not exist: D:\dev\BOSSv2\boss\apps\flight_status_favorite_airline\main.py:run
+2025-07-23 09:13:04,666 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: hello_world
+2025-07-23 09:13:04,667 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for joke_of_the_moment: Entry point does not exist: D:\dev\BOSSv2\boss\apps\joke_of_the_moment\main.py:run
+2025-07-23 09:13:04,668 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: led_test
+2025-07-23 09:13:04,669 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for local_tide_times: Entry point does not exist: D:\dev\BOSSv2\boss\apps\local_tide_times\main.py:run
+2025-07-23 09:13:04,669 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for moon_phase: Entry point does not exist: D:\dev\BOSSv2\boss\apps\moon_phase\main.py:run
+2025-07-23 09:13:04,670 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for name_that_animal: Entry point does not exist: D:\dev\BOSSv2\boss\apps\name_that_animal\main.py:run
+2025-07-23 09:13:04,671 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for on_this_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\on_this_day\main.py:run
+2025-07-23 09:13:04,671 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for public_domain_book_snippet: Entry point does not exist: D:\dev\BOSSv2\boss\apps\public_domain_book_snippet\main.py:run
+2025-07-23 09:13:04,672 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for quote_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\quote_of_the_day\main.py:run
+2025-07-23 09:13:04,673 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for random_emoji_combo: Entry point does not exist: D:\dev\BOSSv2\boss\apps\random_emoji_combo\main.py:run
+2025-07-23 09:13:04,673 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for random_useless_fact: Entry point does not exist: D:\dev\BOSSv2\boss\apps\random_useless_fact\main.py:run
+2025-07-23 09:13:04,674 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for space_update: Entry point does not exist: D:\dev\BOSSv2\boss\apps\space_update\main.py:run
+2025-07-23 09:13:04,675 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for tiny_poem: Entry point does not exist: D:\dev\BOSSv2\boss\apps\tiny_poem\main.py:run
+2025-07-23 09:13:04,676 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for today_in_music: Entry point does not exist: D:\dev\BOSSv2\boss\apps\today_in_music\main.py:run
+2025-07-23 09:13:04,676 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for top_trending_search: Entry point does not exist: D:\dev\BOSSv2\boss\apps\top_trending_search\main.py:run
+2025-07-23 09:13:04,677 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for word_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\word_of_the_day\main.py:run
+2025-07-23 09:13:04,677 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 6 apps
+2025-07-23 09:13:04,678 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 09:13:04,678 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 09:13:04,678 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 09:13:04,980 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 09:13:04,980 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 09:13:04,980 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 09:13:04,981 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop
+2025-07-23 09:14:27,125 - boss.application.services.system_service - INFO - _signal_handler:365 - Received SIGINT, shutting down gracefully
+2025-07-23 09:14:27,125 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-07-23 09:14:27,126 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-07-23 09:14:27,126 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-07-23 09:14:27,126 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-07-23 09:14:27,196 - boss.application.services.hardware_service - INFO - _monitor_hardware:264 - Hardware monitoring thread stopped
+2025-07-23 09:14:27,196 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-07-23 09:14:27,196 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-07-23 09:14:27,196 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-07-23 09:14:27,198 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-07-23 09:14:27,198 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-07-23 09:14:27,198 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-07-23 09:19:07,771 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-07-23 09:19:07,771 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-07-23 09:19:07,772 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-07-23 09:19:07,772 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-07-23 09:19:07,772 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-07-23 09:19:07,773 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-07-23 09:19:07,773 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-07-23 09:19:07,773 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-07-23 09:19:07,773 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-07-23 09:19:07,773 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-07-23 09:19:07,774 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-07-23 09:19:07,774 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-07-23 09:19:07,774 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-07-23 09:19:07,797 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-07-23 09:19:07,797 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-07-23 09:19:07,798 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-07-23 09:19:07,798 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-07-23 09:19:07,798 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-07-23 09:19:07,799 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:60 - Forcing hardware type: mock
+2025-07-23 09:19:07,801 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:19 - Mock hardware factory initialized
+2025-07-23 09:19:07,801 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:82 - ==================================================
+2025-07-23 09:19:07,801 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:83 - BOSS Hardware Configuration Summary
+2025-07-23 09:19:07,802 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:84 - ==================================================
+2025-07-23 09:19:07,802 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:85 - Hardware Type: mock
+2025-07-23 09:19:07,802 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:86 - Platform: Windows AMD64
+2025-07-23 09:19:07,802 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 - Mock Hardware Configuration:
+2025-07-23 09:19:07,803 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   All hardware components mocked for testing
+2025-07-23 09:19:07,803 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 - Audio Enabled: True
+2025-07-23 09:19:07,803 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 - Screen Fullscreen: True
+2025-07-23 09:19:07,803 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:110 - ==================================================
+2025-07-23 09:19:07,804 - boss.main - INFO - main:113 - BOSS system created successfully
+2025-07-23 09:19:07,804 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-07-23 09:19:07,805 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-07-23 09:19:07,805 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-07-23 09:19:07,805 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-07-23 09:19:07,805 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-07-23 09:19:07,806 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-07-23 09:19:07,806 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-07-23 09:19:07,806 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-07-23 09:19:07,806 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-07-23 09:19:07,806 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-07-23 09:19:07,807 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-07-23 09:19:07,807 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-07-23 09:19:07,807 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-07-23 09:19:07,808 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: admin_startup
+2025-07-23 09:19:07,809 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: app_jokes
+2025-07-23 09:19:07,810 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for bird_sightings_near_me: Entry point does not exist: D:\dev\BOSSv2\boss\apps\bird_sightings_near_me\main.py:run
+2025-07-23 09:19:07,810 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for breaking_news: Entry point does not exist: D:\dev\BOSSv2\boss\apps\breaking_news\main.py:run
+2025-07-23 09:19:07,810 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: button_test
+2025-07-23 09:19:07,811 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for color_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\color_of_the_day\main.py:run
+2025-07-23 09:19:07,812 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for constellation_of_the_night: Entry point does not exist: D:\dev\BOSSv2\boss\apps\constellation_of_the_night\main.py:run
+2025-07-23 09:19:07,812 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for current_weather: Entry point does not exist: D:\dev\BOSSv2\boss\apps\current_weather\main.py:run
+2025-07-23 09:19:07,813 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for dad_joke_generator: Entry point does not exist: D:\dev\BOSSv2\boss\apps\dad_joke_generator\main.py:run
+2025-07-23 09:19:07,813 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for flights_leaving_heathrow: Entry point does not exist: D:\dev\BOSSv2\boss\apps\flights_leaving_heathrow\main.py:run
+2025-07-23 09:19:07,814 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for flight_status_favorite_airline: Entry point does not exist: D:\dev\BOSSv2\boss\apps\flight_status_favorite_airline\main.py:run
+2025-07-23 09:19:07,814 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: hello_world
+2025-07-23 09:19:07,815 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for joke_of_the_moment: Entry point does not exist: D:\dev\BOSSv2\boss\apps\joke_of_the_moment\main.py:run
+2025-07-23 09:19:07,815 - boss.application.services.app_manager - WARNING - _load_app:104 - No switch mapping found for app: led_test
+2025-07-23 09:19:07,816 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for local_tide_times: Entry point does not exist: D:\dev\BOSSv2\boss\apps\local_tide_times\main.py:run
+2025-07-23 09:19:07,817 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for moon_phase: Entry point does not exist: D:\dev\BOSSv2\boss\apps\moon_phase\main.py:run
+2025-07-23 09:19:07,817 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for name_that_animal: Entry point does not exist: D:\dev\BOSSv2\boss\apps\name_that_animal\main.py:run
+2025-07-23 09:19:07,818 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for on_this_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\on_this_day\main.py:run
+2025-07-23 09:19:07,819 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for public_domain_book_snippet: Entry point does not exist: D:\dev\BOSSv2\boss\apps\public_domain_book_snippet\main.py:run
+2025-07-23 09:19:07,819 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for quote_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\quote_of_the_day\main.py:run
+2025-07-23 09:19:07,820 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for random_emoji_combo: Entry point does not exist: D:\dev\BOSSv2\boss\apps\random_emoji_combo\main.py:run
+2025-07-23 09:19:07,821 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for random_useless_fact: Entry point does not exist: D:\dev\BOSSv2\boss\apps\random_useless_fact\main.py:run
+2025-07-23 09:19:07,821 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for space_update: Entry point does not exist: D:\dev\BOSSv2\boss\apps\space_update\main.py:run
+2025-07-23 09:19:07,822 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for tiny_poem: Entry point does not exist: D:\dev\BOSSv2\boss\apps\tiny_poem\main.py:run
+2025-07-23 09:19:07,822 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for today_in_music: Entry point does not exist: D:\dev\BOSSv2\boss\apps\today_in_music\main.py:run
+2025-07-23 09:19:07,823 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for top_trending_search: Entry point does not exist: D:\dev\BOSSv2\boss\apps\top_trending_search\main.py:run
+2025-07-23 09:19:07,823 - boss.application.services.app_manager - ERROR - _load_app:128 - Invalid app configuration for word_of_the_day: Entry point does not exist: D:\dev\BOSSv2\boss\apps\word_of_the_day\main.py:run
+2025-07-23 09:19:07,824 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 6 apps
+2025-07-23 09:19:07,824 - boss.application.services.hardware_service - INFO - _monitor_hardware:244 - Hardware monitoring thread started
+2025-07-23 09:19:07,824 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-07-23 09:19:07,825 - boss.application.services.system_service - INFO - _run_startup_app:174 - No admin_startup app found - skipping startup feedback
+2025-07-23 09:19:08,125 - boss.application.services.system_service - INFO - _provide_basic_startup_feedback:221 - Basic startup feedback completed
+2025-07-23 09:19:08,126 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-07-23 09:19:08,126 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-07-23 09:19:08,126 - boss.main - INFO - main:120 - BOSS system running - Press Ctrl+C to stop

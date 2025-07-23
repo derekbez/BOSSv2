@@ -4,6 +4,7 @@ Provides a web-based debug dashboard for development and testing.
 """
 
 import logging
+import signal
 import socket
 import threading
 from typing import Dict, Any, Optional
@@ -11,6 +12,10 @@ import uvicorn
 from boss.presentation.api.web_ui import create_app
 
 logger = logging.getLogger(__name__)
+
+# Global server instance for shutdown control
+_server_instance = None
+_server_thread = None
 
 def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
     """Check if a port is already in use."""
@@ -72,18 +77,23 @@ def start_web_ui(hardware_dict: Dict[str, Any], event_bus, port=8070) -> Optiona
         app = create_app(hardware_dict, event_bus)
         
         def run_server():
+            global _server_instance
             try:
-                uvicorn.run(
+                config = uvicorn.Config(
                     app, 
                     host="127.0.0.1", 
                     port=port,
-                    log_level="warning"  # Reduce uvicorn noise
+                    log_level="warning",  # Reduce uvicorn noise
+                    access_log=False      # Disable access logs
                 )
+                _server_instance = uvicorn.Server(config)
+                _server_instance.run()
             except Exception as e:
                 logger.error(f"Uvicorn server error: {e}")
         
-        thread = threading.Thread(target=run_server, daemon=True)
-        thread.start()
+        global _server_thread
+        _server_thread = threading.Thread(target=run_server, daemon=True)
+        _server_thread.start()
         
         logger.info(f"BOSS Web UI started at http://localhost:{port}")
         logger.info("Web UI debug dashboard initialized")
@@ -97,3 +107,27 @@ def start_web_ui(hardware_dict: Dict[str, Any], event_bus, port=8070) -> Optiona
     except Exception as e:
         logger.error(f"Failed to start web UI: {e}")
         return None
+
+
+def stop_web_ui():
+    """Stop the WebUI server if it's running."""
+    global _server_instance, _server_thread
+    
+    if _server_instance:
+        try:
+            logger.info("Stopping WebUI server...")
+            _server_instance.should_exit = True
+            if hasattr(_server_instance, 'force_exit'):
+                _server_instance.force_exit = True
+            
+            # Give it a moment to shutdown gracefully
+            if _server_thread and _server_thread.is_alive():
+                _server_thread.join(timeout=2.0)
+                
+            _server_instance = None
+            _server_thread = None
+            logger.info("WebUI server stopped")
+        except Exception as e:
+            logger.warning(f"Error stopping WebUI server: {e}")
+    else:
+        logger.debug("No WebUI server to stop")

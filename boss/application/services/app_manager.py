@@ -67,12 +67,17 @@ class AppManager(AppManagerService):
         """Set the currently running app."""
         self._current_app = app
     
-    def _load_app_mappings(self) -> Dict[str, int]:
-        """Load app-to-switch mappings from JSON file."""
+    def _load_app_mappings(self) -> Dict[str, str]:
+        """Load switch-to-app mappings from JSON file."""
         try:
             if self._app_mappings_file.exists():
                 with open(self._app_mappings_file, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Handle nested structure with "app_mappings" key
+                    if isinstance(data, dict) and "app_mappings" in data:
+                        return data["app_mappings"]
+                    else:
+                        return data
             else:
                 logger.warning(f"App mappings file not found: {self._app_mappings_file}")
                 return {}
@@ -80,12 +85,21 @@ class AppManager(AppManagerService):
             logger.error(f"Error loading app mappings: {e}")
             return {}
     
-    def _load_app(self, app_dir: Path, mappings: Dict[str, int]) -> Optional[App]:
+    def _load_app(self, app_dir: Path, mappings: Dict[str, str]) -> Optional[App]:
         """Load a single app from its directory."""
         app_name = app_dir.name
         
-        # Get switch value from mappings
-        switch_value = mappings.get(app_name)
+        # Find switch value by looking for this app name in the mappings values
+        switch_value = None
+        for switch_str, mapped_app_name in mappings.items():
+            if mapped_app_name == app_name:
+                try:
+                    switch_value = int(switch_str)
+                    break
+                except ValueError:
+                    logger.warning(f"Invalid switch value in mappings: {switch_str}")
+                    continue
+        
         if switch_value is None:
             logger.warning(f"No switch mapping found for app: {app_name}")
             return None
