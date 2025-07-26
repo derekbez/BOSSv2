@@ -131,11 +131,16 @@ class WebUIGoButton(GoButtonInterface):
 class WebUILeds(LedInterface):
     """WebUI LED implementation - shows LED states in web interface."""
     
-    def __init__(self):
+    def __init__(self, event_bus=None):
         self._led_states: Dict[LedColor, LedState] = {
             color: LedState(color=color, is_on=False) for color in LedColor
         }
         self._available = False
+        self._event_bus = event_bus
+    
+    def set_event_bus(self, event_bus):
+        """Set the event bus for publishing LED state changes."""
+        self._event_bus = event_bus
     
     def initialize(self) -> bool:
         """Initialize WebUI LEDs."""
@@ -153,10 +158,17 @@ class WebUILeds(LedInterface):
         return self._available
     
     def set_led(self, color: LedColor, is_on: bool, brightness: float = 1.0) -> None:
-        """Set LED state."""
+        """Set LED state and publish to WebUI."""
         self._led_states[color] = LedState(color=color, is_on=is_on, brightness=brightness)
         logger.debug(f"WebUI LED {color.value}: {'ON' if is_on else 'OFF'} (brightness: {brightness})")
-        # TODO: Send to web interface via WebSocket or similar
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.led.state_changed", {
+                "led_id": color.value,
+                "state": "on" if is_on else "off",
+                "brightness": brightness
+            })
     
     def get_led_state(self, color: LedColor) -> LedState:
         """Get current LED state."""
