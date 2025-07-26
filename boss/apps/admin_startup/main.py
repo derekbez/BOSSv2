@@ -10,20 +10,24 @@ def run(stop_event, api, **kwargs):
         stop_event: threading.Event to signal app termination
         api: AppAPI instance
     """
-    if hasattr(api.screen, 'clear'):
-        api.screen.clear()
+    # Clear the screen
+    api.screen.clear_screen()
+    
     # Blink all LEDs
     for color in ['red', 'yellow', 'green', 'blue']:
-        api.led_on(color)
+        api.hardware.set_led(color, True)
     time.sleep(0.5)
     for color in ['red', 'yellow', 'green', 'blue']:
-        api.led_off(color)
+        api.hardware.set_led(color, False)
+    
     # Show 'Ready' message
-    api.display_text(
-        "ready",
+    api.screen.display_text(
+        "BOSS Ready",
         align='center',
-        color=(0, 255, 0),
-        size=64
+        color='green',
+        font_size=32
     )
-    # Exit immediately after displaying
+    
+    # Exit immediately after displaying - no button input expected
+    # LEDs should remain off since no user interaction needed
     time.sleep(0.5)

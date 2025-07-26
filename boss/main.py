@@ -68,15 +68,14 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     
     # Create app API factory function
     def create_app_api_factory(app_name: str, app_path: Path) -> AppAPI:
-        return AppAPI(event_bus, app_name, app_path)
+        return AppAPI(event_bus, app_name, app_path, app_manager)
     
     app_runner = AppRunner(event_bus, create_app_api_factory)
     
     # Create system manager
     system_manager = SystemManager(event_bus, hardware_service, app_manager, app_runner)
     
-    # Set up event handlers
-    system_event_handler = SystemEventHandler(event_bus)
+    # Set up hardware event handler for LED/display/screen updates
     hardware_event_handler = HardwareEventHandler(event_bus, hardware_service)
     
     return system_manager, config

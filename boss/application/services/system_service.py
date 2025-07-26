@@ -264,10 +264,8 @@ class SystemManager(SystemService):
         # Handle admin shutdown requests
         self.event_bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
         
-        # Handle hardware output events
-        self.event_bus.subscribe("led_update", self._on_led_update)
-        self.event_bus.subscribe("display_update", self._on_display_update)
-        self.event_bus.subscribe("screen_update", self._on_screen_update)
+        # Note: Hardware output events (led_update, display_update, screen_update) 
+        # are now handled by HardwareEventHandler to avoid duplication
     
     def _on_app_launch_requested(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle app launch requests."""
@@ -331,33 +329,6 @@ class SystemManager(SystemService):
             # Normal shutdown
             logger.info("Normal system shutdown")
             self.stop()
-    
-    def _on_led_update(self, event_type: str, payload: Dict[str, Any]) -> None:
-        """Handle LED update events."""
-        color = payload.get("color")
-        is_on = payload.get("is_on", False)
-        brightness = payload.get("brightness", 1.0)
-        
-        if color:
-            self.hardware_service.update_led(color, is_on, brightness)
-    
-    def _on_display_update(self, event_type: str, payload: Dict[str, Any]) -> None:
-        """Handle display update events."""
-        value = payload.get("value")
-        brightness = payload.get("brightness", 1.0)
-        
-        self.hardware_service.update_display(value, brightness)
-    
-    def _on_screen_update(self, event_type: str, payload: Dict[str, Any]) -> None:
-        """Handle screen update events."""
-        content_type = payload.get("content_type", "text")
-        content = payload.get("content", "")
-        
-        # Extract additional parameters
-        kwargs = {k: v for k, v in payload.items() 
-                 if k not in ["content_type", "content"]}
-        
-        self.hardware_service.update_screen(content_type, content, **kwargs)
     
     def _signal_handler(self, signum, frame) -> None:
         """Handle system signals for graceful shutdown."""

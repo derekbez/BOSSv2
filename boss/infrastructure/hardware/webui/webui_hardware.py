@@ -353,37 +353,48 @@ class WebUIScreen(ScreenInterface):
                     background: str = "black", align: str = "center") -> None:
         """Display text on screen."""
         self._current_content = text
-        logger.debug(f"WebUI screen text: '{text}' (size: {font_size}, color: {color}, align: {align})")
         
-        # Publish event for WebUI update
+        # Publish event for WebUI update - use the correct event that WebSocket manager listens for
         if self._event_bus:
             self._event_bus.publish("output.screen.updated", {
                 "text": text,
-                "size": font_size,
+                "font_size": font_size,
                 "color": color,
                 "background": background,
-                "align": align
-            })
-            self._event_bus.publish("screen.update", {
-                "text": text,
-                "size": font_size,
-                "color": color,
-                "align": align
-            })
-        logger.info(f"WebUI screen text: '{text}' (size: {font_size}, color: {color}, align: {align})")
-        # TODO: Send to web interface via WebSocket
+                "align": align,
+                "content_type": "text"
+            }, "webui_screen")
+        
+        logger.info(f"WebUI screen text updated: '{text}' (size: {font_size}, color: {color}, align: {align})")
     
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
         """Display an image on screen."""
         self._current_content = f"Image: {image_path}"
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.screen.updated", {
+                "image_path": image_path,
+                "scale": scale,
+                "position": position,
+                "content_type": "image"
+            }, "webui_screen")
+        
         logger.info(f"WebUI screen image: {image_path} (scale: {scale}, pos: {position})")
-        # TODO: Send to web interface
     
     def clear_screen(self, color: str = "black") -> None:
         """Clear screen with specified color."""
-        self._current_content = f"Cleared ({color})"
-        logger.debug(f"WebUI screen cleared with color: {color}")
-        # TODO: Send to web interface
+        self._current_content = ""
+        
+        # Publish event for WebUI update
+        if self._event_bus:
+            self._event_bus.publish("output.screen.updated", {
+                "text": "",
+                "color": color,
+                "content_type": "clear"
+            }, "webui_screen")
+        
+        logger.info(f"WebUI screen cleared with color: {color}")
     
     def get_screen_size(self) -> tuple:
         """Get screen dimensions (width, height)."""

@@ -4,30 +4,31 @@ Displays a paginated list of all available mini-apps by reading their number, na
 Entry point: run(stop_event, api)
 """
 
-from boss.core.config import ConfigManager
 from threading import Event
 from typing import Any, List, Dict
 
 
-def get_app_list() -> List[Dict[str, Any]]:
-    config_mgr = ConfigManager()
-    mappings = config_mgr.app_mappings
-    app_list = []
-    for num in sorted(mappings, key=lambda x: int(x)):
-        mapping = mappings[num]
-        # Support both legacy (str) and new (dict) mapping formats
-        if isinstance(mapping, dict):
-            app_dir = mapping.get('app', num)
-        else:
-            app_dir = mapping
-        manifest = config_mgr.get_manifest(app_dir)
-        if manifest:
+def get_app_list(api: Any) -> List[Dict[str, Any]]:
+    """Get list of all apps from the API."""
+    # Get all apps through the API instead of directly accessing config
+    try:
+        # Ask the API for all available apps - returns Dict[int, App]
+        all_apps_dict = api.get_all_apps()
+        app_list = []
+        
+        for switch_value, app in all_apps_dict.items():
             app_list.append({
-                'number': num.zfill(3),
-                'name': manifest.get('title', app_dir),
-                'description': manifest.get('description', '')
+                'number': str(switch_value).zfill(3),
+                'name': app.manifest.name,
+                'description': app.manifest.description
             })
-    return app_list
+        
+        # Sort by switch value
+        app_list.sort(key=lambda x: int(x['number']))
+        return app_list
+    except Exception as e:
+        api.log_error(f"Error getting app list: {e}")
+        return []
 
 
 def paginate(items: List[Dict[str, Any]], page: int, per_page: int) -> List[Dict[str, Any]]:
@@ -43,56 +44,69 @@ def run(stop_event: Event, api: Any) -> None:
         stop_event (Event): Event to signal app termination.
         api (AppAPI): Provided API for hardware/display access.
     """
-    config_mgr = ConfigManager()
-    config = config_mgr.get_manifest('list_all_apps').get('config', {})
-    per_page = config.get('entries_per_page', 12)
-    app_list = get_app_list()
+    # Use default configuration values since we don't have ConfigManager access
+    per_page = 12  # Default entries per page
+    app_list = get_app_list(api)
+    
+    if not app_list:
+        # If no apps found, show error message
+        api.screen.clear_screen()
+        api.screen.display_text("Error: No apps found\nCheck configuration", font_size=16, align='center')
+        return
+    
     total_pages = (len(app_list) - 1) // per_page + 1
     page = 0
 
     def display_page(page_idx: int):
         page_items = paginate(app_list, page_idx, per_page)
-        num_col = 3   # Number of characters in the "Num" column (excluding spaces)
-        name_col = 45 # Number of characters in the "Name" column (excluding spaces)
+        
+        # Build the display text
         lines = [
+            "Mini-Apps Directory",
+            "===================",
+            "",
             "Num | Name",
-            f"{'-' * num_col}+{'-' * name_col}"
+            "----+---------------------------------------------"
         ]
+        
         for app in page_items:
             lines.append(f"{app['number']:>3} | {app['name'][:45]:<45}")
+        
         lines.append("")
         lines.append(f"Page {page_idx+1}/{total_pages}")
+        
         # LED logic: illuminate available buttons
-        led_states = {'yellow': False, 'blue': False}
-        if page_idx == 0:
+        if page_idx == 0 and total_pages == 1:
+            lines.append("[YELLOW: DISABLED] Prev | [BLUE : DISABLED] Next")
+            api.hardware.set_led('yellow', False)
+            api.hardware.set_led('blue', False)
+        elif page_idx == 0:
             lines.append("[YELLOW: DISABLED] Prev | [BLUE] Next")
-            led_states['yellow'] = False
-            led_states['blue'] = True
-        elif page_idx == total_pages - 1:
+            api.hardware.set_led('yellow', False)
+            api.hardware.set_led('blue', True)
+        elif  page_idx == total_pages - 1:
             lines.append("[YELLOW] Prev | [BLUE: DISABLED] Next")
-            led_states['yellow'] = True
-            led_states['blue'] = False
+            api.hardware.set_led('yellow', True)
+            api.hardware.set_led('blue', False)
         else:
             lines.append("[YELLOW] Prev | [BLUE] Next")
-            led_states['yellow'] = True
-            led_states['blue'] = True
-        api.set_leds(led_states)
-        api.screen.clear()
-        api.screen.set_cursor(0)
-        for line in lines:
-            api.screen.print_line(line, size=api.FONT_SIZE_SMALLEST, align='left')
-        #api.screen.refresh()    
+            api.hardware.set_led('yellow', True)
+            api.hardware.set_led('blue', True)
+        
+        # Display the text
+        display_text = "\n".join(lines)
+        api.screen.clear_screen()
+        api.screen.display_text(display_text, font_size=12, align="left")    
 
     display_page(page)
 
     # Event-driven: subscribe to button presses
-    def on_button_press(event_type, event):
+    def on_button_press(event_type, payload):
         nonlocal page
-        api.logger.info(f"[list_all_apps] Button event received: {event_type} | {event}")
-        # Only respond to button press, not release
-        if event_type != 'input.button.pressed':
-            return
-        button = event.get('button_id') or event.get('button')
+        api.log_info(f"Button event received: {event_type} | {payload}")
+        
+        # Handle button press events
+        button = payload.get('button_id') or payload.get('button')
         if button == 'yellow' and page > 0:
             page -= 1
             display_page(page)
@@ -101,9 +115,8 @@ def run(stop_event: Event, api: Any) -> None:
             display_page(page)
 
     sub_id = api.event_bus.subscribe(
-        'input.button.pressed',
-        on_button_press,
-        filter=None  # Let handler filter for robustness
+        'button_pressed',
+        on_button_press
     )
 
     try:

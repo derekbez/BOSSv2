@@ -78,8 +78,8 @@ class HardwareEventHandler:
             brightness = payload.get("brightness", 1.0)
             
             # Update hardware via service
-            # This will be implemented when we create the hardware service
-            logger.debug(f"LED update: {color} {'on' if is_on else 'off'} at {brightness}")
+            self.hardware_service.update_led(color, is_on, brightness)
+            logger.debug(f"LED update processed: {color} {'on' if is_on else 'off'} at {brightness}")
             
         except Exception as e:
             logger.error(f"Error updating LED: {e}")
@@ -102,8 +102,30 @@ class HardwareEventHandler:
             content_type = payload.get("content_type", "text")
             content = payload.get("content", "")
             
-            # Update hardware via service
-            logger.debug(f"Screen update: {content_type}")
+            # Update hardware via service using the unified update_screen method
+            if content_type == "text":
+                self.hardware_service.update_screen(
+                    content_type=content_type,
+                    content=content,
+                    font_size=payload.get("font_size", 24),
+                    color=payload.get("color", "white"),
+                    background=payload.get("background", "black"),
+                    align=payload.get("align", "center")
+                )
+            elif content_type == "image":
+                self.hardware_service.update_screen(
+                    content_type=content_type,
+                    content=content,
+                    scale=payload.get("scale", 1.0),
+                    position=payload.get("position", (0, 0))
+                )
+            elif content_type == "clear":
+                self.hardware_service.update_screen(
+                    content_type=content_type,
+                    content=content  # content is the color
+                )
+            
+            logger.debug(f"Screen update processed: {content_type}")
             
         except Exception as e:
             logger.error(f"Error updating screen: {e}")

@@ -107,7 +107,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin apps endpoint error: {e}")
+                    api_ref.log_error(f"Admin apps endpoint error: {e}")
                 
         elif self.path == '/mappings':
             self.send_response(200)
@@ -125,7 +125,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin mappings endpoint error: {e}")
+                    api_ref.log_error(f"Admin mappings endpoint error: {e}")
                 
         elif self.path == '/unassigned':
             self.send_response(200)
@@ -149,7 +149,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin unassigned endpoint error: {e}")
+                    api_ref.log_error(f"Admin unassigned endpoint error: {e}")
                 
         elif self.path == '/status':
             self.send_response(200)
@@ -167,7 +167,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin status endpoint error: {e}")
+                    api_ref.log_error(f"Admin status endpoint error: {e}")
                 
         elif self.path == '/logs':
             self.send_response(200)
@@ -187,7 +187,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self.wfile.write(f'Error reading logs: {e}'.encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin logs endpoint error: {e}")
+                    api_ref.log_error(f"Admin logs endpoint error: {e}")
                 
         elif self.path == '/update':
             self.send_response(200)
@@ -210,12 +210,12 @@ class AdminHandler(BaseHTTPRequestHandler):
                 
                 self.wfile.write(output.encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.info(f"Git pull executed via admin interface, return code: {result.returncode}")
+                    api_ref.log_info(f"Git pull executed via admin interface, return code: {result.returncode}")
             except Exception as e:
                 error_msg = f'Update error: {e}'
                 self.wfile.write(error_msg.encode('utf-8'))
                 if api_ref:
-                    api_ref.logger.error(f"Admin update endpoint error: {e}")
+                    api_ref.log_error(f"Admin update endpoint error: {e}")
         else:
             self.send_response(404)
             self.end_headers()
@@ -246,17 +246,34 @@ def run(stop_event: Event, api: Any) -> None:
         ip = "localhost"
     
     # Display connection info
-    api.screen.clear()
-    api.screen.add_text("BOSS Admin Panel", x=10, y=50, size=24, color="white")
-    api.screen.add_text(f"Web Interface:", x=10, y=100, size=18, color="yellow")
-    api.screen.add_text(f"http://{ip}:{WEB_PORT}", x=10, y=130, size=16, color="cyan")
-    api.screen.add_text("Press any button to exit", x=10, y=200, size=14, color="gray")
-    api.screen.refresh()
+    admin_screen_text = f"""BOSS Admin Panel
+
+Web Interface:
+http://{ip}:{WEB_PORT}
+
+Press any button to exit"""
     
-    # Light up green LED to indicate admin mode
-    api.set_leds(green=True)
+    api.screen.clear_screen()
+    api.screen.display_text(admin_screen_text, font_size=18, align="left")
     
-    api.logger.info(f"Starting BOSS Admin web interface on port {WEB_PORT}")
+    # Light up all LEDs to indicate any button can be pressed to exit
+    api.hardware.set_led('red', True)
+    api.hardware.set_led('yellow', True) 
+    api.hardware.set_led('green', True)
+    api.hardware.set_led('blue', True)
+    
+    api.log_info(f"Starting BOSS Admin web interface on port {WEB_PORT}")
+    
+    # Add button handler for exit
+    def on_button_press(event_type, event):
+        if event_type == 'button_pressed':
+            # Any button press should exit
+            button = event.get('button_id') or event.get('button')
+            api.log_info(f"Admin panel exit requested via {button} button")
+            stop_event.set()
+    
+    # Subscribe to button events
+    button_sub_id = api.event_bus.subscribe('button_pressed', on_button_press)
     
     # Start HTTP server
     server = HTTPServer(("0.0.0.0", WEB_PORT), AdminHandler)
@@ -268,15 +285,20 @@ def run(stop_event: Event, api: Any) -> None:
         while not stop_event.is_set():
             stop_event.wait(0.1)
     except Exception as e:
-        api.logger.error(f"Admin app error: {e}")
+        api.log_error(f"Admin app error: {e}")
     finally:
         # Cleanup
         server.shutdown()
-        api.screen.clear()
-        api.screen.add_text("Admin panel stopped", x=10, y=100, size=20, color="white")
-        api.screen.refresh()
-        api.set_leds()  # Turn off all LEDs
-        api.logger.info("BOSS Admin web interface stopped")
+        api.screen.clear_screen()
+        api.screen.display_text("Admin panel stopped", font_size=20, align="center")
+        # Turn off all LEDs
+        api.hardware.set_led('red', False)
+        api.hardware.set_led('yellow', False)
+        api.hardware.set_led('green', False)
+        api.hardware.set_led('blue', False)
+        # Unsubscribe from button events
+        api.event_bus.unsubscribe(button_sub_id)
+        api.log_info("BOSS Admin web interface stopped")
         
         # Clear global reference
         api_ref = None

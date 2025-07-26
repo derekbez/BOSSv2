@@ -89,12 +89,12 @@ def start_ap():
                       check=True, capture_output=True)
         
         if api_ref:
-            api_ref.logger.info("Access point started successfully")
+            api_ref.log_info("Access point started successfully")
         return True
         
     except subprocess.CalledProcessError as e:
         if api_ref:
-            api_ref.logger.error(f"Failed to start access point: {e}")
+            api_ref.log_error(f"Failed to start access point: {e}")
         return False
 
 
@@ -106,19 +106,19 @@ def stop_ap():
         subprocess.run(["nmcli", "connection", "delete", "setup-hotspot"], 
                       check=False, capture_output=True)
         if api_ref:
-            api_ref.logger.info("Access point stopped")
+            api_ref.log_info("Access point stopped")
     except Exception as e:
         if api_ref:
-            api_ref.logger.error(f"Error stopping access point: {e}")
+            api_ref.log_error(f"Error stopping access point: {e}")
 
 
 def connect_wifi(ssid: str, password: str):
     """Connect to WiFi network."""
     try:
         if api_ref:
-            api_ref.screen.clear()
-            api_ref.screen.print_line(f"Connecting to:\n{ssid}")
-            api_ref.logger.info(f"Attempting to connect to WiFi: {ssid}")
+            api_ref.screen.clear_screen()
+            api_ref.screen.display_text(f"Connecting to:\n{ssid}", font_size=16, align="center")
+            api_ref.log_info(f"Attempting to connect to WiFi: {ssid}")
         
         # Stop AP mode first
         stop_ap()
@@ -135,25 +135,25 @@ def connect_wifi(ssid: str, password: str):
         
         if result.returncode == 0:
             if api_ref:
-                api_ref.screen.clear()
-                api_ref.screen.print_line(f"Connected to:\n{ssid}")
-                api_ref.logger.info(f"Successfully connected to WiFi: {ssid}")
+                api_ref.screen.clear_screen()
+                api_ref.screen.display_text(f"Connected to:\n{ssid}", font_size=16, align="center")
+                api_ref.log_info(f"Successfully connected to WiFi: {ssid}")
         else:
             if api_ref:
-                api_ref.screen.clear()
-                api_ref.screen.print_line(f"Failed to connect to:\n{ssid}\nError: {result.stderr[:50]}")
-                api_ref.logger.error(f"Failed to connect to WiFi {ssid}: {result.stderr}")
+                api_ref.screen.clear_screen()
+                api_ref.screen.display_text(f"Failed to connect to:\n{ssid}\nError: {result.stderr[:50]}", font_size=14, align="center")
+                api_ref.log_error(f"Failed to connect to WiFi {ssid}: {result.stderr}")
                 
     except subprocess.TimeoutExpired:
         if api_ref:
-            api_ref.screen.clear()
-            api_ref.screen.print_line(f"Connection timeout:\n{ssid}")
-            api_ref.logger.error(f"WiFi connection timeout: {ssid}")
+            api_ref.screen.clear_screen()
+            api_ref.screen.display_text(f"Connection timeout:\n{ssid}", font_size=16, align="center")
+            api_ref.log_error(f"WiFi connection timeout: {ssid}")
     except Exception as e:
         if api_ref:
-            api_ref.screen.clear()
-            api_ref.screen.print_line(f"Connection error:\n{str(e)[:50]}")
-            api_ref.logger.error(f"WiFi connection error: {e}")
+            api_ref.screen.clear_screen()
+            api_ref.screen.display_text(f"Connection error:\n{str(e)[:50]}", font_size=14, align="center")
+            api_ref.log_error(f"WiFi connection error: {e}")
 
 
 def run(stop_event: Event, api: Any) -> None:
@@ -166,14 +166,21 @@ def run(stop_event: Event, api: Any) -> None:
     global api_ref
     api_ref = api
     
-    api.logger.info("Starting WiFi configuration mode")
-    api.screen.clear()
-    api.screen.print_line("Starting Wi-Fi setup mode...")
+    api.log_info("Starting WiFi configuration mode")
+    
+    # Turn off all LEDs since no button input is expected (web-based interface)
+    api.hardware.set_led('red', False)
+    api.hardware.set_led('yellow', False)
+    api.hardware.set_led('green', False)
+    api.hardware.set_led('blue', False)
+    
+    api.screen.clear_screen()
+    api.screen.display_text("Starting Wi-Fi setup mode...", font_size=16, align="center")
     
     # Start access point
     if not start_ap():
-        api.screen.clear()
-        api.screen.print_line("Failed to start\nAP mode")
+        api.screen.clear_screen()
+        api.screen.display_text("Failed to start\nAP mode", font_size=16, align="center")
         return
     
     # Get AP IP address
@@ -190,8 +197,17 @@ def run(stop_event: Event, api: Any) -> None:
         ip = "192.168.4.1"  # Default AP IP
     
     # Display connection info
-    api.screen.clear()
-    api.screen.print_line(f"WiFi Setup Mode\n\n1. Connect to WiFi:\n   SSID: {AP_SSID}\n   Pass: {AP_PASSWORD}\n\n2. Open browser:\n   http://{ip}")
+    wifi_setup_text = f"""WiFi Setup Mode
+
+1. Connect to WiFi:
+   SSID: {AP_SSID}
+   Pass: {AP_PASSWORD}
+
+2. Open browser:
+   http://{ip}"""
+   
+    api.screen.clear_screen()
+    api.screen.display_text(wifi_setup_text, font_size=14, align="left")
     
     # Start web server
     server = None
@@ -200,22 +216,22 @@ def run(stop_event: Event, api: Any) -> None:
         server_thread = threading.Thread(target=server.serve_forever, daemon=True)
         server_thread.start()
         
-        api.logger.info(f"WiFi config web server started at http://{ip}:{WEB_PORT}")
+        api.log_info(f"WiFi config web server started at http://{ip}:{WEB_PORT}")
         
         # Wait for stop event
         while not stop_event.is_set():
             stop_event.wait(1.0)
             
     except Exception as e:
-        api.logger.error(f"Error in WiFi configuration: {e}")
-        api.screen.clear()
-        api.screen.print_line(f"Error: {str(e)[:50]}")
+        api.log_error(f"Error in WiFi configuration: {e}")
+        api.screen.clear_screen()
+        api.screen.display_text(f"Error: {str(e)[:50]}", font_size=16, align="center")
         
     finally:
         # Cleanup
         if server:
             server.shutdown()
         stop_ap()
-        api.screen.clear()
-        api.screen.print_line("WiFi setup complete")
-        api.logger.info("WiFi configuration mode ended")
+        api.screen.clear_screen()
+        api.screen.display_text("WiFi setup complete", font_size=16, align="center")
+        api.log_info("WiFi configuration mode ended")

@@ -52,10 +52,6 @@ class WebSocketManager:
             event_bus.subscribe("output.screen.updated", self._on_screen_changed)
             event_bus.subscribe("input.switch.changed", self._on_switch_changed)
             event_bus.subscribe("switch_change", self._on_switch_changed)  # Also listen for switch_change events
-            # Additional screen events
-            event_bus.subscribe("screen.update", self._on_screen_changed)
-            event_bus.subscribe("screen.display", self._on_screen_changed)
-            event_bus.subscribe("screen.output", self._on_screen_changed)
             # Display events
             event_bus.subscribe("display.update", self._on_display_changed)
             event_bus.subscribe("output.display.set", self._on_display_changed)
@@ -302,20 +298,44 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
             raise HTTPException(status_code=400, detail=f"Invalid button: {button_id}")
         
         # Handle button presses through the hardware components
+        logger.info(f"WebUI button press request: {button_id}")
+        
         if button_id == 'main':
             # Main Go button
             go_button = hardware_dict.get('go_button')
+            logger.info(f"Go button object: {go_button}")
             if go_button and hasattr(go_button, 'handle_press'):
                 go_button.handle_press()
+                logger.info("Go button handle_press called")
             elif go_button and hasattr(go_button, '_press_callback') and go_button._press_callback:
                 go_button._press_callback()
+                logger.info("Go button callback called")
             else:
                 logger.warning("Go button not properly connected")
         else:
-            # Color buttons  
+            # Color buttons - check if LED is on before processing button press
             buttons = hardware_dict.get('buttons')
+            leds = hardware_dict.get('leds')
+            
+            # Check if the corresponding LED is active
+            led_is_active = False
+            if leds and hasattr(leds, 'get_led_state'):
+                try:
+                    from boss.domain.models.hardware_state import LedColor
+                    led_color = LedColor(button_id)
+                    led_state = leds.get_led_state(led_color)
+                    led_is_active = led_state.is_on if led_state else False
+                except (ValueError, AttributeError):
+                    led_is_active = False
+            
+            if not led_is_active:
+                logger.info(f"Button {button_id} press ignored - corresponding LED is OFF (button not active)")
+                return {"status": "ignored", "button": button_id, "reason": "LED not active"}
+            
+            logger.info(f"Color buttons object: {buttons}")
             if buttons and hasattr(buttons, 'handle_button_press'):
                 buttons.handle_button_press(button_id)
+                logger.info(f"Color button {button_id} handle_button_press called")
             else:
                 logger.warning(f"Button {button_id} not properly connected")
         

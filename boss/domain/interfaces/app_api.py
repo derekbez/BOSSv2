@@ -112,3 +112,8 @@ class AppAPIInterface(ABC):
     def log_error(self, message: str) -> None:
         """Log an error message."""
         pass
+    
+    @abstractmethod
+    def get_all_apps(self) -> list:
+        """Get list of all available apps. Returns list of App objects."""
+        pass

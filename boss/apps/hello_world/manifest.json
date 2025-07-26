@@ -1,14 +1,19 @@
 {
     "name": "Hello World",
-    "description": "Simple hello world app demonstrating event-driven API",
-    "version": "1.0.0",
+    "description": "Comprehensive BOSS API demonstration - LED control, button handling, screen display, and event management. Perfect template for new mini-apps.",
+    "version": "2.0.0",
     "author": "BOSS Team",
     "entry_point": "main.py",
-    "timeout_seconds": 60,
+    "timeout_seconds": 120,
     "requires_network": false,
     "requires_audio": false,
     "tags": [
         "example",
-        "basic"
+        "template",
+        "demo",
+        "led",
+        "buttons",
+        "screen",
+        "events"
     ]
 }

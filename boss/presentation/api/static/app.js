@@ -10,25 +10,25 @@ class BOSSWebUI {
         this.eventLog = [];
         this.maxEvents = 100;
         this.currentSwitchValue = 0;
-        
+
         this.init();
     }
-    
+
     init() {
         this.setupWebSocket();
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.updateSwitchDisplay();
     }
-    
+
     // WebSocket Management
     setupWebSocket() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${protocol}//${window.location.host}/ws`;
-        
+
         try {
             this.ws = new WebSocket(wsUrl);
-            
+
             this.ws.onopen = () => {
                 console.log('WebSocket connected');
                 this.updateConnectionStatus(true);
@@ -37,39 +37,39 @@ class BOSSWebUI {
                     this.reconnectInterval = null;
                 }
             };
-            
+
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 this.handleWebSocketMessage(data);
             };
-            
+
             this.ws.onclose = () => {
                 console.log('WebSocket disconnected');
                 this.updateConnectionStatus(false);
                 this.scheduleReconnect();
             };
-            
+
             this.ws.onerror = (error) => {
                 console.error('WebSocket error:', error);
                 this.updateConnectionStatus(false);
             };
-            
+
         } catch (error) {
             console.error('Failed to create WebSocket:', error);
             this.updateConnectionStatus(false);
             this.scheduleReconnect();
         }
     }
-    
+
     scheduleReconnect() {
         if (this.reconnectInterval) return;
-        
+
         this.reconnectInterval = setInterval(() => {
             console.log('Attempting to reconnect...');
             this.setupWebSocket();
         }, 3000);
     }
-    
+
     updateConnectionStatus(connected) {
         const statusElement = document.getElementById('connection-status');
         if (connected) {
@@ -80,12 +80,12 @@ class BOSSWebUI {
             statusElement.className = 'status disconnected';
         }
     }
-    
+
     // WebSocket Message Handling
     handleWebSocketMessage(data) {
         console.log('Received:', data);
         this.addEventToLog(data);
-        
+
         switch (data.event) {
             case 'initial_state':
                 this.updateHardwareState(data.payload);
@@ -104,7 +104,7 @@ class BOSSWebUI {
                 break;
         }
     }
-    
+
     // Hardware State Updates
     updateHardwareState(state) {
         // Update LEDs
@@ -112,35 +112,35 @@ class BOSSWebUI {
             const isOn = state[`led_${color}`] || false;
             this.updateLEDIndicator(color, isOn);
         });
-        
+
         // Update display
         if (state.display !== undefined) {
             this.updateDisplayValue(state.display);
         }
-        
+
         // Update switch
         if (state.switch_value !== undefined) {
             this.currentSwitchValue = state.switch_value;
             this.updateSwitchDisplay();
         }
-        
+
         // Update screen
         if (state.screen_content !== undefined) {
             this.updateScreenContent(state.screen_content);
         }
     }
-    
+
     updateLEDState(payload) {
         if (payload.led_id && payload.state !== undefined) {
             const isOn = payload.state === 'on';
             this.updateLEDIndicator(payload.led_id, isOn);
         }
     }
-    
+
     updateLEDIndicator(color, isOn) {
         const ledElement = document.getElementById(`led-${color}`);
         const statusElement = document.getElementById(`status-${color}`);
-        
+
         if (ledElement && statusElement) {
             if (isOn) {
                 ledElement.classList.add('on');
@@ -151,40 +151,99 @@ class BOSSWebUI {
             }
         }
     }
-    
+
     updateDisplayState(payload) {
         if (payload.value !== undefined) {
             this.updateDisplayValue(payload.value);
         }
     }
-    
+
     updateDisplayValue(value) {
         const displayElement = document.getElementById('display-value');
         if (displayElement) {
             displayElement.textContent = String(value).padStart(4, ' ');
         }
     }
-    
+
     updateScreenState(payload) {
-        if (payload.details && payload.details.text) {
-            this.updateScreenContent(payload.details.text);
+        console.log('Updating screen state:', payload);
+
+        // Handle different payload structures
+        let content = '';
+        if (payload.text) {
+            content = payload.text;
+        } else if (payload.details && payload.details.text) {
+            content = payload.details.text;
+        } else if (payload.content) {
+            content = payload.content;
+        }
+
+        if (content) {
+            this.updateScreenContent(content);
+        }
+
+        // Handle clear events
+        if (payload.content_type === 'clear') {
+            this.clearScreenContent();
         }
     }
-    
+
     updateScreenContent(content) {
         const screenOverlay = document.getElementById('screen-text');
+        const canvas = document.getElementById('screen-canvas');
+
         if (screenOverlay) {
+            // Set the text content with proper formatting
             screenOverlay.textContent = content;
+
+            // Make the overlay visible
+            screenOverlay.style.display = 'block';
+            screenOverlay.style.position = 'absolute';
+            screenOverlay.style.top = '0';
+            screenOverlay.style.left = '0';
+            screenOverlay.style.width = '100%';
+            screenOverlay.style.height = '100%';
+            screenOverlay.style.padding = '10px';
+            screenOverlay.style.fontFamily = 'monospace';
+            screenOverlay.style.fontSize = '14px';
+            screenOverlay.style.color = 'white';
+            screenOverlay.style.backgroundColor = 'black';
+            screenOverlay.style.whiteSpace = 'pre-wrap';
+            screenOverlay.style.overflow = 'auto';
+            screenOverlay.style.boxSizing = 'border-box';
+        }
+
+        // Clear canvas background
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
     }
-    
+
+    clearScreenContent() {
+        const screenOverlay = document.getElementById('screen-text');
+        const canvas = document.getElementById('screen-canvas');
+
+        if (screenOverlay) {
+            screenOverlay.textContent = '';
+            screenOverlay.style.display = 'none';
+        }
+
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+
     updateSwitchState(payload) {
         if (payload.value !== undefined) {
             this.currentSwitchValue = payload.value;
             this.updateSwitchDisplay();
         }
     }
-    
+
     // Event Logging
     addEventToLog(event) {
         const timestamp = new Date().toLocaleTimeString();
@@ -194,30 +253,30 @@ class BOSSWebUI {
             payload: event.payload,
             category: this.categorizeEvent(event.event)
         };
-        
+
         this.eventLog.unshift(logEntry);
         if (this.eventLog.length > this.maxEvents) {
             this.eventLog.pop();
         }
-        
+
         this.updateEventDisplay();
     }
-    
+
     categorizeEvent(eventType) {
         if (eventType.startsWith('input.')) return 'input';
         if (eventType.startsWith('output.')) return 'output';
         return 'system';
     }
-    
+
     updateEventDisplay() {
         const logElement = document.getElementById('event-log');
         const filter = document.getElementById('event-filter').value;
-        
+
         let filteredEvents = this.eventLog;
         if (filter) {
             filteredEvents = this.eventLog.filter(event => event.category === filter);
         }
-        
+
         const logHTML = filteredEvents.map(event => `
             <div class="event-entry ${event.category}">
                 <span class="event-timestamp">[${event.timestamp}]</span>
@@ -225,19 +284,19 @@ class BOSSWebUI {
                 <div class="event-payload">${JSON.stringify(event.payload, null, 2)}</div>
             </div>
         `).join('');
-        
+
         logElement.innerHTML = logHTML;
     }
-    
+
     // Switch Controls
     updateSwitchDisplay() {
         // Update decimal input
         document.getElementById('switch-value').value = this.currentSwitchValue;
-        
+
         // Update binary display
         const binaryValue = this.currentSwitchValue.toString(2).padStart(8, '0');
         document.getElementById('binary-value').textContent = binaryValue;
-        
+
         // Update bit checkboxes
         for (let i = 0; i < 8; i++) {
             const checkbox = document.getElementById(`bit${i}`);
@@ -246,29 +305,29 @@ class BOSSWebUI {
             }
         }
     }
-    
+
     setSwitchValue(value) {
         value = Math.max(0, Math.min(255, parseInt(value) || 0));
         this.currentSwitchValue = value;
         this.updateSwitchDisplay();
-        
+
         // Send to server
         this.apiCall('POST', '/api/switch/set', { value });
     }
-    
+
     toggleBit(bitIndex) {
         const bitValue = 1 << bitIndex;
         this.currentSwitchValue ^= bitValue;
         this.updateSwitchDisplay();
-        
+
         // Send to server
         this.apiCall('POST', '/api/switch/set', { value: this.currentSwitchValue });
     }
-    
+
     // Button Controls
     pressButton(buttonId) {
         console.log(`Pressing button: ${buttonId}`);
-        
+
         // Visual feedback
         const button = document.querySelector(`[data-button="${buttonId}"]`);
         if (button) {
@@ -277,11 +336,11 @@ class BOSSWebUI {
                 button.style.transform = '';
             }, 150);
         }
-        
+
         // Send to server
         this.apiCall('POST', `/api/button/${buttonId}/press`);
     }
-    
+
     // API Communication
     async apiCall(method, endpoint, data = null) {
         try {
@@ -291,24 +350,24 @@ class BOSSWebUI {
                     'Content-Type': 'application/json',
                 }
             };
-            
+
             if (data) {
                 options.body = JSON.stringify(data);
             }
-            
+
             const response = await fetch(endpoint, options);
             const result = await response.json();
-            
+
             if (!response.ok) {
                 console.error(`API call failed: ${result.detail || 'Unknown error'}`);
             }
-            
+
             return result;
         } catch (error) {
             console.error(`API call error: ${error.message}`);
         }
     }
-    
+
     // Event Listeners
     setupEventListeners() {
         // Button clicks
@@ -318,19 +377,19 @@ class BOSSWebUI {
                 this.pressButton(buttonId);
             });
         });
-        
+
         // Switch value input
         document.getElementById('set-switch-btn').addEventListener('click', () => {
             const value = document.getElementById('switch-value').value;
             this.setSwitchValue(value);
         });
-        
+
         document.getElementById('switch-value').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.setSwitchValue(e.target.value);
             }
         });
-        
+
         // Bit checkboxes
         document.querySelectorAll('.bit-switch input[type="checkbox"]').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
@@ -338,18 +397,18 @@ class BOSSWebUI {
                 this.toggleBit(bitIndex);
             });
         });
-        
+
         // Event log controls
         document.getElementById('clear-events-btn').addEventListener('click', () => {
             this.eventLog = [];
             this.updateEventDisplay();
         });
-        
+
         document.getElementById('event-filter').addEventListener('change', () => {
             this.updateEventDisplay();
         });
     }
-    
+
     // Keyboard Shortcuts
     setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
@@ -357,7 +416,7 @@ class BOSSWebUI {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
                 return;
             }
-            
+
             switch (e.key) {
                 case '1':
                     this.pressButton('red');

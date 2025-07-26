@@ -118,6 +118,7 @@ boss/
 - **Clean Architecture:** Layer separation (Presentation, Application, Domain, Infrastructure) with dependency inversion
 - **Event-Driven:** All hardware and app events are published to the event bus. Display, LED, and screen updates are event-driven (no polling in production code)
 - **Hardware Abstraction:** All hardware (buttons, LEDs, display, screen, speaker) is abstracted with real, WebUI, and mock implementations. Fallback to mocks if hardware is not detected, enabling dev/testing on any platform
+- **Hardware Parity Principle:** The WebUI is a development emulation layer that mirrors real hardware behavior exactly. Any behavior implemented for real GPIO hardware must work identically in the WebUI, and any feature developed/tested in the WebUI must work identically on real hardware. This ensures seamless development-to-production transitions
 - **App API:** Mini-apps must not access hardware directly. All hardware and display access is via the provided API object
 - **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout. Use `stop_event` for clean shutdown
 - **Configuration:** System config in `boss/config/boss_config.json`, app mappings in `boss/config/app_mappings.json` (JSON format). Co-located with main code for modularity. If missing, auto-generated with defaults
@@ -150,6 +151,43 @@ boss/
   - `assets/`: Data files (e.g., images, sounds, JSON)
 - Apps load assets at runtime and use the API for all hardware/display access.
 - All mini-apps and tests use real or mock hardware as appropriate.
+
+## Critical UX Pattern: LED/Button Coordination
+**IMPORTANT**: Mini-apps MUST follow this LED/Button pattern for consistent user experience across BOTH real hardware and WebUI development:
+
+### LED State Rule (Hardware Parity)
+- **LEDs indicate which buttons are active/expected** (applies to both physical LEDs and WebUI LED indicators)
+- If app expects RED button press → RED LED should be ON (physical LED on Pi, virtual LED in WebUI)
+- If app expects BLUE and YELLOW buttons → BLUE and YELLOW LEDs ON, others OFF (both environments)
+- If no button expected → ALL LEDs OFF (both environments)
+- **Button presses are filtered**: If LED is OFF, button press is ignored (both physical buttons and WebUI buttons)
+- LEDs provide immediate visual feedback about available actions in both development and production
+
+### Hardware Parity Implementation
+- **Real Hardware**: Physical button press when LED is OFF → no event reaches app
+- **WebUI Development**: Virtual button click when LED is OFF → no event reaches app  
+- **Behavioral Consistency**: What works in WebUI development works identically on real hardware
+
+### Implementation Pattern
+```python
+def setup_button_state():
+    # Example: App expects Red and Blue buttons
+    api.hardware.set_led('red', True)     # RED button available
+    api.hardware.set_led('blue', True)    # BLUE button available  
+    api.hardware.set_led('yellow', False) # YELLOW not used
+    api.hardware.set_led('green', False)  # GREEN not used
+
+def cleanup_leds():
+    # Always turn off all LEDs when app exits
+    for color in ['red', 'yellow', 'green', 'blue']:
+        api.hardware.set_led(color, False)
+```
+
+### Event Subscription
+- Use `api.event_bus.subscribe('button_pressed', handler)` for button presses
+- Use `api.event_bus.subscribe('button_released', handler)` for button releases  
+- Check `event.get('button_id')` or `event.get('button')` for button color
+- Always unsubscribe in `finally` block: `api.event_bus.unsubscribe(sub_id)`
 
 ## Configuration Files Structure
 

@@ -136,9 +136,10 @@ class AppHardwareAPI(HardwareAPIInterface):
 class AppAPI(AppAPIInterface):
     """Complete API implementation provided to mini-apps."""
     
-    def __init__(self, event_bus, app_name: str, app_path: Path):
+    def __init__(self, event_bus, app_name: str, app_path: Path, app_manager=None):
         self._app_name = app_name
         self._app_path = app_path
+        self._app_manager = app_manager
         
         # Create sub-interfaces
         self._event_bus = AppEventBus(event_bus, app_name)
@@ -177,6 +178,18 @@ class AppAPI(AppAPIInterface):
     def log_error(self, message: str) -> None:
         """Log an error message."""
         logger.error(f"[{self._app_name}] {message}")
+    
+    def get_all_apps(self) -> list:
+        """Get list of all available apps."""
+        if self._app_manager is None:
+            logger.warning(f"App {self._app_name} requested all apps but app_manager not available")
+            return []
+        
+        try:
+            return self._app_manager.get_all_apps()
+        except Exception as e:
+            logger.error(f"Error getting all apps for {self._app_name}: {e}")
+            return []
     
     def cleanup(self) -> None:
         """Clean up API resources when app stops."""

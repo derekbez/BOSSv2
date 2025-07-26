@@ -156,26 +156,10 @@ class HardwareManager(HardwareService):
 
     def _setup_event_subscriptions(self) -> None:
         """Subscribe to app API events."""
-        # Subscribe to screen events from apps
-        self.event_bus.subscribe("screen_update", self._on_screen_update)
+        # Note: Hardware events are now handled by HardwareEventHandler, not directly here
+        # Subscribe only to display events from apps (not screen events)
         self.event_bus.subscribe("display_update", self._on_display_update)
         logger.debug("Subscribed to app API events")
-    
-    def _on_screen_update(self, event_type: str, payload: dict, source: Optional[str] = None) -> None:
-        """Handle screen update events from apps."""
-        if not self.screen:
-            return
-            
-        content_type = payload.get("content_type", "text")
-        if content_type == "text":
-            text = payload.get("content", "")
-            font_size = payload.get("font_size", 24)
-            color = payload.get("color", "white")
-            background = payload.get("background", "black")
-            align = payload.get("align", "center")
-            
-            self.screen.display_text(text, font_size, color, background, align)
-            logger.debug(f"Screen updated with text from {source}: '{text[:50]}...'")
     
     def _on_display_update(self, event_type: str, payload: dict, source: Optional[str] = None) -> None:
         """Handle display update events from apps."""
