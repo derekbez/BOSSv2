@@ -112,6 +112,7 @@ muxInpin = 8  #          blue
 
 - **Display:**
   - TM1637 7-segment display shows current switch value or status messages
+  - HDMI screen output is handled using the `rich` library for text and simple graphics (no Pillow dependency)
   - All updates are event-driven (no polling)
 
 - **Remote Management:**

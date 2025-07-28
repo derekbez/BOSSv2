@@ -8,11 +8,11 @@ import time
 from typing import Optional, Callable, Dict
 
 try:
-    import RPi.GPIO as GPIO
+    from gpiozero import Button as GZButton, LED as GZLED
     HAS_GPIO = True
 except ImportError:
     HAS_GPIO = False
-    GPIO = None
+
 
 from boss.domain.interfaces.hardware import (
     ButtonInterface, GoButtonInterface, LedInterface, SwitchInterface, 
@@ -41,39 +41,47 @@ class GPIOButtons(ButtonInterface):
         self._available = False
     
     def initialize(self) -> bool:
-        """Initialize GPIO buttons."""
+        """Initialize GPIO buttons using gpiozero."""
         if not HAS_GPIO:
-            logger.error("RPi.GPIO not available")
+            logger.error("gpiozero not available")
             return False
-        
         try:
-            GPIO.setmode(GPIO.BCM)
-            
-            # Set up button pins
+            self._gz_buttons = {}
             for color, pin in self.hardware_config.button_pins.items():
-                GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-                
-                # Set up interrupt for button press detection
-                GPIO.add_event_detect(pin, GPIO.BOTH, 
-                                    callback=self._button_callback, 
-                                    bouncetime=50)
-            
+                btn = GZButton(pin, pull_up=True, bounce_time=0.05)
+                btn.when_pressed = lambda c=color: self._handle_press(c)
+                btn.when_released = lambda c=color: self._handle_release(c)
+                self._gz_buttons[color] = btn
             self._available = True
-            logger.info("GPIO buttons initialized")
+            logger.info("GPIO buttons initialized (gpiozero)")
             return True
-            
         except Exception as e:
-            logger.error(f"Failed to initialize GPIO buttons: {e}")
+            logger.error(f"Failed to initialize GPIO buttons (gpiozero): {e}")
             return False
+
+    def _handle_press(self, color):
+        self._button_states[color] = True
+        callback = self._press_callbacks.get(color)
+        if callback:
+            callback(color)
+        logger.debug(f"GPIO button {color.value} pressed")
+
+    def _handle_release(self, color):
+        self._button_states[color] = False
+        callback = self._release_callbacks.get(color)
+        if callback:
+            callback(color)
+        logger.debug(f"GPIO button {color.value} released")
     
     def cleanup(self) -> None:
         """Clean up GPIO buttons."""
         if HAS_GPIO and self._available:
             try:
-                for pin in self.hardware_config.button_pins.values():
-                    GPIO.remove_event_detect(pin)
+                for btn in getattr(self, '_gz_buttons', {}).values():
+                    btn.close()
+                self._gz_buttons = {}
                 self._available = False
-                logger.debug("GPIO buttons cleaned up")
+                logger.debug("GPIO buttons cleaned up (gpiozero)")
             except Exception as e:
                 logger.error(f"Error cleaning up GPIO buttons: {e}")
     
@@ -85,13 +93,10 @@ class GPIOButtons(ButtonInterface):
         """Check if a button is currently pressed."""
         if not self.is_available:
             return False
-        
-        pin = self.hardware_config.button_pins.get(color.value)
-        if pin is None:
+        btn = getattr(self, '_gz_buttons', {}).get(color)
+        if btn is None:
             return False
-        
-        # Button is pressed when pin is LOW (pull-up resistor)
-        return GPIO.input(pin) == GPIO.LOW
+        return btn.is_pressed
     
     def set_press_callback(self, color: ButtonColor, callback: Callable[[ButtonColor], None]) -> None:
         """Set callback for button press events."""
@@ -148,35 +153,35 @@ class GPIOGoButton(GoButtonInterface):
         self._available = False
     
     def initialize(self) -> bool:
-        """Initialize GPIO Go button."""
+        """Initialize GPIO Go button using gpiozero."""
         if not HAS_GPIO:
-            logger.error("RPi.GPIO not available")
+            logger.error("gpiozero not available")
             return False
-        
         try:
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(self.hardware_config.go_button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            
-            # Set up interrupt for Go button
-            GPIO.add_event_detect(self.hardware_config.go_button_pin, GPIO.FALLING, 
-                                callback=self._go_button_callback, 
-                                bouncetime=200)
-            
+            from gpiozero import Button as GZButton
+            self._gz_button = GZButton(self.hardware_config.go_button_pin, pull_up=True, bounce_time=0.2)
+            self._gz_button.when_pressed = self._handle_press
             self._available = True
-            logger.info("GPIO Go button initialized")
+            logger.info("GPIO Go button initialized (gpiozero)")
             return True
-            
         except Exception as e:
-            logger.error(f"Failed to initialize GPIO Go button: {e}")
+            logger.error(f"Failed to initialize GPIO Go button (gpiozero): {e}")
             return False
+
+    def _handle_press(self):
+        self._pressed = True
+        if self._press_callback:
+            self._press_callback()
+        logger.debug("GPIO Go button pressed")
     
     def cleanup(self) -> None:
         """Clean up GPIO Go button."""
         if HAS_GPIO and self._available:
             try:
-                GPIO.remove_event_detect(self.hardware_config.go_button_pin)
+                if hasattr(self, '_gz_button'):
+                    self._gz_button.close()
                 self._available = False
-                logger.debug("GPIO Go button cleaned up")
+                logger.debug("GPIO Go button cleaned up (gpiozero)")
             except Exception as e:
                 logger.error(f"Error cleaning up GPIO Go button: {e}")
     
@@ -188,7 +193,10 @@ class GPIOGoButton(GoButtonInterface):
         """Check if the Go button is currently pressed."""
         if not self.is_available:
             return False
-        return GPIO.input(self.hardware_config.go_button_pin) == GPIO.LOW
+        btn = getattr(self, '_gz_button', None)
+        if btn is None:
+            return False
+        return btn.is_pressed
     
     def set_press_callback(self, callback: Callable[[], None]) -> None:
         """Set callback for Go button press events."""
@@ -216,39 +224,31 @@ class GPIOLeds(LedInterface):
         self._available = False
     
     def initialize(self) -> bool:
-        """Initialize GPIO LEDs."""
+        """Initialize GPIO LEDs using gpiozero."""
         if not HAS_GPIO:
-            logger.error("RPi.GPIO not available")
+            logger.error("gpiozero not available")
             return False
-        
         try:
-            GPIO.setmode(GPIO.BCM)
-            
-            # Set up LED pins and PWM
+            self._gz_leds = {}
             for color, pin in self.hardware_config.led_pins.items():
-                GPIO.setup(pin, GPIO.OUT)
-                # Create PWM instance for brightness control
-                pwm = GPIO.PWM(pin, 1000)  # 1kHz frequency
-                pwm.start(0)  # Start with 0% duty cycle (off)
-                self._pwm_objects[LedColor(color)] = pwm
-            
+                led = GZLED(pin)
+                self._gz_leds[LedColor(color)] = led
             self._available = True
-            logger.info("GPIO LEDs initialized")
+            logger.info("GPIO LEDs initialized (gpiozero)")
             return True
-            
         except Exception as e:
-            logger.error(f"Failed to initialize GPIO LEDs: {e}")
+            logger.error(f"Failed to initialize GPIO LEDs (gpiozero): {e}")
             return False
     
     def cleanup(self) -> None:
         """Clean up GPIO LEDs."""
         if HAS_GPIO and self._available:
             try:
-                for pwm in self._pwm_objects.values():
-                    pwm.stop()
-                self._pwm_objects.clear()
+                for led in getattr(self, '_gz_leds', {}).values():
+                    led.close()
+                self._gz_leds = {}
                 self._available = False
-                logger.debug("GPIO LEDs cleaned up")
+                logger.debug("GPIO LEDs cleaned up (gpiozero)")
             except Exception as e:
                 logger.error(f"Error cleaning up GPIO LEDs: {e}")
     
@@ -260,22 +260,17 @@ class GPIOLeds(LedInterface):
         """Set LED state."""
         if not self.is_available:
             return
-        
-        pwm = self._pwm_objects.get(color)
-        if pwm is None:
-            logger.error(f"No PWM object for LED color: {color}")
+        led = getattr(self, '_gz_leds', {}).get(color)
+        if led is None:
+            logger.error(f"No gpiozero LED object for color: {color}")
             return
-        
         try:
             if is_on:
-                duty_cycle = brightness * 100  # Convert to percentage
-                pwm.ChangeDutyCycle(duty_cycle)
+                led.value = brightness
             else:
-                pwm.ChangeDutyCycle(0)
-            
+                led.off()
             self._led_states[color] = LedState(color=color, is_on=is_on, brightness=brightness)
             logger.debug(f"GPIO LED {color.value}: {'ON' if is_on else 'OFF'} (brightness: {brightness})")
-            
         except Exception as e:
             logger.error(f"Error setting GPIO LED {color}: {e}")
     
@@ -302,73 +297,66 @@ class GPIOSwitches(SwitchInterface):
         self._monitor_thread: Optional[threading.Thread] = None
     
     def initialize(self) -> bool:
-        """Initialize GPIO switches."""
+        """Initialize GPIO switches using gpiozero."""
         if not HAS_GPIO:
-            logger.error("RPi.GPIO not available")
+            logger.error("gpiozero not available")
             return False
-        
         try:
-            GPIO.setmode(GPIO.BCM)
-            
-            # Set up pins for shift register/multiplexer
-            GPIO.setup(self.hardware_config.switch_data_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            GPIO.setup(self.hardware_config.switch_clock_pin, GPIO.OUT)
-            
-            for pin in self.hardware_config.switch_select_pins:
-                GPIO.setup(pin, GPIO.OUT)
-            
+            from gpiozero import DigitalInputDevice, DigitalOutputDevice
+            self._data_pin = DigitalInputDevice(self.hardware_config.switch_data_pin, pull_up=True)
+            self._clock_pin = DigitalOutputDevice(self.hardware_config.switch_clock_pin)
+            self._select_pins = [DigitalOutputDevice(pin) for pin in self.hardware_config.switch_select_pins]
             self._available = True
             self._start_monitoring()
-            logger.info("GPIO switches initialized")
+            logger.info("GPIO switches initialized (gpiozero)")
             return True
-            
         except Exception as e:
-            logger.error(f"Failed to initialize GPIO switches: {e}")
+            logger.error(f"Failed to initialize GPIO switches (gpiozero): {e}")
             return False
     
     def cleanup(self) -> None:
         """Clean up GPIO switches."""
         if self._available:
             self._stop_monitoring()
+            try:
+                if hasattr(self, '_data_pin'):
+                    self._data_pin.close()
+                if hasattr(self, '_clock_pin'):
+                    self._clock_pin.close()
+                if hasattr(self, '_select_pins'):
+                    for pin in self._select_pins:
+                        pin.close()
+            except Exception as e:
+                logger.error(f"Error cleaning up GPIO switches: {e}")
             self._available = False
-            logger.debug("GPIO switches cleaned up")
+            logger.debug("GPIO switches cleaned up (gpiozero)")
     
     @property
     def is_available(self) -> bool:
         return self._available and HAS_GPIO
     
     def read_switches(self) -> SwitchState:
-        """Read current switch state."""
+        """Read current switch state using gpiozero."""
         if not self.is_available:
             return SwitchState(value=0, individual_switches={i: False for i in range(8)})
-        
         try:
-            # Read switches using shift register or multiplexer
             switch_value = 0
             individual_switches = {}
-            
             for i in range(8):
                 # Set select pins for current switch
-                for j, pin in enumerate(self.hardware_config.switch_select_pins):
-                    GPIO.output(pin, (i >> j) & 1)
-                
-                # Small delay for signal settling
+                for j, pin in enumerate(self._select_pins):
+                    pin.value = (i >> j) & 1
                 time.sleep(0.001)
-                
-                # Read switch state
-                switch_on = GPIO.input(self.hardware_config.switch_data_pin) == GPIO.LOW
+                # Read switch state (active low)
+                switch_on = not self._data_pin.value
                 individual_switches[i] = switch_on
-                
                 if switch_on:
                     switch_value |= (1 << i)
-            
             self._switch_value = switch_value
             self._individual_switches = individual_switches
-            
             return SwitchState(value=switch_value, individual_switches=individual_switches)
-            
         except Exception as e:
-            logger.error(f"Error reading GPIO switches: {e}")
+            logger.error(f"Error reading GPIO switches (gpiozero): {e}")
             return SwitchState(value=0, individual_switches={i: False for i in range(8)})
     
     def set_change_callback(self, callback: Callable[[int, int], None]) -> None:
@@ -458,38 +446,124 @@ class GPIOScreen(ScreenInterface):
     def __init__(self, hardware_config: HardwareConfig):
         self.hardware_config = hardware_config
         self._available = False
-    
+        self._fb_path = "/dev/fb0"
+        self._framebuffer = None
+        self._image = None
+        self._draw = None
+        self._font = None
+        # Try to auto-detect framebuffer size
+        self._screen_width, self._screen_height = self._detect_fb_size(hardware_config)
+
+    def _detect_fb_size(self, hardware_config):
+        # Try to read framebuffer size from /sys/class/graphics/fb0/virtual_size
+        try:
+            with open("/sys/class/graphics/fb0/virtual_size", "r") as f:
+                size_str = f.read().strip()
+                width, height = map(int, size_str.split(","))
+                logger.info(f"Detected framebuffer size: {width}x{height}")
+                return width, height
+        except Exception as e:
+            logger.warning(f"Could not auto-detect framebuffer size, using config: {e}")
+            return hardware_config.screen_width, hardware_config.screen_height
+
     def initialize(self) -> bool:
-        """Initialize GPIO screen."""
-        # TODO: Implement with pygame or similar
-        logger.warning("GPIO screen not fully implemented - using placeholder")
-        self._available = True
-        return True
-    
+        """Initialize GPIO screen using Pillow and framebuffer."""
+        try:
+            from PIL import Image, ImageDraw, ImageFont
+            self._image = Image.new("RGB", (self._screen_width, self._screen_height), "black")
+            self._draw = ImageDraw.Draw(self._image)
+            # Try to load a sans-serif font, fallback to default
+            try:
+                self._font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+            except Exception:
+                self._font = ImageFont.load_default()
+            self._available = True
+            logger.info("GPIO screen initialized (Pillow framebuffer)")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize GPIO screen (Pillow): {e}")
+            return False
+
     def cleanup(self) -> None:
         """Clean up GPIO screen."""
         self._available = False
-    
+        self._image = None
+        self._draw = None
+        self._font = None
+
     @property
     def is_available(self) -> bool:
         return self._available
-    
-    def display_text(self, text: str, font_size: int = 24, color: str = "white", 
-                    background: str = "black", align: str = "center") -> None:
-        """Display text on screen."""
-        logger.info(f"GPIO screen would display: '{text}'")
-    
-    def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
-        """Display an image on screen."""
-        logger.info(f"GPIO screen would display image: {image_path}")
-    
+
+    def _write_to_framebuffer(self):
+        """Write the current image to the framebuffer device in RGB565 format, using Pillow's tobytes if possible."""
+        try:
+            img = self._image.convert("RGB")
+            width, height = img.size
+            try:
+                # Try Pillow's built-in RGB565 output (BGR;16 is common for Pi)
+                fb_bytes = img.tobytes("raw", "BGR;16")
+            except Exception:
+                # Fallback to manual conversion
+                arr = img.load()
+                fb_bytes = bytearray()
+                for y in range(height):
+                    for x in range(width):
+                        r, g, b = arr[x, y]
+                        rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+                        fb_bytes.append((rgb565 >> 8) & 0xFF)
+                        fb_bytes.append(rgb565 & 0xFF)
+            with open(self._fb_path, "wb") as fb:
+                fb.write(fb_bytes)
+        except Exception as e:
+            logger.error(f"Failed to write to framebuffer: {e}")
+
     def clear_screen(self, color: str = "black") -> None:
-        """Clear screen with specified color."""
-        logger.debug(f"GPIO screen cleared with {color}")
-    
+        """Clear the screen to the given color."""
+        if not self.is_available:
+            return
+        self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
+        self._write_to_framebuffer()
+
+    def display_text(self, text: str, font_size: int = 48, color: str = "white", background: str = "black", align: str = "center") -> None:
+        """Display text on the HDMI screen using Pillow and framebuffer."""
+        if not self.is_available:
+            logger.warning("GPIOScreen not available for display_text")
+            return
+        from PIL import ImageFont
+        # Optionally reload font at requested size
+        try:
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
+        except Exception:
+            font = self._font or ImageFont.load_default()
+        # Clear screen first
+        self.clear_screen(background)
+        # Calculate text size and position using textbbox
+        try:
+            bbox = self._draw.textbbox((0, 0), text, font=font)
+            text_w = bbox[2] - bbox[0]
+            text_h = bbox[3] - bbox[1]
+        except Exception as e:
+            logger.error(f"Failed to calculate text bounding box: {e}")
+            text_w, text_h = 0, 0
+        if align == "center":
+            x = (self._screen_width - text_w) // 2
+        elif align == "right":
+            x = self._screen_width - text_w - 10
+        else:
+            x = 10
+        y = (self._screen_height - text_h) // 2
+        self._draw.text((x, y), text, font=font, fill=color)
+        self._write_to_framebuffer()
+
+    def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
+        """TODO: Display an image on the HDMI screen using Pillow and framebuffer."""
+        # Placeholder for future image support
+        logger.info(f"TODO: display_image not yet implemented. Would display: {image_path}")
+
     def get_screen_size(self) -> tuple:
         """Get screen dimensions (width, height)."""
-        return (self.hardware_config.screen_width, self.hardware_config.screen_height)
+        return (self._screen_width, self._screen_height)
 
 
 class GPIOSpeaker(SpeakerInterface):

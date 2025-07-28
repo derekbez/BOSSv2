@@ -39,8 +39,8 @@ class HardwareConfig:
     display_dio_pin: int = 3
     
     # Screen settings
-    screen_width: int = 800
-    screen_height: int = 480
+    screen_width: int = 1280
+    screen_height: int = 720
     screen_fullscreen: bool = True
     
     # Audio settings

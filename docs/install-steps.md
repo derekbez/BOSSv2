@@ -32,7 +32,7 @@ python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
 echo "*** Installing B.O.S.S. Python dependencies..."
-pip install gpiozero pigpio python-tm1637 pytest Pillow numpy
+pip install gpiozero pigpio python-tm1637 pytest rich numpy
 echo "*** B.O.S.S. Python dependencies installed."
 
 echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
