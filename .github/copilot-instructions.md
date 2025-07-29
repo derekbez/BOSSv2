@@ -1,3 +1,14 @@
+# HDMI Screen Output Best Practices
+
+- The HDMI screen is driven by Pillow, writing directly to the framebuffer (`/dev/fb0`).
+- **Always ensure `screen_width` and `screen_height` in `boss_config.json` match the framebuffer geometry.**
+    - Check geometry with: `fbset -fb /dev/fb0 -i`
+    - Example for 1024x600 framebuffer:
+      - `"screen_width": 1024,`
+      - `"screen_height": 600,`
+- If the config and framebuffer do not match, text and graphics will appear distorted or unclear.
+- Document any changes to screen geometry in both the config and this documentation.
+
 # Copilot Instructions for B.O.S.S. (Board Of Switches and Screen)
 
 ## Project Overview

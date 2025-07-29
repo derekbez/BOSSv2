@@ -22,8 +22,9 @@
     },
     "display_clk_pin": 2,
     "display_dio_pin": 3,
-    "screen_width": 1280,
-    "screen_height": 720,
+    "screen_width": 1024,
+    "screen_height": 600,
+    // IMPORTANT: Keep screen_width and screen_height in sync with framebuffer geometry (see docs, use `fbset -fb /dev/fb0 -i`)
     "screen_fullscreen": true,
     "enable_audio": true,
     "audio_volume": 0.7
