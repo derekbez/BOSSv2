@@ -24,7 +24,7 @@
     "display_dio_pin": 3,
     "screen_width": 1024,
     "screen_height": 600,
-    // IMPORTANT: Keep screen_width and screen_height in sync with framebuffer geometry (see docs, use `fbset -fb /dev/fb0 -i`)
+    // IMPORTANT: These must match the framebuffer geometry. Run `fbset -fb /dev/fb0 -i` and set screen_width and screen_height to the reported geometry. If mismatched, text/graphics will be distorted or unclear. See docs for details.
     "screen_fullscreen": true,
     "enable_audio": true,
     "audio_volume": 0.7

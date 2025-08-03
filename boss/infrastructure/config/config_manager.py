@@ -17,10 +17,17 @@ def get_config_path() -> Path:
     config_path = os.environ.get("BOSS_CONFIG_PATH")
     if config_path:
         return Path(config_path)
-    
-    # Default to boss/config/boss_config.json (co-located with main code)
-    current_dir = Path(__file__).parent.parent.parent
-    return current_dir / "boss" / "config" / "boss_config.json"
+
+    # Always use the canonical config path: <project_root>/boss/config/boss_config.json
+    # Find project root (the parent of the 'boss' package)
+    current_dir = Path(__file__).resolve()
+    # Traverse up until we find the 'boss' directory
+    for parent in current_dir.parents:
+        if (parent / "boss" / "config" / "boss_config.json").exists():
+            return parent / "boss" / "config" / "boss_config.json"
+    # Fallback: assume this file is in <project_root>/boss/infrastructure/config/
+    project_root = Path(__file__).parent.parent.parent
+    return project_root / "boss" / "config" / "boss_config.json"
 
 
 def load_config(config_path: Optional[Path] = None) -> BossConfig:

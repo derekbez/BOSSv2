@@ -467,8 +467,25 @@ class GPIOScreen(ScreenInterface):
             return hardware_config.screen_width, hardware_config.screen_height
 
     def initialize(self) -> bool:
-        """Initialize GPIO screen using Pillow and framebuffer."""
+        """Initialize GPIO screen using Pillow and framebuffer, with runtime validation of geometry and bpp."""
         try:
+            # --- Runtime validation of framebuffer geometry and bpp ---
+            fb_width, fb_height = self._screen_width, self._screen_height
+            fb_bpp = 16
+            try:
+                with open("/sys/class/graphics/fb0/virtual_size", "r") as f:
+                    size_str = f.read().strip()
+                    fb_width, fb_height = map(int, size_str.split(","))
+                with open("/sys/class/graphics/fb0/bits_per_pixel", "r") as f:
+                    fb_bpp = int(f.read().strip())
+            except Exception as e:
+                logger.warning(f"Could not auto-detect framebuffer geometry/bpp: {e}")
+            # Compare config vs detected
+            if (self._screen_width, self._screen_height) != (fb_width, fb_height):
+                logger.warning(f"Screen config {self._screen_width}x{self._screen_height} does not match framebuffer {fb_width}x{fb_height}. Update config or HDMI settings to match.")
+            if fb_bpp != 16:
+                logger.warning(f"Framebuffer is {fb_bpp}bpp, expected 16bpp (RGB565). Display output may be incorrect.")
+            # --- End validation ---
             from PIL import Image, ImageDraw, ImageFont
             self._image = Image.new("RGB", (self._screen_width, self._screen_height), "black")
             self._draw = ImageDraw.Draw(self._image)
