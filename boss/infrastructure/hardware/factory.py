@@ -29,12 +29,17 @@ def detect_hardware_platform() -> str:
         # Try to import one of the supported GPIO libraries
         try:
             import gpiozero  # noqa: F401
-            logger.info("Detected Raspberry Pi with gpiozero GPIO access")
+            # Check if lgpio is available (preferred backend for gpiozero)
+            try:
+                import lgpio  # noqa: F401
+                logger.info("Detected Raspberry Pi with gpiozero + lgpio GPIO access (optimal)")
+            except ImportError:
+                logger.info("Detected Raspberry Pi with gpiozero GPIO access (using fallback backend)")
             return "gpio"
         except ImportError:
             try:
-                import pigpio  # noqa: F401
-                logger.info("Detected Raspberry Pi with pigpio GPIO access")
+                import lgpio  # noqa: F401
+                logger.info("Detected Raspberry Pi with lgpio GPIO access")
                 return "gpio"
             except ImportError:
                 try:
@@ -42,7 +47,7 @@ def detect_hardware_platform() -> str:
                     logger.info("Detected Raspberry Pi with python-tm1637 GPIO access")
                     return "gpio"
                 except ImportError:
-                    logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, pigpio, python-tm1637)")
+                    logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, python-tm1637)")
     
     # Check for testing environment
     if os.environ.get("BOSS_TEST_MODE") == "1":

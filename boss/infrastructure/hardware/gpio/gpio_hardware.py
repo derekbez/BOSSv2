@@ -7,8 +7,18 @@ import threading
 import time
 from typing import Optional, Callable, Dict
 
+logger = logging.getLogger(__name__)
+
 try:
-    from gpiozero import Button as GZButton, LED as GZLED
+    from gpiozero import Device, Button as GZButton, LED as GZLED
+    # Explicitly set pin factory to lgpio for optimal performance and to eliminate warnings
+    try:
+        from gpiozero.pins.lgpio import LGPIOFactory
+        Device.pin_factory = LGPIOFactory()
+        logger.info("Using lgpio pin factory for gpiozero (optimal)")
+    except ImportError:
+        # Fallback to default factory selection if lgpio not available
+        logger.info("lgpio not available, using gpiozero default pin factory")
     HAS_GPIO = True
 except ImportError:
     HAS_GPIO = False
@@ -20,8 +30,6 @@ from boss.domain.interfaces.hardware import (
 )
 from boss.domain.models.hardware_state import LedColor, ButtonColor, LedState, SwitchState
 from boss.domain.models.config import HardwareConfig
-
-logger = logging.getLogger(__name__)
 
 
 class GPIOButtons(ButtonInterface):
