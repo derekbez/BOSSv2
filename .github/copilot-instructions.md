@@ -1,3 +1,14 @@
+# HDMI Screen Output Best Practices
+
+- The HDMI screen is driven by Pillow, writing directly to the framebuffer (`/dev/fb0`).
+- **Always ensure `screen_width` and `screen_height` in `boss_config.json` match the framebuffer geometry.**
+    - Check geometry with: `fbset -fb /dev/fb0 -i`
+    - Example for 1024x600 framebuffer:
+      - `"screen_width": 1024,`
+      - `"screen_height": 600,`
+- If the config and framebuffer do not match, text and graphics will appear distorted or unclear.
+- Document any changes to screen geometry in both the config and this documentation.
+
 # Copilot Instructions for B.O.S.S. (Board Of Switches and Screen)
 
 ## Project Overview
@@ -11,12 +22,12 @@ B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It prov
   - 4 color LEDs (Red, Yellow, Green, Blue)
   - Main "Go" button
   - TM1637 7-segment display
-  - 7-inch HDMI screen
+  - 7-inch HDMI screen (output via `rich` library)
   - Speaker (optional)
 - **Setup:**
   - Python 3.11+
   - Use a Python virtual environment
-  - Install dependencies:  `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
+  - Install dependencies:  `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `rich`, `numpy`, etc.
   - All configuration is in `boss/config/` (co-located with main code for modularity)
     - `boss/config/boss_config.json` - Hardware pins, system settings
     - `boss/config/app_mappings.json` - Switch-to-app mappings
@@ -127,7 +138,7 @@ boss/
 - **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`, mirroring the main structure. Use `pytest` and ensure coverage
 - **Extensibility:**
   - Add new apps by creating a new subdirectory in `boss/apps/` with `main.py`, `manifest.json`, and any assets
-  - Add new hardware by extending the hardware abstraction layer
+  - Add new hardware by extending the hardware abstraction layer (for screen output, use `rich` instead of Pillow)
   - Register new event types with the event bus as needed
 - **Type Hints & Docstrings:** Use type hints and docstrings throughout for clarity and maintainability
 - **Validation:** Validate all configuration and user input
@@ -137,12 +148,13 @@ boss/
 ## Best Practices
 - Print/log all pin assignments and a hardware startup summary at launch, indicating which devices are real or mocked.
 - Use event-driven patterns for all hardware events and outputs.
-- Document all new apps and hardware modules.
+  - Document all new apps and hardware modules. For screen output, use the `rich` library for text and simple graphics.
 - All code is inside the `boss/` package for import clarity.
 - Each app is a subdirectory in `boss/apps/` with its own code, manifest, and assets.
-- All configuration is co-located in `boss/config/`.
-- All documentation is in `docs/`.
-- All tests are in `tests/`, mirroring the main structure.
+  - All configuration is co-located in `boss/config/`.
+  - All documentation is in `docs/`.
+  - All tests are in `tests/`, mirroring the main structure.
+  - The HDMI screen is driven by the `rich` library (not Pillow).
 
 ## App Structure
 - Each mini-app is a subdirectory under `boss/apps/`, e.g.:
@@ -242,10 +254,11 @@ def cleanup_leds():
 - Tag releases with semantic versioning.
 
 ## Testing Framework
-- Use `pytest` for all tests.
-- Mock hardware interfaces in tests.
-- Run tests with `pytest` and coverage.
-- Place all tests in `tests/`.
+  - Use `pytest` for all tests.
+  - Mock hardware interfaces in tests.
+  - Run tests with `pytest` and coverage.
+  - Place all tests in `tests/`.
+  - For screen output, use the `rich` library for all new development.
 
 ## Acceptance Criteria
 - Meets all functional requirements

@@ -98,7 +98,7 @@ boss/
 │   │   ├── __init__.py
 │   │   ├── app.py            # App entity and business rules
 │   │   ├── hardware_state.py # Hardware state models
-│   │   └── config.py         # Configuration models
+│   │   └── config.py         # Configuration data structures (no defaults)
 │   ├── events/
 │   │   ├── __init__.py
 │   │   └── domain_events.py  # Domain event definitions
@@ -134,7 +134,7 @@ boss/
 │   ├── config/
 │   │   ├── __init__.py
 │   │   ├── config_loader.py  # JSON config loading and validation
-│   │   └── config_manager.py # Runtime config management
+│   │   └── config_manager.py # Runtime config management & defaults
 │   └── logging/
 │       ├── __init__.py
 │       ├── logger.py         # Centralized logging setup
@@ -384,6 +384,13 @@ boss/
 - Automatic fallback to mocks prevents development blockers
 - Centralized logging aids debugging
 - Clear error messages and validation
+
+### Configuration Architecture
+- **Domain models are pure data structures** with no defaults or business logic
+- **Infrastructure layer provides all defaults** through config_manager functions
+- **Single source of truth** for configuration values in JSON files
+- **No circular dependencies** between domain and infrastructure layers
+- **Clean separation** between structure definition (domain) and value provision (infrastructure)
 
 ---
 

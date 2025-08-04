@@ -6,9 +6,11 @@ import logging
 import os
 from pathlib import Path
 from typing import Optional
-from boss.domain.models.config import BossConfig
+from boss.domain.models.config import BossConfig, HardwareConfig, SystemConfig
 
 logger = logging.getLogger(__name__)
+
+
 
 
 def get_config_path() -> Path:
@@ -17,43 +19,57 @@ def get_config_path() -> Path:
     config_path = os.environ.get("BOSS_CONFIG_PATH")
     if config_path:
         return Path(config_path)
-    
-    # Default to boss/config/boss_config.json (co-located with main code)
-    current_dir = Path(__file__).parent.parent.parent
-    return current_dir / "boss" / "config" / "boss_config.json"
+
+    # Always use the canonical config path: <project_root>/boss/config/boss_config.json
+    # Find project root (the parent of the 'boss' package)
+    current_dir = Path(__file__).resolve()
+    # Traverse up until we find the 'boss' directory
+    for parent in current_dir.parents:
+        if (parent / "boss" / "config" / "boss_config.json").exists():
+            return parent / "boss" / "config" / "boss_config.json"
+    # Fallback: assume this file is in <project_root>/boss/infrastructure/config/
+    project_root = Path(__file__).parent.parent.parent
+    return project_root / "boss" / "config" / "boss_config.json"
 
 
 def load_config(config_path: Optional[Path] = None) -> BossConfig:
     """
-    Load configuration from file or create default.
+    Load configuration from file. Config file is REQUIRED.
     
     Args:
         config_path: Optional path to config file
         
     Returns:
         BossConfig instance
+        
+    Raises:
+        FileNotFoundError: If config file doesn't exist
+        ValueError: If config file is invalid
     """
     if config_path is None:
         config_path = get_config_path()
     
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"Configuration file not found at {config_path}. "
+            f"B.O.S.S. requires a valid configuration file to match your hardware setup. "
+            f"Please ensure {config_path} exists with correct pin assignments."
+        )
+    
     try:
-        if config_path.exists():
-            logger.info(f"Loading configuration from {config_path}")
-            config = BossConfig.from_file(config_path)
-        else:
-            logger.info(f"Configuration file not found at {config_path}, using defaults")
-            config = BossConfig()
-            
-            # Save default config for future reference
-            save_config(config, config_path)
-            logger.info(f"Default configuration saved to {config_path}")
+        logger.info(f"Loading configuration from {config_path}")
+        config = BossConfig.from_file(config_path)
         
+        # Validate the loaded configuration
+        if not validate_config(config):
+            raise ValueError("Configuration validation failed")
+            
+        logger.info("Configuration loaded and validated successfully")
         return config
         
     except Exception as e:
-        logger.error(f"Error loading configuration: {e}")
-        logger.info("Using default configuration")
-        return BossConfig()
+        logger.error(f"Error loading configuration from {config_path}: {e}")
+        raise ValueError(f"Failed to load valid configuration: {e}") from e
 
 
 def save_config(config: BossConfig, config_path: Optional[Path] = None) -> None:
@@ -137,7 +153,6 @@ def validate_config(config: BossConfig) -> bool:
     used_pins = set()
     all_pins = [
         config.hardware.switch_data_pin,
-        config.hardware.switch_clock_pin,
         config.hardware.go_button_pin,
         config.hardware.display_clk_pin,
         config.hardware.display_dio_pin

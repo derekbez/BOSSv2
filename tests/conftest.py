@@ -25,7 +25,6 @@ def mock_config():
     """Create a mock configuration for testing."""
     hardware_config = HardwareConfig(
         switch_data_pin=18,
-        switch_clock_pin=24,
         switch_select_pins=[22, 23, 25],
         go_button_pin=16,
         button_pins={"red": 5, "yellow": 6, "green": 13, "blue": 19},

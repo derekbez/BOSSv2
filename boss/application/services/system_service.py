@@ -183,43 +183,45 @@ class SystemManager(SystemService):
     def _provide_basic_startup_feedback(self) -> None:
         """Provide basic startup feedback if no startup app is available."""
         try:
-            # Basic LED blink to show system is alive
-            for color in ['red', 'yellow', 'green', 'blue']:
-                try:
-                    from boss.domain.models.hardware_state import LedColor
-                    led_color = LedColor(color)
-                    if hasattr(self.hardware_service, 'leds') and self.hardware_service.leds:
-                        self.hardware_service.leds.set_led(led_color, True)
-                except Exception:
-                    pass
-            
-            # Brief pause
             import time
-            time.sleep(0.3)
-            
-            # Turn off LEDs
-            for color in ['red', 'yellow', 'green', 'blue']:
-                try:
-                    from boss.domain.models.hardware_state import LedColor
-                    led_color = LedColor(color)
+            from boss.domain.models.hardware_state import LedColor
+            led_colors = [LedColor("red"), LedColor("yellow"), LedColor("green"), LedColor("blue")]
+
+            # Blink all LEDs 5 times
+            for i in range(5):
+                for color in led_colors:
                     if hasattr(self.hardware_service, 'leds') and self.hardware_service.leds:
-                        self.hardware_service.leds.set_led(led_color, False)
-                except Exception:
-                    pass
-            
-            # Show "READY" on display
+                        self.hardware_service.leds.set_led(color, True)
+                time.sleep(0.2)
+                for color in led_colors:
+                    if hasattr(self.hardware_service, 'leds') and self.hardware_service.leds:
+                        self.hardware_service.leds.set_led(color, False)
+                time.sleep(0.15)
+
+            # Show message on screen if available
+            try:
+                if hasattr(self.hardware_service, 'screen') and self.hardware_service.screen:
+                    self.hardware_service.screen.display_text(
+                        "BOSS might not be ready\n\nThe expected Startup app could not be found.",
+                        align='center',
+                        color='yellow',
+                        font_size=28
+                    )
+            except Exception:
+                pass
+
+            # Show fallback on 7-segment display if available
             try:
                 if hasattr(self.hardware_service, 'display') and self.hardware_service.display:
-                    # Try to show a number first, then text
                     try:
                         self.hardware_service.display.show_number(0)  # Show 0000
                     except:
                         self.hardware_service.display.show_text("BOSS")
             except Exception:
                 pass
-                
+
             logger.info("Basic startup feedback completed")
-            
+
         except Exception as e:
             logger.debug(f"Error providing basic startup feedback: {e}")
     
