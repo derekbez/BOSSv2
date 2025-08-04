@@ -130,14 +130,6 @@ class BossConfig:
             raise ValueError(f"Missing required configuration key: {e}")
         except (FileNotFoundError, json.JSONDecodeError, TypeError) as e:
             raise ValueError(f"Invalid configuration file: {e}")
-                display_clk_pin=hardware_data.get('display_clk_pin', default_hardware.display_clk_pin),
-                display_dio_pin=hardware_data.get('display_dio_pin', default_hardware.display_dio_pin),
-                screen_width=hardware_data.get('screen_width', default_hardware.screen_width),
-                screen_height=hardware_data.get('screen_height', default_hardware.screen_height),
-                screen_fullscreen=hardware_data.get('screen_fullscreen', default_hardware.screen_fullscreen),
-                enable_audio=hardware_data.get('enable_audio', default_hardware.enable_audio),
-                audio_volume=hardware_data.get('audio_volume', default_hardware.audio_volume)
-            )
             
             # Create system config with defaults for missing values
             system_config = SystemConfig(

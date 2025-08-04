@@ -435,6 +435,89 @@ class GPIODisplay(DisplayInterface):
     def set_brightness(self, brightness: float) -> None:
         """Set display brightness (0.0-1.0)."""
         logger.debug(f"GPIO display brightness: {brightness}")
+    """
+    GPIO 7-segment display implementation using python-tm1637.
+    Ensures hardware parity with WebUI and mock hardware: all display updates are event-driven and use the same API.
+    """
+
+    def __init__(self, hardware_config: HardwareConfig):
+        self.hardware_config = hardware_config
+        self._available = False
+        self._tm = None
+        self._brightness = 7  # TM1637 brightness: 0-7
+
+    def initialize(self) -> bool:
+        """Initialize TM1637 display."""
+        try:
+            import tm1637
+            self._tm = tm1637.TM1637(
+                clk=self.hardware_config.display_clk_pin,
+                dio=self.hardware_config.display_dio_pin
+            )
+            self._tm.brightness(self._brightness)
+            self.clear()
+            self._available = True
+            logger.info("GPIO TM1637 display initialized")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize TM1637 display: {e}")
+            self._available = False
+            return False
+
+    def cleanup(self) -> None:
+        """Clean up TM1637 display."""
+        if self._tm:
+            self.clear()
+        self._available = False
+
+    @property
+    def is_available(self) -> bool:
+        return self._available
+
+    def show_number(self, value: int, brightness: float = 1.0) -> None:
+        """Display a number (0-9999) on the TM1637 display."""
+        if not self._available or not self._tm:
+            return
+        try:
+            self.set_brightness(brightness)
+            # Clamp and format value
+            value = max(0, min(9999, int(value)))
+            digits = [int(d) for d in f"{value:0>4d}"]
+            self._tm.show(digits)
+        except Exception as e:
+            logger.error(f"Error showing number on TM1637: {e}")
+
+    def show_text(self, text: str, brightness: float = 1.0) -> None:
+        """Display text (up to 4 chars) on the TM1637 display."""
+        if not self._available or not self._tm:
+            return
+        try:
+            self.set_brightness(brightness)
+            # Only 4 characters supported
+            text = text.ljust(4)[:4]
+            self._tm.show([c for c in text])
+        except Exception as e:
+            logger.error(f"Error showing text on TM1637: {e}")
+
+    def clear(self) -> None:
+        """Clear the TM1637 display."""
+        if self._available and self._tm:
+            try:
+                self._tm.show([0, 0, 0, 0])
+            except Exception as e:
+                logger.error(f"Error clearing TM1637: {e}")
+
+    def set_brightness(self, brightness: float) -> None:
+        """Set display brightness (0.0-1.0 mapped to 0-7)."""
+        if not self._available or not self._tm:
+            return
+        try:
+            # Map brightness float to TM1637 0-7
+            level = int(max(0, min(7, round(brightness * 7))))
+            self._tm.brightness(level)
+            self._brightness = level
+        except Exception as e:
+            logger.error(f"Error setting TM1637 brightness: {e}")
 
 
 class GPIOScreen(ScreenInterface):

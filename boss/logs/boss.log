@@ -10349,3 +10349,173 @@ Main button to exit' (size: 28, color: white, align: center)
 2025-08-03 20:10:09,740 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
 2025-08-03 20:10:09,746 - __main__ - INFO - main:142 - Initiating system shutdown...
 2025-08-03 20:10:09,749 - __main__ - INFO - main:144 - System shutdown complete
+2025-08-04 09:18:25,612 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: /home/rpi/boss/boss/logs/boss.log
+2025-08-04 09:18:25,614 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-04 09:18:25,616 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-04 09:18:25,618 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-04 09:18:25,620 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-04 09:18:25,621 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-04 09:18:25,623 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-04 09:18:25,624 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-04 09:18:25,626 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-04 09:18:25,628 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-04 09:18:25,630 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-04 09:18:25,631 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-04 09:18:25,633 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.2 (main, Apr 28 2025, 14:11:48) [GCC 12.2.0]
+2025-08-04 09:18:25,672 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Linux-6.12.25+rpt-rpi-v8-aarch64-with-glibc2.36
+2025-08-04 09:18:25,888 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'ELF')
+2025-08-04 09:18:25,889 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: aarch64
+2025-08-04 09:18:25,891 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: 
+2025-08-04 09:18:25,892 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-04 09:18:26,524 - boss.infrastructure.hardware.factory - INFO - detect_hardware_platform:32 - Detected Raspberry Pi with gpiozero GPIO access
+2025-08-04 09:18:26,620 - boss.infrastructure.hardware.gpio.gpio_factory - INFO - __init__:19 - GPIO hardware factory initialized
+2025-08-04 09:18:26,622 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:92 - ==================================================
+2025-08-04 09:18:26,623 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:93 - BOSS Hardware Configuration Summary
+2025-08-04 09:18:26,624 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:94 - ==================================================
+2025-08-04 09:18:26,625 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:95 - Hardware Type: gpio
+2025-08-04 09:18:26,626 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:96 - Platform: Linux aarch64
+2025-08-04 09:18:26,627 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:99 - GPIO Pin Assignments:
+2025-08-04 09:18:26,628 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:100 -   Switch Data Pin: 8
+2025-08-04 09:18:26,630 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:101 -   Switch Select Pins: [25, 23, 22]
+2025-08-04 09:18:26,631 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:102 -   Go Button Pin: 17
+2025-08-04 09:18:26,633 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:103 -   Button Pins: {'red': 26, 'yellow': 19, 'green': 13, 'blue': 6}
+2025-08-04 09:18:26,634 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:104 -   LED Pins: {'red': 21, 'yellow': 20, 'green': 16, 'blue': 12}
+2025-08-04 09:18:26,635 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 -   Display CLK Pin: 5
+2025-08-04 09:18:26,637 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   Display DIO Pin: 4
+2025-08-04 09:18:26,638 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - Audio Enabled: True
+2025-08-04 09:18:26,640 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:118 - Screen Fullscreen: True
+2025-08-04 09:18:26,641 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:119 - ==================================================
+2025-08-04 09:18:26,645 - __main__ - INFO - main:112 - BOSS system created successfully
+2025-08-04 09:18:26,647 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-08-04 09:18:26,650 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-04 09:18:26,651 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-04 09:18:26,655 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing gpio hardware
+2025-08-04 09:18:26,660 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - _detect_fb_size:543 - Detected framebuffer size: 1024x600
+2025-08-04 09:18:26,792 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:56 - GPIO buttons initialized (gpiozero)
+2025-08-04 09:18:26,794 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-08-04 09:18:26,807 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:165 - GPIO Go button initialized (gpiozero)
+2025-08-04 09:18:26,809 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-08-04 09:18:26,828 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:237 - GPIO LEDs initialized (gpiozero)
+2025-08-04 09:18:26,830 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-08-04 09:18:26,852 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:310 - GPIO switches initialized (gpiozero)
+2025-08-04 09:18:26,854 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-08-04 09:18:27,058 - boss.infrastructure.hardware.gpio.gpio_hardware - ERROR - initialize:463 - Failed to initialize TM1637 display: 'int' object is not callable
+2025-08-04 09:18:27,061 - boss.application.services.hardware_service - WARNING - initialize:71 - ✗ Display failed to initialize
+2025-08-04 09:18:27,718 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:578 - GPIO screen initialized (Pillow framebuffer)
+2025-08-04 09:18:27,720 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-08-04 09:18:27,721 - boss.infrastructure.hardware.gpio.gpio_hardware - WARNING - initialize:676 - GPIO speaker not fully implemented - using placeholder
+2025-08-04 09:18:27,723 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-08-04 09:18:27,764 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-08-04 09:18:27,766 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from /home/rpi/boss/boss/apps
+2025-08-04 09:18:27,783 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 6 apps
+2025-08-04 09:18:27,786 - boss.application.services.hardware_service - INFO - _monitor_hardware:228 - Hardware monitoring thread started
+2025-08-04 09:18:27,786 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-08-04 09:18:27,791 - boss.application.services.system_service - INFO - _run_startup_app:166 - Running startup app for visual feedback
+2025-08-04 09:18:27,793 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Admin Startup (switch 4)
+2025-08-04 09:18:27,800 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-08-04 09:18:27,805 - __main__ - INFO - main:119 - BOSS system running - Press Ctrl+C to stop
+2025-08-04 09:18:27,817 - boss.application.services.app_runner - INFO - _run_app_thread:125 - Running app: Admin Startup
+2025-08-04 09:18:27,828 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Initializing
+2025-08-04 09:18:27,833 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 1/3
+2025-08-04 09:18:28,298 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 2/3
+2025-08-04 09:18:28,790 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 3/3
+2025-08-04 09:18:29,298 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-04 09:18:29,834 - boss.application.services.app_runner - INFO - _run_app_thread:145 - App Admin Startup finished normally after 2.0 seconds
+2025-08-04 09:19:49,204 - boss.application.services.system_service - INFO - _signal_handler:338 - Received SIGINT, shutting down gracefully
+2025-08-04 09:19:49,207 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-08-04 09:19:49,210 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-08-04 09:19:49,211 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-08-04 09:19:49,221 - boss.application.services.hardware_service - INFO - _monitor_hardware:248 - Hardware monitoring thread stopped
+2025-08-04 09:19:49,224 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-08-04 09:19:49,226 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-08-04 09:19:49,657 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-08-04 09:19:49,659 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-04 09:19:49,660 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-04 09:19:49,662 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-08-04 09:19:49,665 - __main__ - INFO - main:142 - Initiating system shutdown...
+2025-08-04 09:19:49,667 - __main__ - INFO - main:144 - System shutdown complete
+2025-08-04 09:20:23,461 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: /home/rpi/boss/boss/logs/boss.log
+2025-08-04 09:20:23,463 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-04 09:20:23,465 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-04 09:20:23,466 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-04 09:20:23,468 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-04 09:20:23,469 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-04 09:20:23,471 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-04 09:20:23,473 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-04 09:20:23,474 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-04 09:20:23,476 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-04 09:20:23,477 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-04 09:20:23,479 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-04 09:20:23,481 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.2 (main, Apr 28 2025, 14:11:48) [GCC 12.2.0]
+2025-08-04 09:20:23,504 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Linux-6.12.25+rpt-rpi-v8-aarch64-with-glibc2.36
+2025-08-04 09:20:23,554 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'ELF')
+2025-08-04 09:20:23,556 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: aarch64
+2025-08-04 09:20:23,558 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: 
+2025-08-04 09:20:23,560 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-04 09:20:24,022 - boss.infrastructure.hardware.factory - INFO - detect_hardware_platform:32 - Detected Raspberry Pi with gpiozero GPIO access
+2025-08-04 09:20:24,037 - boss.infrastructure.hardware.gpio.gpio_factory - INFO - __init__:19 - GPIO hardware factory initialized
+2025-08-04 09:20:24,039 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:92 - ==================================================
+2025-08-04 09:20:24,040 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:93 - BOSS Hardware Configuration Summary
+2025-08-04 09:20:24,041 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:94 - ==================================================
+2025-08-04 09:20:24,042 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:95 - Hardware Type: gpio
+2025-08-04 09:20:24,043 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:96 - Platform: Linux aarch64
+2025-08-04 09:20:24,045 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:99 - GPIO Pin Assignments:
+2025-08-04 09:20:24,046 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:100 -   Switch Data Pin: 8
+2025-08-04 09:20:24,047 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:101 -   Switch Select Pins: [25, 23, 22]
+2025-08-04 09:20:24,049 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:102 -   Go Button Pin: 17
+2025-08-04 09:20:24,050 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:103 -   Button Pins: {'red': 26, 'yellow': 19, 'green': 13, 'blue': 6}
+2025-08-04 09:20:24,052 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:104 -   LED Pins: {'red': 21, 'yellow': 20, 'green': 16, 'blue': 12}
+2025-08-04 09:20:24,054 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:105 -   Display CLK Pin: 5
+2025-08-04 09:20:24,056 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:106 -   Display DIO Pin: 4
+2025-08-04 09:20:24,057 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - Audio Enabled: True
+2025-08-04 09:20:24,059 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:118 - Screen Fullscreen: True
+2025-08-04 09:20:24,061 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:119 - ==================================================
+2025-08-04 09:20:24,065 - __main__ - INFO - main:112 - BOSS system created successfully
+2025-08-04 09:20:24,067 - boss.application.services.system_service - INFO - start:42 - Starting BOSS system
+2025-08-04 09:20:24,070 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-04 09:20:24,071 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-04 09:20:24,074 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing gpio hardware
+2025-08-04 09:20:24,077 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - _detect_fb_size:543 - Detected framebuffer size: 1024x600
+2025-08-04 09:20:24,155 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:56 - GPIO buttons initialized (gpiozero)
+2025-08-04 09:20:24,157 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-08-04 09:20:24,166 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:165 - GPIO Go button initialized (gpiozero)
+2025-08-04 09:20:24,168 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-08-04 09:20:24,184 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:237 - GPIO LEDs initialized (gpiozero)
+2025-08-04 09:20:24,185 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-08-04 09:20:24,202 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:310 - GPIO switches initialized (gpiozero)
+2025-08-04 09:20:24,204 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-08-04 09:20:24,349 - boss.infrastructure.hardware.gpio.gpio_hardware - ERROR - initialize:463 - Failed to initialize TM1637 display: 'int' object is not callable
+2025-08-04 09:20:24,351 - boss.application.services.hardware_service - WARNING - initialize:71 - ✗ Display failed to initialize
+2025-08-04 09:20:24,601 - boss.infrastructure.hardware.gpio.gpio_hardware - INFO - initialize:578 - GPIO screen initialized (Pillow framebuffer)
+2025-08-04 09:20:24,603 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-08-04 09:20:24,604 - boss.infrastructure.hardware.gpio.gpio_hardware - WARNING - initialize:676 - GPIO speaker not fully implemented - using placeholder
+2025-08-04 09:20:24,605 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-08-04 09:20:24,633 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-08-04 09:20:24,635 - boss.application.services.app_manager - INFO - load_apps:27 - Loading apps from /home/rpi/boss/boss/apps
+2025-08-04 09:20:24,646 - boss.application.services.app_manager - INFO - load_apps:52 - Loaded 6 apps
+2025-08-04 09:20:24,649 - boss.application.services.hardware_service - INFO - _monitor_hardware:228 - Hardware monitoring thread started
+2025-08-04 09:20:24,650 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-08-04 09:20:24,653 - boss.application.services.system_service - INFO - _run_startup_app:166 - Running startup app for visual feedback
+2025-08-04 09:20:24,657 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Admin Startup (switch 4)
+2025-08-04 09:20:24,662 - boss.application.services.system_service - INFO - start:70 - BOSS system started successfully
+2025-08-04 09:20:24,666 - boss.application.services.app_runner - INFO - _run_app_thread:125 - Running app: Admin Startup
+2025-08-04 09:20:24,668 - __main__ - INFO - main:119 - BOSS system running - Press Ctrl+C to stop
+2025-08-04 09:20:24,672 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Initializing
+2025-08-04 09:20:24,678 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 1/3
+2025-08-04 09:20:25,143 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 2/3
+2025-08-04 09:20:25,624 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 3/3
+2025-08-04 09:20:26,122 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-04 09:20:26,646 - boss.application.services.app_runner - INFO - _run_app_thread:145 - App Admin Startup finished normally after 2.0 seconds
+2025-08-04 09:20:41,518 - boss.application.services.system_service - INFO - _signal_handler:338 - Received SIGINT, shutting down gracefully
+2025-08-04 09:20:41,520 - boss.application.services.system_service - INFO - stop:82 - Stopping BOSS system
+2025-08-04 09:20:41,522 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:301 - System shutdown requested: normal
+2025-08-04 09:20:41,524 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:332 - Normal system shutdown
+2025-08-04 09:20:41,547 - boss.application.services.hardware_service - INFO - _monitor_hardware:248 - Hardware monitoring thread stopped
+2025-08-04 09:20:41,549 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-08-04 09:20:41,550 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-08-04 09:20:41,984 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-08-04 09:20:41,985 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-04 09:20:41,987 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-04 09:20:41,988 - boss.application.services.system_service - INFO - stop:106 - BOSS system stopped
+2025-08-04 09:20:41,991 - __main__ - INFO - main:142 - Initiating system shutdown...
+2025-08-04 09:20:41,992 - __main__ - INFO - main:144 - System shutdown complete
