@@ -64,14 +64,14 @@ class GPIOButtons(ButtonInterface):
         callback = self._press_callbacks.get(color)
         if callback:
             callback(color)
-        logger.debug(f"GPIO button {color.value} pressed")
+        logger.debug(f"GPIO button {color} pressed")
 
     def _handle_release(self, color):
         self._button_states[color] = False
         callback = self._release_callbacks.get(color)
         if callback:
             callback(color)
-        logger.debug(f"GPIO button {color.value} released")
+        logger.debug(f"GPIO button {color} released")
     
     def cleanup(self) -> None:
         """Clean up GPIO buttons."""
@@ -398,43 +398,8 @@ class GPIOSwitches(SwitchInterface):
 # Note: Display, Screen, and Speaker implementations would require additional libraries
 # For now, we'll use simpler implementations
 
+
 class GPIODisplay(DisplayInterface):
-    """GPIO 7-segment display implementation (placeholder)."""
-    
-    def __init__(self, hardware_config: HardwareConfig):
-        self.hardware_config = hardware_config
-        self._available = False
-    
-    def initialize(self) -> bool:
-        """Initialize GPIO display."""
-        # TODO: Implement with TM1637 or similar library
-        logger.warning("GPIO display not fully implemented - using placeholder")
-        self._available = True
-        return True
-    
-    def cleanup(self) -> None:
-        """Clean up GPIO display."""
-        self._available = False
-    
-    @property
-    def is_available(self) -> bool:
-        return self._available
-    
-    def show_number(self, value: int, brightness: float = 1.0) -> None:
-        """Display a number (0-9999)."""
-        logger.info(f"GPIO display would show: {value}")
-    
-    def show_text(self, text: str, brightness: float = 1.0) -> None:
-        """Display text (limited characters)."""
-        logger.info(f"GPIO display would show text: {text}")
-    
-    def clear(self) -> None:
-        """Clear the display."""
-        logger.debug("GPIO display cleared")
-    
-    def set_brightness(self, brightness: float) -> None:
-        """Set display brightness (0.0-1.0)."""
-        logger.debug(f"GPIO display brightness: {brightness}")
     """
     GPIO 7-segment display implementation using python-tm1637.
     Ensures hardware parity with WebUI and mock hardware: all display updates are event-driven and use the same API.
@@ -454,6 +419,7 @@ class GPIODisplay(DisplayInterface):
                 dio=self.hardware_config.display_dio_pin
             )
             self.clear()
+            self.show_text("BOSS")
             self._available = True
             logger.info("GPIO TM1637 display initialized")
             return True

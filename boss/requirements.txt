@@ -1,8 +1,8 @@
 gpiozero
 pigpio
-rpi-tm1637
+python-tm1637
 pytest
-rich
+Pillow
 numpy
 fastapi
 uvicorn

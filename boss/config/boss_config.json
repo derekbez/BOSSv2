@@ -1,7 +1,7 @@
 {
   "hardware": {
     "switch_data_pin": 8,
-    "switch_select_pins": [25, 23, 22],
+    "switch_select_pins": [23, 24, 25],
     "go_button_pin": 17,
     "button_pins": {
       "red": 26,
