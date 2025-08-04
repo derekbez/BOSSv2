@@ -395,10 +395,6 @@ class GPIOSwitches(SwitchInterface):
                 time.sleep(1.0)
 
 
-# Note: Display, Screen, and Speaker implementations would require additional libraries
-# For now, we'll use simpler implementations
-
-
 class GPIODisplay(DisplayInterface):
     """
     GPIO 7-segment display implementation using python-tm1637.
@@ -418,10 +414,10 @@ class GPIODisplay(DisplayInterface):
                 clk=self.hardware_config.display_clk_pin,
                 dio=self.hardware_config.display_dio_pin
             )
+            self._available = True
             self.clear()
             self.show_text("BOSS")
-            self._available = True
-            logger.info("GPIO TM1637 display initialized")
+            logger.info(f"GPIO TM1637 display initialized clk={self.hardware_config.display_clk_pin}, dio={self.hardware_config.display_dio_pin}")
             return True
         except Exception as e:
             logger.error(f"Failed to initialize TM1637 display: {e}")
