@@ -156,7 +156,7 @@ muxInpin = 8  #          blue
   - All hardware is mocked for tests
   - Run tests with `pytest` and coverage
 
-
+> `https://pypi.org/project/python-tm1637/`
 ---
 
 
