@@ -444,7 +444,6 @@ class GPIODisplay(DisplayInterface):
         self.hardware_config = hardware_config
         self._available = False
         self._tm = None
-        self._brightness = 7  # TM1637 brightness: 0-7
 
     def initialize(self) -> bool:
         """Initialize TM1637 display."""
@@ -454,7 +453,6 @@ class GPIODisplay(DisplayInterface):
                 clk=self.hardware_config.display_clk_pin,
                 dio=self.hardware_config.display_dio_pin
             )
-            self._tm.brightness(self._brightness)
             self.clear()
             self._available = True
             logger.info("GPIO TM1637 display initialized")
@@ -475,49 +473,41 @@ class GPIODisplay(DisplayInterface):
         return self._available
 
     def show_number(self, value: int, brightness: float = 1.0) -> None:
-        """Display a number (0-9999) on the TM1637 display."""
+        """Display a number (0-9999) on the TM1637 display using .number()."""
         if not self._available or not self._tm:
             return
         try:
-            self.set_brightness(brightness)
-            # Clamp and format value
-            value = max(0, min(9999, int(value)))
-            digits = [int(d) for d in f"{value:0>4d}"]
-            self._tm.show(digits)
+            # Clamp value to supported range
+            value = max(-999, min(9999, int(value)))
+            logger.debug(f"TM1637 number(): {value}")
+            self._tm.number(value)
         except Exception as e:
             logger.error(f"Error showing number on TM1637: {e}")
 
     def show_text(self, text: str, brightness: float = 1.0) -> None:
-        """Display text (up to 4 chars) on the TM1637 display."""
+        """Display text (up to 4 chars) on the TM1637 display using .show()."""
         if not self._available or not self._tm:
             return
         try:
-            self.set_brightness(brightness)
-            # Only 4 characters supported
-            text = text.ljust(4)[:4]
-            self._tm.show([c for c in text])
+            # Only 4 characters supported, pad or trim as needed
+            text = str(text).ljust(4)[:4]
+            logger.debug(f"TM1637 show(): '{text}'")
+            self._tm.show(text)
         except Exception as e:
             logger.error(f"Error showing text on TM1637: {e}")
 
     def clear(self) -> None:
-        """Clear the TM1637 display."""
+        """Clear the TM1637 display using .write([0,0,0,0])."""
         if self._available and self._tm:
             try:
-                self._tm.show([0, 0, 0, 0])
+                self._tm.write([0, 0, 0, 0])
+                logger.debug("TM1637 display cleared")
             except Exception as e:
                 logger.error(f"Error clearing TM1637: {e}")
 
     def set_brightness(self, brightness: float) -> None:
-        """Set display brightness (0.0-1.0 mapped to 0-7)."""
-        if not self._available or not self._tm:
-            return
-        try:
-            # Map brightness float to TM1637 0-7
-            level = int(max(0, min(7, round(brightness * 7))))
-            self._tm.brightness(level)
-            self._brightness = level
-        except Exception as e:
-            logger.error(f"Error setting TM1637 brightness: {e}")
+        """Brightness control not supported on TM1637 display (no-op)."""
+        pass
 
 
 class GPIOScreen(ScreenInterface):
