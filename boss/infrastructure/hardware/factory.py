@@ -98,7 +98,6 @@ def log_hardware_summary(factory: HardwareFactory, hardware_config: HardwareConf
     if factory.hardware_type == "gpio":
         logger.info("GPIO Pin Assignments:")
         logger.info(f"  Switch Data Pin: {hardware_config.switch_data_pin}")
-        logger.info(f"  Switch Clock Pin: {hardware_config.switch_clock_pin}")
         logger.info(f"  Switch Select Pins: {hardware_config.switch_select_pins}")
         logger.info(f"  Go Button Pin: {hardware_config.go_button_pin}")
         logger.info(f"  Button Pins: {hardware_config.button_pins}")

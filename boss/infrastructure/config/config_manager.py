@@ -6,9 +6,66 @@ import logging
 import os
 from pathlib import Path
 from typing import Optional
-from boss.domain.models.config import BossConfig
+from boss.domain.models.config import BossConfig, HardwareConfig, SystemConfig
 
 logger = logging.getLogger(__name__)
+
+
+def get_default_hardware_config() -> HardwareConfig:
+    """Get default hardware configuration values."""
+    return HardwareConfig(
+        switch_data_pin=8,
+        switch_select_pins=[25, 23, 22],
+        go_button_pin=17,
+        button_pins={
+            "red": 26,
+            "yellow": 19,
+            "green": 13,
+            "blue": 6
+        },
+        led_pins={
+            "red": 21,
+            "yellow": 20,
+            "green": 16,
+            "blue": 12
+        },
+        display_clk_pin=5,
+        display_dio_pin=4,
+        screen_width=1024,
+        screen_height=600,
+        screen_fullscreen=True,
+        enable_audio=True,
+        audio_volume=0.7
+    )
+
+
+def get_default_system_config() -> SystemConfig:
+    """Get default system configuration values."""
+    return SystemConfig(
+        app_timeout_seconds=300,
+        apps_directory="apps",
+        log_level="INFO",
+        log_file="logs/boss.log",
+        log_max_size_mb=10,
+        log_backup_count=5,
+        event_queue_size=1000,
+        event_timeout_seconds=1.0,
+        webui_enabled=False,
+        webui_host="localhost",
+        webui_port=8080,
+        enable_api=False,
+        api_port=5000,
+        auto_detect_hardware=True,
+        force_hardware_type=None
+    )
+
+
+def get_default_config() -> BossConfig:
+    """Get default configuration."""
+    return BossConfig(
+        hardware=get_default_hardware_config(),
+        system=get_default_system_config()
+    )
 
 
 def get_config_path() -> Path:
@@ -32,35 +89,42 @@ def get_config_path() -> Path:
 
 def load_config(config_path: Optional[Path] = None) -> BossConfig:
     """
-    Load configuration from file or create default.
+    Load configuration from file. Config file is REQUIRED.
     
     Args:
         config_path: Optional path to config file
         
     Returns:
         BossConfig instance
+        
+    Raises:
+        FileNotFoundError: If config file doesn't exist
+        ValueError: If config file is invalid
     """
     if config_path is None:
         config_path = get_config_path()
     
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"Configuration file not found at {config_path}. "
+            f"B.O.S.S. requires a valid configuration file to match your hardware setup. "
+            f"Please ensure {config_path} exists with correct pin assignments."
+        )
+    
     try:
-        if config_path.exists():
-            logger.info(f"Loading configuration from {config_path}")
-            config = BossConfig.from_file(config_path)
-        else:
-            logger.info(f"Configuration file not found at {config_path}, using defaults")
-            config = BossConfig()
-            
-            # Save default config for future reference
-            save_config(config, config_path)
-            logger.info(f"Default configuration saved to {config_path}")
+        logger.info(f"Loading configuration from {config_path}")
+        config = BossConfig.from_file(config_path)
         
+        # Validate the loaded configuration
+        if not validate_config(config):
+            raise ValueError("Configuration validation failed")
+            
+        logger.info("Configuration loaded and validated successfully")
         return config
         
     except Exception as e:
-        logger.error(f"Error loading configuration: {e}")
-        logger.info("Using default configuration")
-        return BossConfig()
+        logger.error(f"Error loading configuration from {config_path}: {e}")
+        raise ValueError(f"Failed to load valid configuration: {e}") from e
 
 
 def save_config(config: BossConfig, config_path: Optional[Path] = None) -> None:
@@ -144,7 +208,6 @@ def validate_config(config: BossConfig) -> bool:
     used_pins = set()
     all_pins = [
         config.hardware.switch_data_pin,
-        config.hardware.switch_clock_pin,
         config.hardware.go_button_pin,
         config.hardware.display_clk_pin,
         config.hardware.display_dio_pin

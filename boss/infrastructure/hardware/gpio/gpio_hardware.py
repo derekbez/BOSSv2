@@ -304,7 +304,6 @@ class GPIOSwitches(SwitchInterface):
         try:
             from gpiozero import DigitalInputDevice, DigitalOutputDevice
             self._data_pin = DigitalInputDevice(self.hardware_config.switch_data_pin, pull_up=True)
-            self._clock_pin = DigitalOutputDevice(self.hardware_config.switch_clock_pin)
             self._select_pins = [DigitalOutputDevice(pin) for pin in self.hardware_config.switch_select_pins]
             self._available = True
             self._start_monitoring()
@@ -321,8 +320,6 @@ class GPIOSwitches(SwitchInterface):
             try:
                 if hasattr(self, '_data_pin'):
                     self._data_pin.close()
-                if hasattr(self, '_clock_pin'):
-                    self._clock_pin.close()
                 if hasattr(self, '_select_pins'):
                     for pin in self._select_pins:
                         pin.close()
