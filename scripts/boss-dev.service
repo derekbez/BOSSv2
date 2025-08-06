@@ -1,0 +1,22 @@
+[Unit]
+Description=B.O.S.S. Hardware Interface Development Service
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=gpio
+WorkingDirectory=/home/rpi/boss
+Environment=PYTHONPATH=/home/rpi/boss
+Environment=BOSS_LOG_LEVEL=DEBUG
+ExecStart=/home/rpi/boss-venv/bin/python -m boss.main
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# GPIO access
+SupplementaryGroups=gpio
+
+[Install]
+WantedBy=multi-user.target
