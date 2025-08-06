@@ -311,6 +311,297 @@ user_stories:
       - display_status_message:
           if_failed: "No internet connection detected. Please connect to Wi-Fi to ensure full functionality."
 
+# ===================================================================
+# EPIC: Rich Display Backend Implementation
+# ===================================================================
+
+  - id: US-025
+    title: Rich Display Backend Architecture
+    as: developer
+    want: Create a new Rich-based screen implementation alongside the existing Pillow implementation
+    so_that: Apps can choose the most appropriate display backend for their needs
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - A new GPIORichScreen class is created that implements ScreenInterface
+      - GPIORichScreen uses the rich library for text rendering instead of Pillow
+      - Both GPIOScreen (Pillow) and GPIORichScreen (Rich) can coexist in the system
+      - The hardware factory can create either implementation based on configuration
+      - Rich implementation handles console output redirected to the framebuffer or terminal
+      - All existing ScreenInterface methods are implemented with Rich equivalents
+    tasks:
+      - Create boss/infrastructure/hardware/gpio/gpio_rich_screen.py
+      - Implement GPIORichScreen class with ScreenInterface
+      - Add rich library imports and console initialization
+      - Implement display_text() using rich.console.Console
+      - Implement clear_screen() using rich console clearing
+      - Implement get_screen_size() for rich console dimensions
+      - Add proper error handling and logging
+      - Create unit tests for GPIORichScreen class
+      - Update gpio_factory.py to support Rich screen creation
+
+  - id: US-026
+    title: Configuration-Based Screen Backend Selection
+    as: system administrator
+    want: Configure which screen backend (Pillow or Rich) the system uses via configuration
+    so_that: I can choose the optimal display technology for my deployment without code changes
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - A new "screen_backend" configuration option is added to boss_config.json
+      - Valid values are "pillow" and "rich" (default: "pillow" for backward compatibility)
+      - The hardware factory creates the appropriate screen implementation based on this setting
+      - Invalid configuration values log an error and fall back to Pillow
+      - Configuration validation ensures only supported backends are specified
+      - Hot-reload of configuration updates the screen backend without restart
+    tasks:
+      - Add screen_backend field to HardwareConfig model
+      - Update boss/config/boss_config.json with screen_backend option
+      - Modify config validation to check screen_backend values
+      - Update hardware factory to read screen_backend configuration
+      - Implement factory logic to create GPIOScreen or GPIORichScreen based on config
+      - Add configuration validation with helpful error messages
+      - Update configuration loading tests
+      - Add integration tests for backend switching
+      - Document configuration options in config comments
+
+  - id: US-027
+    title: App Manifest Screen Backend Preference
+    as: app developer
+    want: Specify in my app's manifest.json which screen backend I prefer
+    so_that: My app can automatically use the display technology best suited for its content
+    priority: Medium
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - App manifest.json can include "preferred_screen_backend" field
+      - Valid values are "pillow", "rich", or "auto" (auto uses system default)
+      - App Manager reads the preference during app loading
+      - The screen backend is switched temporarily while the app runs
+      - When the app exits, the system reverts to the configured default backend
+      - Apps without a preference use the system default backend
+      - Invalid preferences log a warning and use system default
+    tasks:
+      - Update app manifest schema to include preferred_screen_backend
+      - Modify app loader to read screen backend preference
+      - Update App domain model to store screen backend preference
+      - Implement screen backend switching in AppRunner
+      - Add logic to revert to default backend on app exit
+      - Create app manifest validation for screen backend values
+      - Update app template manifest.json with example preference
+      - Add unit tests for app screen backend preference handling
+      - Update app development documentation with manifest options
+
+  - id: US-028
+    title: Rich Console Features Implementation
+    as: app developer
+    want: Access Rich-specific features like tables, progress bars, syntax highlighting, and rich formatting
+    so_that: I can create visually appealing console-style interfaces with structured data display
+    priority: Medium
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Rich screen backend supports displaying Rich Table objects
+      - Rich screen backend supports Progress bars and status indicators
+      - Rich screen backend supports syntax highlighting for code display
+      - Rich screen backend supports Rich markup (colors, bold, italic)
+      - Rich screen backend supports panels and borders
+      - Rich screen backend supports tree structures for hierarchical data
+      - Extended API methods are available for Rich-specific features
+      - Fallback behavior is provided when Rich features are used with Pillow backend
+    tasks:
+      - Extend GPIORichScreen with display_table() method
+      - Implement display_progress() for progress bars
+      - Add display_code() method with syntax highlighting
+      - Implement display_panel() for bordered content
+      - Add display_tree() for hierarchical data structures
+      - Create display_markup() for rich text formatting
+      - Implement console layout and column management
+      - Add Rich feature detection and graceful fallbacks
+      - Create examples demonstrating each Rich feature
+      - Update ScreenInterface with Rich-specific optional methods
+
+  - id: US-029
+    title: Rich Console Output Redirection
+    as: system developer
+    want: Ensure Rich console output is properly directed to the HDMI screen on Raspberry Pi
+    so_that: Rich-rendered content appears on the physical display instead of SSH terminal
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Rich console output is redirected to the framebuffer device (/dev/fb0)
+      - Rich content appears on the physical HDMI screen, not SSH terminal
+      - Rich console respects the configured screen dimensions
+      - Console output is properly formatted for the target display resolution
+      - Color output is correctly mapped to the display color space
+      - Rich console works in headless mode without SSH connection
+      - Performance is acceptable for real-time display updates
+    tasks:
+      - Research Rich console output redirection techniques
+      - Implement framebuffer output capture for Rich console
+      - Configure Rich console with proper screen dimensions
+      - Set up Rich console for headless operation
+      - Implement color space mapping for framebuffer output
+      - Add performance optimization for framebuffer writes
+      - Test Rich output on actual Raspberry Pi hardware
+      - Create benchmarks comparing Rich vs Pillow performance
+      - Document framebuffer redirection approach
+
+  - id: US-030
+    title: Rich and Pillow Feature Parity
+    as: app developer
+    want: Have equivalent functionality available regardless of which screen backend I choose
+    so_that: I can switch backends without losing essential display capabilities
+    priority: Medium
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Both backends support text display with size, color, and positioning
+      - Both backends support screen clearing with background colors
+      - Both backends support multi-line text and text alignment
+      - Image display gracefully degrades in Rich (shows filename or placeholder)
+      - Rich backend provides text-based alternatives for graphical features
+      - Performance characteristics are documented for both backends
+      - API compatibility layer ensures seamless backend switching
+    tasks:
+      - Audit existing Pillow features for Rich equivalents
+      - Implement Rich text positioning equivalent to Pillow coordinates
+      - Create Rich color mapping for Pillow color specifications
+      - Implement image placeholder display in Rich backend
+      - Add text alignment options for Rich backend
+      - Create font size mapping between Pillow and Rich
+      - Implement compatibility layer for seamless API usage
+      - Add feature comparison documentation
+      - Create migration guide for apps switching backends
+
+  - id: US-031
+    title: Rich Backend Performance Optimization
+    as: system administrator
+    want: Rich display backend to perform efficiently on Raspberry Pi hardware
+    so_that: The system remains responsive even with complex Rich console output
+    priority: Medium
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Rich backend renders content within 100ms for typical text displays
+      - Rich backend uses less than 50MB additional memory compared to Pillow
+      - Rich backend updates do not cause noticeable lag in the user interface
+      - Rich backend handles rapid display updates without buffer overflow
+      - Rich backend gracefully handles complex layouts without system slowdown
+      - Performance metrics are logged for monitoring and optimization
+    tasks:
+      - Profile Rich backend memory usage vs Pillow
+      - Benchmark Rich rendering performance on Raspberry Pi
+      - Implement Rich console buffer optimization
+      - Add asynchronous rendering for complex Rich layouts
+      - Optimize Rich console refresh rates
+      - Implement display update batching for Rich backend
+      - Add performance monitoring and logging
+      - Create performance comparison documentation
+      - Implement automatic performance degradation for complex content
+
+  - id: US-032
+    title: Rich Backend Testing and Validation
+    as: developer
+    want: Comprehensive tests for Rich display backend functionality
+    so_that: Rich backend is reliable and regressions are prevented
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Unit tests cover all GPIORichScreen methods
+      - Integration tests verify Rich backend works with app lifecycle
+      - Mock tests allow Rich backend testing without hardware
+      - Visual regression tests ensure Rich output consistency
+      - Performance tests validate Rich backend efficiency
+      - Cross-platform tests ensure Rich works on development machines
+      - CI pipeline includes Rich backend test execution
+    tasks:
+      - Create unit tests for GPIORichScreen class
+      - Implement Rich console mocking for tests
+      - Add integration tests for Rich backend with apps
+      - Create visual output comparison tests
+      - Implement performance benchmarking tests
+      - Add Rich backend tests to CI pipeline
+      - Create test fixtures for Rich console validation
+      - Implement Rich output capture for test verification
+      - Add error condition testing for Rich backend
+
+  - id: US-033
+    title: Rich Backend Developer Experience
+    as: app developer
+    want: Clear documentation, examples, and tools for using Rich display backend
+    so_that: I can effectively develop apps that leverage Rich's capabilities
+    priority: Medium
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Rich backend API is fully documented with examples
+      - Code examples demonstrate Rich-specific features
+      - Migration guide helps convert Pillow apps to use Rich
+      - Best practices guide covers Rich performance optimization
+      - Development tools support Rich backend testing
+      - Rich backend features are documented in app development guide
+    tasks:
+      - Create Rich backend API documentation
+      - Write Rich feature demonstration apps
+      - Create Pillow-to-Rich migration guide
+      - Document Rich backend performance best practices
+      - Add Rich backend examples to app template
+      - Update app development documentation with Rich guidance
+      - Create Rich backend troubleshooting guide
+      - Add Rich backend support to development tools
+
+  - id: US-034
+    title: Rich Backend Installation and Dependencies
+    as: system administrator
+    want: Clear installation instructions and dependency management for Rich backend
+    so_that: I can deploy systems with Rich backend support without dependency conflicts
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Rich library is added to project dependencies with proper version constraints
+      - Installation documentation includes Rich backend setup steps
+      - Dependency conflicts between Rich and existing libraries are resolved
+      - Rich backend dependencies are optional when not needed
+      - Virtual environment setup includes Rich installation
+      - Docker configuration supports Rich backend
+      - Installation validation confirms Rich backend functionality
+    tasks:
+      - Add rich library to requirements.txt with version constraints
+      - Update setup scripts to install Rich dependencies
+      - Test Rich installation on clean Raspberry Pi OS
+      - Update Docker configuration for Rich support
+      - Add Rich installation to systemd service setup
+      - Create Rich installation validation script
+      - Update remote development setup to include Rich
+      - Document Rich version compatibility requirements
+      - Add Rich installation troubleshooting guide
+
+  - id: US-035
+    title: Rich Backend Documentation and Installation Guide
+    as: developer or system administrator
+    want: Comprehensive documentation for Rich backend implementation, configuration, and usage
+    so_that: I can successfully deploy, configure, and develop with Rich backend support
+    priority: High
+    epic: Rich Display Backend
+    acceptance_criteria:
+      - Installation guide includes Rich library setup and dependencies
+      - Configuration documentation covers screen_backend options
+      - App development guide explains Rich vs Pillow backend selection
+      - Performance comparison documentation helps choose appropriate backend
+      - Troubleshooting guide covers common Rich backend issues
+      - API reference documents all Rich-specific methods and features
+      - Migration guide helps transition existing apps to Rich backend
+      - Best practices documentation covers Rich optimization techniques
+    tasks:
+      - Update README.md with Rich backend overview
+      - Add Rich installation steps to setup documentation
+      - Create docs/rich_display_backend.md comprehensive guide
+      - Update configuration documentation with screen_backend options
+      - Add Rich backend section to app development guide
+      - Create Rich vs Pillow comparison documentation
+      - Write Rich backend troubleshooting guide
+      - Update API documentation with Rich-specific methods
+      - Create Rich backend migration guide for existing apps
+      - Add Rich backend examples to documentation
+      - Update Copilot instructions with Rich backend information
+      - Create Rich backend quick reference guide
+
 
 
 
