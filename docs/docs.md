@@ -141,16 +141,29 @@ muxInpin = 8  #          blue
 - **Setup:**
   - Designed for Raspberry Pi OS 64bit Lite (no GUI)
   - Use Python 3.11+ and a virtual environment
-  - Install dependencies: `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
+  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
   - All configuration is in `boss/config/` (co-located with main code)
   - For Windows/dev, hardware is mocked automatically
 
 - **Startup:**
-  - Run from project root: `python3 -m boss.main`
+  - **Production Hardware**: Use systemd service for reliability:
+    ```bash
+    sudo systemctl start boss
+    sudo journalctl -u boss -f
+    ```
+  - **Remote Development**: Manage from Windows/VSCode:
+    ```bash
+    python scripts/boss_remote_manager.py
+    ```
+  - **Local Testing**: Run directly for development/testing:
+    ```bash
+    cd ~/boss
+    python3 -m boss.main
+    ```
   - Configuration is automatically loaded from `boss/config/boss_config.json`
   - App mappings are loaded from `boss/config/app_mappings.json`
   - Open the Web UI debug dashboard at [http://localhost:8080/](http://localhost:8080/) for live hardware and event inspection (when webui hardware mode is enabled)
-  - Can be started manually or as a systemd service (see `docs/install-steps.md`)
+  - Can be started manually or as a systemd service (see `docs/remote_development.md`)
 
 - **Testing:**
   - Use `pytest` for all tests (see `tests/`)

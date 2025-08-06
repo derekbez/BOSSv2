@@ -14,6 +14,57 @@
 ## Project Overview
 B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It provides a physical interface to select and run mini-apps using 8 toggle switches (0–255), a 7-segment display, 4 color LEDs, 4 color buttons, a main "Go" button, a 7-inch screen, and optionally a speaker. The system is designed for extensibility, robust hardware abstraction, and seamless development/testing with or without real hardware.
 
+## Remote Development & Debugging
+For production hardware development and testing, B.O.S.S. runs as a systemd service with remote management capabilities:
+
+### **Systemd Service Setup (Raspberry Pi)**
+```bash
+# One-time setup
+cd ~/boss
+./scripts/setup_systemd_service.sh
+
+# Service management
+sudo systemctl start boss        # Start service
+sudo systemctl stop boss         # Stop service
+sudo systemctl restart boss      # Restart service
+sudo systemctl status boss       # Check status
+sudo journalctl -u boss -f       # View live logs
+```
+
+### **Remote Management (Windows/VSCode)**
+```bash
+# Setup SSH authentication first (one-time)
+ssh-keygen -t rsa -b 4096
+type ~/.ssh/id_rsa.pub | ssh rpi@192.168.1.143 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+# Interactive management console
+python scripts/boss_remote_manager.py
+
+# Quick commands
+python scripts/boss_remote_manager.py start     # Start service
+python scripts/boss_remote_manager.py restart   # Restart service
+python scripts/boss_remote_manager.py logs      # Follow live logs
+python scripts/boss_remote_manager.py status    # Show detailed status
+python scripts/boss_remote_manager.py test      # Run hardware test
+python scripts/boss_remote_manager.py ssh-setup # Setup SSH authentication
+```
+
+### **Development Workflow**
+1. **Code on Windows**: Develop in VSCode with full editor features
+2. **Deploy to Pi**: Use remote manager "Deploy & Restart" or git workflow
+3. **Test on Hardware**: Monitor via live logs and hardware tests
+4. **Debug**: Use systemd logs and remote status monitoring
+5. **Iterate**: Fast cycle with automatic service restarts
+
+### **Key Benefits**
+- **Service Reliability**: Auto-restart, proper permissions, resource limits
+- **Remote Control**: Full service management from Windows terminal
+- **Live Monitoring**: Real-time logs and status from development machine
+- **Hardware Access**: Proper gpio/video/audio group permissions
+- **Professional Workflow**: Git-based deployment with service integration
+
+See `docs/remote_development.md` for complete setup and troubleshooting guide.
+
 ## System Requirements & Installation
 - **Hardware:**
   - Raspberry Pi (64bit Lite OS, no GUI)
@@ -22,12 +73,12 @@ B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It prov
   - 4 color LEDs (Red, Yellow, Green, Blue)
   - Main "Go" button
   - TM1637 7-segment display
-  - 7-inch HDMI screen (output via `rich` library)
+  - 7-inch HDMI screen (output via Pillow framebuffer)
   - Speaker (optional)
 - **Setup:**
   - Python 3.11+
   - Use a Python virtual environment
-  - Install dependencies:  `gpiozero`, `pigpio`, `python-tm1637`, `pytest`, `rich`, `numpy`, etc.
+  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
   - All configuration is in `boss/config/` (co-located with main code for modularity)
     - `boss/config/boss_config.json` - Hardware pins, system settings
     - `boss/config/app_mappings.json` - Switch-to-app mappings
@@ -237,8 +288,17 @@ def cleanup_leds():
 ```
 
 ## Workflow & Usage
-- Always run the BOSS app from the project root for correct module resolution:
+- **Production**: Always run BOSS as a systemd service for real hardware:
+  ```bash
+  sudo systemctl start boss
+  sudo journalctl -u boss -f
   ```
+- **Development**: Use remote management from Windows/VSCode:
+  ```bash
+  python scripts/boss_remote_manager.py
+  ```
+- **Local Testing**: Run directly for development/testing:
+  ```bash
   cd ~/boss
   python3 -m boss.main
   ```
@@ -259,6 +319,37 @@ def cleanup_leds():
   - Run tests with `pytest` and coverage.
   - Place all tests in `tests/`.
   - For screen output, use the `rich` library for all new development.
+
+## Remote Development Troubleshooting
+
+### Common Issues
+1. **Service Won't Start**: Check `sudo systemctl status boss` and `sudo journalctl -u boss -n 50`
+2. **Permission Denied**: Ensure user is in `gpio`, `video`, and `audio` groups
+3. **GPIO Not Working**: Install `lgpio` and check `/dev/gpiomem` permissions
+4. **Display Issues**: Verify framebuffer geometry matches config with `fbset -fb /dev/fb0 -i`
+5. **SSH Connection Issues**: Run `python scripts/boss_remote_manager.py ssh-setup` to fix authentication
+6. **Remote Manager Issues**: Update `RPI_HOST` and ensure SSH key authentication (see `docs/ssh_authentication_setup.md`)
+
+### Debug Commands
+```bash
+# Service management
+python scripts/boss_remote_manager.py status    # Check service status
+python scripts/boss_remote_manager.py logs      # View live logs
+python scripts/boss_remote_manager.py test      # Run hardware test
+python scripts/boss_remote_manager.py groups    # Check permissions
+python scripts/boss_remote_manager.py ssh-setup # Setup SSH authentication
+
+# Direct SSH access
+ssh rpi@your-pi-hostname
+sudo systemctl status boss
+sudo journalctl -u boss -f
+```
+
+### Hardware Validation
+- Use `python scripts/boss_remote_manager.py test` to validate hardware
+- Check group membership: `groups` should include `gpio video audio`
+- Verify framebuffer access: `ls -la /dev/fb0`
+- Test GPIO access: `ls -la /dev/gpiomem`
 
 ## Acceptance Criteria
 - Meets all functional requirements
