@@ -404,38 +404,19 @@ class GPIOSwitches(SwitchInterface):
 
 
 class GPIODisplay(DisplayInterface):
-    """
-    GPIO 7-segment display implementation using python-tm1637.
-    Ensures hardware parity with WebUI and mock hardware: all display updates are event-driven and use the same API.
-    """
-
+    """GPIO 7-segment display implementation (placeholder)."""
     def __init__(self, hardware_config: HardwareConfig):
         self.hardware_config = hardware_config
         self._available = False
-        self._tm = None
+        self._last_value = None
 
     def initialize(self) -> bool:
-        """Initialize TM1637 display."""
-        try:
-            import tm1637
-            self._tm = tm1637.TM1637(
-                clk=self.hardware_config.display_clk_pin,
-                dio=self.hardware_config.display_dio_pin
-            )
-            self._available = True
-            self.clear()
-            self.show_text("BOSS")
-            logger.info(f"GPIO TM1637 display initialized clk={self.hardware_config.display_clk_pin}, dio={self.hardware_config.display_dio_pin}")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to initialize TM1637 display: {e}")
-            self._available = False
-            return False
+        # TODO: Implement with python-tm1637
+        logger.warning("GPIODisplay not fully implemented - using placeholder")
+        self._available = True
+        return True
 
     def cleanup(self) -> None:
-        """Clean up TM1637 display."""
-        if self._tm:
-            self.clear()
         self._available = False
 
     @property
@@ -443,184 +424,19 @@ class GPIODisplay(DisplayInterface):
         return self._available
 
     def show_number(self, value: int, brightness: float = 1.0) -> None:
-        """Display a number (0-9999) on the TM1637 display using .number()."""
-        if not self._available or not self._tm:
-            return
-        try:
-            # Clamp value to supported range
-            value = max(-999, min(9999, int(value)))
-            logger.debug(f"TM1637 number(): {value}")
-            self._tm.number(value)
-        except Exception as e:
-            logger.error(f"Error showing number on TM1637: {e}")
+        self._last_value = value
+        logger.info(f"GPIODisplay show_number: {value} (brightness {brightness})")
 
     def show_text(self, text: str, brightness: float = 1.0) -> None:
-        """Display text (up to 4 chars) on the TM1637 display using .show()."""
-        if not self._available or not self._tm:
-            return
-        try:
-            # Only 4 characters supported, pad or trim as needed
-            text = str(text).ljust(4)[:4]
-            logger.debug(f"TM1637 show(): '{text}'")
-            self._tm.show(text)
-        except Exception as e:
-            logger.error(f"Error showing text on TM1637: {e}")
+        self._last_value = text
+        logger.info(f"GPIODisplay show_text: {text} (brightness {brightness})")
 
     def clear(self) -> None:
-        """Clear the TM1637 display using .write([0,0,0,0])."""
-        if self._available and self._tm:
-            try:
-                self._tm.write([0, 0, 0, 0])
-                logger.debug("TM1637 display cleared")
-            except Exception as e:
-                logger.error(f"Error clearing TM1637: {e}")
+        self._last_value = None
+        logger.info("GPIODisplay cleared")
 
     def set_brightness(self, brightness: float) -> None:
-        """Brightness control not supported on TM1637 display (no-op)."""
-        pass
-
-
-class GPIOScreen(ScreenInterface):
-    """GPIO screen implementation (placeholder)."""
-    
-    def __init__(self, hardware_config: HardwareConfig):
-        self.hardware_config = hardware_config
-        self._available = False
-        self._fb_path = "/dev/fb0"
-        self._framebuffer = None
-        self._image = None
-        self._draw = None
-        self._font = None
-        # Try to auto-detect framebuffer size
-        self._screen_width, self._screen_height = self._detect_fb_size(hardware_config)
-
-    def _detect_fb_size(self, hardware_config):
-        # Try to read framebuffer size from /sys/class/graphics/fb0/virtual_size
-        try:
-            with open("/sys/class/graphics/fb0/virtual_size", "r") as f:
-                size_str = f.read().strip()
-                width, height = map(int, size_str.split(","))
-                logger.info(f"Detected framebuffer size: {width}x{height}")
-                return width, height
-        except Exception as e:
-            logger.warning(f"Could not auto-detect framebuffer size, using config: {e}")
-            return hardware_config.screen_width, hardware_config.screen_height
-
-    def initialize(self) -> bool:
-        """Initialize GPIO screen using Pillow and framebuffer, with runtime validation of geometry and bpp."""
-        try:
-            # --- Runtime validation of framebuffer geometry and bpp ---
-            fb_width, fb_height = self._screen_width, self._screen_height
-            fb_bpp = 16
-            try:
-                with open("/sys/class/graphics/fb0/virtual_size", "r") as f:
-                    size_str = f.read().strip()
-                    fb_width, fb_height = map(int, size_str.split(","))
-                with open("/sys/class/graphics/fb0/bits_per_pixel", "r") as f:
-                    fb_bpp = int(f.read().strip())
-            except Exception as e:
-                logger.warning(f"Could not auto-detect framebuffer geometry/bpp: {e}")
-            # Compare config vs detected
-            if (self._screen_width, self._screen_height) != (fb_width, fb_height):
-                logger.warning(f"Screen config {self._screen_width}x{self._screen_height} does not match framebuffer {fb_width}x{fb_height}. Update config or HDMI settings to match.")
-            if fb_bpp != 16:
-                logger.warning(f"Framebuffer is {fb_bpp}bpp, expected 16bpp (RGB565). Display output may be incorrect.")
-            # --- End validation ---
-            from PIL import Image, ImageDraw, ImageFont
-            self._image = Image.new("RGB", (self._screen_width, self._screen_height), "black")
-            self._draw = ImageDraw.Draw(self._image)
-            # Try to load a sans-serif font, fallback to default
-            try:
-                self._font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
-            except Exception:
-                self._font = ImageFont.load_default()
-            self._available = True
-            logger.info("GPIO screen initialized (Pillow framebuffer)")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to initialize GPIO screen (Pillow): {e}")
-            return False
-
-    def cleanup(self) -> None:
-        """Clean up GPIO screen."""
-        self._available = False
-        self._image = None
-        self._draw = None
-        self._font = None
-
-    @property
-    def is_available(self) -> bool:
-        return self._available
-
-    def _write_to_framebuffer(self):
-        """Write the current image to the framebuffer device in RGB565 format, using Pillow's tobytes if possible."""
-        try:
-            img = self._image.convert("RGB")
-            width, height = img.size
-            try:
-                # Try Pillow's built-in RGB565 output (BGR;16 is common for Pi)
-                fb_bytes = img.tobytes("raw", "BGR;16")
-            except Exception:
-                # Fallback to manual conversion
-                arr = img.load()
-                fb_bytes = bytearray()
-                for y in range(height):
-                    for x in range(width):
-                        r, g, b = arr[x, y]
-                        rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-                        fb_bytes.append((rgb565 >> 8) & 0xFF)
-                        fb_bytes.append(rgb565 & 0xFF)
-            with open(self._fb_path, "wb") as fb:
-                fb.write(fb_bytes)
-        except Exception as e:
-            logger.error(f"Failed to write to framebuffer: {e}")
-
-    def clear_screen(self, color: str = "black") -> None:
-        """Clear the screen to the given color."""
-        if not self.is_available:
-            return
-        self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
-        self._write_to_framebuffer()
-
-    def display_text(self, text: str, font_size: int = 48, color: str = "white", background: str = "black", align: str = "center") -> None:
-        """Display text on the HDMI screen using Pillow and framebuffer."""
-        if not self.is_available:
-            logger.warning("GPIOScreen not available for display_text")
-            return
-        from PIL import ImageFont
-        # Optionally reload font at requested size
-        try:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
-        except Exception:
-            font = self._font or ImageFont.load_default()
-        # Clear screen first
-        self.clear_screen(background)
-        # Calculate text size and position using textbbox
-        try:
-            bbox = self._draw.textbbox((0, 0), text, font=font)
-            text_w = bbox[2] - bbox[0]
-            text_h = bbox[3] - bbox[1]
-        except Exception as e:
-            logger.error(f"Failed to calculate text bounding box: {e}")
-            text_w, text_h = 0, 0
-        if align == "center":
-            x = (self._screen_width - text_w) // 2
-        elif align == "right":
-            x = self._screen_width - text_w - 10
-        else:
-            x = 10
-        y = (self._screen_height - text_h) // 2
-        self._draw.text((x, y), text, font=font, fill=color)
-        self._write_to_framebuffer()
-
-    def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
-        """TODO: Display an image on the HDMI screen using Pillow and framebuffer."""
-        # Placeholder for future image support
-        logger.info(f"TODO: display_image not yet implemented. Would display: {image_path}")
-
-    def get_screen_size(self) -> tuple:
-        """Get screen dimensions (width, height)."""
-        return (self._screen_width, self._screen_height)
+        logger.info(f"GPIODisplay brightness: {brightness}")
 
 
 class GPIOSpeaker(SpeakerInterface):

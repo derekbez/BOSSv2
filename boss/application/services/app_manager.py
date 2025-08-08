@@ -15,9 +15,16 @@ logger = logging.getLogger(__name__)
 class AppManager(AppManagerService):
     """Service for managing mini-apps."""
     
-    def __init__(self, apps_directory: Path, event_bus):
+    def __init__(self, apps_directory: Path, event_bus, hardware_service, config_manager):
         self.apps_directory = apps_directory
         self.event_bus = event_bus
+        self.hardware_service = hardware_service
+        self.config_manager = config_manager
+        try:
+            cfg = self.config_manager.get_effective_config() if hasattr(self.config_manager, 'get_effective_config') else self.config_manager.get_config()
+            self._system_default_backend = getattr(cfg.hardware, 'screen_backend', 'pillow')
+        except Exception:
+            self._system_default_backend = 'pillow'
         self._apps: Dict[int, App] = {}
         self._app_mappings_file = apps_directory.parent / "config" / "app_mappings.json"
         self._current_app: Optional[App] = None
@@ -137,3 +144,51 @@ class AppManager(AppManagerService):
         logger.info("Reloading apps")
         self._apps.clear()
         self.load_apps()
+
+    # --- US-027: Backend switching support ---
+    def _determine_backend_for_app(self, app: App) -> str:
+        """Resolve which backend to use for a given app."""
+        use_rich = app.should_use_rich_backend(self._system_default_backend)
+        return 'rich' if use_rich else 'pillow'
+
+    def _apply_app_backend(self, app: App) -> str:
+        """Switch backend if needed; return previous backend to allow restore."""
+        previous_backend = self.hardware_service.get_current_screen_backend()
+        target_backend = self._determine_backend_for_app(app)
+        if target_backend != previous_backend:
+            ok = self.hardware_service.switch_screen_backend(target_backend)
+            if not ok:
+                logger.warning(f"Failed to switch to {target_backend}, staying on {previous_backend}")
+                return previous_backend
+            logger.info(f"Switched backend for app '{app.manifest.name}' -> {target_backend}")
+        return previous_backend
+
+    def _restore_backend(self, previous_backend: str) -> None:
+        """Restore a previously saved backend."""
+        current = self.hardware_service.get_current_screen_backend()
+        if current != previous_backend:
+            if not self.hardware_service.switch_screen_backend(previous_backend):
+                logger.error(f"Failed to restore screen backend to {previous_backend}")
+
+    # Public helpers for orchestration
+    def apply_backend_for_app(self, app: App) -> str:
+        return self._apply_app_backend(app)
+
+    def restore_backend(self, previous_backend: str) -> None:
+        self._restore_backend(previous_backend)
+
+    def run_app(self, app: App) -> None:
+        """Run an app with backend preference switching around its lifecycle."""
+        previous_backend = self._apply_app_backend(app)
+        try:
+            # Publish app starting event
+            app.mark_starting()
+            self.event_bus.publish("app.starting", {"app": app.manifest.name}, "app_manager")
+            # For now, just mark running and then stopped; real execution is handled by AppRunner
+            app.mark_running()
+            self.event_bus.publish("app.running", {"app": app.manifest.name}, "app_manager")
+        except Exception as e:
+            app.mark_error(str(e))
+            self.event_bus.publish("app.error", {"app": app.manifest.name, "error": str(e)}, "app_manager")
+        finally:
+            self._restore_backend(previous_backend)

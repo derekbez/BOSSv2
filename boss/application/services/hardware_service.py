@@ -310,3 +310,37 @@ class HardwareManager(HardwareService):
                 logger.debug(f"Screen updated: {content_type}")
         except Exception as e:
             logger.error(f"Error updating screen: {e}")
+
+    # --- US-027: runtime switching support ---
+    def get_current_screen_backend(self) -> str:
+        if hasattr(self.hardware_factory, 'get_current_screen_backend'):
+            return self.hardware_factory.get_current_screen_backend()  # type: ignore
+        return 'pillow'
+
+    def switch_screen_backend(self, backend_type: str) -> bool:
+        """Switch screen backend at runtime and reinitialize screen."""
+        try:
+            if not hasattr(self.hardware_factory, 'switch_screen_backend'):
+                logger.warning("Hardware factory does not support backend switching")
+                return False
+            ok = self.hardware_factory.switch_screen_backend(backend_type)  # type: ignore
+            if not ok:
+                return False
+            # Recreate and initialize screen
+            if self.screen:
+                try:
+                    self.screen.cleanup()
+                except Exception:
+                    pass
+            self.screen = self.hardware_factory.create_screen()
+            if self.screen and not self.screen.initialize():
+                logger.error("Reinitialized screen failed to initialize")
+                return False
+            # For WebUI impls, reset event bus
+            if self.screen and hasattr(self.screen, 'set_event_bus'):
+                self.screen.set_event_bus(self.event_bus)  # type: ignore
+            logger.info(f"Switched screen backend to {backend_type}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to switch screen backend: {e}")
+            return False

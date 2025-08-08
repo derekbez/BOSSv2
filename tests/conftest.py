@@ -7,10 +7,10 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, MagicMock
 
-# Add boss package to Python path for tests
-boss_root = Path(__file__).parent.parent / "boss"
-if str(boss_root) not in sys.path:
-    sys.path.insert(0, str(boss_root))
+# Add repository root to Python path so 'boss' package resolves
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 # Import after path setup
 from boss.domain.models.config import BossConfig, HardwareConfig, SystemConfig
@@ -31,6 +31,7 @@ def mock_config():
         led_pins={"red": 21, "yellow": 20, "green": 26, "blue": 12},
         display_clk_pin=2,
         display_dio_pin=3,
+    screen_backend="rich",
         screen_width=800,
         screen_height=480,
         screen_fullscreen=True,

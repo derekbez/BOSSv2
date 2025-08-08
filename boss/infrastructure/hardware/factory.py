@@ -5,6 +5,7 @@ Hardware factory with automatic platform detection.
 import logging
 import platform
 import os
+import importlib.util
 from typing import Optional
 from boss.domain.interfaces.hardware import HardwareFactory
 from boss.domain.models.config import HardwareConfig
@@ -26,28 +27,20 @@ def detect_hardware_platform() -> str:
     
     # Check if we're on Raspberry Pi (32/64-bit) and GPIO libraries are available
     if system == "Linux" and (machine.startswith("arm") or machine == "aarch64"):
-        # Try to import one of the supported GPIO libraries
-        try:
-            import gpiozero  # noqa: F401
-            # Check if lgpio is available (preferred backend for gpiozero)
-            try:
-                import lgpio  # noqa: F401
+        # Try to detect supported GPIO libraries without importing them
+        if importlib.util.find_spec("gpiozero") is not None:
+            if importlib.util.find_spec("lgpio") is not None:
                 logger.info("Detected Raspberry Pi with gpiozero + lgpio GPIO access (optimal)")
-            except ImportError:
+            else:
                 logger.info("Detected Raspberry Pi with gpiozero GPIO access (using fallback backend)")
             return "gpio"
-        except ImportError:
-            try:
-                import lgpio  # noqa: F401
-                logger.info("Detected Raspberry Pi with lgpio GPIO access")
-                return "gpio"
-            except ImportError:
-                try:
-                    import python_tm1637  # noqa: F401
-                    logger.info("Detected Raspberry Pi with python-tm1637 GPIO access")
-                    return "gpio"
-                except ImportError:
-                    logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, python-tm1637)")
+        if importlib.util.find_spec("lgpio") is not None:
+            logger.info("Detected Raspberry Pi with lgpio GPIO access")
+            return "gpio"
+        if importlib.util.find_spec("python_tm1637") is not None:
+            logger.info("Detected Raspberry Pi with python-tm1637 GPIO access")
+            return "gpio"
+        logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, python-tm1637)")
     
     # Check for testing environment
     if os.environ.get("BOSS_TEST_MODE") == "1":
@@ -122,3 +115,8 @@ def log_hardware_summary(factory: HardwareFactory, hardware_config: HardwareConf
     logger.info(f"Audio Enabled: {hardware_config.enable_audio}")
     logger.info(f"Screen Fullscreen: {hardware_config.screen_fullscreen}")
     logger.info("=" * 50)
+
+
+"""
+Note: Screen backend switching is implemented by concrete factories/services, not here.
+"""

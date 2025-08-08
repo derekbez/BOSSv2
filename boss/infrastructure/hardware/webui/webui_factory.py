@@ -16,6 +16,7 @@ class WebUIHardwareFactory(HardwareFactory):
     
     def __init__(self, hardware_config: HardwareConfig):
         self.hardware_config = hardware_config
+        self._current_screen_backend = getattr(self.hardware_config, 'screen_backend', 'rich')
         logger.info("WebUI hardware factory initialized")
     
     def create_buttons(self) -> ButtonInterface:
@@ -44,6 +45,19 @@ class WebUIHardwareFactory(HardwareFactory):
             width=self.hardware_config.screen_width,
             height=self.hardware_config.screen_height
         )
+
+    # --- US-027 helpers (track backend; UI rendering is the same) ---
+    def get_current_screen_backend(self) -> str:
+        return self._current_screen_backend
+
+    def switch_screen_backend(self, backend_type: str) -> bool:
+        backend = (backend_type or '').lower()
+        if backend not in {"rich", "pillow"}:
+            logger.warning(f"Invalid backend '{backend_type}', keeping current: {self._current_screen_backend}")
+            return False
+        self._current_screen_backend = backend
+        logger.info(f"WebUI logical screen backend set to: {backend}")
+        return True
     
     def create_speaker(self) -> Optional[SpeakerInterface]:
         """Create WebUI speaker interface implementation."""

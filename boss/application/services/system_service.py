@@ -25,6 +25,7 @@ class SystemManager(SystemService):
         self._running = False
         self._shutdown_event = threading.Event()
         self._webui_port = None  # Track WebUI port for shutdown
+        self._previous_backend_for_app: Optional[str] = None
         
         # Set up signal handlers for graceful shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -262,11 +263,11 @@ class SystemManager(SystemService):
         # Handle app launch requests (from Go button or API)
         self.event_bus.subscribe("app_launch_requested", self._on_app_launch_requested)
         self.event_bus.subscribe("go_button_pressed", self._on_go_button_pressed)
-        
+        # Restore backend after app stops
+        self.event_bus.subscribe("app_stopped", self._on_app_stopped)
         # Handle admin shutdown requests
         self.event_bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
-        
-        # Note: Hardware output events (led_update, display_update, screen_update) 
+        # Note: Hardware output events (led_update, display_update, screen_update)
         # are now handled by HardwareEventHandler to avoid duplication
     
     def _on_app_launch_requested(self, event_type: str, payload: Dict[str, Any]) -> None:
@@ -281,6 +282,11 @@ class SystemManager(SystemService):
             
             if app:
                 logger.info(f"Launching app for switch {switch_value}: {app.manifest.name}")
+                # US-027: apply preferred backend for this app
+                try:
+                    self._previous_backend_for_app = self.app_manager.apply_backend_for_app(app)
+                except Exception as e:
+                    logger.warning(f"Could not apply backend for app: {e}")
                 self.app_runner.start_app(app)
                 self.app_manager.set_current_app(app)
             else:
@@ -289,6 +295,15 @@ class SystemManager(SystemService):
                 
         except Exception as e:
             logger.error(f"Error launching app: {e}")
+
+    def _on_app_stopped(self, event_type: str, payload: Dict[str, Any]) -> None:
+        """Restore screen backend after app completes (US-027)."""
+        try:
+            if self._previous_backend_for_app:
+                self.app_manager.restore_backend(self._previous_backend_for_app)
+                self._previous_backend_for_app = None
+        except Exception as e:
+            logger.warning(f"Failed to restore backend after app stop: {e}")
     
     def _on_go_button_pressed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle Go button press."""

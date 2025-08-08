@@ -30,6 +30,7 @@ class HardwareConfig:
     screen_width: int
     screen_height: int
     screen_fullscreen: bool
+    screen_backend: str
 
     # Audio settings
     enable_audio: bool
@@ -101,6 +102,7 @@ class BossConfig:
                 screen_width=hardware_data['screen_width'],
                 screen_height=hardware_data['screen_height'],
                 screen_fullscreen=hardware_data['screen_fullscreen'],
+                screen_backend=hardware_data.get('screen_backend', 'rich'),
                 enable_audio=hardware_data['enable_audio'],
                 audio_volume=hardware_data['audio_volume']
             )
@@ -130,33 +132,6 @@ class BossConfig:
             raise ValueError(f"Missing required configuration key: {e}")
         except (FileNotFoundError, json.JSONDecodeError, TypeError) as e:
             raise ValueError(f"Invalid configuration file: {e}")
-            
-            # Create system config with defaults for missing values
-            system_config = SystemConfig(
-                app_timeout_seconds=system_data.get('app_timeout_seconds', default_system.app_timeout_seconds),
-                apps_directory=system_data.get('apps_directory', default_system.apps_directory),
-                log_level=system_data.get('log_level', default_system.log_level),
-                log_file=system_data.get('log_file', default_system.log_file),
-                log_max_size_mb=system_data.get('log_max_size_mb', default_system.log_max_size_mb),
-                log_backup_count=system_data.get('log_backup_count', default_system.log_backup_count),
-                event_queue_size=system_data.get('event_queue_size', default_system.event_queue_size),
-                event_timeout_seconds=system_data.get('event_timeout_seconds', default_system.event_timeout_seconds),
-                webui_enabled=system_data.get('webui_enabled', default_system.webui_enabled),
-                webui_host=system_data.get('webui_host', default_system.webui_host),
-                webui_port=system_data.get('webui_port', default_system.webui_port),
-                enable_api=system_data.get('enable_api', default_system.enable_api),
-                api_port=system_data.get('api_port', default_system.api_port),
-                auto_detect_hardware=system_data.get('auto_detect_hardware', default_system.auto_detect_hardware),
-                force_hardware_type=system_data.get('force_hardware_type', default_system.force_hardware_type)
-            )
-            
-            return cls(hardware=hardware_config, system=system_config)
-            
-        except (FileNotFoundError, json.JSONDecodeError, TypeError) as e:
-            # Import here to avoid circular dependencies
-            from boss.infrastructure.config.config_manager import get_default_config
-            # Return default config if file doesn't exist or is invalid
-            return get_default_config()
     
     def save_to_file(self, config_path: Path) -> None:
         """Save configuration to JSON file."""

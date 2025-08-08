@@ -83,16 +83,6 @@ class AppRunner(AppRunnerService):
                     # Note: Python doesn't allow force-killing threads safely
                     # Apps should respect the stop_event
             
-            # Mark app as stopped
-            app.mark_stopped()
-            
-            # Publish app stopped event
-            self.event_bus.publish("app_stopped", {
-                "app_name": app.manifest.name,
-                "switch_value": app.switch_value,
-                "reason": "normal"
-            }, "app_runner")
-            
             # Clean up
             self._current_app = None
             self._current_thread = None
@@ -162,6 +152,22 @@ class AppRunner(AppRunnerService):
             # Ensure app is marked as stopped
             if app.status != AppStatus.ERROR:
                 app.mark_stopped()
+            # Determine reason and publish app_stopped for both normal completion and requested stop
+            reason = "stopped" if stop_event.is_set() else "normal"
+            try:
+                self.event_bus.publish("app_stopped", {
+                    "app_name": app.manifest.name,
+                    "switch_value": app.switch_value,
+                    "reason": reason
+                }, "app_runner")
+            except Exception:
+                pass
+            # Clean up runner state if still pointing to this app
+            with self._lock:
+                if self._current_app is app:
+                    self._current_app = None
+                    self._current_thread = None
+                    self._stop_event = None
     
     def _load_app_module(self, app: App) -> Optional[Any]:
         """Dynamically load app module."""
