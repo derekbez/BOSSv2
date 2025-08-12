@@ -1,2 +1,0 @@
-# Moved: use requirements/base.txt for runtime dependencies
--r ../requirements/base.txt

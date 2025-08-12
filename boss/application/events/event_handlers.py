@@ -91,7 +91,8 @@ class HardwareEventHandler:
             brightness = payload.get("brightness", 1.0)
             
             # Update hardware via service
-            logger.debug(f"Display update: {value} at brightness {brightness}")
+            self.hardware_service.update_display(value, brightness)
+            logger.debug(f"Display update processed: {value} at brightness {brightness}")
             
         except Exception as e:
             logger.error(f"Error updating display: {e}")

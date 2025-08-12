@@ -77,8 +77,11 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     # Create system manager
     system_manager = SystemManager(event_bus, hardware_service, app_manager, app_runner)
     
-    # Set up hardware event handler for LED/display/screen updates
-    hardware_event_handler = HardwareEventHandler(event_bus, hardware_service)
+    # Set up event handlers
+    # - SystemEventHandler: bridges core events (e.g., switch_changed -> display_update)
+    # - HardwareEventHandler: applies output events to hardware
+    _ = SystemEventHandler(event_bus)
+    _ = HardwareEventHandler(event_bus, hardware_service)
     
     return system_manager, config
 
