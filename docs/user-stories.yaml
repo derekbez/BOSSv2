@@ -355,7 +355,7 @@ user_stories:
     epic: Rich Display Backend
     acceptance_criteria:
       - A new "screen_backend" configuration option is added to boss_config.json
-      - Valid values are "pillow" and "rich" (default: "pillow" for backward compatibility)
+      - Valid values are "pillow" and "rich" (default: "rich")
       - The hardware factory creates the appropriate screen implementation based on this setting
       - Invalid configuration values log an error and fall back to Pillow
       - Configuration validation ensures only supported backends are specified
@@ -403,11 +403,11 @@ user_stories:
       - Update app development documentation with manifest options
     status: In Progress
     implementation_notes: |
-      - AppManifest now supports preferred_screen_backend (auto|rich|pillow)
-      - App model provides helpers: should_use_rich_backend(), validate_backend_preference(), get_backend_preference_info()
-      - HardwareFactory supports runtime get_current_screen_backend() and switch_screen_backend()
-      - AppManager includes backend selection/apply/restore methods around app lifecycle
-      - Next: wire into actual app start/stop flow and add tests
+      - AppManifest supports preferred_screen_backend (auto|rich|pillow)
+      - App model helpers implemented: should_use_rich_backend(), validate_backend_preference(), get_backend_preference_info()
+      - HardwareFactory exposes get_current_screen_backend() and switch_screen_backend()
+      - AppManager applies and restores backend around app run lifecycle
+      - Next: wire switching into actual app start/stop flow and add unit/integration tests
   - id: US-028
     title: Rich Console Features Implementation
     as: app developer
