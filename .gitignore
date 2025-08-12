@@ -16,6 +16,8 @@ boss-venv/
 # Logs
 *.log
 logs/
+boss/logs/
+**/logs/
 
 # OS generated files
 .DS_Store
