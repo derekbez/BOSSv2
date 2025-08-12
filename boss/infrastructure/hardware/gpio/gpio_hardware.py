@@ -22,6 +22,9 @@ try:
     HAS_GPIO = True
 except ImportError:
     HAS_GPIO = False
+    # Provide stubs to satisfy type checkers when gpiozero isn't available at import time
+    GZButton = None  # type: ignore
+    GZLED = None  # type: ignore
 
 
 from boss.domain.interfaces.hardware import (
@@ -54,6 +57,8 @@ class GPIOButtons(ButtonInterface):
             logger.error("gpiozero not available")
             return False
         try:
+            # Import here to ensure symbols exist only when gpiozero is present
+            from gpiozero import Button as GZButton  # type: ignore
             self._gz_buttons = {}
             for color, pin in self.hardware_config.button_pins.items():
                 btn = GZButton(pin, pull_up=True, bounce_time=0.05)
@@ -114,41 +119,7 @@ class GPIOButtons(ButtonInterface):
         """Set callback for button release events."""
         self._release_callbacks[color] = callback
     
-    def _button_callback(self, pin: int) -> None:
-        """GPIO interrupt callback for button events."""
-        try:
-            # Find which button this pin corresponds to
-            button_color = None
-            for color, button_pin in self.hardware_config.button_pins.items():
-                if button_pin == pin:
-                    button_color = ButtonColor(color)
-                    break
-            
-            if button_color is None:
-                return
-            
-            # Check if button is pressed or released
-            is_pressed = GPIO.input(pin) == GPIO.LOW
-            old_state = self._button_states[button_color]
-            self._button_states[button_color] = is_pressed
-            
-            # Call appropriate callback if state changed
-            if is_pressed and not old_state:
-                # Button pressed
-                callback = self._press_callbacks.get(button_color)
-                if callback:
-                    callback(button_color)
-                logger.debug(f"GPIO button {button_color.value} pressed")
-            
-            elif not is_pressed and old_state:
-                # Button released
-                callback = self._release_callbacks.get(button_color)
-                if callback:
-                    callback(button_color)
-                logger.debug(f"GPIO button {button_color.value} released")
-                
-        except Exception as e:
-            logger.error(f"Error in button callback: {e}")
+    # Legacy RPi.GPIO interrupt callback removed; gpiozero event handlers are used instead.
 
 
 class GPIOGoButton(GoButtonInterface):
@@ -237,6 +208,7 @@ class GPIOLeds(LedInterface):
             logger.error("gpiozero not available")
             return False
         try:
+            from gpiozero import LED as GZLED  # type: ignore
             self._gz_leds = {}
             for color, pin in self.hardware_config.led_pins.items():
                 led = GZLED(pin)
@@ -409,34 +381,144 @@ class GPIODisplay(DisplayInterface):
         self.hardware_config = hardware_config
         self._available = False
         self._last_value = None
+        self._brightness = 1.0
+        self._tm = None  # Lazy-initialized TM1637 instance
 
     def initialize(self) -> bool:
-        # TODO: Implement with python-tm1637
-        logger.warning("GPIODisplay not fully implemented - using placeholder")
-        self._available = True
-        return True
+        """Initialize TM1637 display using python-tm1637 (gpio)."""
+        if not HAS_GPIO:
+            logger.error("gpiozero not available; cannot initialize TM1637 display")
+            return False
+        try:
+            # Import locally to avoid import issues on non-Linux dev machines
+            from tm1637 import TM1637  # type: ignore
+        except Exception as e:
+            logger.error(f"python-tm1637 not available: {e}")
+            return False
+
+        try:
+            clk = int(self.hardware_config.display_clk_pin)
+            dio = int(self.hardware_config.display_dio_pin)
+            self._tm = TM1637(clk=clk, dio=dio)
+            # Apply initial brightness mapping (0-1 -> 0-7)
+            self._apply_tm_brightness(self._brightness)
+            self._available = True
+            logger.info(f"TM1637 display initialized on CLK={clk}, DIO={dio}")
+            # Clear on startup
+            self.clear()
+            return True
+        except Exception as e:
+            logger.error(f"Failed to initialize TM1637 display: {e}")
+            self._tm = None
+            self._available = False
+            return False
 
     def cleanup(self) -> None:
-        self._available = False
+        try:
+            if self._tm is not None:
+                # Best-effort clear and release
+                try:
+                    if hasattr(self._tm, 'clear'):
+                        self._tm.clear()
+                    else:
+                        self._tm.show('    ')
+                except Exception:
+                    pass
+            self._tm = None
+        finally:
+            self._available = False
 
     @property
     def is_available(self) -> bool:
         return self._available
 
     def show_number(self, value: int, brightness: float = 1.0) -> None:
-        self._last_value = value
-        logger.info(f"GPIODisplay show_number: {value} (brightness {brightness})")
+        """Display a number (0-9999) on the TM1637."""
+        if not self.is_available or self._tm is None:
+            return
+        if not 0 <= value <= 9999:
+            raise ValueError(f"Display value must be 0-9999, got {value}")
+        try:
+            self._last_value = value
+            self._brightness = brightness
+            self._apply_tm_brightness(brightness)
+            # Common libraries support .number(); if unavailable, use .show(str)
+            if hasattr(self._tm, 'number'):
+                self._tm.number(value)
+            else:
+                s = str(value).rjust(4)
+                if hasattr(self._tm, 'show'):
+                    self._tm.show(s)
+            logger.debug(f"TM1637 display number: {value} (brightness: {brightness})")
+        except Exception as e:
+            logger.error(f"Error displaying number on TM1637: {e}")
 
     def show_text(self, text: str, brightness: float = 1.0) -> None:
-        self._last_value = text
-        logger.info(f"GPIODisplay show_text: {text} (brightness {brightness})")
+        """Display text (first 4 chars best-effort)."""
+        if not self.is_available or self._tm is None:
+            return
+        try:
+            self._last_value = text
+            self._brightness = brightness
+            self._apply_tm_brightness(brightness)
+            s = (text or "")[:4].ljust(4)
+            # Prefer encode_string/write if available for better segment mapping
+            if hasattr(self._tm, 'encode_string') and hasattr(self._tm, 'write'):
+                try:
+                    encoded = self._tm.encode_string(s)
+                    self._tm.write(encoded)
+                except Exception:
+                    # Fallback to show
+                    if hasattr(self._tm, 'show'):
+                        self._tm.show(s)
+            elif hasattr(self._tm, 'show'):
+                self._tm.show(s)
+            logger.debug(f"TM1637 display text: '{s}' (brightness: {brightness})")
+        except Exception as e:
+            logger.error(f"Error displaying text on TM1637: {e}")
 
     def clear(self) -> None:
         self._last_value = None
-        logger.info("GPIODisplay cleared")
+        if not self.is_available or self._tm is None:
+            return
+        try:
+            if hasattr(self._tm, 'clear'):
+                self._tm.clear()
+            elif hasattr(self._tm, 'show'):
+                self._tm.show('    ')
+            logger.debug("TM1637 display cleared")
+        except Exception as e:
+            logger.error(f"Error clearing TM1637 display: {e}")
 
     def set_brightness(self, brightness: float) -> None:
-        logger.info(f"GPIODisplay brightness: {brightness}")
+        self._brightness = brightness
+        if not self.is_available or self._tm is None:
+            return
+        try:
+            self._apply_tm_brightness(brightness)
+            logger.debug(f"TM1637 brightness set: {brightness}")
+        except Exception as e:
+            logger.error(f"Error setting TM1637 brightness: {e}")
+
+    # --- Internal helpers ---
+    def _apply_tm_brightness(self, brightness: float) -> None:
+        """Map 0.0-1.0 to TM1637 brightness steps (0-7) and apply."""
+        try:
+            level = int(round(max(0.0, min(1.0, float(brightness))) * 7))
+        except Exception:
+            level = 7
+        tm = self._tm
+        if tm is None:
+            return
+        try:
+            if hasattr(tm, 'brightness'):
+                # Some libs use .brightness(level)
+                tm.brightness(level)
+            elif hasattr(tm, 'set_brightness'):
+                tm.set_brightness(level)
+        except Exception:
+            # Non-fatal if brightness cannot be applied
+            pass
 
 
 class GPIOSpeaker(SpeakerInterface):
