@@ -1,7 +1,2 @@
-# Existing requirements
-# ...existing code...
-
-# Rich library for enhanced console output and display backend
-rich>=13.0.0,<15.0.0
-
-# ...existing code...
+# Moved: use centralized requirements/base.txt
+-r requirements/base.txt

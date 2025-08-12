@@ -12201,3 +12201,255 @@ Main button to exit' (size: 28, color: white, align: center)
 2025-08-08 17:25:35,501 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
 2025-08-08 17:25:35,501 - boss.infrastructure.hardware.mock.mock_hardware - INFO - display_text:293 - Mock screen text: 'BOSS Ready' (size: 32, color: green, align: center)
 2025-08-08 17:25:36,005 - boss.application.services.app_runner - INFO - _run_app_thread:135 - App Admin Startup finished normally after 1.9 seconds
+2025-08-12 20:16:27,687 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-08-12 20:16:27,688 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-12 20:16:27,688 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-12 20:16:27,688 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-12 20:16:27,688 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-12 20:16:27,689 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-12 20:16:27,689 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-12 20:16:27,689 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-12 20:16:27,689 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-12 20:16:27,689 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-12 20:16:27,690 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-12 20:16:27,690 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-12 20:16:27,690 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-08-12 20:16:27,722 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-08-12 20:16:27,722 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-08-12 20:16:27,723 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-08-12 20:16:27,723 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-08-12 20:16:27,723 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-12 20:16:27,724 - boss.infrastructure.hardware.factory - INFO - detect_hardware_platform:51 - Development platform detected: Windows AMD64
+2025-08-12 20:16:27,743 - boss.infrastructure.hardware.webui.webui_factory - INFO - __init__:20 - WebUI hardware factory initialized
+2025-08-12 20:16:27,743 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:90 - ==================================================
+2025-08-12 20:16:27,744 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:91 - BOSS Hardware Configuration Summary
+2025-08-12 20:16:27,744 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:92 - ==================================================
+2025-08-12 20:16:27,744 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:93 - Hardware Type: webui
+2025-08-12 20:16:27,744 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:94 - Platform: Windows AMD64
+2025-08-12 20:16:27,745 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:107 - Web UI Configuration:
+2025-08-12 20:16:27,745 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 -   Development interface available for testing
+2025-08-12 20:16:27,745 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 -   Screen Size: 1024x600
+2025-08-12 20:16:27,745 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:115 - Audio Enabled: True
+2025-08-12 20:16:27,746 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:116 - Screen Fullscreen: True
+2025-08-12 20:16:27,746 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - ==================================================
+2025-08-12 20:16:27,747 - boss.infrastructure.config.config_manager - INFO - load_config:60 - Loading configuration from D:\dev\BOSSv2\boss\config\boss_config.json
+2025-08-12 20:16:27,747 - boss.infrastructure.config.config_manager - INFO - load_config:67 - Configuration loaded and validated successfully
+2025-08-12 20:16:27,748 - __main__ - INFO - main:114 - BOSS system created successfully
+2025-08-12 20:16:27,748 - boss.application.services.system_service - INFO - start:43 - Starting BOSS system
+2025-08-12 20:16:27,748 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-12 20:16:27,748 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-12 20:16:27,748 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing webui hardware
+2025-08-12 20:16:27,748 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:36 - WebUI buttons initialized - check web interface for controls
+2025-08-12 20:16:27,750 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-08-12 20:16:27,750 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:96 - WebUI Go button initialized
+2025-08-12 20:16:27,750 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-08-12 20:16:27,751 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:148 - WebUI LEDs initialized - LED states will show in web interface
+2025-08-12 20:16:27,751 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-08-12 20:16:27,751 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:195 - WebUI switches initialized - use web interface to change switch values
+2025-08-12 20:16:27,751 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-08-12 20:16:27,752 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:253 - WebUI display initialized - display will show in web interface
+2025-08-12 20:16:27,752 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-08-12 20:16:27,752 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:352 - WebUI screen initialized (1024x600) - content will show in web interface
+2025-08-12 20:16:27,752 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-08-12 20:16:27,753 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:426 - WebUI speaker initialized - audio will play in web interface
+2025-08-12 20:16:27,753 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-08-12 20:16:27,753 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-08-12 20:16:27,753 - boss.application.services.app_manager - INFO - load_apps:34 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-08-12 20:16:27,755 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: app_template
+2025-08-12 20:16:27,756 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: button_test
+2025-08-12 20:16:27,756 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: led_test
+2025-08-12 20:16:27,757 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: rich_demo
+2025-08-12 20:16:27,757 - boss.application.services.app_manager - INFO - load_apps:59 - Loaded 6 apps
+2025-08-12 20:16:27,758 - boss.application.services.hardware_service - INFO - _monitor_hardware:228 - Hardware monitoring thread started
+2025-08-12 20:16:27,758 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-08-12 20:16:29,990 - boss.presentation.api.web_ui_main - INFO - start_web_ui:98 - BOSS Web UI started at http://localhost:8070
+2025-08-12 20:16:29,991 - boss.presentation.api.web_ui_main - INFO - start_web_ui:99 - Web UI debug dashboard initialized
+2025-08-12 20:16:29,991 - boss.presentation.api.web_ui_main - INFO - start_web_ui:100 - Available hardware devices:
+2025-08-12 20:16:29,991 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   buttons: WebUIButtons
+2025-08-12 20:16:29,991 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   go_button: WebUIGoButton
+2025-08-12 20:16:29,992 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   leds: WebUILeds
+2025-08-12 20:16:29,992 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   switches: WebUISwitches
+2025-08-12 20:16:29,992 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   display: WebUIDisplay
+2025-08-12 20:16:29,992 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   screen: WebUIScreen
+2025-08-12 20:16:29,992 - boss.application.services.system_service - INFO - start_webui_if_needed:135 - WebUI development interface started at http://localhost:8070
+2025-08-12 20:16:29,993 - boss.application.services.system_service - INFO - _run_startup_app:167 - Running startup app for visual feedback
+2025-08-12 20:16:29,993 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Admin Startup (switch 4)
+2025-08-12 20:16:29,993 - boss.application.services.system_service - INFO - start:71 - BOSS system started successfully
+2025-08-12 20:16:29,994 - __main__ - INFO - main:121 - BOSS system running - Press Ctrl+C to stop
+2025-08-12 20:16:29,999 - boss.application.services.app_runner - INFO - _run_app_thread:115 - Running app: Admin Startup
+2025-08-12 20:16:30,000 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Initializing
+2025-08-12 20:16:30,000 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 1/3
+2025-08-12 20:16:30,000 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:409 - WebUI screen cleared with color: black
+2025-08-12 20:16:30,457 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 2/3
+2025-08-12 20:16:30,912 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 3/3
+2025-08-12 20:16:31,379 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-12 20:16:31,379 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:380 - WebUI screen text updated: 'BOSS Ready' (size: 32, color: green, align: center)
+2025-08-12 20:16:31,881 - boss.application.services.app_runner - INFO - _run_app_thread:135 - App Admin Startup finished normally after 1.9 seconds
+2025-08-12 20:17:21,886 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:17:40,992 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:18:03,800 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:18:25,957 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:19:08,749 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:19:09,596 - boss.application.services.system_service - INFO - _signal_handler:353 - Received SIGINT, shutting down gracefully
+2025-08-12 20:19:09,596 - boss.application.services.system_service - INFO - stop:83 - Stopping BOSS system
+2025-08-12 20:19:09,597 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:118 - Stopping WebUI server...
+2025-08-12 20:19:09,597 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:316 - System shutdown requested: normal
+2025-08-12 20:19:09,597 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:347 - Normal system shutdown
+2025-08-12 20:19:09,725 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:129 - WebUI server stopped
+2025-08-12 20:19:09,725 - boss.application.services.system_service - INFO - stop_webui_if_running:148 - WebUI development interface on port 8070 stopped
+2025-08-12 20:19:09,774 - boss.application.services.hardware_service - INFO - _monitor_hardware:248 - Hardware monitoring thread stopped
+2025-08-12 20:19:09,774 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-08-12 20:19:09,774 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-08-12 20:19:09,774 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-08-12 20:19:09,775 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-12 20:19:09,775 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-12 20:19:09,775 - boss.application.services.system_service - INFO - stop:107 - BOSS system stopped
+2025-08-12 20:21:08,540 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-08-12 20:21:08,541 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-12 20:21:08,541 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-12 20:21:08,541 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-12 20:21:08,542 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-12 20:21:08,542 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-12 20:21:08,542 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-12 20:21:08,542 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-12 20:21:08,543 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-12 20:21:08,543 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-12 20:21:08,543 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-12 20:21:08,543 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-12 20:21:08,544 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-08-12 20:21:08,575 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-08-12 20:21:08,575 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-08-12 20:21:08,576 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-08-12 20:21:08,576 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-08-12 20:21:08,576 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-12 20:21:08,577 - boss.infrastructure.hardware.factory - INFO - detect_hardware_platform:51 - Development platform detected: Windows AMD64
+2025-08-12 20:21:08,587 - boss.infrastructure.hardware.webui.webui_factory - INFO - __init__:20 - WebUI hardware factory initialized
+2025-08-12 20:21:08,587 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:90 - ==================================================
+2025-08-12 20:21:08,587 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:91 - BOSS Hardware Configuration Summary
+2025-08-12 20:21:08,588 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:92 - ==================================================
+2025-08-12 20:21:08,588 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:93 - Hardware Type: webui
+2025-08-12 20:21:08,588 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:94 - Platform: Windows AMD64
+2025-08-12 20:21:08,588 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:107 - Web UI Configuration:
+2025-08-12 20:21:08,588 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:108 -   Development interface available for testing
+2025-08-12 20:21:08,589 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:109 -   Screen Size: 1024x600
+2025-08-12 20:21:08,589 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:115 - Audio Enabled: True
+2025-08-12 20:21:08,589 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:116 - Screen Fullscreen: True
+2025-08-12 20:21:08,589 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - ==================================================
+2025-08-12 20:21:08,590 - boss.infrastructure.config.config_manager - INFO - load_config:60 - Loading configuration from D:\dev\BOSSv2\boss\config\boss_config.json
+2025-08-12 20:21:08,591 - boss.infrastructure.config.config_manager - INFO - load_config:67 - Configuration loaded and validated successfully
+2025-08-12 20:21:08,591 - __main__ - INFO - main:114 - BOSS system created successfully
+2025-08-12 20:21:08,591 - boss.application.services.system_service - INFO - start:43 - Starting BOSS system
+2025-08-12 20:21:08,592 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-12 20:21:08,592 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-12 20:21:08,592 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing webui hardware
+2025-08-12 20:21:08,593 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:36 - WebUI buttons initialized - check web interface for controls
+2025-08-12 20:21:08,593 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-08-12 20:21:08,593 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:96 - WebUI Go button initialized
+2025-08-12 20:21:08,593 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-08-12 20:21:08,593 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:148 - WebUI LEDs initialized - LED states will show in web interface
+2025-08-12 20:21:08,594 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-08-12 20:21:08,594 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:195 - WebUI switches initialized - use web interface to change switch values
+2025-08-12 20:21:08,594 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-08-12 20:21:08,594 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:253 - WebUI display initialized - display will show in web interface
+2025-08-12 20:21:08,595 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-08-12 20:21:08,595 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:352 - WebUI screen initialized (1024x600) - content will show in web interface
+2025-08-12 20:21:08,595 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-08-12 20:21:08,595 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:426 - WebUI speaker initialized - audio will play in web interface
+2025-08-12 20:21:08,595 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-08-12 20:21:08,596 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-08-12 20:21:08,596 - boss.application.services.app_manager - INFO - load_apps:34 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-08-12 20:21:08,598 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: app_template
+2025-08-12 20:21:08,598 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: button_test
+2025-08-12 20:21:08,599 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: led_test
+2025-08-12 20:21:08,599 - boss.application.services.app_manager - WARNING - _load_app:111 - No switch mapping found for app: rich_demo
+2025-08-12 20:21:08,600 - boss.application.services.app_manager - INFO - load_apps:59 - Loaded 6 apps
+2025-08-12 20:21:08,600 - boss.application.services.hardware_service - INFO - _monitor_hardware:228 - Hardware monitoring thread started
+2025-08-12 20:21:08,601 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-08-12 20:21:09,942 - boss.presentation.api.web_ui_main - INFO - start_web_ui:98 - BOSS Web UI started at http://localhost:8070
+2025-08-12 20:21:09,943 - boss.presentation.api.web_ui_main - INFO - start_web_ui:99 - Web UI debug dashboard initialized
+2025-08-12 20:21:09,943 - boss.presentation.api.web_ui_main - INFO - start_web_ui:100 - Available hardware devices:
+2025-08-12 20:21:09,943 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   buttons: WebUIButtons
+2025-08-12 20:21:09,944 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   go_button: WebUIGoButton
+2025-08-12 20:21:09,944 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   leds: WebUILeds
+2025-08-12 20:21:09,944 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   switches: WebUISwitches
+2025-08-12 20:21:09,945 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   display: WebUIDisplay
+2025-08-12 20:21:09,945 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   screen: WebUIScreen
+2025-08-12 20:21:09,946 - boss.application.services.system_service - INFO - start_webui_if_needed:135 - WebUI development interface started at http://localhost:8070
+2025-08-12 20:21:09,946 - boss.application.services.system_service - INFO - _run_startup_app:167 - Running startup app for visual feedback
+2025-08-12 20:21:09,946 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Admin Startup (switch 4)
+2025-08-12 20:21:09,947 - boss.application.services.system_service - INFO - start:71 - BOSS system started successfully
+2025-08-12 20:21:09,947 - __main__ - INFO - main:121 - BOSS system running - Press Ctrl+C to stop
+2025-08-12 20:21:09,947 - boss.application.services.app_runner - INFO - _run_app_thread:115 - Running app: Admin Startup
+2025-08-12 20:21:09,948 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Initializing
+2025-08-12 20:21:09,948 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 1/3
+2025-08-12 20:21:09,948 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:409 - WebUI screen cleared with color: black
+2025-08-12 20:21:10,410 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 2/3
+2025-08-12 20:21:10,865 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 3/3
+2025-08-12 20:21:11,327 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-12 20:21:11,327 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:380 - WebUI screen text updated: 'BOSS Ready' (size: 32, color: green, align: center)
+2025-08-12 20:21:11,830 - boss.application.services.app_runner - INFO - _run_app_thread:135 - App Admin Startup finished normally after 1.9 seconds
+2025-08-12 20:23:20,147 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:24:21,377 - asyncio - ERROR - default_exception_handler:1785 - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-08-12 20:24:47,635 - boss.application.services.system_service - INFO - _signal_handler:353 - Received SIGINT, shutting down gracefully
+2025-08-12 20:24:47,636 - boss.application.services.system_service - INFO - stop:83 - Stopping BOSS system
+2025-08-12 20:24:47,636 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:118 - Stopping WebUI server...
+2025-08-12 20:24:47,636 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:316 - System shutdown requested: normal
+2025-08-12 20:24:47,637 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:347 - Normal system shutdown
+2025-08-12 20:24:47,859 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:129 - WebUI server stopped
+2025-08-12 20:24:47,859 - boss.application.services.system_service - INFO - stop_webui_if_running:148 - WebUI development interface on port 8070 stopped
+2025-08-12 20:24:47,867 - boss.application.services.hardware_service - INFO - _monitor_hardware:248 - Hardware monitoring thread stopped
+2025-08-12 20:24:47,867 - boss.application.services.hardware_service - INFO - stop_monitoring:140 - Hardware monitoring stopped
+2025-08-12 20:24:47,867 - boss.application.services.hardware_service - INFO - cleanup:93 - Cleaning up hardware
+2025-08-12 20:24:47,868 - boss.application.services.hardware_service - INFO - cleanup:109 - Hardware cleanup complete
+2025-08-12 20:24:47,868 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-12 20:24:47,869 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-12 20:24:47,869 - boss.application.services.system_service - INFO - stop:107 - BOSS system stopped

@@ -31,17 +31,18 @@ python -m ensurepip
 python -m pip install --upgrade pip
 echo "*** Pip is installed and updated."
 
-echo "*** Installing B.O.S.S. Python dependencies..."
-pip install gpiozero pigpio python-tm1637 pytest rich numpy
+echo "*** Installing B.O.S.S. Python dependencies from centralized requirement files..."
+pip install -r requirements/base.txt -r requirements/dev.txt
 echo "*** B.O.S.S. Python dependencies installed."
-
-echo "*** Installing pigpio system daemon (required for remote GPIO and some features)..."
-sudo apt install -y pigpio
-echo "*** pigpio system daemon installed."
 
 echo "*** Installing lgpio backend for GPIOZero (recommended for modern Pi OS)..."
 sudo apt install -y python3-lgpio
 echo "*** lgpio backend installation completed."
+
+echo "*** (Optional) Installing pigpio system daemon (only if you need pigpio-specific features)..."
+echo "*** You can skip this if using lgpio as the default pin factory."
+sudo apt install -y pigpio || true
+echo "*** pigpio system daemon step completed (optional)."
 
 echo "*** Installing  fontconfig..."
 sudo apt install fontconfig
@@ -54,9 +55,12 @@ echo "*** Updated /boot/firmware/config.txt:"
 cat /boot/firmware/config.txt
 echo "*** GPIO configuration completed."
 
-# To start the pigpio daemon (required for gpiozero with pigpio backend):
-sudo systemctl start pigpiod
-sudo systemctl enable pigpiod
+# If you choose pigpio backend, start the pigpio daemon (optional):
+# sudo systemctl start pigpiod
+# sudo systemctl enable pigpiod
+
+# If you choose lgpio backend (recommended), configure the pin factory via systemd env:
+# Example in boss-dev.service or environment: GPIOZERO_PIN_FACTORY=lgpio
 
 echo "*** B.O.S.S. installation complete. Activate your virtual environment and run the app with:"
 echo "source ~/boss/boss-venv/bin/activate"
@@ -64,6 +68,13 @@ echo "cd ~/boss"
 echo "python3 -m boss.main"
 
 
-On Windows, for the WebUi debugging app these need to be installed:
-pip install fastapi uvicorn websockets pydantic
+On Windows, for the WebUi debugging app install:
+pip install -r requirements/base.txt -r requirements/dev.txt
+
+If you still see a WebSocket warning when running the WebUI, verify these are installed in your active environment:
+
+Windows CMD (no venv activation required):
+	.\.venv\Scripts\python.exe -c "import websockets, uvicorn; print('websockets', websockets.__version__, 'uvicorn', uvicorn.__version__)"
+If that fails, install explicitly into the venv:
+	.\.venv\Scripts\python.exe -m pip install "uvicorn[standard]" websockets
 

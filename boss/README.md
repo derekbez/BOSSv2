@@ -18,7 +18,7 @@ This is the main application package for B.O.S.S., a modular, hardware-interfaci
 
 ### For Production Hardware (Recommended)
 1. Install Python 3.11+ and create a virtual environment.
-2. Install dependencies from `requirements.txt` plus `lgpio` for optimal GPIO performance.
+2. Install dependencies from `requirements/base.txt` plus `lgpio` for optimal GPIO performance.
 3. Setup systemd service for robust operation:
    ```bash
    ./scripts/setup_systemd_service.sh
@@ -31,7 +31,7 @@ This is the main application package for B.O.S.S., a modular, hardware-interfaci
 
 ### For Local Development/Testing
 1. Install Python 3.11+ and create a virtual environment.
-2. Install dependencies from `requirements.txt`.
+2. Install dependencies from `requirements/base.txt` (and `requirements/dev.txt` for local dev).
 3. Edit `config/boss_config.json` to configure hardware pins.
 4. Edit `config/app_mappings.json` to map switch values to apps.
 5. Run `python -m boss.main` from the project root to start the system.

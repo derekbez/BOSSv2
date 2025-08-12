@@ -1,0 +1,10 @@
+# Development-only dependencies (install alongside -r requirements/base.txt on dev machines)
+
+-r base.txt
+
+pytest>=8.4,<9
+pytest-cov>=5,<6
+
+# Optional (uncomment to use locally)
+# ruff>=0.5,<1
+# mypy>=1.10,<2

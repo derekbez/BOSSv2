@@ -1,0 +1,13 @@
+# Runtime dependencies for B.O.S.S. (install on Raspberry Pi and production environments)
+
+gpiozero
+pigpio
+lgpio
+python-tm1637
+Pillow
+numpy
+fastapi
+uvicorn[standard]>=0.23,<1
+websockets>=11,<13
+pydantic
+rich

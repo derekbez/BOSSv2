@@ -1,10 +1,2 @@
-gpiozero
-pigpio
-python-tm1637
-pytest
-Pillow
-numpy
-fastapi
-uvicorn
-websockets
-pydantic
+# Moved: use requirements/base.txt for runtime dependencies
+-r ../requirements/base.txt

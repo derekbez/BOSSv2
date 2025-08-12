@@ -281,7 +281,9 @@ tests/                      # Test structure mirrors main structure
   test_fixtures/
 scripts/                    # Utility scripts
 docs/                       # Documentation
-requirements.txt            # Python dependencies
+requirements/               # Centralized dependency files
+  base.txt                  # Runtime dependencies
+  dev.txt                   # Dev-only deps (includes -r base.txt)
 ```
 
 **Best Practices:**

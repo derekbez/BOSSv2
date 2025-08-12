@@ -59,7 +59,7 @@ cd boss
 # Create virtual environment
 python3 -m venv boss-venv
 source boss-venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements/base.txt -r requirements/dev.txt
 
 # Install lgpio for optimal GPIO performance
 pip install lgpio
