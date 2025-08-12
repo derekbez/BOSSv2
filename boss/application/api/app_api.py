@@ -190,6 +190,36 @@ class AppAPI(AppAPIInterface):
         except Exception as e:
             logger.error(f"Error getting all apps for {self._app_name}: {e}")
             return []
+
+    def get_app_summaries(self) -> list:
+        """Get cached list of app summaries (number, name, description)."""
+        if self._app_manager is None:
+            logger.warning(f"App {self._app_name} requested app summaries but app_manager not available")
+            return []
+        try:
+            # Prefer summaries if supported by manager
+            get_summaries = getattr(self._app_manager, "get_app_summaries", None)
+            if callable(get_summaries):
+                result = get_summaries()
+                if result is None:
+                    return []
+                if isinstance(result, list):
+                    return result
+                return []
+            # Fallback to building from full app list
+            apps = self._app_manager.get_all_apps()
+            summary = []
+            for switch, app in apps.items():
+                summary.append({
+                    "number": str(switch).zfill(3),
+                    "name": app.manifest.name,
+                    "description": getattr(app.manifest, 'description', '') or ''
+                })
+            summary.sort(key=lambda x: int(x["number"]))
+            return summary
+        except Exception as e:
+            logger.error(f"Error getting app summaries for {self._app_name}: {e}")
+            return []
     
     def cleanup(self) -> None:
         """Clean up API resources when app stops."""

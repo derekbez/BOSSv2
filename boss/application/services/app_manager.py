@@ -25,9 +25,12 @@ class AppManager(AppManagerService):
             self._system_default_backend = getattr(cfg.hardware, 'screen_backend', 'pillow')
         except Exception:
             self._system_default_backend = 'pillow'
-        self._apps: Dict[int, App] = {}
+        # Internal state
+        self._apps = {}
+        # Cached lightweight summaries for fast access (number, name, description)
+        self._app_summaries_cache = None
         self._app_mappings_file = apps_directory.parent / "config" / "app_mappings.json"
-        self._current_app: Optional[App] = None
+        self._current_app = None
     
     def load_apps(self) -> None:
         """Load all available apps from the apps directory and mappings file."""
@@ -57,6 +60,22 @@ class AppManager(AppManagerService):
                 logger.error(f"Failed to load app from {app_dir}: {e}")
         
         logger.info(f"Loaded {loaded_count} apps")
+
+        # Build cached summaries (sorted by switch number)
+        try:
+            summaries: List[Dict] = []
+            for switch, app in self._apps.items():
+                summaries.append({
+                    "number": str(switch).zfill(3),
+                    "name": app.manifest.name,
+                    "description": getattr(app.manifest, 'description', '') or ''
+                })
+            summaries.sort(key=lambda x: int(x["number"]))
+            self._app_summaries_cache = summaries
+            logger.debug("App summaries cache built")
+        except Exception as e:
+            logger.debug(f"Failed building app summaries cache: {e}")
+            self._app_summaries_cache = None
     
     def get_app_by_switch_value(self, switch_value: int) -> Optional[App]:
         """Get the app mapped to a switch value."""
@@ -138,11 +157,30 @@ class AppManager(AppManagerService):
     def get_app_list(self) -> List[Dict]:
         """Get a list of all apps for external interfaces."""
         return [app.to_dict() for app in self._apps.values()]
+
+    def get_app_summaries(self) -> List[Dict]:
+        """Return cached list of app summaries: number, name, description."""
+        if self._app_summaries_cache is not None:
+            # Return a shallow copy to prevent external mutation
+            return list(self._app_summaries_cache)
+
+        # Fallback: compute on demand if cache missing
+        summaries: List[Dict] = []
+        for switch, app in self._apps.items():
+            summaries.append({
+                "number": str(switch).zfill(3),
+                "name": app.manifest.name,
+                "description": getattr(app.manifest, 'description', '') or ''
+            })
+        summaries.sort(key=lambda x: int(x["number"]))
+        self._app_summaries_cache = summaries
+        return list(self._app_summaries_cache)
     
     def reload_apps(self) -> None:
         """Reload all apps from disk."""
         logger.info("Reloading apps")
         self._apps.clear()
+        self._app_summaries_cache = None
         self.load_apps()
 
     # --- US-027: Backend switching support ---

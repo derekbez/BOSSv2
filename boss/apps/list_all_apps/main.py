@@ -12,18 +12,21 @@ def get_app_list(api: Any) -> List[Dict[str, Any]]:
     """Get list of all apps from the API."""
     # Get all apps through the API instead of directly accessing config
     try:
-        # Ask the API for all available apps - returns Dict[int, App]
+        # Prefer cached summaries from API if available
+        if hasattr(api, 'get_app_summaries'):
+            summaries = api.get_app_summaries()
+            if isinstance(summaries, list) and summaries:
+                return summaries
+
+        # Fallback to building from full app objects
         all_apps_dict = api.get_all_apps()
         app_list = []
-        
         for switch_value, app in all_apps_dict.items():
             app_list.append({
                 'number': str(switch_value).zfill(3),
                 'name': app.manifest.name,
-                'description': app.manifest.description
+                'description': getattr(app.manifest, 'description', '') or ''
             })
-        
-        # Sort by switch value
         app_list.sort(key=lambda x: int(x['number']))
         return app_list
     except Exception as e:
