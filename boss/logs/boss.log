@@ -13173,3 +13173,71 @@ Select shutdown option using:
 2025-08-12 21:16:46,633 - boss.infrastructure.hardware.mock.mock_hardware - INFO - display_text:293 - Mock screen text: 'BOSS Ready' (size: 32, color: green, align: center)
 2025-08-12 21:16:47,139 - boss.application.services.app_runner - INFO - _run_app_thread:135 - App Admin Startup finished normally after 1.9 seconds
 2025-08-12 21:21:45,263 - boss.application.services.app_runner - WARNING - timeout_monitor:121 - App Admin Startup timed out after 300 seconds
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-12 22:16:43,192 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-12 22:16:43,194 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-08-12 22:16:43,224 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-08-12 22:16:43,225 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-08-12 22:16:43,225 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-08-12 22:16:43,225 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-08-12 22:16:43,225 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - create_hardware_factory:68 - Forcing hardware type: mock
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.mock.mock_factory - INFO - __init__:20 - Mock hardware factory initialized
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:90 - ==================================================
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:91 - BOSS Hardware Configuration Summary
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:92 - ==================================================
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:93 - Hardware Type: mock
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:94 - Platform: Windows AMD64
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:112 - Mock Hardware Configuration:
+2025-08-12 22:16:43,227 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:113 -   All hardware components mocked for testing
+2025-08-12 22:16:43,228 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:115 - Audio Enabled: True
+2025-08-12 22:16:43,228 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:116 - Screen Fullscreen: True
+2025-08-12 22:16:43,228 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - ==================================================
+2025-08-12 22:16:43,228 - boss.infrastructure.config.config_manager - INFO - load_config:60 - Loading configuration from D:\dev\BOSSv2\boss\config\boss_config.json
+2025-08-12 22:16:43,228 - boss.infrastructure.config.config_manager - INFO - load_config:67 - Configuration loaded and validated successfully
+2025-08-12 22:16:43,230 - boss.infrastructure.config.config_manager - INFO - get_effective_config:126 - Log level set to: INFO
+2025-08-12 22:16:43,230 - boss.main - INFO - main:117 - BOSS system created successfully
+2025-08-12 22:16:43,230 - boss.application.services.system_service - INFO - start:43 - Starting BOSS system
+2025-08-12 22:16:43,230 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-12 22:16:43,230 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-12 22:16:43,230 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing mock hardware
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Buttons initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Go Button initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] LEDs initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Switches initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Display initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Screen initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:69 - [OK] Speaker initialized
+2025-08-12 22:16:43,232 - boss.application.services.hardware_service - INFO - initialize:85 - Hardware initialization complete
+2025-08-12 22:16:43,233 - boss.application.services.app_manager - INFO - load_apps:37 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-08-12 22:16:43,235 - boss.application.services.app_manager - WARNING - _load_app:130 - No switch mapping found for app: app_template
+2025-08-12 22:16:43,235 - boss.application.services.app_manager - WARNING - _load_app:130 - No switch mapping found for app: button_test
+2025-08-12 22:16:43,235 - boss.application.services.app_manager - WARNING - _load_app:130 - No switch mapping found for app: led_test
+2025-08-12 22:16:43,235 - boss.application.services.app_manager - WARNING - _load_app:130 - No switch mapping found for app: rich_demo
+2025-08-12 22:16:43,236 - boss.application.services.app_manager - INFO - load_apps:62 - Loaded 6 apps
+2025-08-12 22:16:43,236 - boss.application.services.hardware_service - INFO - _monitor_hardware:228 - Hardware monitoring thread started
+2025-08-12 22:16:43,236 - boss.application.services.hardware_service - INFO - start_monitoring:128 - Hardware monitoring started
+2025-08-12 22:16:43,236 - boss.application.services.system_service - INFO - _run_startup_app:167 - Running startup app for visual feedback
+2025-08-12 22:16:43,236 - boss.application.services.app_runner - INFO - start_app:51 - Starting app: Admin Startup (switch 4)
+2025-08-12 22:16:43,238 - boss.application.services.system_service - INFO - start:71 - BOSS system started successfully
+2025-08-12 22:16:43,238 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with mock hardware
+2025-08-12 22:16:43,238 - boss.main - INFO - main:124 - BOSS system running - Press Ctrl+C to stop
+2025-08-12 22:16:43,238 - boss.application.services.app_runner - INFO - _run_app_thread:115 - Running app: Admin Startup
+2025-08-12 22:16:43,238 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Initializing
+2025-08-12 22:16:43,238 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 1/3
+2025-08-12 22:16:43,708 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 2/3
+2025-08-12 22:16:44,161 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: LED blink 3/3
+2025-08-12 22:16:44,627 - boss.application.api.app_api - INFO - log_info:176 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-12 22:16:44,627 - boss.infrastructure.hardware.mock.mock_hardware - INFO - display_text:293 - Mock screen text: 'BOSS Ready' (size: 32, color: green, align: center)
+2025-08-12 22:16:45,133 - boss.application.services.app_runner - INFO - _run_app_thread:135 - App Admin Startup finished normally after 1.9 seconds
+2025-08-12 22:21:43,255 - boss.application.services.app_runner - WARNING - timeout_monitor:121 - App Admin Startup timed out after 300 seconds

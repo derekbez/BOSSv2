@@ -33,6 +33,11 @@ class SystemManager(SystemService):
         
         # Set up event subscriptions
         self._setup_event_handlers()
+        # Optional: basic hot-reload of screen backend when config change event occurs
+        try:
+            self.event_bus.subscribe("config.changed", self._on_config_changed)
+        except Exception:
+            pass
     
     def start(self) -> None:
         """Start the BOSS system."""
@@ -269,6 +274,21 @@ class SystemManager(SystemService):
         self.event_bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
         # Note: Hardware output events (led_update, display_update, screen_update)
         # are now handled by HardwareEventHandler to avoid duplication
+
+    def _on_config_changed(self, event_type: str, payload: Dict[str, Any]) -> None:
+        """Handle config change: basic support to hot-reload screen backend."""
+        try:
+            hardware = payload.get("hardware", {}) if isinstance(payload, dict) else {}
+            new_backend = (hardware.get("screen_backend") or "").lower()
+            if new_backend in {"rich", "pillow"} and hasattr(self.hardware_service, 'switch_screen_backend'):
+                current = self.hardware_service.get_current_screen_backend()
+                if new_backend != current:
+                    if self.hardware_service.switch_screen_backend(new_backend):
+                        logger.info(f"Hot-reloaded screen backend to '{new_backend}' from config change")
+                    else:
+                        logger.warning(f"Failed to hot-reload screen backend to '{new_backend}'")
+        except Exception as e:
+            logger.debug(f"_on_config_changed error: {e}")
     
     def _on_app_launch_requested(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle app launch requests."""

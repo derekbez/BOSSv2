@@ -25,6 +25,7 @@ The Rich backend uses the [Rich library](https://rich.readthedocs.io/) to provid
 ## Configuration
 
 ### System Configuration
+Default backend: rich. If not specified or invalid, the system defaults to "rich" and logs a warning.
 Set the screen backend in `boss/config/boss_config.json`:
 
 ```json
@@ -48,6 +49,7 @@ Apps can specify their preferred backend in `manifest.json`:
 ```
 
 ## Usage Examples
+Below are basic examples; ensure your venv has `rich` installed. For Pillow fallback, use feature detection as shown.
 
 ### Basic Text Display
 ```python

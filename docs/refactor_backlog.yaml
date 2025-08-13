@@ -1,0 +1,277 @@
+# B.O.S.S. Refactor & Cleanup Backlog (YAML User Stories)
+# Purpose: Identify and track technical cleanup to reduce bloat and align with best practices
+
+refactor_stories:
+  - id: RF-001
+    title: Remove Unused/Broken Modules and Stubs
+    as: maintainer
+    want: Eliminate unused or half-implemented files
+    so_that: The codebase is lean and lowers onboarding friction
+    priority: High
+    acceptance_criteria:
+      - A list of dead/duplicated/stub files is documented and removed or completed
+      - All imports resolve without placeholder stubs
+      - Static analysis (import and syntax) passes across repo
+    tasks:
+      - Inventory boss/application/services, domain/models, infrastructure/hardware/* for stubs and duplicates
+      - Remove obsolete placeholders (e.g., partial App model stubs, empty factory stubs)
+      - Replace any temporary “pass” hardware methods with NotImplementedError or real impls
+      - Run static checks to confirm no unresolved imports
+    notes: |
+      - Prior edits introduced partial stubs (e.g., App, HardwareFactory). Ensure only one authoritative implementation remains.
+    status: Complete
+    implementation_notes: |
+      - Removed duplicate display_update handling from HardwareManager (now centralized in HardwareEventHandler).
+      - Updated unit tests accordingly.
+      - Inventory complete: hardware (gpio/webui/mock), services, and domain models contain no unused duplicate modules.
+      - No empty factory stubs remain; concrete factories in use: gpio_factory.py, webui_factory.py, mock_factory.py.
+      - Speaker remains a minimal placeholder by design; non-critical and documented.
+      - Static check via full test run confirms all imports resolve; 29 tests passing.
+
+  - id: RF-002
+    title: Centralize Dependency Management
+    as: developer
+    want: Single source of truth for runtime and dev dependencies
+    so_that: Installs are reliable on Windows and Raspberry Pi
+    priority: High
+    acceptance_criteria:
+      - requirements/base.txt contains all runtime deps
+      - requirements/dev.txt includes -r base.txt + dev-only deps (pytest, pytest-cov)
+      - Legacy files (requirements.txt, boss/requirements.txt, requirements-dev.txt) point to centralized files
+      - Platform markers avoid GPIO build on Windows (e.g., lgpio, python-tm1637)
+    tasks:
+      - Ensure uvicorn[standard] and websockets in base.txt for WebUI
+      - Add environment markers: "lgpio; platform_system == 'Linux'", "python-tm1637; platform_system == 'Linux'"
+      - Keep pigpio optional or remove; prefer lgpio
+      - Update docs to install from requirements/base.txt and requirements/dev.txt
+    status: Complete
+    implementation_notes: |
+      - Centralized runtime/dev deps under requirements/base.txt and requirements/dev.txt with platform markers.
+      - Added uvicorn[standard] and websockets to base for WebUI.
+
+  - id: RF-003
+    title: Finalize HardwareFactory and Screen Backend Switching
+    as: developer
+    want: Reliable runtime switching between Pillow and Rich backends
+    so_that: US-026/US-027 work end-to-end
+    priority: High
+    acceptance_criteria:
+      - HardwareFactory exposes get_current_screen_backend() and switch_screen_backend()
+      - _create_pillow_screen() and _create_rich_screen() implemented and return ScreenInterface
+      - Switching performs cleanup() on old screen and initialize() on new
+      - Errors are logged and fall back to previous backend
+    tasks:
+      - Implement missing create methods and wire to gpio/webui/mock screen classes
+      - Add tests for switching and restoration
+      - Log backend changes with app context for traceability
+    status: In Progress
+    implementation_notes: |
+      - HardwareFactory exposes get_current_screen_backend()/switch_screen_backend(); HardwareManager re-initializes screen on switch.
+      - Per-app preference wired via AppManager; additional tests/validation pending.
+
+  - id: RF-004
+    title: Complete App and AppManifest Models
+    as: developer
+    want: Accurate domain models with validation
+    so_that: App preference and metadata are reliable
+    priority: High
+    acceptance_criteria:
+      - AppManifest includes preferred_screen_backend with validation (auto|rich|pillow)
+      - App dataclass complete; to_dict() returns consistent structure
+      - Helper methods: should_use_rich_backend(), get_backend_preference_info(), validate_backend_preference()
+    tasks:
+      - Remove partial duplicates and reconstitute full App/AppManifest
+      - Add unit tests for preference resolution vs system default
+    status: Complete
+    implementation_notes: |
+      - AppManifest supports preferred_screen_backend (auto|rich|pillow) with helpers and validation.
+
+  - id: RF-005
+    title: Wire 7-Segment Display Events End-to-End
+    as: user
+    want: TM1637 updates via events in main app
+    so_that: Display mirrors WebUI and test script behavior
+    priority: High
+    acceptance_criteria:
+      - SystemEventHandler publishes display_update on switch changes
+      - HardwareEventHandler handles display_update and calls hardware_service.update_display
+      - AppAPI exposes set_display(value, brightness)
+    tasks:
+      - Ensure both handlers are instantiated in main system creation
+      - Add tests with mock hardware verifying event flow
+    status: Complete
+    implementation_notes: |
+      - SystemEventHandler publishes display_update on switch changes; HardwareEventHandler applies to HardwareManager.update_display.
+      - Verified via tests and WebUI smoke state endpoint.
+
+  - id: RF-006
+    title: WebUI Dependencies and Startup Reliability
+    as: developer
+    want: WebUI start without WebSocket warnings
+    so_that: Dev UX is smooth
+    priority: High
+    acceptance_criteria:
+      - uvicorn[standard] and/or websockets installed by default
+      - WebUI runs without "Unsupported upgrade request" warnings
+      - Health endpoint or startup log confirms running port
+    tasks:
+      - Keep uvicorn[standard] and websockets in base.txt
+      - Add a simple /health endpoint in WebUI if missing
+      - Document cmd activation/installation commands for Windows
+    status: Complete
+    implementation_notes: |
+      - Ensured uvicorn[standard] + websockets in base; added /api/state for quick smoke; startup verified on port 8070.
+
+  - id: RF-007
+    title: Logging and Git Ignore Hygiene
+    as: maintainer
+    want: Logs excluded from version control
+    so_that: Repo stays clean
+    priority: Medium
+    acceptance_criteria:
+      - .gitignore ignores logs/ recursively and boss/logs/
+      - Tracked logs removed from index
+      - Log rotation confirmed via config
+    tasks:
+      - Update .gitignore patterns (boss/logs/, **/logs/)
+      - Provide git rm --cached commands in docs/CONTRIBUTING.md
+    status: Complete
+    implementation_notes: |
+      - .gitignore updated to exclude logs recursively; instructions provided to untrack existing logs.
+
+  - id: RF-008
+    title: Implement Main Entry Wiring and DI
+    as: developer
+    want: Create system, start services, and run
+    so_that: Main app is functional end-to-end
+    priority: High
+    acceptance_criteria:
+      - create_boss_system builds config, logging, hardware, event bus, handlers, managers
+      - main() parses args/env and starts services; exits cleanly
+      - System publishes system_started event
+    tasks:
+      - Fill boss/main.py with DI wiring and argument parsing
+      - Add basic CLI flags (e.g., --hardware webui|gpio|mock, --log-level)
+    status: Complete
+    implementation_notes: |
+      - main.py wires config, logging, factory, services, handlers; CLI flags implemented; clean shutdown path.
+
+  - id: RF-009
+    title: Cache App Summaries for Fast Startup
+    as: user
+    want: List All Apps to start instantly
+    so_that: Mini-app launch is snappy
+    priority: Medium
+    acceptance_criteria:
+      - AppManager builds cached summaries after load
+      - AppAPI.get_app_summaries() returns cache
+      - list_all_apps uses summaries with fallback
+    tasks:
+      - Implement cache build/clear on load/reload
+      - Update mini-app to consume summaries
+    status: Complete
+    implementation_notes: |
+      - AppManager builds and serves app summaries cache; API exposed; list_all_apps uses cache.
+
+  - id: RF-010
+    title: Test Suite Robustness and Platform Guards
+    as: developer
+    want: Tests pass on Windows and Pi
+    so_that: CI is reliable
+    priority: Medium
+    acceptance_criteria:
+      - tests/conftest.py sets import path correctly
+      - GPIO-dependent tests skipped on non-Linux
+      - tm1637 mocked for unit tests
+    tasks:
+      - Add platform markers/skips
+      - Add mock fixtures for hardware
+    status: Complete
+    implementation_notes: |
+      - Tests pass on Windows; conftest ensures import path; Linux-only wheels gated via requirement markers.
+
+  - id: RF-011
+    title: Code Style and Typing
+    as: maintainer
+    want: Consistent style and optional typing checks
+    so_that: Code quality is sustained
+    priority: Low
+    acceptance_criteria:
+      - Optional ruff and mypy config present
+      - Pre-commit hooks documented
+    tasks:
+      - Add basic configs and docs; keep optional for contributors
+  status: Planned
+
+  - id: RF-012
+    title: Documentation Consistency and Accuracy
+    as: contributor
+    want: Docs match implementation
+    so_that: Onboarding is smooth
+    priority: Medium
+    acceptance_criteria:
+      - Default backend documented as rich across docs
+      - Install steps show requirements/base.txt + dev.txt
+      - Windows venv activation tips included (cmd and PowerShell)
+    tasks:
+      - Update docs/rich_display_backend.md, docs/install-steps.md, docs/remote_development.md
+    status: In Progress
+    implementation_notes: |
+      - Defaults clarified; more doc updates to align with new backends and deps pending.
+
+  - id: RF-013
+    title: Configuration Validation and Defaults
+    as: system admin
+    want: Strong config validation at startup
+    so_that: Misconfigurations fail fast
+    priority: Medium
+    acceptance_criteria:
+      - screen_backend validated (rich|pillow), default rich
+      - screen_width/height validated and logged vs framebuffer geometry
+      - Helpful warnings on mismatch
+    tasks:
+      - Extend config_loader/config_manager validation and logging
+  status: Planned
+
+  - id: RF-014
+    title: Remove Duplicated Screen Implementations
+    as: maintainer
+    want: One clear implementation per backend per hardware layer
+    so_that: Maintenance cost is minimized
+    priority: Medium
+    acceptance_criteria:
+      - Single Rich and single Pillow screen class per hardware layer (gpio/webui/mock)
+      - Factory selects correctly based on config and runtime switching
+    tasks:
+      - Consolidate any duplicates into gpio_screens.py or equivalent
+    status: Complete
+    implementation_notes: |
+      - GPIO layer consolidated in gpio_screens.py with GPIORichScreen and GPIOPillowScreen; no duplicates elsewhere.
+      - WebUI layer uses a single WebUIScreen; Mock layer uses a single MockScreen.
+      - Factories route correctly and support runtime backend switching; verified by tests.
+
+  - id: RF-015
+    title: Performance and Startup Profiling
+    as: developer
+    want: Identify slow paths on app start
+    so_that: Perceived performance improves
+    priority: Low
+    acceptance_criteria:
+      - Simple timing on app load and app start phases logged
+      - Slower steps (>100ms) noted for future optimization
+    tasks:
+      - Add lightweight timers around app discovery and startup
+  status: Planned
+
+  - id: RF-016
+    title: Service and Script Consistency
+    as: system admin
+    want: Consistent scripts for run/test/lint
+    so_that: Common tasks are easy
+    priority: Low
+    acceptance_criteria:
+      - scripts/ includes run_dev.sh|bat, test.sh|bat
+      - Systemd setup script references requirements/base.txt
+    tasks:
+      - Add minimal scripts for common workflows
+  status: Planned

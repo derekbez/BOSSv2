@@ -166,6 +166,36 @@ def validate_config(config: BossConfig) -> bool:
             logger.error(f"Duplicate pin assignment: {pin}")
             valid = False
         used_pins.add(pin)
+
+    # Validate screen settings and backend
+    backend = (getattr(config.hardware, 'screen_backend', 'rich') or '').lower()
+    if backend not in {"rich", "pillow"}:
+        logger.warning(f"Invalid screen_backend '{backend}' in config; defaulting to 'rich'")
+        try:
+            config.hardware.screen_backend = 'rich'
+        except Exception:
+            pass
+    else:
+        # Normalize stored value
+        try:
+            config.hardware.screen_backend = backend
+        except Exception:
+            pass
+
+    if getattr(config.hardware, 'screen_width', 0) <= 0 or getattr(config.hardware, 'screen_height', 0) <= 0:
+        logger.error(f"Invalid screen dimensions: {config.hardware.screen_width}x{config.hardware.screen_height}")
+        valid = False
+    else:
+        logger.info(
+            f"Screen configured as {config.hardware.screen_width}x{config.hardware.screen_height}, backend={config.hardware.screen_backend}"
+        )
+        # Hint to verify framebuffer geometry on Linux
+        try:
+            import platform
+            if platform.system() == 'Linux':
+                logger.info("Tip: Verify framebuffer geometry matches config: fbset -fb /dev/fb0 -i")
+        except Exception:
+            pass
     
     # Validate system config
     if config.system.app_timeout_seconds < 1:

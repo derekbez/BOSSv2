@@ -480,6 +480,15 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
             info["hardware_status"][component] = component in hardware_dict and hardware_dict[component] is not None
         
         return info
+
+    @app.get("/api/state")
+    async def get_state():
+        """Get the current emulated hardware state (LEDs, display, switches, screen)."""
+        try:
+            return {"state": ws_manager._get_current_state(), "timestamp": time.time()}
+        except Exception as e:
+            logger.error(f"Failed to get state: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
     
     @app.get("/api/apps")
     async def list_apps():

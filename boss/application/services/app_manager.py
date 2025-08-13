@@ -15,16 +15,22 @@ logger = logging.getLogger(__name__)
 class AppManager(AppManagerService):
     """Service for managing mini-apps."""
     
-    def __init__(self, apps_directory: Path, event_bus, hardware_service, config_manager):
+    def __init__(self, apps_directory: Path, event_bus, hardware_service=None, config_manager=None):
         self.apps_directory = apps_directory
         self.event_bus = event_bus
         self.hardware_service = hardware_service
         self.config_manager = config_manager
+        # Determine system default screen backend with safe fallbacks
         try:
-            cfg = self.config_manager.get_effective_config() if hasattr(self.config_manager, 'get_effective_config') else self.config_manager.get_config()
-            self._system_default_backend = getattr(cfg.hardware, 'screen_backend', 'pillow')
+            if self.config_manager is not None:
+                cfg = (self.config_manager.get_effective_config() 
+                       if hasattr(self.config_manager, 'get_effective_config') 
+                       else self.config_manager.get_config())
+                self._system_default_backend = getattr(cfg.hardware, 'screen_backend', 'rich')
+            else:
+                self._system_default_backend = 'rich'
         except Exception:
-            self._system_default_backend = 'pillow'
+            self._system_default_backend = 'rich'
         # Internal state
         self._apps = {}
         # Cached lightweight summaries for fast access (number, name, description)
@@ -191,6 +197,8 @@ class AppManager(AppManagerService):
 
     def _apply_app_backend(self, app: App) -> str:
         """Switch backend if needed; return previous backend to allow restore."""
+        if not self.hardware_service or not hasattr(self.hardware_service, 'get_current_screen_backend'):
+            return self._determine_backend_for_app(app)
         previous_backend = self.hardware_service.get_current_screen_backend()
         target_backend = self._determine_backend_for_app(app)
         if target_backend != previous_backend:
@@ -203,6 +211,8 @@ class AppManager(AppManagerService):
 
     def _restore_backend(self, previous_backend: str) -> None:
         """Restore a previously saved backend."""
+        if not self.hardware_service or not hasattr(self.hardware_service, 'get_current_screen_backend'):
+            return
         current = self.hardware_service.get_current_screen_backend()
         if current != previous_backend:
             if not self.hardware_service.switch_screen_backend(previous_backend):

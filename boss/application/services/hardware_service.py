@@ -76,9 +76,6 @@ class HardwareManager(HardwareService):
             # For WebUI hardware, set the event bus
             self._setup_webui_event_bus()
             
-            # Subscribe to app API events
-            self._setup_event_subscriptions()
-            
             # Update initial state
             self._update_hardware_state()
             
@@ -154,27 +151,7 @@ class HardwareManager(HardwareService):
             self.leds.set_event_bus(self.event_bus)  # type: ignore
             logger.debug("Event bus set for WebUI LEDs")
 
-    def _setup_event_subscriptions(self) -> None:
-        """Subscribe to app API events."""
-        # Note: Hardware events are now handled by HardwareEventHandler, not directly here
-        # Subscribe only to display events from apps (not screen events)
-        self.event_bus.subscribe("display_update", self._on_display_update)
-        logger.debug("Subscribed to app API events")
-    
-    def _on_display_update(self, event_type: str, payload: dict, source: Optional[str] = None) -> None:
-        """Handle display update events from apps."""
-        if not self.display:
-            return
-            
-        if "value" in payload:
-            value = payload["value"]
-            if isinstance(value, int) and 0 <= value <= 9999:
-                self.display.show_number(value)
-                logger.debug(f"Display updated with number from {source}: {value}")
-        elif "text" in payload:
-            text = payload["text"]
-            self.display.show_text(text)
-            logger.debug(f"Display updated with text from {source}: '{text}'")
+    # Note: Output event subscriptions are handled by HardwareEventHandler to avoid duplication
 
     def _setup_callbacks(self) -> None:
         """Set up hardware event callbacks."""
@@ -306,7 +283,9 @@ class HardwareManager(HardwareService):
                 elif content_type == "image":
                     self.screen.display_image(content, **kwargs)
                 elif content_type == "clear":
-                    self.screen.clear_screen(content)
+                    # When clearing, forward the requested color if provided
+                    color = kwargs.get("color", "black")
+                    self.screen.clear_screen(color)
                 logger.debug(f"Screen updated: {content_type}")
         except Exception as e:
             logger.error(f"Error updating screen: {e}")

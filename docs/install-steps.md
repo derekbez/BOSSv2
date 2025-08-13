@@ -78,3 +78,13 @@ Windows CMD (no venv activation required):
 If that fails, install explicitly into the venv:
 	.\.venv\Scripts\python.exe -m pip install "uvicorn[standard]" websockets
 
+Default screen backend is "rich". To change to Pillow, set in boss/config/boss_config.json:
+{
+	"hardware": { "screen_backend": "pillow" }
+}
+
+On Windows CMD, activate venv before running:
+	.\.venv\Scripts\activate
+Then run:
+	.\.venv\Scripts\python.exe -m boss.main --hardware webui
+
