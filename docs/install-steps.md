@@ -1,90 +1,68 @@
-echo "*** Starting system update..."
-sudo apt update && sudo apt upgrade -y
-echo "*** System update completed."
+## B.O.S.S. Install Guide (Raspberry Pi + Windows Dev)
 
-echo "*** Installing Python 3.11+ and essential build tools..."
-sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential
-echo "*** Python and build tools installation completed."
+This guide sets up B.O.S.S. on a Raspberry Pi for production and on Windows for WebUI development. Dependencies are centralized in requirements/base.txt and requirements/dev.txt.
 
-echo "*** Installing Git..."
-sudo apt install -y git
-echo "*** Git installation completed."
+Important: The default screen backend is rich. You can override per app via manifest or system-wide in boss/config/boss_config.json.
 
-echo "*** Configuring Git user details..."
-git config --global user.name "derekbez"
-git config --global user.email "derek@be-easy.com"
-echo "*** Git configuration completed."
+### Raspberry Pi Setup (64-bit Lite OS)
 
-echo "*** Cloning the B.O.S.S. repository..."
-git clone https://github.com/derekbez/BOSSv2.git boss
-echo "*** Repository cloned successfully."
+1) Update system and install prerequisites
+- sudo apt update && sudo apt upgrade -y
+- sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential git fontconfig
 
-echo "*** Creating and activating a Python virtual environment 'boss-venv' inside the project directory..."
-python3 -m venv boss-venv
-source boss-venv/bin/activate
-echo 'if [ -d "$HOME/boss-venv" ]; then source "$HOME/boss-venv/bin/activate"; fi' >> ~/.bashrc
-echo "*** Virtual environment 'boss-venv' will now activate automatically on new terminal sessions."
-echo "*** Virtual environment 'boss-venv' activated for the current session."
+2) Clone repo and create venv
+- cd ~
+- git clone https://github.com/derekbez/BOSSv2.git boss
+- cd boss
+- python3 -m venv boss-venv
+- source boss-venv/bin/activate
+- python -m pip install --upgrade pip
 
-echo "*** Ensuring pip is installed and updated..."
-python -m ensurepip
-python -m pip install --upgrade pip
-echo "*** Pip is installed and updated."
+3) Install Python packages
+- pip install -r requirements/base.txt -r requirements/dev.txt
 
-echo "*** Installing B.O.S.S. Python dependencies from centralized requirement files..."
-pip install -r requirements/base.txt -r requirements/dev.txt
-echo "*** B.O.S.S. Python dependencies installed."
+4) GPIO backend (recommended)
+- sudo apt install -y python3-lgpio
+- Set GPIOZERO_PIN_FACTORY=lgpio in your service environment (see scripts/boss-dev.service)
 
-echo "*** Installing lgpio backend for GPIOZero (recommended for modern Pi OS)..."
-sudo apt install -y python3-lgpio
-echo "*** lgpio backend installation completed."
+5) Optional: pigpio daemon (only if you need pigpio-specific features)
+- sudo apt install -y pigpio
+- sudo systemctl enable --now pigpiod  # optional
 
-echo "*** (Optional) Installing pigpio system daemon (only if you need pigpio-specific features)..."
-echo "*** You can skip this if using lgpio as the default pin factory."
-sudo apt install -y pigpio || true
-echo "*** pigpio system daemon step completed (optional)."
+6) Power button overlay (optional; adjust pins as needed)
+- echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
 
-echo "*** Installing  fontconfig..."
-sudo apt install fontconfig
-echo "*** fontconfig installation completed."
+7) First run (without systemd)
+- source ~/boss/boss-venv/bin/activate
+- python3 -m boss.main
 
-echo "*** Configuring GPIO settings for power button and indicator light (if needed)..."
-echo "dtoverlay=gpio-shutdown,gpio_pin=3" | sudo tee -a /boot/firmware/config.txt
-echo "gpio=14=op,pd,dh" | sudo tee -a /boot/firmware/config.txt
-echo "*** Updated /boot/firmware/config.txt:"
-cat /boot/firmware/config.txt
-echo "*** GPIO configuration completed."
+8) Install as a service (recommended on Pi)
+- chmod +x scripts/setup_systemd_service.sh
+- ./scripts/setup_systemd_service.sh
+- sudo systemctl start boss && sudo journalctl -u boss -f
 
-# If you choose pigpio backend, start the pigpio daemon (optional):
-# sudo systemctl start pigpiod
-# sudo systemctl enable pigpiod
+Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/config/boss_config.json match the framebuffer. Check with: fbset -fb /dev/fb0 -i
 
-# If you choose lgpio backend (recommended), configure the pin factory via systemd env:
-# Example in boss-dev.service or environment: GPIOZERO_PIN_FACTORY=lgpio
+To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pillow" } } in boss/config/boss_config.json. Default is "rich".
 
-echo "*** B.O.S.S. installation complete. Activate your virtual environment and run the app with:"
-echo "source ~/boss/boss-venv/bin/activate"
-echo "cd ~/boss"
-echo "python3 -m boss.main"
+### Windows WebUI Development (CMD)
 
+1) Create a virtual environment in the repo
+- cd \path\to\BOSSv2
+- py -3 -m venv .venv
+- .\.venv\Scripts\activate
 
-On Windows, for the WebUi debugging app install:
-pip install -r requirements/base.txt -r requirements/dev.txt
+2) Install dependencies
+- pip install -r requirements/base.txt -r requirements/dev.txt
 
-If you still see a WebSocket warning when running the WebUI, verify these are installed in your active environment:
+3) Verify WebUI server deps
+- python -c "import uvicorn, websockets; print('uvicorn', uvicorn.__version__, 'websockets', websockets.__version__)"
+	- If missing, install: pip install "uvicorn[standard]" websockets
 
-Windows CMD (no venv activation required):
-	.\.venv\Scripts\python.exe -c "import websockets, uvicorn; print('websockets', websockets.__version__, 'uvicorn', uvicorn.__version__)"
-If that fails, install explicitly into the venv:
-	.\.venv\Scripts\python.exe -m pip install "uvicorn[standard]" websockets
+4) Run with WebUI hardware emulation
+- python -m boss.main --hardware webui
 
-Default screen backend is "rich". To change to Pillow, set in boss/config/boss_config.json:
-{
-	"hardware": { "screen_backend": "pillow" }
-}
-
-On Windows CMD, activate venv before running:
-	.\.venv\Scripts\activate
-Then run:
-	.\.venv\Scripts\python.exe -m boss.main --hardware webui
+5) Change screen backend (optional)
+- System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "rich" | "pillow" (default: rich)
+- Per app: set preferred_screen_backend in the app's manifest.json
 

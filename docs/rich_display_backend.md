@@ -184,6 +184,7 @@ console = Console(file=framebuffer_wrapper, force_terminal=True)
 - Colors are mapped to the display's color space
 - Content is formatted for the target resolution
 - Works in headless mode without SSH connection
+ - Ensure boss_config.json screen_width/screen_height match framebuffer geometry (fbset -fb /dev/fb0 -i)
 
 ## Troubleshooting
 

@@ -46,13 +46,16 @@ def make_min_config(tmp_path: Path, backend: str = "rich") -> BossConfig:
     return BossConfig(hardware=hardware, system=system)
 
 
-def write_simple_app(tmp_apps: Path, name: str, preferred: str | None):
+def write_simple_app(tmp_apps: Path, name: str, preferred: str | None, run_delay: float = 0.0):
     app_dir = tmp_apps / name
     app_dir.mkdir(parents=True, exist_ok=True)
     (app_dir / "main.py").write_text(
-        """
+        f"""
 def run(stop_event, api):
     api.log_info("test app running")
+    import time
+    if {run_delay} > 0:
+        time.sleep({run_delay})
     stop_event.set()
 """
     )
@@ -111,3 +114,71 @@ def test_config_validation_normalizes_backend(tmp_path: Path):
     ok = validate_config(cfg)
     assert ok is True
     assert cfg.hardware.screen_backend == "rich"
+
+
+def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: Path):
+    """System-level: ensure backend switches to app preference on start and restores after stop."""
+    from boss.application.services.system_service import SystemManager
+    from boss.application.api.app_api import AppAPI
+
+    # Arrange environment
+    cfg = make_min_config(tmp_path, backend="rich")
+    apps_dir = tmp_path / "apps"
+    apps_dir.mkdir()
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    # map switch 1 to app
+    (config_dir / "app_mappings.json").write_text(json.dumps({"app_mappings": {"1": "app_pref_pillow"}}))
+    # create app preferring pillow, with a small delay to sample during run
+    write_simple_app(apps_dir, "app_pref_pillow", preferred="pillow", run_delay=0.2)
+
+    # Wire services with mock hardware factory
+    event_bus = EventBus(queue_size=100)
+    hw_factory = MockHardwareFactory(cfg.hardware)
+    hardware = HardwareManager(hw_factory, event_bus)
+    app_manager = AppManager(apps_dir, event_bus, hardware_service=hardware)
+    app_manager.load_apps()
+
+    # Minimal AppAPI factory (not used by this simple app)
+    app_api_factory = lambda name, path: AppAPI(event_bus, name, path)
+    runner = AppRunner(event_bus, app_api_factory)
+
+    # System manager
+    system = SystemManager(event_bus, hardware, app_manager, runner)
+
+    # Start subsystems (event bus started by SystemManager.start)
+    system.start()
+
+    try:
+        # Ensure initial backend is rich
+        assert hardware.get_current_screen_backend() == "rich"
+
+        # Simulate switches at 1 and request app launch
+        assert hardware.switches is not None
+        # Use getattr to access mock-only helper without upsetting static typing
+        simulate = getattr(hardware.switches, "simulate_switch_change", None)
+        assert callable(simulate), "Mock switches missing simulate_switch_change"
+        simulate(1)
+        event_bus.publish("app_launch_requested", {}, "test")
+
+        # During run (short delay), backend should be pillow
+        import time
+        deadline = time.time() + 1.0
+        seen_pillow = False
+        while time.time() < deadline:
+            if hardware.get_current_screen_backend() == "pillow":
+                seen_pillow = True
+                break
+            time.sleep(0.02)
+        assert seen_pillow, "Expected backend to switch to pillow during app run"
+
+        # After app finishes, backend should restore to rich
+        deadline = time.time() + 2.0
+        while time.time() < deadline:
+            if hardware.get_current_screen_backend() == "rich":
+                break
+            time.sleep(0.02)
+        assert hardware.get_current_screen_backend() == "rich"
+    finally:
+        # Stop system and event bus
+        system.stop()
