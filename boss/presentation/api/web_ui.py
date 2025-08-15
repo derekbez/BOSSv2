@@ -51,10 +51,11 @@ class WebSocketManager:
             event_bus.subscribe("output.display.updated", self._on_display_changed)
             event_bus.subscribe("output.screen.updated", self._on_screen_changed)
             event_bus.subscribe("input.switch.changed", self._on_switch_changed)
-            event_bus.subscribe("switch_change", self._on_switch_changed)  # Also listen for switch_change events
-            # Display events
-            event_bus.subscribe("display.update", self._on_display_changed)
-            event_bus.subscribe("output.display.set", self._on_display_changed)
+            event_bus.subscribe("switch_change", self._on_switch_changed)  # legacy name
+            event_bus.subscribe("switch_changed", self._on_switch_changed)  # canonical name
+            # Display events: prefer canonical and output updates. Avoid legacy duplicate events.
+            event_bus.subscribe("display_update", self._on_display_changed)  # canonical name
+            event_bus.subscribe("output.display.updated", self._on_display_changed)
     
     async def connect(self, websocket: WebSocket):
         """Accept a new WebSocket connection."""
@@ -142,8 +143,11 @@ class WebSocketManager:
         # Display state
         display = self.hardware_dict.get('display')
         if display:
-            if hasattr(display, '_current_value') and display._current_value is not None:
-                state['display'] = str(display._current_value)
+            # Prefer a current numeric value if available, else fall back to last value, else placeholder
+            if hasattr(display, '_current_value') and getattr(display, '_current_value') is not None:
+                state['display'] = str(getattr(display, '_current_value'))
+            elif hasattr(display, '_last_value') and getattr(display, '_last_value') is not None:
+                state['display'] = str(getattr(display, '_last_value'))
             else:
                 state['display'] = "----"
         else:
@@ -358,10 +362,9 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         else:
             logger.warning("Switch handle_switch_change method not available")
         
-        # Also trigger display update (switches should update display)
-        display = hardware_dict.get('display')
-        if display and hasattr(display, 'show_number'):
-            display.show_number(request.value)
+        # Publish a canonical system display_update so every backend mirrors the value
+        if event_bus:
+            event_bus.publish("display_update", {"value": request.value}, "system")
         
         return {"status": "success", "value": request.value}
     

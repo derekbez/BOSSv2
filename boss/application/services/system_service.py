@@ -302,11 +302,22 @@ class SystemManager(SystemService):
             
             if app:
                 logger.info(f"Launching app for switch {switch_value}: {app.manifest.name}")
+
+                # If an app is running, stop it first (gracefully with timeout)
+                try:
+                    stopped = self.app_runner.stop_current_app(timeout=3.0)
+                    if not stopped:
+                        logger.warning("Previous app did not stop within timeout; proceeding with new launch")
+                except Exception as e:
+                    logger.debug(f"stop_current_app error: {e}")
+
                 # US-027: apply preferred backend for this app
                 try:
                     self._previous_backend_for_app = self.app_manager.apply_backend_for_app(app)
                 except Exception as e:
                     logger.warning(f"Could not apply backend for app: {e}")
+
+                # Start new app
                 self.app_runner.start_app(app)
                 self.app_manager.set_current_app(app)
             else:

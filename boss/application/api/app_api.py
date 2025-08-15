@@ -112,17 +112,16 @@ class AppHardwareAPI(HardwareAPIInterface):
         }, f"app:{self._app_name}")
     
     def set_display(self, value: Optional[int], brightness: float = 1.0) -> None:
-        """Set 7-segment display value."""
+        """No-op: 7-seg display is system-controlled and mirrors switch value.
+        Mini-apps must not control it. Use screen API for any user-facing output.
+        """
         if value is not None and not 0 <= value <= 9999:
             raise ValueError(f"Display value must be 0-9999 or None, got {value}")
-        
         if not 0.0 <= brightness <= 1.0:
             raise ValueError(f"Display brightness must be 0.0-1.0, got {brightness}")
-        
-        self._event_bus.publish("display_update", {
-            "value": value,
-            "brightness": brightness
-        }, f"app:{self._app_name}")
+        logger.info(
+            f"[{self._app_name}] Ignored set_display({value}) - 7-seg is system-controlled (mirrors switches)."
+        )
     
     def play_sound(self, sound_path: str, volume: float = 1.0) -> None:
         """Play a sound file."""

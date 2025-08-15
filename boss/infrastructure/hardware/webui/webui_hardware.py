@@ -273,14 +273,13 @@ class WebUIDisplay(DisplayInterface):
         
         # Publish event for WebUI update
         if self._event_bus:
+            # Only emit the output.display.updated event; the canonical display_update
+            # is published by the system when switches change. Avoid duplicate/legacy
+            # events that can cause transient UI state.
             self._event_bus.publish("output.display.updated", {
                 "type": "number",
                 "value": value,
                 "brightness": brightness,
-                "text": str(value)
-            })
-            self._event_bus.publish("display.update", {
-                "value": value,
                 "text": str(value)
             })
     
@@ -296,10 +295,6 @@ class WebUIDisplay(DisplayInterface):
                 "text": text,
                 "brightness": brightness
             })
-            self._event_bus.publish("display.update", {
-                "value": None,
-                "text": text
-            })
     
     def clear(self) -> None:
         """Clear the display."""
@@ -312,10 +307,6 @@ class WebUIDisplay(DisplayInterface):
                 "type": "clear",
                 "text": "",
                 "brightness": self._brightness
-            })
-            self._event_bus.publish("display.update", {
-                "value": None,
-                "text": ""
             })
     
     def set_brightness(self, brightness: float) -> None:

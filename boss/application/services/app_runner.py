@@ -32,6 +32,27 @@ class AppRunner(AppRunnerService):
             # Stop current app if running
             if self._current_app and self._current_app.is_running:
                 self.stop_current_app()
+
+            # If we're relaunching the same App object (or it hasn't fully
+            # transitioned to STOPPED yet), wait briefly for it to settle.
+            if not app.can_start:
+                deadline = time.time() + 1.0  # up to ~1s grace
+                while not app.can_start and time.time() < deadline:
+                    time.sleep(0.05)
+
+            # As a last resort (threads can't be force-killed), reset state to
+            # STOPPED to avoid raising on mark_starting; the previous thread, if
+            # still alive, will finish and publish app_stopped. We prefer not to
+            # run two concurrent instances, but this unblocks accidental status
+            # races.
+            if not app.can_start:
+                logger.warning(
+                    f"Previous instance of {app.manifest.name} not fully stopped; forcing status reset"
+                )
+                try:
+                    app.mark_stopped()
+                except Exception:
+                    pass
             
             # Mark app as starting
             app.mark_starting()
@@ -57,11 +78,14 @@ class AppRunner(AppRunnerService):
                 "switch_value": app.switch_value
             }, "app_runner")
     
-    def stop_current_app(self) -> None:
-        """Stop the currently running app."""
+    def stop_current_app(self, timeout: float = 5.0) -> bool:
+        """Stop the currently running app.
+
+        Returns True if the app thread terminated within timeout, else False.
+        """
         with self._lock:
             if not self._current_app or not self._current_app.is_running:
-                return
+                return True
             
             app = self._current_app
             logger.info(f"Stopping app: {app.manifest.name}")
@@ -75,18 +99,24 @@ class AppRunner(AppRunnerService):
             
             # Wait for thread to finish with timeout
             if self._current_thread and self._current_thread.is_alive():
-                self._current_thread.join(timeout=5.0)
+                self._current_thread.join(timeout=timeout)
                 
                 # Force terminate if still running
                 if self._current_thread.is_alive():
                     logger.warning(f"App {app.manifest.name} did not stop gracefully")
                     # Note: Python doesn't allow force-killing threads safely
                     # Apps should respect the stop_event
+                    stopped = False
+                else:
+                    stopped = True
+            else:
+                stopped = True
             
             # Clean up
             self._current_app = None
             self._current_thread = None
             self._stop_event = None
+            return stopped
     
     def get_running_app(self) -> Optional[App]:
         """Get the currently running app."""

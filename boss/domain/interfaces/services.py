@@ -70,8 +70,8 @@ class AppRunnerService(ABC):
         pass
     
     @abstractmethod
-    def stop_current_app(self) -> None:
-        """Stop the currently running app."""
+    def stop_current_app(self, *args, **kwargs) -> bool:
+        """Stop the currently running app. Returns True if stopped within timeout."""
         pass
     
     @abstractmethod

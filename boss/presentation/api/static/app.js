@@ -154,6 +154,8 @@ class BOSSWebUI {
 
     updateDisplayState(payload) {
         if (payload.value !== undefined) {
+            // Ignore explicit nulls from legacy/clear events to avoid flicker
+            if (payload.value === null) return;
             this.updateDisplayValue(payload.value);
         }
     }
@@ -161,7 +163,8 @@ class BOSSWebUI {
     updateDisplayValue(value) {
         const displayElement = document.getElementById('display-value');
         if (displayElement) {
-            displayElement.textContent = String(value).padStart(4, ' ');
+            const safe = (value === null || value === undefined) ? '----' : String(value);
+            displayElement.textContent = safe.padStart(4, ' ');
         }
     }
 
@@ -241,6 +244,8 @@ class BOSSWebUI {
         if (payload.value !== undefined) {
             this.currentSwitchValue = payload.value;
             this.updateSwitchDisplay();
+            // Mirror switch value to 7-seg in WebUI for parity
+            this.updateDisplayValue(payload.value);
         }
     }
 

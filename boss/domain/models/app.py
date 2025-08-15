@@ -108,8 +108,16 @@ class App:
     
     @property
     def is_running(self) -> bool:
-        """Check if the app is currently running."""
-        return self.status in (AppStatus.STARTING, AppStatus.RUNNING)
+        """Check if the app is currently running.
+
+        Treat STOPPING as still running to avoid racey relaunches during
+        graceful shutdown windows.
+        """
+        return self.status in (
+            AppStatus.STARTING,
+            AppStatus.RUNNING,
+            AppStatus.STOPPING,
+        )
     
     @property
     def can_start(self) -> bool:

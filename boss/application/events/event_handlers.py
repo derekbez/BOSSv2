@@ -90,6 +90,12 @@ class HardwareEventHandler:
             value = payload.get("value")
             brightness = payload.get("brightness", 1.0)
             
+            # Only allow system-driven numeric updates (e.g., switch mirror).
+            # Ignore None clears and any updates not originating from system layer.
+            if value is None:
+                logger.debug("Ignoring display clear request; 7-seg is system-controlled.")
+                return
+            
             # Update hardware via service
             self.hardware_service.update_display(value, brightness)
             logger.debug(f"Display update processed: {value} at brightness {brightness}")

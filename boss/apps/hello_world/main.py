@@ -258,7 +258,8 @@ def run(stop_event, api):
         
         # Clear display if available
         if hasattr(api.hardware, 'set_display'):
-            api.hardware.set_display(None)
+            # 7-seg is system-controlled; apps should not modify it.
+            pass
         
         api.log_info("Hello World app cleanup completed")
 
