@@ -328,6 +328,7 @@ class GPIOPillowScreen(ScreenInterface):
         self._draw = None
         self._font = None
         self._screen_width, self._screen_height = self._detect_fb_size(hardware_config)
+        self._fb_bpp = 16
 
     def _detect_fb_size(self, hardware_config):
         try:
@@ -350,12 +351,15 @@ class GPIOPillowScreen(ScreenInterface):
                     fb_width, fb_height = map(int, size_str.split(","))
                 with open("/sys/class/graphics/fb0/bits_per_pixel", "r") as f:
                     fb_bpp = int(f.read().strip())
+                # persist detected values for write path
+                self._screen_width, self._screen_height = fb_width, fb_height
+                self._fb_bpp = fb_bpp
             except Exception as e:
                 logger.warning(f"Could not auto-detect framebuffer geometry/bpp: {e}")
             if (self._screen_width, self._screen_height) != (fb_width, fb_height):
                 logger.warning(f"Screen config {self._screen_width}x{self._screen_height} does not match framebuffer {fb_width}x{fb_height}. Update config or HDMI settings to match.")
-            if fb_bpp != 16:
-                logger.warning(f"Framebuffer is {fb_bpp}bpp, expected 16bpp (RGB565). Display output may be incorrect.")
+            if fb_bpp not in (16, 24, 32):
+                logger.warning(f"Unsupported framebuffer bpp {fb_bpp}. Attempting best-effort write.")
             from PIL import Image, ImageDraw, ImageFont
             self._image = Image.new("RGB", (self._screen_width, self._screen_height), "black")
             self._draw = ImageDraw.Draw(self._image)
@@ -384,18 +388,44 @@ class GPIOPillowScreen(ScreenInterface):
         try:
             img = self._image.convert("RGB")
             width, height = img.size
+            fb_bytes = None
+            # Choose conversion based on framebuffer bpp
             try:
-                fb_bytes = img.tobytes("raw", "BGR;16")
-            except Exception:
+                if self._fb_bpp == 32:
+                    # Most RPi KMS uses XRGB8888 or ARGB8888; BGRX works well for many fb drivers
+                    fb_bytes = img.tobytes("raw", "BGRX")
+                elif self._fb_bpp == 24:
+                    fb_bytes = img.tobytes("raw", "BGR")
+                else:
+                    # default to 16bpp RGB565
+                    fb_bytes = img.tobytes("raw", "BGR;16")
+            except Exception as e:
+                logger.debug(f"Fast conversion failed ({e}); falling back to manual pack for {self._fb_bpp}bpp")
                 arr = img.load()
-                fb_bytes = bytearray()
-                for y in range(height):
-                    for x in range(width):
-                        r, g, b = arr[x, y]
-                        rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-                        fb_bytes.append((rgb565 >> 8) & 0xFF)
-                        fb_bytes.append(rgb565 & 0xFF)
-            with open(self._fb_path, "wb") as fb:
+                if self._fb_bpp == 32:
+                    fb_bytes = bytearray()
+                    for y in range(height):
+                        for x in range(width):
+                            r, g, b = arr[x, y]
+                            # B,G,R, padding
+                            fb_bytes.extend((b, g, r, 0))
+                elif self._fb_bpp == 24:
+                    fb_bytes = bytearray()
+                    for y in range(height):
+                        for x in range(width):
+                            r, g, b = arr[x, y]
+                            fb_bytes.extend((b, g, r))
+                else:
+                    fb_bytes = bytearray()
+                    for y in range(height):
+                        for x in range(width):
+                            r, g, b = arr[x, y]
+                            rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+                            fb_bytes.append((rgb565 >> 8) & 0xFF)
+                            fb_bytes.append(rgb565 & 0xFF)
+            # Write to framebuffer from start
+            with open(self._fb_path, "rb+") as fb:
+                fb.seek(0)
                 fb.write(fb_bytes)
         except Exception as e:
             logger.error(f"Failed to write to framebuffer: {e}")

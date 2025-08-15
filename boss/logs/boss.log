@@ -14393,3 +14393,16 @@ Page 1/1
 2025-08-15 21:35:10,855 - boss.application.api.app_api - INFO - log_info:175 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
 2025-08-15 21:35:10,855 - boss.infrastructure.hardware.mock.mock_hardware - INFO - display_text:293 - Mock screen text: 'BOSS Ready' (size: 32, color: green, align: center)
 2025-08-15 21:35:11,358 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Admin Startup finished normally after 1.9 seconds
+2025-08-15 21:40:09,486 - boss.application.services.app_runner - WARNING - timeout_monitor:151 - App Admin Startup timed out after 300 seconds
+2025-08-15 21:55:38,638 - boss.application.services.system_service - INFO - _signal_handler:384 - Received SIGINT, shutting down gracefully
+2025-08-15 21:55:38,638 - boss.application.services.system_service - INFO - stop:88 - Stopping BOSS system
+2025-08-15 21:55:38,638 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:347 - System shutdown requested: normal
+2025-08-15 21:55:38,638 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:378 - Normal system shutdown
+2025-08-15 21:55:38,638 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-08-15 21:55:38,666 - boss.application.services.hardware_service - INFO - _monitor_hardware:225 - Hardware monitoring thread stopped
+2025-08-15 21:55:38,666 - boss.application.services.hardware_service - INFO - stop_monitoring:137 - Hardware monitoring stopped
+2025-08-15 21:55:38,666 - boss.application.services.hardware_service - INFO - cleanup:90 - Cleaning up hardware
+2025-08-15 21:55:38,666 - boss.application.services.hardware_service - INFO - cleanup:106 - Hardware cleanup complete
+2025-08-15 21:55:38,666 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-15 21:55:38,666 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-15 21:55:38,668 - boss.application.services.system_service - INFO - stop:112 - BOSS system stopped

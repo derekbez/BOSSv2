@@ -174,6 +174,60 @@ muxInpin = 8  #          blue
 ---
 
 
+## Screen troubleshooting (real hardware)
+
+If LEDs work but nothing appears on the HDMI screen after starting the service:
+
+1) Verify framebuffer and geometry
+- Check that /dev/fb0 exists and note its geometry and bpp:
+  ```bash
+  ls -la /dev/fb0
+  fbset -fb /dev/fb0 -i
+  cat /sys/class/graphics/fb0/virtual_size
+  cat /sys/class/graphics/fb0/bits_per_pixel
+  ```
+- Ensure boss/config/boss_config.json matches the framebuffer size (screen_width, screen_height). If they differ, update the config and restart the service.
+
+2) Use the Pillow backend on Pi
+- In boss/config/boss_config.json set:
+  ```json
+  "screen_backend": "pillow"
+  ```
+- Pillow writes directly to /dev/fb0 and is the recommended backend for headless HDMI.
+
+3) Confirm permissions and service config
+- The service/user must have video group access to write /dev/fb0:
+  ```bash
+  groups
+  # Expect to see: gpio video audio
+  ```
+- The systemd unit should include:
+  - Group=gpio
+  - SupplementaryGroups=video audio
+
+4) Restart and watch logs
+```bash
+sudo systemctl restart boss
+sudo journalctl -u boss -n 100 -f
+```
+You should see lines like:
+- GPIOPillowScreen initialized (Pillow framebuffer)
+- Detected framebuffer size: WxH
+- Screen updated: text
+
+5) Quick screen test (optional)
+- Run the included test script to draw to the framebuffer:
+  ```bash
+  python3 scripts/test_pillow_screen.py
+  ```
+  If this shows text but the service does not, compare logs and config.
+
+6) Console overlay notes
+- The Linux login console may still be visible; Pillow writes directly over it. If you never see updates, double-check bpp and geometry, and that the service logs no framebuffer write errors.
+
+If issues persist, capture the last 200 lines of the boss journal and the outputs of fbset and share them.
+
+
 ## Directory Structure & Best Practices
 
 The project is organized for modularity, scalability, and maintainability:
