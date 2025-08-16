@@ -1,13 +1,9 @@
 # Runtime dependencies for B.O.S.S. (install on Raspberry Pi and production environments)
 
 gpiozero
-pigpio; platform_system == "Linux"
-lgpio; platform_system == "Linux"
+# TM1637 7-seg display (GPIO) — Linux only
 python-tm1637; platform_system == "Linux"
+
+# Screen backends
 Pillow
-numpy
-fastapi
-uvicorn[standard]>=0.23,<1
-websockets>=11,<13
-pydantic
 rich

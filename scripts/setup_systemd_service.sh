@@ -36,7 +36,7 @@ Environment=BOSS_LOG_LEVEL=INFO
 Environment=BOSS_CONFIG_PATH=$BOSS_ROOT/boss/config/boss_config.json
 
 # Virtual environment and execution
-ExecStart=$BOSS_ROOT/boss-venv/bin/python -m boss.main
+ExecStart=$BOSS_ROOT/.venv/bin/python -m boss.main
 ExecReload=/bin/kill -HUP \$MAINPID
 
 # Restart policy

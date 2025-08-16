@@ -6,23 +6,31 @@ Important: The default screen backend is rich. You can override per app via mani
 
 ### Raspberry Pi Setup (64-bit Lite OS)
 
-1) Update system and install prerequisites
-- sudo apt update && sudo apt upgrade -y
-- sudo apt install -y python3 python3-pip python3-venv python3-dev build-essential git fontconfig
+1) Update system and install prerequisites (includes lgpio)
+```
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git python3 python3-pip python3-venv python3-dev build-essential \
+	pkg-config libffi-dev fontconfig python3-lgpio
+```
+
+
 
 2) Clone repo and create venv
-- cd ~
-- git clone https://github.com/derekbez/BOSSv2.git boss
-- cd boss
-- python3 -m venv boss-venv
-- source boss-venv/bin/activate
-- python -m pip install --upgrade pip
+```
+cd ~
+git clone https://github.com/derekbez/BOSSv2.git boss
+cd boss
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
 
 3) Install Python packages
-- pip install -r requirements/base.txt -r requirements/dev.txt
+```
+pip install -r requirements/base.txt -r requirements/dev.txt
+```
 
 4) GPIO backend (recommended)
-- sudo apt install -y python3-lgpio
 - Set GPIOZERO_PIN_FACTORY=lgpio in your service environment (see scripts/boss-dev.service)
 
 5) Optional: pigpio daemon (only if you need pigpio-specific features)
@@ -37,9 +45,11 @@ Important: The default screen backend is rich. You can override per app via mani
 - python3 -m boss.main
 
 8) Install as a service (recommended on Pi)
-- chmod +x scripts/setup_systemd_service.sh
-- ./scripts/setup_systemd_service.sh
-- sudo systemctl start boss && sudo journalctl -u boss -f
+```
+chmod +x scripts/setup_systemd_service.sh
+./scripts/setup_systemd_service.sh
+sudo systemctl start boss && sudo journalctl -u boss -f
+```
 
 Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/config/boss_config.json match the framebuffer. Check with: fbset -fb /dev/fb0 -i
 
@@ -56,8 +66,8 @@ To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pi
 - pip install -r requirements/base.txt -r requirements/dev.txt
 
 3) Verify WebUI server deps
-- python -c "import uvicorn, websockets; print('uvicorn', uvicorn.__version__, 'websockets', websockets.__version__)"
-	- If missing, install: pip install "uvicorn[standard]" websockets
+- python -c "import uvicorn, fastapi; print('uvicorn', uvicorn.__version__)"
+	- If missing, install: pip install -r requirements/dev.txt
 
 4) Run with WebUI hardware emulation
 - python -m boss.main --hardware webui
@@ -65,4 +75,43 @@ To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pi
 5) Change screen backend (optional)
 - System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "rich" | "pillow" (default: rich)
 - Per app: set preferred_screen_backend in the app's manifest.json
+
+++++++++++
+
+#!/bin/bash
+
+# Exit on error
+set -e
+
+echo "📦 Cloning repo..."
+cd ~
+git clone https://github.com/derekbez/BOSSv2.git boss
+cd boss
+
+echo "🐍 Creating Python virtual environment..."
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+
+echo "🔧 Installing direnv..."
+sudo apt update
+sudo apt install -y direnv
+
+echo "🔗 Adding direnv hook to shell config..."
+SHELL_RC="$HOME/.bashrc"
+[[ "$SHELL" == *zsh ]] && SHELL_RC="$HOME/.zshrc"
+
+if ! grep -q 'eval "$(direnv hook' "$SHELL_RC"; then
+    echo 'eval "$(direnv hook bash)"' >> "$SHELL_RC"
+fi
+
+echo "📝 Creating .envrc for auto-activation..."
+echo 'source .venv/bin/activate' > .envrc
+direnv allow
+
+echo "✅ Setup complete. Your virtual environment will auto-activate when you enter ~/boss"
+
+
+
+
 
