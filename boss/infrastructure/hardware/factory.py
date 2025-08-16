@@ -37,8 +37,9 @@ def detect_hardware_platform() -> str:
         if importlib.util.find_spec("lgpio") is not None:
             logger.info("Detected Raspberry Pi with lgpio GPIO access")
             return "gpio"
-        if importlib.util.find_spec("python_tm1637") is not None:
-            logger.info("Detected Raspberry Pi with python-tm1637 GPIO access")
+        # python-tm1637 installs the module named 'tm1637'
+        if importlib.util.find_spec("tm1637") is not None:
+            logger.info("Detected Raspberry Pi with tm1637 GPIO access")
             return "gpio"
         logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, python-tm1637)")
     
