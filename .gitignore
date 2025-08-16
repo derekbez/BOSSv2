@@ -9,6 +9,7 @@ __pycache__/
 # Virtual environments
 venv/
 boss-venv/
+.venv/
 
 # VS Code settings
 .vscode/
