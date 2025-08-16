@@ -28,20 +28,29 @@ def detect_hardware_platform() -> str:
     # Check if we're on Raspberry Pi (32/64-bit) and GPIO libraries are available
     if system == "Linux" and (machine.startswith("arm") or machine == "aarch64"):
         # Try to detect supported GPIO libraries without importing them
-        if importlib.util.find_spec("gpiozero") is not None:
-            if importlib.util.find_spec("lgpio") is not None:
+        has_gpiozero = importlib.util.find_spec("gpiozero") is not None
+        has_lgpio = importlib.util.find_spec("lgpio") is not None
+        has_tm1637 = importlib.util.find_spec("tm1637") is not None
+        logger.info(
+            f"GPIO detection: gpiozero={'yes' if has_gpiozero else 'no'}, lgpio={'yes' if has_lgpio else 'no'}, tm1637={'yes' if has_tm1637 else 'no'}"
+        )
+        if has_gpiozero:
+            if has_lgpio:
                 logger.info("Detected Raspberry Pi with gpiozero + lgpio GPIO access (optimal)")
             else:
                 logger.info("Detected Raspberry Pi with gpiozero GPIO access (using fallback backend)")
             return "gpio"
-        if importlib.util.find_spec("lgpio") is not None:
+        if has_lgpio:
             logger.info("Detected Raspberry Pi with lgpio GPIO access")
             return "gpio"
-        # python-tm1637 installs the module named 'tm1637'
-        if importlib.util.find_spec("tm1637") is not None:
+        if has_tm1637:
             logger.info("Detected Raspberry Pi with tm1637 GPIO access")
             return "gpio"
-        logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, python-tm1637)")
+        # If framebuffer exists, we can still drive HDMI via Pillow even if GPIO libs are missing
+        if os.path.exists("/dev/fb0"):
+            logger.info("Raspberry Pi framebuffer detected; defaulting to GPIO for HDMI output (GPIO libs missing)")
+            return "gpio"
+        logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, tm1637)")
     
     # Check for testing environment
     if os.environ.get("BOSS_TEST_MODE") == "1":

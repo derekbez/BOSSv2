@@ -14,6 +14,20 @@ echo "Setting up B.O.S.S. systemd service..."
 echo "Adding user to required groups..."
 sudo usermod -a -G gpio,video,audio $USER
 
+# Ensure virtual environment exists and has runtime deps installed
+if [ ! -d "$BOSS_ROOT/.venv" ]; then
+	echo "Creating Python virtual environment with system site packages (to access apt-installed GPIO libs)..."
+	python3 -m venv --system-site-packages "$BOSS_ROOT/.venv"
+fi
+
+echo "Upgrading pip and installing runtime requirements..."
+"$BOSS_ROOT/.venv/bin/python" -m pip install --upgrade pip
+if [ -f "$BOSS_ROOT/requirements/base.txt" ]; then
+	"$BOSS_ROOT/.venv/bin/python" -m pip install -r "$BOSS_ROOT/requirements/base.txt"
+elif [ -f "$BOSS_ROOT/requirements.txt" ]; then
+	"$BOSS_ROOT/.venv/bin/python" -m pip install -r "$BOSS_ROOT/requirements.txt"
+fi
+
 # Create the systemd service file
 echo "Creating systemd service file at $SERVICE_FILE..."
 sudo tee $SERVICE_FILE > /dev/null <<EOF
@@ -34,6 +48,9 @@ WorkingDirectory=$BOSS_ROOT
 Environment=PYTHONPATH=$BOSS_ROOT
 Environment=BOSS_LOG_LEVEL=INFO
 Environment=BOSS_CONFIG_PATH=$BOSS_ROOT/boss/config/boss_config.json
+# Ensure dev/test modes are disabled in production
+Environment=BOSS_DEV_MODE=0
+Environment=BOSS_TEST_MODE=0
 
 # Virtual environment and execution
 ExecStart=$BOSS_ROOT/.venv/bin/python -m boss.main

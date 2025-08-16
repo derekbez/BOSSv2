@@ -44,14 +44,15 @@ try:
     HAS_RICH = True
 except ImportError:
     HAS_RICH = False
-    # Create dummy classes for graceful fallback
-    Console = object
-    Text = object
-    Table = object
-    Progress = object
-    Panel = object
-    Tree = object
-    Syntax = object
+    # Create loose-typed dummies for graceful fallback (avoid static errors)
+    from typing import Any
+    Console: Any = None
+    Text: Any = None
+    Table: Any = None
+    Progress: Any = None
+    Panel: Any = None
+    Tree: Any = None
+    Syntax: Any = None
 
 class PerformanceMonitor:
     """Monitor Rich backend performance metrics."""
@@ -386,6 +387,8 @@ class GPIOPillowScreen(ScreenInterface):
 
     def _write_to_framebuffer(self):
         try:
+            if self._image is None:
+                return
             img = self._image.convert("RGB")
             width, height = img.size
             fb_bytes = None
@@ -431,7 +434,7 @@ class GPIOPillowScreen(ScreenInterface):
             logger.error(f"Failed to write to framebuffer: {e}")
 
     def clear_screen(self, color: str = "black") -> None:
-        if not self.is_available:
+        if not self.is_available or self._draw is None:
             return
         self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
         self._write_to_framebuffer()
@@ -453,13 +456,17 @@ class GPIOPillowScreen(ScreenInterface):
         except Exception as e:
             logger.error(f"Failed to calculate text bounding box: {e}")
             text_w, text_h = 0, 0
+        # Match Rich behavior: top-aligned; only horizontal justification changes
+        margin = 0
         if align == "center":
             x = (self._screen_width - text_w) // 2
         elif align == "right":
-            x = self._screen_width - text_w - 10
+            x = max(margin, self._screen_width - text_w - margin)
         else:
-            x = 10
-        y = (self._screen_height - text_h) // 2
+            x = margin
+        y = margin  # top-aligned for parity with Rich's default rendering
+        if self._draw is None:
+            return
         self._draw.text((x, y), text, font=font, fill=color)
         self._write_to_framebuffer()
 

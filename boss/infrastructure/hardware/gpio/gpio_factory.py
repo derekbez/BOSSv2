@@ -3,6 +3,8 @@ GPIO hardware factory implementation.
 """
 
 import logging
+import os
+import sys
 from typing import Optional
 from boss.domain.interfaces.hardware import HardwareFactory, ButtonInterface, GoButtonInterface, LedInterface, SwitchInterface, DisplayInterface, ScreenInterface, SpeakerInterface
 from boss.domain.models.config import HardwareConfig
@@ -44,7 +46,15 @@ class GPIOHardwareFactory(HardwareFactory):
     
     def create_screen(self) -> ScreenInterface:
         """Create screen interface implementation based on current backend (rich or pillow)."""
-        backend = self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich')
+        backend = (self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich'))
+        # Heuristic: if running headless under systemd on a Pi (no TTY) and framebuffer exists, prefer Pillow
+        # This ensures HDMI output works when there is no terminal attached for Rich to render to.
+        try:
+            if backend == 'rich' and os.path.exists('/dev/fb0') and not sys.stdout.isatty():
+                logger.info("Headless + framebuffer detected; using Pillow framebuffer backend for HDMI output")
+                backend = 'pillow'
+        except Exception:
+            pass
         if backend == 'rich':
             self._screen_instance = GPIORichScreen(self.hardware_config)
         else:
