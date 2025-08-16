@@ -48,6 +48,8 @@ WorkingDirectory=$BOSS_ROOT
 Environment=PYTHONPATH=$BOSS_ROOT
 Environment=BOSS_LOG_LEVEL=INFO
 Environment=BOSS_CONFIG_PATH=$BOSS_ROOT/boss/config/boss_config.json
+# Force gpiozero to use lgpio backend for stable GPIO on Bookworm
+Environment=GPIOZERO_PIN_FACTORY=lgpio
 # Ensure dev/test modes are disabled in production
 Environment=BOSS_DEV_MODE=0
 Environment=BOSS_TEST_MODE=0
