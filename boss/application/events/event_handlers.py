@@ -50,10 +50,8 @@ class SystemEventHandler:
     
     def on_go_button_pressed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle Go button presses."""
-        logger.info("Go button pressed - requesting app launch")
-        
-        # This will be handled by the app manager
-        self.event_bus.publish("app_launch_requested", {}, "system")
+    logger.info("Go button pressed")
+    # App launch orchestration is handled by SystemManager subscriber
 
 
 class HardwareEventHandler:

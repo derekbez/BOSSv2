@@ -283,8 +283,8 @@ class HardwareManager(HardwareService):
                 elif content_type == "image":
                     self.screen.display_image(content, **kwargs)
                 elif content_type == "clear":
-                    # When clearing, forward the requested color if provided
-                    color = kwargs.get("color", "black")
+                    # When clearing, 'content' carries the color
+                    color = content if isinstance(content, str) else kwargs.get("color", "black")
                     self.screen.clear_screen(color)
                 logger.debug(f"Screen updated: {content_type}")
         except Exception as e:

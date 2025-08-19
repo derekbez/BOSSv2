@@ -35,6 +35,8 @@ class HardwareConfig:
     # Audio settings
     enable_audio: bool
     audio_volume: float
+    # Optional polarity for LEDs (True = active-high, False = active-low)
+    led_active_high: bool = True
 
 
 @dataclass
@@ -104,7 +106,8 @@ class BossConfig:
                 screen_fullscreen=hardware_data['screen_fullscreen'],
                 screen_backend=hardware_data.get('screen_backend', 'rich'),
                 enable_audio=hardware_data['enable_audio'],
-                audio_volume=hardware_data['audio_volume']
+                audio_volume=hardware_data['audio_volume'],
+                led_active_high=hardware_data.get('led_active_high', True)
             )
             
             # Create system config - all values required

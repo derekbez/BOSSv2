@@ -30,7 +30,7 @@ B.O.S.S. is a modular, hardware-interfacing Python application designed to run o
   - 7-inch HDMI screen
   - Speaker (optional)
 - **Raspberry Pi GPIO:**
-  - Uses `gpiozero` and `pigpio` for hardware abstraction
+  - Uses `gpiozero` and `lgpio` for hardware abstraction
   - All hardware modules fall back to mocks if not detected, enabling dev/testing on any platform
 
 
@@ -82,7 +82,7 @@ muxInpin = 8  #          blue
 - **Entry Point:** `main.py`
   - Initializes logging, configuration, and all hardware interfaces (with fallback to mocks)
   - Prints/logs all pin assignments and a hardware startup summary (real/mocked)
-  - Loads app mappings from `config/BOSSsettings.json` (auto-generates if missing)
+  - Loads app mappings 
   - Instantiates the event bus and registers all core event types (see [event_schema.md](./event_schema.md))
   - Subscribes display and other handlers to relevant events (e.g., switch changes, button presses)
   - Runs the startup mini-app, then enters the main event-driven loop
@@ -102,17 +102,17 @@ muxInpin = 8  #          blue
   - Apps interact with hardware only via the provided API object
 
 - **Event Bus:**
-  - Central event bus (`core/event_bus.py`) for all hardware, system, and app events
+  - Central event bus (`application/events/event_bus.py`) for all hardware, system, and app events
   - Supports publish/subscribe, event filtering, async/sync delivery, and custom event types
   - All hardware and app events are logged for auditing
 
 - **Hardware Abstraction:**
-  - All hardware (buttons, LEDs, display, screen, speaker) is abstracted in `hardware/` with real and mock implementations
+  - All hardware (buttons, LEDs, display, screen, speaker) is abstracted in `infrastructure/hardware/` with real, WebUI and mock implementations
   - Hardware errors are caught and logged; system falls back to mocks for seamless dev/testing
 
 - **Display:**
   - TM1637 7-segment display shows current switch value or status messages
-  - HDMI screen output is handled using the `rich` library for text and simple graphics (no Pillow dependency)
+  - HDMI screen output 
   - All updates are event-driven (no polling)
 
 - **Remote Management:**
@@ -127,9 +127,6 @@ muxInpin = 8  #          blue
 
 ## Supported Mini-Apps (Examples)
 - Matrix screensaver
-- Display photos (grouped)
-- Play sounds (birds, songs, movie quotes)
-- LED/LED strip control (patterns, color, brightness)
 - Simple games (e.g., guess the number)
 - Display quotes, movie clips, test patterns, clock, weather, text-to-speech, fractals, text
 
@@ -139,9 +136,9 @@ muxInpin = 8  #          blue
 ## Development & Deployment
 
 - **Setup:**
-  - Designed for Raspberry Pi OS 64bit Lite (no GUI)
+  - Designed for Raspberry Pi OS Lite (no GUI)
   - Use Python 3.11+ and a virtual environment
-  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `Pillow`, `numpy`, etc.
+  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `Pillow`, etc.
   - All configuration is in `boss/config/` (co-located with main code)
   - For Windows/dev, hardware is mocked automatically
 
@@ -228,117 +225,7 @@ You should see lines like:
 If issues persist, capture the last 200 lines of the boss journal and the outputs of fbset and share them.
 
 
-## Directory Structure & Best Practices
 
-The project is organized for modularity, scalability, and maintainability:
-
-```
-boss/
-  __init__.py
-  main.py                     # Entry point with dependency injection setup
-  presentation/              # UI/API interfaces (no business logic)
-    __init__.py
-    physical_ui/
-      __init__.py
-      button_handler.py       # Physical button event handling
-      switch_handler.py       # Switch state monitoring
-    api/
-      __init__.py
-      rest_api.py            # REST endpoints for remote management
-      websocket_api.py       # Real-time event streaming
-      web_ui.py              # Development web interface
-    cli/
-      __init__.py
-      debug_cli.py           # Debug and maintenance commands
-  application/               # Service classes and business logic
-    __init__.py
-    services/
-      __init__.py
-      app_manager.py         # App lifecycle management
-      app_runner.py          # Thread management for mini-apps
-      switch_monitor.py      # Switch state monitoring and events
-      hardware_service.py    # Hardware coordination
-      system_service.py      # System health and shutdown
-    events/
-      __init__.py
-      event_bus.py           # Simple, robust event bus
-      event_handlers.py      # System event handlers
-    api/
-      __init__.py
-      app_api.py             # API provided to mini-apps
-  domain/                    # Core models and business rules
-    __init__.py
-    models/
-      __init__.py
-      app.py                # App entity and business rules
-      hardware_state.py     # Hardware state models
-      config.py             # Configuration models
-    events/
-      __init__.py
-      domain_events.py      # Domain event definitions
-    interfaces/
-      __init__.py
-      hardware.py           # Hardware abstraction interfaces
-      app_api.py            # App API interface
-      services.py           # Service interfaces
-  infrastructure/           # Hardware, config, logging implementations
-    __init__.py
-    hardware/
-      __init__.py
-      factory.py            # Hardware factory (GPIO/WebUI/Mock)
-      gpio/                 # Real hardware implementations
-        __init__.py
-        buttons.py
-        leds.py
-        display.py
-        switches.py
-        screen.py
-        speaker.py
-      webui/               # Web UI implementations for development
-        __init__.py
-        webui_buttons.py
-        webui_leds.py
-        webui_display.py
-      mocks/               # Mock implementations for testing
-        __init__.py
-        mock_buttons.py
-        mock_leds.py
-        mock_display.py
-        mock_switches.py
-    config/
-      __init__.py
-      config_loader.py      # JSON config loading and validation
-      config_manager.py     # Runtime config management
-    logging/
-      __init__.py
-      logger.py             # Centralized logging setup
-      formatters.py         # Log formatting
-  apps/                     # Mini-apps directory
-    __init__.py
-    app_template/           # Template for new apps
-    list_all_apps/          # System app for browsing available apps
-    hello_world/            # Example app
-    admin_startup/          # System startup feedback app
-    admin_shutdown/         # System shutdown app
-    admin_wifi_configuration/ # WiFi management app
-    admin_boss_admin/       # System administration app
-    # ... other mini-apps
-  config/                   # Configuration files (co-located with code)
-    boss_config.json        # Main system configuration
-    app_mappings.json       # Switch-to-app mappings
-  logs/                     # Log files directory
-    boss.log               # Main application log
-tests/                      # Test structure mirrors main structure
-  __init__.py
-  unit/
-  integration/
-  test_fixtures/
-scripts/                    # Utility scripts
-docs/                       # Documentation
-requirements/               # Centralized dependency files
-  base.txt                  # Runtime dependencies
-  dev.txt                   # Dev-only deps (includes -r base.txt)
-```
 
 **Best Practices:**
 - **Clean Architecture:** Layer separation (Presentation, Application, Domain, Infrastructure) with dependency inversion

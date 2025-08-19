@@ -291,7 +291,9 @@ class GPIOSwitches(SwitchInterface):
             self._data_pin = DigitalInputDevice(self.hardware_config.switch_data_pin, pull_up=True)
             self._select_pins = [DigitalOutputDevice(pin) for pin in self.hardware_config.switch_select_pins]
             self._available = True
-            self._start_monitoring()
+            # Start internal monitoring only if higher-level service hasn't started its own loop
+            # The HardwareManager handles debounced monitoring, so avoid double work here.
+            # Keep method available for direct polling via read_switches().
             logger.info("GPIO switches initialized (gpiozero)")
             return True
         except Exception as e:
@@ -328,7 +330,8 @@ class GPIOSwitches(SwitchInterface):
                 # Set select pins for current switch
                 for j, pin in enumerate(self._select_pins):
                     pin.value = (i >> j) & 1
-                time.sleep(0.001)
+                # Short settle; hardware is fast, keep this tiny
+                time.sleep(0.0005)
                 # Read switch state (active low)
                 switch_on = not self._data_pin.value
                 individual_switches[i] = switch_on
@@ -372,8 +375,8 @@ class GPIOSwitches(SwitchInterface):
                     if self._change_callback:
                         self._change_callback(last_value, switch_state.value)
                     last_value = switch_state.value
-                
-                time.sleep(0.1)  # Check every 100ms
+                # Keep this lean; main HardwareManager loop also polls
+                time.sleep(0.05)  # 20Hz
                 
             except Exception as e:
                 logger.error(f"Error in switch monitoring: {e}")

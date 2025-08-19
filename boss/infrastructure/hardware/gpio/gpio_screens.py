@@ -6,6 +6,7 @@ from boss.domain.models.config import HardwareConfig
 import logging
 import sys
 import io
+from typing import Optional, Any
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +162,7 @@ class GPIORichScreen(ScreenInterface):
         if not HAS_RICH:
             logger.error("Rich library not available for GPIORichScreen")
             return False
-            
+        
         self._available = True
         logger.info(f"GPIORichScreen initialized ({self._screen_width}x{self._screen_height})")
         return True
@@ -179,8 +180,10 @@ class GPIORichScreen(ScreenInterface):
     def clear_screen(self, color: str = "black") -> None:
         if not self._available:
             return
-        self._console.clear()
-        self._console.print("", style=f"on {color}")
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print("", style=f"on {color}")  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen cleared with color: {color}")
 
     def display_text(self, text: str, font_size: int = 48, color: str = "white", background: str = "black", align: str = "center") -> None:
@@ -188,27 +191,31 @@ class GPIORichScreen(ScreenInterface):
             logger.warning("GPIORichScreen not available for display_text")
             return
         style = f"{color} on {background}"
-        rich_text = Text(text, style=style)
-        self._console.clear()
+        rich_text = Text(text, style=style) if HAS_RICH else text
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
         if align == "center":
-            self._console.print(rich_text, justify="center")
+            self._console.print(rich_text, justify="center")  # type: ignore[union-attr]
         elif align == "right":
-            self._console.print(rich_text, justify="right")
+            self._console.print(rich_text, justify="right")  # type: ignore[union-attr]
         else:
-            self._console.print(rich_text, justify="left")
+            self._console.print(rich_text, justify="left")  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen text displayed: '{text}' (color: {color}, align: {align})")
 
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
         if not self._available:
             return
-        self._console.print(f"[Image: {image_path}]", style="bold yellow")
+        if self._console is None:
+            return
+        self._console.print(f"[Image: {image_path}]", style="bold yellow")  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen image placeholder: {image_path}")
 
     def get_screen_size(self) -> tuple:
         return (self._screen_width, self._screen_height)
 
     # Rich-specific enhanced features
-    def display_table(self, table_data: dict, title: str = None) -> None:
+    def display_table(self, table_data: dict, title: Optional[str] = None) -> None:
         """Display a Rich table with optional title."""
         if not self._available:
             logger.warning("GPIORichScreen not available for display_table")
@@ -232,8 +239,10 @@ class GPIORichScreen(ScreenInterface):
                 for key, value in table_data.items():
                     table.add_row(str(key), str(value))
         
-        self._console.clear()
-        self._console.print(table)
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print(table)  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen table displayed with title: {title}")
 
     def display_progress(self, progress_value: float, description: str = "Progress") -> None:
@@ -244,27 +253,30 @@ class GPIORichScreen(ScreenInterface):
         
         # Clamp progress value between 0 and 100
         progress_value = max(0, min(100, progress_value))
-        
-        with Progress(
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-            console=self._console
+        if self._console is None or not HAS_RICH:
+            return
+        with Progress(  # type: ignore[misc]
+            TextColumn("[progress.description]{task.description}"),  # type: ignore[name-defined]
+            BarColumn(),  # type: ignore[name-defined]
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),  # type: ignore[name-defined]
+            console=self._console  # type: ignore[arg-type]
         ) as progress:
             task = progress.add_task(description, total=100)
             progress.update(task, completed=progress_value)
         
         logger.info(f"GPIORichScreen progress displayed: {progress_value}% - {description}")
 
-    def display_panel(self, content: str, title: str = None, border_style: str = "blue") -> None:
+    def display_panel(self, content: str, title: Optional[str] = None, border_style: str = "blue") -> None:
         """Display content within a bordered panel."""
         if not self._available:
             logger.warning("GPIORichScreen not available for display_panel")
             return
         
         panel = Panel(content, title=title, border_style=border_style)
-        self._console.clear()
-        self._console.print(panel)
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print(panel)  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen panel displayed with title: {title}")
 
     def display_tree(self, tree_data: dict, root_label: str = "Root") -> None:
@@ -292,8 +304,10 @@ class GPIORichScreen(ScreenInterface):
                         node.add(str(item))
         
         add_tree_items(tree, tree_data)
-        self._console.clear()
-        self._console.print(tree)
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print(tree)  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen tree displayed with root: {root_label}")
 
     def display_code(self, code: str, language: str = "python", theme: str = "monokai") -> None:
@@ -303,8 +317,10 @@ class GPIORichScreen(ScreenInterface):
             return
         
         syntax = Syntax(code, language, theme=theme, line_numbers=True)
-        self._console.clear()
-        self._console.print(syntax)
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print(syntax)  # type: ignore[union-attr]
         logger.info(f"GPIORichScreen code displayed in {language} with {theme} theme")
 
     def display_markup(self, markup_text: str) -> None:
@@ -313,8 +329,10 @@ class GPIORichScreen(ScreenInterface):
             logger.warning("GPIORichScreen not available for display_markup")
             return
         
-        self._console.clear()
-        self._console.print(markup_text)
+        if self._console is None:
+            return
+        self._console.clear()  # type: ignore[union-attr]
+        self._console.print(markup_text)  # type: ignore[union-attr]
         logger.info("GPIORichScreen markup displayed")
 
 # --- Pillow Screen Implementation ---
@@ -404,25 +422,25 @@ class GPIOPillowScreen(ScreenInterface):
                     fb_bytes = img.tobytes("raw", "BGR;16")
             except Exception as e:
                 logger.debug(f"Fast conversion failed ({e}); falling back to manual pack for {self._fb_bpp}bpp")
-                arr = img.load()
+                arr: Any = img.load()
                 if self._fb_bpp == 32:
                     fb_bytes = bytearray()
                     for y in range(height):
                         for x in range(width):
-                            r, g, b = arr[x, y]
+                            r, g, b = arr[x, y]  # type: ignore[index]
                             # B,G,R, padding
                             fb_bytes.extend((b, g, r, 0))
                 elif self._fb_bpp == 24:
                     fb_bytes = bytearray()
                     for y in range(height):
                         for x in range(width):
-                            r, g, b = arr[x, y]
+                            r, g, b = arr[x, y]  # type: ignore[index]
                             fb_bytes.extend((b, g, r))
                 else:
                     fb_bytes = bytearray()
                     for y in range(height):
                         for x in range(width):
-                            r, g, b = arr[x, y]
+                            r, g, b = arr[x, y]  # type: ignore[index]
                             rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
                             fb_bytes.append((rgb565 >> 8) & 0xFF)
                             fb_bytes.append(rgb565 & 0xFF)
@@ -436,6 +454,7 @@ class GPIOPillowScreen(ScreenInterface):
     def clear_screen(self, color: str = "black") -> None:
         if not self.is_available or self._draw is None:
             return
+        # Fast path: solid fill without text metrics
         self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
         self._write_to_framebuffer()
 
@@ -450,9 +469,12 @@ class GPIOPillowScreen(ScreenInterface):
             font = self._font or ImageFont.load_default()
         self.clear_screen(background)
         try:
-            bbox = self._draw.textbbox((0, 0), text, font=font)
-            text_w = bbox[2] - bbox[0]
-            text_h = bbox[3] - bbox[1]
+            if self._draw is None:
+                text_w, text_h = 0, 0
+            else:
+                bbox = self._draw.textbbox((0, 0), text, font=font)
+                text_w = bbox[2] - bbox[0]
+                text_h = bbox[3] - bbox[1]
         except Exception as e:
             logger.error(f"Failed to calculate text bounding box: {e}")
             text_w, text_h = 0, 0
