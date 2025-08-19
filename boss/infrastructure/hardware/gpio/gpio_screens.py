@@ -6,7 +6,9 @@ from boss.domain.models.config import HardwareConfig
 import logging
 import sys
 import io
-from typing import Optional, Any
+import os
+import mmap
+from typing import Optional, Any, Tuple, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -342,12 +344,22 @@ class GPIOPillowScreen(ScreenInterface):
         self.hardware_config = hardware_config
         self._available = False
         self._fb_path = "/dev/fb0"
-        self._framebuffer = None
+        self._fb_file = None  # type: ignore[var-annotated]
+        self._fb_mmap: Optional[mmap.mmap] = None
         self._image = None
         self._draw = None
         self._font = None
         self._screen_width, self._screen_height = self._detect_fb_size(hardware_config)
         self._fb_bpp = 16
+        self._fb_stride = self._screen_width * (self._fb_bpp // 8)
+        self._font_cache: Dict[int, Any] = {}
+
+    def _read_sysfs_int(self, path: str) -> Optional[int]:
+        try:
+            with open(path, "r") as f:
+                return int(f.read().strip())
+        except Exception:
+            return None
 
     def _detect_fb_size(self, hardware_config):
         try:
@@ -373,8 +385,12 @@ class GPIOPillowScreen(ScreenInterface):
                 # persist detected values for write path
                 self._screen_width, self._screen_height = fb_width, fb_height
                 self._fb_bpp = fb_bpp
+                # Try to get stride from sysfs if exposed; else compute
+                stride_sys = self._read_sysfs_int("/sys/class/graphics/fb0/stride")
+                self._fb_stride = stride_sys if stride_sys else self._screen_width * max(2, (self._fb_bpp // 8))
             except Exception as e:
                 logger.warning(f"Could not auto-detect framebuffer geometry/bpp: {e}")
+                self._fb_stride = self._screen_width * max(2, (self._fb_bpp // 8))
             if (self._screen_width, self._screen_height) != (fb_width, fb_height):
                 logger.warning(f"Screen config {self._screen_width}x{self._screen_height} does not match framebuffer {fb_width}x{fb_height}. Update config or HDMI settings to match.")
             if fb_bpp not in (16, 24, 32):
@@ -386,6 +402,19 @@ class GPIOPillowScreen(ScreenInterface):
                 self._font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
             except Exception:
                 self._font = ImageFont.load_default()
+            # Prepare font cache with default
+            self._font_cache[32] = self._font
+
+            # Open framebuffer once and mmap for fast writes
+            if os.path.exists(self._fb_path):
+                try:
+                    self._fb_file = open(self._fb_path, "r+b", buffering=0)
+                    fb_size = self._fb_stride * self._screen_height
+                    self._fb_mmap = mmap.mmap(self._fb_file.fileno(), fb_size, access=mmap.ACCESS_WRITE)
+                    logger.info(f"Framebuffer mapped: {self._screen_width}x{self._screen_height} {self._fb_bpp}bpp stride={self._fb_stride}")
+                except Exception as e:
+                    logger.warning(f"Failed to mmap framebuffer; will use file writes. Error: {e}")
+                    self._fb_mmap = None
             self._available = True
             logger.info("GPIOPillowScreen initialized (Pillow framebuffer)")
             return True
@@ -398,75 +427,157 @@ class GPIOPillowScreen(ScreenInterface):
         self._image = None
         self._draw = None
         self._font = None
+        self._font_cache.clear()
+        try:
+            if self._fb_mmap is not None:
+                self._fb_mmap.close()
+        except Exception:
+            pass
+        try:
+            if self._fb_file is not None:
+                self._fb_file.close()
+        except Exception:
+            pass
 
     @property
     def is_available(self) -> bool:
         return self._available
 
-    def _write_to_framebuffer(self):
+    def _pack_image(self, img) -> bytes:
+        """Pack a Pillow RGB image into framebuffer byte format."""
+        width, height = img.size
+        try:
+            if self._fb_bpp == 32:
+                # Prefer RGBX to avoid channel swaps where possible
+                return img.tobytes("raw", "RGBX")
+            if self._fb_bpp == 24:
+                return img.tobytes("raw", "RGB")
+            # default RGB565 little-endian
+            return img.tobytes("raw", "BGR;16")
+        except Exception as e:
+            logger.debug(f"Fast conversion failed ({e}); falling back to manual pack for {self._fb_bpp}bpp")
+            arr: Any = img.load()
+            if self._fb_bpp == 32:
+                out = bytearray()
+                for y in range(height):
+                    for x in range(width):
+                        r, g, b = arr[x, y]  # type: ignore[index]
+                        out.extend((r, g, b, 0))
+                return bytes(out)
+            if self._fb_bpp == 24:
+                out = bytearray()
+                for y in range(height):
+                    for x in range(width):
+                        r, g, b = arr[x, y]  # type: ignore[index]
+                        out.extend((r, g, b))
+                return bytes(out)
+            out = bytearray()
+            for y in range(height):
+                for x in range(width):
+                    r, g, b = arr[x, y]  # type: ignore[index]
+                    rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+                    out.append((rgb565 >> 8) & 0xFF)
+                    out.append(rgb565 & 0xFF)
+            return bytes(out)
+
+    def _write_full(self) -> None:
+        """Write full backbuffer to framebuffer."""
         try:
             if self._image is None:
                 return
             img = self._image.convert("RGB")
-            width, height = img.size
-            fb_bytes = None
-            # Choose conversion based on framebuffer bpp
-            try:
-                if self._fb_bpp == 32:
-                    # Most RPi KMS uses XRGB8888 or ARGB8888; BGRX works well for many fb drivers
-                    fb_bytes = img.tobytes("raw", "BGRX")
-                elif self._fb_bpp == 24:
-                    fb_bytes = img.tobytes("raw", "BGR")
-                else:
-                    # default to 16bpp RGB565
-                    fb_bytes = img.tobytes("raw", "BGR;16")
-            except Exception as e:
-                logger.debug(f"Fast conversion failed ({e}); falling back to manual pack for {self._fb_bpp}bpp")
-                arr: Any = img.load()
-                if self._fb_bpp == 32:
-                    fb_bytes = bytearray()
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b = arr[x, y]  # type: ignore[index]
-                            # B,G,R, padding
-                            fb_bytes.extend((b, g, r, 0))
-                elif self._fb_bpp == 24:
-                    fb_bytes = bytearray()
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b = arr[x, y]  # type: ignore[index]
-                            fb_bytes.extend((b, g, r))
-                else:
-                    fb_bytes = bytearray()
-                    for y in range(height):
-                        for x in range(width):
-                            r, g, b = arr[x, y]  # type: ignore[index]
-                            rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
-                            fb_bytes.append((rgb565 >> 8) & 0xFF)
-                            fb_bytes.append(rgb565 & 0xFF)
-            # Write to framebuffer from start
-            with open(self._fb_path, "rb+") as fb:
-                fb.seek(0)
-                fb.write(fb_bytes)
+            fb_bytes = self._pack_image(img)
+            if self._fb_mmap is not None:
+                self._fb_mmap.seek(0)
+                self._fb_mmap.write(fb_bytes)
+            elif self._fb_file is not None:
+                self._fb_file.seek(0)
+                self._fb_file.write(fb_bytes)
         except Exception as e:
-            logger.error(f"Failed to write to framebuffer: {e}")
+            logger.error(f"Failed to write full framebuffer: {e}")
+
+    def _write_region(self, x: int, y: int, w: int, h: int) -> None:
+        """Write only a rectangular region to framebuffer for speed."""
+        try:
+            if self._image is None or w <= 0 or h <= 0:
+                return
+            from PIL import Image
+            region = self._image.crop((x, y, x + w, y + h)).convert("RGB")
+            bpp = max(2, self._fb_bpp // 8)
+            if self._fb_mmap is None and self._fb_file is None:
+                # Fallback to full write if no handle (shouldn't happen in normal use)
+                self._write_full()
+                return
+            # Pack once per row to reduce peak memory
+            for row in range(h):
+                row_img = region.crop((0, row, w, row + 1))
+                row_bytes = self._pack_image(row_img)
+                offset = (y + row) * self._fb_stride + x * bpp
+                if self._fb_mmap is not None:
+                    self._fb_mmap.seek(offset)
+                    self._fb_mmap.write(row_bytes)
+                else:
+                    # File seek/write per row
+                    self._fb_file.seek(offset)  # type: ignore[union-attr]
+                    self._fb_file.write(row_bytes)  # type: ignore[union-attr]
+        except Exception as e:
+            logger.error(f"Failed to write region to framebuffer: {e}")
 
     def clear_screen(self, color: str = "black") -> None:
         if not self.is_available or self._draw is None:
             return
-        # Fast path: solid fill without text metrics
-        self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
-        self._write_to_framebuffer()
+        # Fast path: fill both local image and framebuffer directly
+        try:
+            # Update local backbuffer image to keep parity
+            if self._image is not None:
+                self._image.paste(color, box=(0, 0, self._screen_width, self._screen_height))
+            # Compute pixel pattern for chosen color and fill via mmap/file
+            from PIL import ImageColor
+            rgb = ImageColor.getrgb(color)
+            r, g, b = (rgb[0], rgb[1], rgb[2])
+            bpp = max(2, self._fb_bpp // 8)
+            if self._fb_bpp == 32:
+                pix = bytes((r, g, b, 0))
+            elif self._fb_bpp == 24:
+                pix = bytes((r, g, b))
+            else:
+                rgb565 = ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3)
+                pix = bytes(((rgb565 >> 8) & 0xFF, rgb565 & 0xFF))
+            row_bytes = pix * self._screen_width
+            if self._fb_mmap is not None:
+                # Fill each row honoring stride
+                for row in range(self._screen_height):
+                    off = row * self._fb_stride
+                    self._fb_mmap.seek(off)
+                    self._fb_mmap.write(row_bytes)
+            elif self._fb_file is not None:
+                for row in range(self._screen_height):
+                    off = row * self._fb_stride
+                    self._fb_file.seek(off)
+                    self._fb_file.write(row_bytes)
+            else:
+                # Last resort: write full from Pillow buffer
+                self._write_full()
+        except Exception as e:
+            logger.debug(f"Fast clear failed, falling back ({e})")
+            # Fallback: draw rectangle and full write
+            self._draw.rectangle([(0, 0), (self._screen_width, self._screen_height)], fill=color)
+            self._write_full()
 
     def display_text(self, text: str, font_size: int = 48, color: str = "white", background: str = "black", align: str = "center") -> None:
         if not self.is_available:
             logger.warning("GPIOPillowScreen not available for display_text")
             return
         from PIL import ImageFont
-        try:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
-        except Exception:
-            font = self._font or ImageFont.load_default()
+        # Font cache to avoid reloading TTF repeatedly
+        font = self._font_cache.get(font_size)
+        if font is None:
+            try:
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
+            except Exception:
+                font = self._font or ImageFont.load_default()
+            self._font_cache[font_size] = font
+        # Clear screen fast, then draw only text region
         self.clear_screen(background)
         try:
             if self._draw is None:
@@ -490,10 +601,29 @@ class GPIOPillowScreen(ScreenInterface):
         if self._draw is None:
             return
         self._draw.text((x, y), text, font=font, fill=color)
-        self._write_to_framebuffer()
+        # Only write changed region (text area)
+        rx = int(max(0, x))
+        ry = int(max(0, y))
+        rw = int(min(text_w, self._screen_width))
+        rh = int(min(text_h, self._screen_height))
+        self._write_region(rx, ry, rw, rh)
 
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
-        logger.info(f"TODO: display_image not yet implemented. Would display: {image_path}")
+        try:
+            from PIL import Image
+            img = Image.open(image_path).convert("RGB")
+            if scale != 1.0:
+                new_size = (int(img.width * scale), int(img.height * scale))
+                img = img.resize(new_size)
+            if self._image is None:
+                return
+            # Paste onto backbuffer
+            self._image.paste(img, position)
+            x, y = position
+            w, h = img.size
+            self._write_region(x, y, w, h)
+        except Exception as e:
+            logger.error(f"display_image failed: {e}")
 
     def get_screen_size(self) -> tuple:
         return (self._screen_width, self._screen_height)
