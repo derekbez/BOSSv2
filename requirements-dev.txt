@@ -1,2 +1,0 @@
-# Moved: use requirements/dev.txt for dev dependencies
--r requirements/dev.txt
