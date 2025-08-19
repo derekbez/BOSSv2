@@ -66,7 +66,13 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     apps_directory = Path(__file__).parent / config.system.apps_directory
     # Pass hardware_service and config manager module for backend default resolution
     from boss.infrastructure import config as config_module
-    app_manager = AppManager(apps_directory, event_bus, hardware_service, config_module)
+    app_manager = AppManager(
+        apps_directory,
+        event_bus,
+        hardware_service,
+        config_module,
+        system_default_backend=getattr(config.hardware, 'screen_backend', 'rich'),
+    )
     
     # Create app API factory function
     def create_app_api_factory(app_name: str, app_path: Path) -> AppAPI:

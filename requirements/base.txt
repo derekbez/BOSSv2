@@ -1,6 +1,7 @@
 # Runtime dependencies for B.O.S.S. (install on Raspberry Pi and production environments)
 
 gpiozero
+lgpio
 # TM1637 7-seg display (GPIO) — Linux only
 python-tm1637; platform_system == "Linux"
 
