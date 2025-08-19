@@ -14833,3 +14833,301 @@ Page 1/1
 2025-08-19 20:49:19,506 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
 2025-08-19 20:49:19,507 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
 2025-08-19 20:49:19,507 - boss.application.services.system_service - INFO - stop:128 - BOSS system stopped
+2025-08-19 21:22:38,086 - boss.infrastructure.logging.logger - INFO - setup_logging:64 - Logging initialized - Level: INFO, File: D:\dev\BOSSv2\boss\logs\boss.log
+2025-08-19 21:22:38,086 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - ____   ___  ____  ____
+2025-08-19 21:22:38,087 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | __ ) / _ \/ ___/ ___|
+2025-08-19 21:22:38,087 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |  _ \| | | \___ \___ \
+2025-08-19 21:22:38,087 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - | |_) | |_| |___) |__) |
+2025-08-19 21:22:38,087 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 - |____/ \___/____/____/
+2025-08-19 21:22:38,088 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     
+2025-08-19 21:22:38,088 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     Buttons, Operations, Switches & Screen
+2025-08-19 21:22:38,088 - boss.infrastructure.logging.logger - INFO - log_startup_banner:180 -     A modular hardware interface system
+2025-08-19 21:22:38,088 - boss.infrastructure.logging.logger - INFO - log_system_info:92 - ============================================================
+2025-08-19 21:22:38,089 - boss.infrastructure.logging.logger - INFO - log_system_info:93 - B.O.S.S. (Buttons, Operations, Switches & Screen) Starting
+2025-08-19 21:22:38,089 - boss.infrastructure.logging.logger - INFO - log_system_info:94 - ============================================================
+2025-08-19 21:22:38,089 - boss.infrastructure.logging.logger - INFO - log_system_info:95 - Python Version: 3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]
+2025-08-19 21:22:38,097 - boss.infrastructure.logging.logger - INFO - log_system_info:96 - Platform: Windows-10-10.0.26100-SP0
+2025-08-19 21:22:38,098 - boss.infrastructure.logging.logger - INFO - log_system_info:97 - Architecture: ('64bit', 'WindowsPE')
+2025-08-19 21:22:38,098 - boss.infrastructure.logging.logger - INFO - log_system_info:98 - Machine: AMD64
+2025-08-19 21:22:38,098 - boss.infrastructure.logging.logger - INFO - log_system_info:99 - Processor: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+2025-08-19 21:22:38,099 - boss.infrastructure.logging.logger - INFO - log_system_info:100 - ============================================================
+2025-08-19 21:22:38,099 - boss.infrastructure.config.config_manager - INFO - validate_config:189 - Screen configured as 1024x600, backend=pillow
+2025-08-19 21:22:38,100 - boss.infrastructure.hardware.factory - INFO - detect_hardware_platform:61 - Development platform detected: Windows AMD64
+2025-08-19 21:22:38,109 - boss.infrastructure.hardware.webui.webui_factory - INFO - __init__:20 - WebUI hardware factory initialized
+2025-08-19 21:22:38,109 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:100 - ==================================================
+2025-08-19 21:22:38,110 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:101 - BOSS Hardware Configuration Summary
+2025-08-19 21:22:38,110 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:102 - ==================================================
+2025-08-19 21:22:38,110 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:103 - Hardware Type: webui
+2025-08-19 21:22:38,111 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:104 - Platform: Windows AMD64
+2025-08-19 21:22:38,111 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:117 - Web UI Configuration:
+2025-08-19 21:22:38,111 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:118 -   Development interface available for testing
+2025-08-19 21:22:38,111 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:119 -   Screen Size: 1024x600
+2025-08-19 21:22:38,112 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:125 - Audio Enabled: True
+2025-08-19 21:22:38,112 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:126 - Screen Fullscreen: True
+2025-08-19 21:22:38,112 - boss.infrastructure.hardware.factory - INFO - log_hardware_summary:127 - ==================================================
+2025-08-19 21:22:38,113 - __main__ - INFO - main:123 - BOSS system created successfully
+2025-08-19 21:22:38,113 - boss.application.services.system_service - INFO - start:48 - Starting BOSS system
+2025-08-19 21:22:38,113 - boss.application.events.event_bus - INFO - _process_events:147 - Event bus worker thread started
+2025-08-19 21:22:38,113 - boss.application.events.event_bus - INFO - start:54 - Event bus started
+2025-08-19 21:22:38,114 - boss.application.services.hardware_service - INFO - initialize:42 - Initializing webui hardware
+2025-08-19 21:22:38,114 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:253 - WebUI display initialized - display will show in web interface
+2025-08-19 21:22:38,114 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Display initialized
+2025-08-19 21:22:38,114 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:195 - WebUI switches initialized - use web interface to change switch values
+2025-08-19 21:22:38,115 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Switches initialized
+2025-08-19 21:22:38,115 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:96 - WebUI Go button initialized
+2025-08-19 21:22:38,115 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Go Button initialized
+2025-08-19 21:22:38,116 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:343 - WebUI screen initialized (1024x600) - content will show in web interface
+2025-08-19 21:22:38,116 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Screen initialized
+2025-08-19 21:22:38,116 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:148 - WebUI LEDs initialized - LED states will show in web interface
+2025-08-19 21:22:38,117 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] LEDs initialized
+2025-08-19 21:22:38,117 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:36 - WebUI buttons initialized - check web interface for controls
+2025-08-19 21:22:38,117 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Buttons initialized
+2025-08-19 21:22:38,118 - boss.infrastructure.hardware.webui.webui_hardware - INFO - initialize:417 - WebUI speaker initialized - audio will play in web interface
+2025-08-19 21:22:38,118 - boss.application.services.hardware_service - INFO - initialize:75 - [OK] Speaker initialized
+2025-08-19 21:22:38,118 - boss.application.services.hardware_service - INFO - initialize:108 - Hardware initialization complete
+2025-08-19 21:22:38,119 - boss.application.services.app_manager - INFO - load_apps:47 - Loading apps from D:\dev\BOSSv2\boss\apps
+2025-08-19 21:22:38,121 - boss.application.services.app_manager - INFO - load_apps:72 - Loaded 6 apps
+2025-08-19 21:22:38,121 - boss.application.services.hardware_service - INFO - _monitor_hardware:218 - Hardware monitoring thread started
+2025-08-19 21:22:38,122 - boss.application.services.hardware_service - INFO - start_monitoring:151 - Hardware monitoring started
+2025-08-19 21:22:39,462 - boss.presentation.api.web_ui_main - INFO - start_web_ui:98 - BOSS Web UI started at http://localhost:8070
+2025-08-19 21:22:39,463 - boss.presentation.api.web_ui_main - INFO - start_web_ui:99 - Web UI debug dashboard initialized
+2025-08-19 21:22:39,463 - boss.presentation.api.web_ui_main - INFO - start_web_ui:100 - Available hardware devices:
+2025-08-19 21:22:39,464 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   buttons: WebUIButtons
+2025-08-19 21:22:39,464 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   go_button: WebUIGoButton
+2025-08-19 21:22:39,464 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   leds: WebUILeds
+2025-08-19 21:22:39,465 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   switches: WebUISwitches
+2025-08-19 21:22:39,465 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   display: WebUIDisplay
+2025-08-19 21:22:39,465 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   screen: WebUIScreen
+2025-08-19 21:22:39,466 - boss.presentation.api.web_ui_main - INFO - start_web_ui:103 -   speaker: WebUISpeaker
+2025-08-19 21:22:39,466 - boss.application.services.system_service - INFO - start:82 - Development UI started at http://localhost:8070
+2025-08-19 21:22:39,466 - boss.application.services.system_service - INFO - _run_startup_app:171 - Running startup app for visual feedback
+2025-08-19 21:22:39,467 - boss.application.services.app_runner - INFO - start_app:72 - Starting app: Admin Startup (switch 4)
+2025-08-19 21:22:39,467 - boss.application.services.system_service - INFO - start:100 - BOSS system started successfully
+2025-08-19 21:22:39,467 - boss.application.events.event_handlers - INFO - on_system_started:29 - BOSS system started with webui hardware
+2025-08-19 21:22:39,468 - __main__ - INFO - main:130 - BOSS system running - Press Ctrl+C to stop
+2025-08-19 21:22:39,469 - boss.application.services.app_runner - INFO - _run_app_thread:145 - Running app: Admin Startup
+2025-08-19 21:22:39,470 - boss.application.api.app_api - INFO - log_info:175 - [Admin Startup] Admin Startup: Initializing
+2025-08-19 21:22:39,470 - boss.application.api.app_api - INFO - log_info:175 - [Admin Startup] Admin Startup: LED blink 1/2
+2025-08-19 21:22:39,470 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:400 - WebUI screen cleared with color: black
+2025-08-19 21:22:39,471 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Starting BOSS…' (size: 32, color: white, align: center)
+2025-08-19 21:22:39,871 - boss.application.api.app_api - INFO - log_info:175 - [Admin Startup] Admin Startup: LED blink 2/2
+2025-08-19 21:22:40,047 - boss.presentation.api.web_ui - INFO - connect:74 - WebSocket connected. Total connections: 1
+2025-08-19 21:22:40,268 - boss.application.api.app_api - INFO - log_info:175 - [Admin Startup] Admin Startup: Displayed 'BOSS Ready'
+2025-08-19 21:22:40,268 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'BOSS Ready' (size: 32, color: red, align: left)
+2025-08-19 21:22:40,679 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Admin Startup finished normally after 1.2 seconds
+2025-08-19 21:22:43,248 - boss.presentation.api.web_ui - INFO - connect:74 - WebSocket connected. Total connections: 2
+2025-08-19 21:22:49,016 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: red
+2025-08-19 21:22:49,017 - boss.presentation.api.web_ui - INFO - press_button:336 - Button red press ignored - corresponding LED is OFF (button not active)
+2025-08-19 21:22:53,405 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: main
+2025-08-19 21:22:53,406 - boss.presentation.api.web_ui - INFO - press_button:310 - Go button object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIGoButton object at 0x000001EA2CB8E6D0>
+2025-08-19 21:22:53,406 - boss.application.services.system_service - INFO - _on_app_launch_requested:303 - Launching app for switch 0: Mini-App Directory Viewer
+2025-08-19 21:22:53,406 - boss.presentation.api.web_ui - INFO - press_button:313 - Go button handle_press called
+2025-08-19 21:22:53,407 - boss.application.services.app_runner - INFO - start_app:72 - Starting app: Mini-App Directory Viewer (switch 0)
+2025-08-19 21:22:53,408 - boss.application.services.app_runner - INFO - _run_app_thread:145 - Running app: Mini-App Directory Viewer
+2025-08-19 21:22:53,409 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:400 - WebUI screen cleared with color: black
+2025-08-19 21:22:53,409 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Mini-Apps Directory
+===================
+
+Num | Name
+----+---------------------------------------------
+000 | Mini-App Directory Viewer                    
+001 | Hello World                                  
+004 | Admin Startup                                
+252 | Configure or Change Wi-Fi Connection         
+254 | Administrative Mini-App Manager              
+255 | Graceful Application and System Shutdown     
+
+Page 1/1
+[YELLOW: DISABLED] Prev | [BLUE : DISABLED] Next' (size: 12, color: white, align: left)
+2025-08-19 21:22:59,054 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 0 to 1
+2025-08-19 21:22:59,660 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: main
+2025-08-19 21:22:59,661 - boss.presentation.api.web_ui - INFO - press_button:310 - Go button object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIGoButton object at 0x000001EA2CB8E6D0>
+2025-08-19 21:22:59,661 - boss.application.services.system_service - INFO - _on_app_launch_requested:303 - Launching app for switch 1: Hello World
+2025-08-19 21:22:59,661 - boss.presentation.api.web_ui - INFO - press_button:313 - Go button handle_press called
+2025-08-19 21:22:59,661 - boss.application.services.app_runner - INFO - stop_current_app:91 - Stopping app: Mini-App Directory Viewer
+2025-08-19 21:22:59,663 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Mini-App Directory Viewer finished normally after 6.3 seconds
+2025-08-19 21:23:02,675 - boss.application.services.app_runner - WARNING - stop_current_app:106 - App Mini-App Directory Viewer did not stop gracefully
+2025-08-19 21:23:02,675 - boss.application.services.system_service - WARNING - _on_app_launch_requested:309 - Previous app did not stop within timeout; proceeding with new launch
+2025-08-19 21:23:02,675 - boss.application.services.app_runner - INFO - start_app:72 - Starting app: Hello World (switch 1)
+2025-08-19 21:23:02,678 - boss.application.services.app_runner - INFO - _run_app_thread:145 - Running app: Hello World
+2025-08-19 21:23:02,678 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] === Hello World App Starting ===
+2025-08-19 21:23:02,680 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Event subscriptions created successfully
+2025-08-19 21:23:02,680 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Welcome to BOSS!
+
+Press any colored button
+to see the magic happen!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:02,680 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Starting LED blink sequence
+2025-08-19 21:23:02,680 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink cycle 1/2
+2025-08-19 21:23:02,682 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking red LED
+2025-08-19 21:23:03,187 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking yellow LED
+2025-08-19 21:23:03,706 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking green LED
+2025-08-19 21:23:04,221 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking blue LED
+2025-08-19 21:23:05,246 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink cycle 2/2
+2025-08-19 21:23:05,247 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking red LED
+2025-08-19 21:23:05,759 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking yellow LED
+2025-08-19 21:23:06,277 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking green LED
+2025-08-19 21:23:06,790 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking blue LED
+2025-08-19 21:23:07,303 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink sequence completed
+2025-08-19 21:23:07,303 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Activating all buttons (turning on all LEDs)
+2025-08-19 21:23:07,303 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app fully initialized and ready
+2025-08-19 21:23:09,703 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: red
+2025-08-19 21:23:09,703 - boss.presentation.api.web_ui - INFO - press_button:339 - Color buttons object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIButtons object at 0x000001EA2CB8E490>
+2025-08-19 21:23:09,703 - boss.presentation.api.web_ui - INFO - press_button:342 - Color button red handle_button_press called
+2025-08-19 21:23:09,703 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Red button pressed!
+2025-08-19 21:23:09,705 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Button Presses:
+  Red: 1
+
+Press any button!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:11,800 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: green
+2025-08-19 21:23:11,801 - boss.presentation.api.web_ui - INFO - press_button:339 - Color buttons object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIButtons object at 0x000001EA2CB8E490>
+2025-08-19 21:23:11,801 - boss.presentation.api.web_ui - INFO - press_button:342 - Color button green handle_button_press called
+2025-08-19 21:23:11,801 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Green button pressed!
+2025-08-19 21:23:11,803 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Button Presses:
+  Red: 1
+  Green: 1
+
+Press any button!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:12,560 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: yellow
+2025-08-19 21:23:12,560 - boss.presentation.api.web_ui - INFO - press_button:339 - Color buttons object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIButtons object at 0x000001EA2CB8E490>
+2025-08-19 21:23:12,560 - boss.presentation.api.web_ui - INFO - press_button:342 - Color button yellow handle_button_press called
+2025-08-19 21:23:12,560 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Yellow button pressed!
+2025-08-19 21:23:12,561 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Button Presses:
+  Red: 1
+  Yellow: 1
+  Green: 1
+
+Press any button!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:12,832 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: blue
+2025-08-19 21:23:12,832 - boss.presentation.api.web_ui - INFO - press_button:339 - Color buttons object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIButtons object at 0x000001EA2CB8E490>
+2025-08-19 21:23:12,832 - boss.presentation.api.web_ui - INFO - press_button:342 - Color button blue handle_button_press called
+2025-08-19 21:23:12,832 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Blue button pressed!
+2025-08-19 21:23:12,834 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Button Presses:
+  Red: 1
+  Yellow: 1
+  Green: 1
+  Blue: 1
+
+Press any button!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:13,564 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: red
+2025-08-19 21:23:13,564 - boss.presentation.api.web_ui - INFO - press_button:339 - Color buttons object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIButtons object at 0x000001EA2CB8E490>
+2025-08-19 21:23:13,565 - boss.presentation.api.web_ui - INFO - press_button:342 - Color button red handle_button_press called
+2025-08-19 21:23:13,565 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Red button pressed 2 times!
+2025-08-19 21:23:13,565 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Button Presses:
+  Red: 2
+  Yellow: 1
+  Green: 1
+  Blue: 1
+
+Press any button!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:15,928 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: main
+2025-08-19 21:23:15,928 - boss.presentation.api.web_ui - INFO - press_button:310 - Go button object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIGoButton object at 0x000001EA2CB8E6D0>
+2025-08-19 21:23:15,929 - boss.application.services.system_service - INFO - _on_app_launch_requested:303 - Launching app for switch 1: Hello World
+2025-08-19 21:23:15,929 - boss.presentation.api.web_ui - INFO - press_button:313 - Go button handle_press called
+2025-08-19 21:23:15,929 - boss.application.services.app_runner - INFO - stop_current_app:91 - Stopping app: Hello World
+2025-08-19 21:23:15,930 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] === Hello World App Shutting Down ===
+2025-08-19 21:23:15,930 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Deactivating all buttons (turning off all LEDs)
+2025-08-19 21:23:15,930 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app cleanup completed
+2025-08-19 21:23:15,931 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Hello World finished normally after 13.3 seconds
+2025-08-19 21:23:18,937 - boss.application.services.app_runner - WARNING - stop_current_app:106 - App Hello World did not stop gracefully
+2025-08-19 21:23:18,937 - boss.application.services.system_service - WARNING - _on_app_launch_requested:309 - Previous app did not stop within timeout; proceeding with new launch
+2025-08-19 21:23:18,938 - boss.application.services.app_runner - INFO - start_app:72 - Starting app: Hello World (switch 1)
+2025-08-19 21:23:18,938 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:400 - WebUI screen cleared with color: black
+2025-08-19 21:23:18,947 - boss.application.services.app_runner - INFO - _run_app_thread:145 - Running app: Hello World
+2025-08-19 21:23:18,948 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] === Hello World App Starting ===
+2025-08-19 21:23:18,949 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Event subscriptions created successfully
+2025-08-19 21:23:18,949 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Hello World!
+
+Welcome to BOSS!
+
+Press any colored button
+to see the magic happen!
+
+Main button to exit' (size: 28, color: white, align: center)
+2025-08-19 21:23:18,949 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Starting LED blink sequence
+2025-08-19 21:23:18,950 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink cycle 1/2
+2025-08-19 21:23:18,950 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking red LED
+2025-08-19 21:23:19,460 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking yellow LED
+2025-08-19 21:23:19,976 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking green LED
+2025-08-19 21:23:20,496 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking blue LED
+2025-08-19 21:23:21,519 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink cycle 2/2
+2025-08-19 21:23:21,520 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking red LED
+2025-08-19 21:23:21,565 - boss.application.events.event_handlers - INFO - on_switch_changed:46 - Switch changed from 1 to 0
+2025-08-19 21:23:22,025 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking yellow LED
+2025-08-19 21:23:22,532 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking green LED
+2025-08-19 21:23:23,040 - boss.application.api.app_api - INFO - log_info:175 - [Hello World]   Blinking blue LED
+2025-08-19 21:23:23,545 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] LED blink sequence completed
+2025-08-19 21:23:23,545 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Activating all buttons (turning on all LEDs)
+2025-08-19 21:23:23,546 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app fully initialized and ready
+2025-08-19 21:23:25,522 - boss.presentation.api.web_ui - INFO - press_button:305 - WebUI button press request: main
+2025-08-19 21:23:25,523 - boss.presentation.api.web_ui - INFO - press_button:310 - Go button object: <boss.infrastructure.hardware.webui.webui_hardware.WebUIGoButton object at 0x000001EA2CB8E6D0>
+2025-08-19 21:23:25,523 - boss.application.services.system_service - INFO - _on_app_launch_requested:303 - Launching app for switch 0: Mini-App Directory Viewer
+2025-08-19 21:23:25,523 - boss.presentation.api.web_ui - INFO - press_button:313 - Go button handle_press called
+2025-08-19 21:23:25,524 - boss.application.services.app_runner - INFO - stop_current_app:91 - Stopping app: Hello World
+2025-08-19 21:23:25,524 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] === Hello World App Shutting Down ===
+2025-08-19 21:23:25,524 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Deactivating all buttons (turning off all LEDs)
+2025-08-19 21:23:25,525 - boss.application.api.app_api - INFO - log_info:175 - [Hello World] Hello World app cleanup completed
+2025-08-19 21:23:25,525 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Hello World finished normally after 6.6 seconds
+2025-08-19 21:23:28,532 - boss.application.services.app_runner - WARNING - stop_current_app:106 - App Hello World did not stop gracefully
+2025-08-19 21:23:28,532 - boss.application.services.system_service - WARNING - _on_app_launch_requested:309 - Previous app did not stop within timeout; proceeding with new launch
+2025-08-19 21:23:28,533 - boss.application.services.app_runner - INFO - start_app:72 - Starting app: Mini-App Directory Viewer (switch 0)
+2025-08-19 21:23:28,533 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:400 - WebUI screen cleared with color: black
+2025-08-19 21:23:28,534 - boss.application.services.app_runner - INFO - _run_app_thread:145 - Running app: Mini-App Directory Viewer
+2025-08-19 21:23:28,535 - boss.infrastructure.hardware.webui.webui_hardware - INFO - clear_screen:400 - WebUI screen cleared with color: black
+2025-08-19 21:23:28,536 - boss.infrastructure.hardware.webui.webui_hardware - INFO - display_text:371 - WebUI screen text updated: 'Mini-Apps Directory
+===================
+
+Num | Name
+----+---------------------------------------------
+000 | Mini-App Directory Viewer                    
+001 | Hello World                                  
+004 | Admin Startup                                
+252 | Configure or Change Wi-Fi Connection         
+254 | Administrative Mini-App Manager              
+255 | Graceful Application and System Shutdown     
+
+Page 1/1
+[YELLOW: DISABLED] Prev | [BLUE : DISABLED] Next' (size: 12, color: white, align: left)
+2025-08-19 21:23:32,805 - boss.application.services.system_service - INFO - _signal_handler:383 - Received SIGINT, shutting down gracefully
+2025-08-19 21:23:32,805 - boss.application.services.system_service - INFO - stop:112 - Stopping BOSS system
+2025-08-19 21:23:32,805 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:118 - Stopping WebUI server...
+2025-08-19 21:23:32,805 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:346 - System shutdown requested: normal
+2025-08-19 21:23:32,805 - boss.application.services.system_service - INFO - _on_system_shutdown_requested:377 - Normal system shutdown
+2025-08-19 21:23:32,807 - boss.application.events.event_handlers - INFO - on_system_shutdown:34 - BOSS system shutting down: normal
+2025-08-19 21:23:32,836 - boss.presentation.api.web_ui - INFO - disconnect:88 - WebSocket disconnected. Total connections: 1
+2025-08-19 21:23:32,836 - boss.presentation.api.web_ui - INFO - disconnect:88 - WebSocket disconnected. Total connections: 0
+2025-08-19 21:23:32,931 - boss.presentation.api.web_ui_main - INFO - stop_web_ui:129 - WebUI server stopped
+2025-08-19 21:23:32,932 - boss.application.services.system_service - INFO - stop_webui_if_running:152 - Development UI on port 8070 stopped
+2025-08-19 21:23:32,932 - boss.application.services.app_runner - INFO - stop_current_app:91 - Stopping app: Mini-App Directory Viewer
+2025-08-19 21:23:32,932 - boss.application.services.app_runner - INFO - _run_app_thread:165 - App Mini-App Directory Viewer finished normally after 4.4 seconds
+2025-08-19 21:23:37,943 - boss.application.services.app_runner - WARNING - stop_current_app:106 - App Mini-App Directory Viewer did not stop gracefully
+2025-08-19 21:23:37,985 - boss.application.services.hardware_service - INFO - _monitor_hardware:238 - Hardware monitoring thread stopped
+2025-08-19 21:23:37,985 - boss.application.services.hardware_service - INFO - stop_monitoring:163 - Hardware monitoring stopped
+2025-08-19 21:23:37,986 - boss.application.services.hardware_service - INFO - cleanup:116 - Cleaning up hardware
+2025-08-19 21:23:37,986 - boss.application.services.hardware_service - INFO - cleanup:132 - Hardware cleanup complete
+2025-08-19 21:23:37,986 - boss.application.events.event_bus - INFO - _process_events:165 - Event bus worker thread stopped
+2025-08-19 21:23:37,987 - boss.application.events.event_bus - INFO - stop:74 - Event bus stopped
+2025-08-19 21:23:37,987 - boss.application.services.system_service - INFO - stop:136 - BOSS system stopped

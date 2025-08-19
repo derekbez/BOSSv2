@@ -42,6 +42,7 @@ def run(stop_event, api):
     button_counts = {"red": 0, "yellow": 0, "green": 0, "blue": 0}
     last_activity_time = time.time()
     subscription_ids = []  # Track subscriptions for cleanup
+    restore_timers = {}    # Per-button LED restore timers
     
     # ========================================================================
     # SCREEN DISPLAY
@@ -115,6 +116,16 @@ def run(stop_event, api):
     def deactivate_all_buttons():
         """Turn off all LEDs - buttons become inactive."""
         api.log_info("Deactivating all buttons (turning off all LEDs)")
+        # Cancel any pending restore timers so nothing turns back on after deactivation
+        try:
+            for t in list(restore_timers.values()):
+                try:
+                    t.cancel()
+                except Exception:
+                    pass
+            restore_timers.clear()
+        except Exception:
+            pass
         for color in button_counts.keys():
             api.hardware.set_led(color, False)
     
@@ -156,12 +167,29 @@ def run(stop_event, api):
         # Update screen immediately
         update_screen()
         
-        # Turn LED back on after brief visual feedback
-        def restore_led():
-            if not stop_event.wait(0.2):
-                api.hardware.set_led(button, True)
-        
-        threading.Thread(target=restore_led, daemon=True).start()
+        # Turn LED back on after brief visual feedback using a per-button timer
+        # Cancel any existing timer for this button to avoid overlap
+        existing = restore_timers.get(button)
+        if existing:
+            try:
+                existing.cancel()
+            except Exception:
+                pass
+            restore_timers.pop(button, None)
+
+        def do_restore(color=button):
+            if not stop_event.is_set():
+                api.hardware.set_led(color, True)
+            # Remove our timer reference after running
+            try:
+                restore_timers.pop(color, None)
+            except Exception:
+                pass
+
+        timer = threading.Timer(0.2, do_restore)
+        timer.daemon = True
+        restore_timers[button] = timer
+        timer.start()
     
     def on_main_button_press(event_type, payload):
         """Handle main button press - exit the app."""
@@ -250,6 +278,16 @@ def run(stop_event, api):
             except Exception as e:
                 api.log_error(f"Error unsubscribing event {sub_id}: {e}")
         
+        # Cancel any pending timers and turn off all LEDs
+        try:
+            for t in list(restore_timers.values()):
+                try:
+                    t.cancel()
+                except Exception:
+                    pass
+            restore_timers.clear()
+        except Exception:
+            pass
         # Turn off all LEDs
         deactivate_all_buttons()
         

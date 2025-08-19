@@ -51,14 +51,20 @@ class HardwareManager(HardwareService):
             self.screen = self.hardware_factory.create_screen()
             self.speaker = self.hardware_factory.create_speaker()  # May be None
             
-            # Initialize each component
+            # Initialize each component (preferred order)
+            # 1) Display (can show a quick startup cue)
+            # 2) Switches (they drive the 7-seg number)
+            # 3) Go Button (user input next)
+            # 4) Screen (main UI feedback)
+            # 5) LEDs
+            # 6) Buttons
             components = [
-                ("Buttons", self.buttons),
-                ("Go Button", self.go_button),
-                ("LEDs", self.leds),
-                ("Switches", self.switches),
                 ("Display", self.display),
+                ("Switches", self.switches),
+                ("Go Button", self.go_button),
                 ("Screen", self.screen),
+                ("LEDs", self.leds),
+                ("Buttons", self.buttons),
             ]
             
             if self.speaker:
@@ -69,6 +75,13 @@ class HardwareManager(HardwareService):
                     logger.info(f"[OK] {name} initialized")
                 else:
                     logger.warning(f"✗ {name} failed to initialize")
+
+            # Optional quick cue on 7-seg: flash "BOSS" once before the switch value is shown.
+            try:
+                if self.display and hasattr(self.display, 'show_text'):
+                    self.display.show_text("BOSS")
+            except Exception as e:
+                logger.debug(f"Startup 7-seg cue skipped: {e}")
             
             # Set up hardware callbacks
             self._setup_callbacks()

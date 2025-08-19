@@ -83,6 +83,14 @@ class SystemManager(SystemService):
             except Exception as e:
                 logger.debug(f"Dev UI start skipped: {e}")
             
+            # Show current switch value on 7-seg before running the startup app
+            try:
+                state = self.hardware_service.get_hardware_state()
+                if state and state.switches:
+                    self.event_bus.publish("display_update", {"value": state.switches.value}, "system")
+            except Exception as e:
+                logger.debug(f"Initial display update skipped: {e}")
+
             # Run startup app to give immediate feedback
             self._run_startup_app()
             
