@@ -210,8 +210,13 @@ class GPIOLeds(LedInterface):
         try:
             from gpiozero import LED as GZLED  # type: ignore
             self._gz_leds = {}
+            # If config has 'led_active_high' and it's False, use active_low LEDs
+            active_high = getattr(self.hardware_config, 'led_active_high', True)
             for color, pin in self.hardware_config.led_pins.items():
-                led = GZLED(pin)
+                if active_high:
+                    led = GZLED(pin)
+                else:
+                    led = GZLED(pin, active_high=False)
                 self._gz_leds[LedColor(color)] = led
             self._available = True
             logger.info("GPIO LEDs initialized (gpiozero)")
