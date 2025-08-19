@@ -21,16 +21,16 @@ class SystemManager(SystemService):
         self.hardware_service = hardware_service
         self.app_manager = app_manager
         self.app_runner = app_runner
-        
+
         self._running = False
         self._shutdown_event = threading.Event()
-        self._webui_port = None  # Track WebUI port for shutdown
-        self._previous_backend_for_app: Optional[str] = None
-        
+        self._webui_port = None  # Track dev UI port for shutdown (if any)
+        self._previous_backend_for_app = None
+
         # Set up signal handlers for graceful shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
-        
+
         # Set up event subscriptions
         self._setup_event_handlers()
         # Optional: basic hot-reload of screen backend when config change event occurs
@@ -63,9 +63,25 @@ class SystemManager(SystemService):
             # Mark system as running
             self._running = True
             
-            # Start WebUI development interface if needed
+            # Optionally start a dev UI via factory (no-op on real GPIO/mock)
             hardware_type = getattr(self.hardware_service.hardware_factory, 'hardware_type', 'unknown')
-            self.start_webui_if_needed(hardware_type)
+            try:
+                components_map = {
+                    'buttons': self.hardware_service.buttons,
+                    'go_button': self.hardware_service.go_button,
+                    'leds': self.hardware_service.leds,
+                    'switches': self.hardware_service.switches,
+                    'display': self.hardware_service.display,
+                    'screen': self.hardware_service.screen,
+                    'speaker': self.hardware_service.speaker,
+                }
+                if hasattr(self.hardware_service.hardware_factory, 'start_dev_ui'):
+                    port = self.hardware_service.hardware_factory.start_dev_ui(self.event_bus, components_map)  # type: ignore
+                    if port:
+                        self._webui_port = port
+                        logger.info(f"Development UI started at http://localhost:{port}")
+            except Exception as e:
+                logger.debug(f"Dev UI start skipped: {e}")
             
             # Run startup app to give immediate feedback
             self._run_startup_app()
@@ -117,43 +133,18 @@ class SystemManager(SystemService):
         # Signal shutdown complete
         self._shutdown_event.set()
     
-    def start_webui_if_needed(self, hardware_type: str) -> None:
-        """Start WebUI development interface if using webui hardware type."""
-        if hardware_type == "webui":
-            try:
-                from boss.presentation.api.web_ui_main import start_web_ui
-                
-                # Create hardware dictionary for WebUI
-                hardware_dict = {
-                    'buttons': self.hardware_service.buttons,
-                    'go_button': self.hardware_service.go_button, 
-                    'leds': self.hardware_service.leds,
-                    'switches': self.hardware_service.switches,
-                    'display': self.hardware_service.display,
-                    'screen': self.hardware_service.screen
-                }
-                
-                # Start WebUI in background
-                port = start_web_ui(hardware_dict, self.event_bus)
-                if port:
-                    self._webui_port = port
-                    logger.info(f"WebUI development interface started at http://localhost:{port}")
-                else:
-                    logger.warning("Failed to start WebUI development interface")
-                    
-            except Exception as e:
-                logger.warning(f"Could not start WebUI development interface: {e}")
+    # WebUI-specific helper removed; factory handles dev UI lifecycle
     
     def stop_webui_if_running(self) -> None:
         """Stop WebUI development interface if it's running."""
         if self._webui_port:
             try:
-                from boss.presentation.api.web_ui_main import stop_web_ui
-                stop_web_ui()
-                logger.info(f"WebUI development interface on port {self._webui_port} stopped")
+                if hasattr(self.hardware_service.hardware_factory, 'stop_dev_ui'):
+                    self.hardware_service.hardware_factory.stop_dev_ui()  # type: ignore
+                logger.info(f"Development UI on port {self._webui_port} stopped")
                 self._webui_port = None
             except Exception as e:
-                logger.warning(f"Error stopping WebUI: {e}")
+                logger.debug(f"Error stopping development UI: {e}")
     
     def _run_startup_app(self) -> None:
         """Run the admin_startup app to provide immediate visual feedback."""

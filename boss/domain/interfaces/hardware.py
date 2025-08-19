@@ -204,3 +204,25 @@ class HardwareFactory(ABC):
     def hardware_type(self) -> str:
         """Get the type of hardware implementation (gpio, webui, mock)."""
         pass
+
+    # --- Optional hooks to preserve presentation/application parity ---
+    # Default implementations are no-ops; concrete factories may override.
+    def attach_event_bus(self, event_bus, components: Optional[Dict[str, Any]] = None) -> None:
+        """Attach event bus to components when applicable (e.g., WebUI).
+
+        Args:
+            event_bus: The central event bus instance.
+            components: Optional map of component name to instance.
+        """
+        return None
+
+    def start_dev_ui(self, event_bus, components: Optional[Dict[str, Any]] = None) -> Optional[int]:
+        """Start a development UI if supported by the factory (no-op otherwise).
+
+        Returns an optional port number or None if not applicable.
+        """
+        return None
+
+    def stop_dev_ui(self) -> None:
+        """Stop any development UI started by start_dev_ui (no-op by default)."""
+        return None

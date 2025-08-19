@@ -69,3 +69,29 @@ class WebUIHardwareFactory(HardwareFactory):
     def hardware_type(self) -> str:
         """Get the type of hardware implementation (gpio, webui, mock)."""
         return "webui"
+
+    # --- Optional hooks to keep services agnostic ---
+    def attach_event_bus(self, event_bus, components: Optional[dict] = None) -> None:
+        try:
+            comps = components or {}
+            for key in ("display", "screen", "leds"):
+                comp = comps.get(key)
+                if comp and hasattr(comp, "set_event_bus"):
+                    comp.set_event_bus(event_bus)  # type: ignore
+        except Exception as e:
+            logger.debug(f"WebUI attach_event_bus ignored: {e}")
+
+    def start_dev_ui(self, event_bus, components: Optional[dict] = None) -> Optional[int]:
+        try:
+            from boss.presentation.api.web_ui_main import start_web_ui
+            return start_web_ui(components or {}, event_bus)
+        except Exception as e:
+            logger.warning(f"Could not start WebUI development interface: {e}")
+            return None
+
+    def stop_dev_ui(self) -> None:
+        try:
+            from boss.presentation.api.web_ui_main import stop_web_ui
+            stop_web_ui()
+        except Exception as e:
+            logger.debug(f"Error stopping WebUI: {e}")

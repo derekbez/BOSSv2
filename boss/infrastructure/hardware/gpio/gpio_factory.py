@@ -95,3 +95,13 @@ class GPIOHardwareFactory(HardwareFactory):
     def hardware_type(self) -> str:
         """Get the type of hardware implementation (gpio, webui, mock)."""
         return "gpio"
+
+    # Optional hooks: no-ops for GPIO
+    def attach_event_bus(self, event_bus, components=None) -> None:
+        return None
+
+    def start_dev_ui(self, event_bus, components=None) -> Optional[int]:
+        return None
+
+    def stop_dev_ui(self) -> None:
+        return None

@@ -73,8 +73,21 @@ class HardwareManager(HardwareService):
             # Set up hardware callbacks
             self._setup_callbacks()
             
-            # For WebUI hardware, set the event bus
-            self._setup_webui_event_bus()
+            # Allow factory to attach event bus to components where applicable
+            try:
+                components_map = {
+                    'buttons': self.buttons,
+                    'go_button': self.go_button,
+                    'leds': self.leds,
+                    'switches': self.switches,
+                    'display': self.display,
+                    'screen': self.screen,
+                    'speaker': self.speaker,
+                }
+                if hasattr(self.hardware_factory, 'attach_event_bus'):
+                    self.hardware_factory.attach_event_bus(self.event_bus, components_map)  # type: ignore
+            except Exception as e:
+                logger.debug(f"attach_event_bus ignored: {e}")
             
             # Update initial state
             self._update_hardware_state()
@@ -136,20 +149,7 @@ class HardwareManager(HardwareService):
         
         logger.info("Hardware monitoring stopped")
 
-    def _setup_webui_event_bus(self) -> None:
-        """Set up event bus for WebUI hardware components."""
-        # Check if we're using WebUI hardware and set event bus
-        if self.display and hasattr(self.display, 'set_event_bus'):
-            self.display.set_event_bus(self.event_bus)  # type: ignore
-            logger.debug("Event bus set for WebUI display")
-        
-        if self.screen and hasattr(self.screen, 'set_event_bus'):
-            self.screen.set_event_bus(self.event_bus)  # type: ignore
-            logger.debug("Event bus set for WebUI screen")
-        
-        if self.leds and hasattr(self.leds, 'set_event_bus'):
-            self.leds.set_event_bus(self.event_bus)  # type: ignore
-            logger.debug("Event bus set for WebUI LEDs")
+    # WebUI-specific wiring removed; parity handled by factory.attach_event_bus
 
     # Note: Output event subscriptions are handled by HardwareEventHandler to avoid duplication
 
