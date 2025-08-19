@@ -60,11 +60,18 @@ class GPIOButtons(ButtonInterface):
             # Import here to ensure symbols exist only when gpiozero is present
             from gpiozero import Button as GZButton  # type: ignore
             self._gz_buttons = {}
-            for color, pin in self.hardware_config.button_pins.items():
+            # Normalize config keys to ButtonColor enum to avoid mismatches
+            for color_key, pin in self.hardware_config.button_pins.items():
+                try:
+                    btn_color = ButtonColor(color_key)  # supports str or enum
+                except Exception:
+                    # As a fallback, attempt upper-case name mapping
+                    btn_color = ButtonColor[color_key.upper()]  # type: ignore[index]
                 btn = GZButton(pin, pull_up=True, bounce_time=0.05)
-                btn.when_pressed = lambda c=color: self._handle_press(c)
-                btn.when_released = lambda c=color: self._handle_release(c)
-                self._gz_buttons[color] = btn
+                # Capture enum in default arg to avoid late binding
+                btn.when_pressed = (lambda c=btn_color: self._handle_press(c))
+                btn.when_released = (lambda c=btn_color: self._handle_release(c))
+                self._gz_buttons[btn_color] = btn
             self._available = True
             logger.info("GPIO buttons initialized (gpiozero)")
             return True
@@ -72,14 +79,14 @@ class GPIOButtons(ButtonInterface):
             logger.error(f"Failed to initialize GPIO buttons (gpiozero): {e}")
             return False
 
-    def _handle_press(self, color):
+    def _handle_press(self, color: ButtonColor):
         self._button_states[color] = True
         callback = self._press_callbacks.get(color)
         if callback:
             callback(color)
         logger.debug(f"GPIO button {color} pressed")
 
-    def _handle_release(self, color):
+    def _handle_release(self, color: ButtonColor):
         self._button_states[color] = False
         callback = self._release_callbacks.get(color)
         if callback:
