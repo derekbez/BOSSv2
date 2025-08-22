@@ -19,6 +19,7 @@ FORCE_OVERWRITE=0
 SKIP_VENV=0
 RUN_USER="$DEFAULT_USER"
 BOSS_ROOT="$DEFAULT_ROOT"
+ALLOCATE_TTY=0
 
 usage() {
 	cat <<USAGE
@@ -29,6 +30,7 @@ Options:
 	-r, --root PATH          Root directory of boss checkout (default: /home/USER/boss)
 	-f, --force              Overwrite existing service file without prompt
 	-d, --disable-getty      Disable getty@tty1 (one time) for dedicated TTY screen
+	-a, --allocate-tty       Add TTYPath=/dev/tty1 & related directives for textual backend
 	-n, --no-venv            Skip virtual environment creation / package install
 	-h, --help               Show this help and exit
 
@@ -44,6 +46,7 @@ while [[ $# -gt 0 ]]; do
 		-r|--root) BOSS_ROOT="$2"; shift 2;;
 		-f|--force) FORCE_OVERWRITE=1; shift;;
 		-d|--disable-getty) DISABLE_GETTY=1; shift;;
+		-a|--allocate-tty) ALLOCATE_TTY=1; shift;;
 		-n|--no-venv) SKIP_VENV=1; shift;;
 		-h|--help) usage; exit 0;;
 		*) echo "Unknown option: $1" >&2; usage; exit 1;;
@@ -139,8 +142,8 @@ Environment=BOSS_SCREEN_BACKEND=auto
 
 # Optional explicit disable: set BOSS_DISABLE_TEXTUAL=1 to force rich backend
 
-# Switch to tty1 (ignore errors if already active)
-ExecStartPre=/bin/chvt 1
+# Switch to tty1 (ignore errors if already active or insufficient perms)
+ExecStartPre=-/bin/chvt 1
 ExecStart=${PYTHON_BIN:-${BOSS_ROOT}/.venv/bin/python} -m boss.main
 ExecReload=/bin/kill -HUP \$MAINPID
 
@@ -164,6 +167,22 @@ ReadWritePaths=${BOSS_ROOT}/boss/logs ${BOSS_ROOT}/boss/config
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=boss
+
+EOF
+
+# Append optional TTY allocation if requested
+if [[ $ALLOCATE_TTY -eq 1 ]]; then
+	cat >> /tmp/${SERVICE_NAME}.service.new <<EOF
+# TTY allocation directives (enabled via --allocate-tty)
+TTYPath=/dev/tty1
+StandardInput=tty
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+EOF
+fi
+
+cat >> /tmp/${SERVICE_NAME}.service.new <<EOF
 
 [Install]
 WantedBy=multi-user.target
