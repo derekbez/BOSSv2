@@ -169,7 +169,7 @@ def validate_config(config: BossConfig) -> bool:
 
     # Validate screen settings and backend
     backend = (getattr(config.hardware, 'screen_backend', 'rich') or '').lower()
-    allowed_backends = {"rich", "pillow", "textual", "auto"}  # NOTE: 'pillow' is deprecated (kept for legacy)
+    allowed_backends = {"textual", "auto", "rich", "pillow"}  # NOTE: 'pillow' is deprecated (kept for legacy)
     if backend not in allowed_backends:
         logger.warning(f"Invalid screen_backend '{backend}' in config; defaulting to 'rich' (allowed: {sorted(allowed_backends)})")
         backend = 'rich'

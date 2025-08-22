@@ -57,45 +57,45 @@ class GPIOHardwareFactory(HardwareFactory):
           - 'pillow' remains selectable explicitly for legacy framebuffer/image use
           - Auto mode will NOT choose pillow anymore; it prefers textual (TTY/headless) then rich
         """
-        configured = (self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich')).lower()
-
-        # Env override to disable textual (US-TXT-13)
-        if os.getenv('BOSS_DISABLE_TEXTUAL') == '1' and configured == 'textual':
-            logger.info("BOSS_DISABLE_TEXTUAL=1 set; falling back from textual to rich")
-            configured = 'rich'
-
-        backend = configured
-        if configured == 'auto':
-            try:
-                if os.name == 'posix' and sys.stdout.isatty() and not os.getenv('DISPLAY') and HAS_TEXTUAL:
-                    backend = 'textual'
-                else:
-                    backend = 'rich'
-                logger.info(f"Auto screen backend selected: {backend}")
-            except Exception as e:  # pragma: no cover
-                logger.debug(f"Auto backend selection error: {e}")
-                backend = 'rich'
-
-        # Instantiate (avoid pillow unless explicitly requested)
-        if backend == 'textual':
-            if HAS_TEXTUAL and TextualScreen is not None:  # type: ignore
-                self._screen_instance = TextualScreen(self.hardware_config)  # type: ignore
-            else:
-                logger.warning("Textual backend requested but not available (import failed); falling back to rich")
-                backend = 'rich'
-                self._screen_instance = GPIORichScreen(self.hardware_config)
-        elif backend == 'rich' or backend == 'auto':
-            self._screen_instance = GPIORichScreen(self.hardware_config)
-        elif backend == 'pillow':
-            logger.warning("Pillow screen backend is DEPRECATED. Prefer 'textual' or 'rich'.")
-            self._screen_instance = GPIOPillowScreen(self.hardware_config)
-        else:
-            logger.warning(f"Unknown screen backend '{backend}' requested; defaulting to rich")
-            backend = 'rich'
-            self._screen_instance = GPIORichScreen(self.hardware_config)
-
+        requested = (self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich')).lower()
+        backend = self._resolve_backend(requested)
+        self._screen_instance = self._instantiate_backend(backend)
         self._current_screen_backend = backend
         return self._screen_instance
+
+    # --- internal helpers ---
+    def _resolve_backend(self, requested: str) -> str:
+        """Determine effective backend after env overrides & auto logic."""
+        # Env override to disable textual (US-TXT-13)
+        if os.getenv('BOSS_DISABLE_TEXTUAL') == '1' and requested == 'textual':
+            logger.info("BOSS_DISABLE_TEXTUAL=1 set; overriding textual -> rich")
+            return 'rich'
+        if requested == 'auto':
+            try:  # prefer textual when headless TTY and textual present
+                if os.name == 'posix' and sys.stdout.isatty() and not os.getenv('DISPLAY') and HAS_TEXTUAL:
+                    logger.info("Auto screen backend selected: textual")
+                    return 'textual'
+                logger.info("Auto screen backend selected: rich")
+                return 'rich'
+            except Exception as e:  # pragma: no cover
+                logger.debug(f"Auto backend selection error: {e}; falling back to rich")
+                return 'rich'
+        return requested
+
+    def _instantiate_backend(self, backend: str) -> ScreenInterface:
+        """Instantiate chosen backend (with fallbacks & warnings)."""
+        if backend == 'textual':
+            if HAS_TEXTUAL and TextualScreen is not None:  # type: ignore
+                return TextualScreen(self.hardware_config)  # type: ignore
+            logger.warning("Textual backend requested but unavailable; falling back to rich")
+            return GPIORichScreen(self.hardware_config)
+        if backend == 'rich':
+            return GPIORichScreen(self.hardware_config)
+        if backend == 'pillow':
+            logger.warning("Pillow backend DEPRECATED; consider 'textual' or 'rich'.")
+            return GPIOPillowScreen(self.hardware_config)
+        logger.warning(f"Unknown backend '{backend}' requested; defaulting to rich")
+        return GPIORichScreen(self.hardware_config)
 
     # --- US-027 helpers ---
     def get_current_screen_backend(self) -> str:
