@@ -77,14 +77,22 @@ class GPIOHardwareFactory(HardwareFactory):
                 backend = 'rich'
 
         # Instantiate (avoid pillow unless explicitly requested)
-        if backend == 'pillow':
-            logger.warning("Pillow screen backend is DEPRECATED. Prefer 'textual' or 'rich'.")
-        if backend == 'textual' and HAS_TEXTUAL and TextualScreen is not None:  # type: ignore
-            self._screen_instance = TextualScreen(self.hardware_config)  # type: ignore
+        if backend == 'textual':
+            if HAS_TEXTUAL and TextualScreen is not None:  # type: ignore
+                self._screen_instance = TextualScreen(self.hardware_config)  # type: ignore
+            else:
+                logger.warning("Textual backend requested but not available (import failed); falling back to rich")
+                backend = 'rich'
+                self._screen_instance = GPIORichScreen(self.hardware_config)
         elif backend == 'rich' or backend == 'auto':
             self._screen_instance = GPIORichScreen(self.hardware_config)
-        else:  # pillow explicit
+        elif backend == 'pillow':
+            logger.warning("Pillow screen backend is DEPRECATED. Prefer 'textual' or 'rich'.")
             self._screen_instance = GPIOPillowScreen(self.hardware_config)
+        else:
+            logger.warning(f"Unknown screen backend '{backend}' requested; defaulting to rich")
+            backend = 'rich'
+            self._screen_instance = GPIORichScreen(self.hardware_config)
 
         self._current_screen_backend = backend
         return self._screen_instance
