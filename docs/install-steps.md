@@ -2,7 +2,7 @@
 
 This guide sets up B.O.S.S. on a Raspberry Pi for production and on Windows for WebUI development. Dependencies are centralized in requirements/base.txt and requirements/dev.txt.
 
-Important: The default screen backend is rich. You can override per app via manifest or system-wide in boss/config/boss_config.json.
+Important: The default screen backend is now textual (Rich-based). You can still explicitly set "rich". The legacy Pillow framebuffer backend is deprecated and only available if explicitly configured for legacy image use.
 
 ### Raspberry Pi Setup (64-bit Lite OS)
 
@@ -53,7 +53,7 @@ sudo systemctl start boss && sudo journalctl -u boss -f
 
 Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/config/boss_config.json match the framebuffer. Check with: fbset -fb /dev/fb0 -i
 
-To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pillow" } } in boss/config/boss_config.json. Default is "rich".
+Legacy (deprecated): To force the old Pillow backend system-wide set { "hardware": { "screen_backend": "pillow" } } in boss/config/boss_config.json. This is discouraged; prefer textual. Default selection is textual (or rich if textual unavailable).
 
 ### Windows WebUI Development (CMD)
 
@@ -73,7 +73,7 @@ To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pi
 - python -m boss.main --hardware webui
 
 5) Change screen backend (optional)
-- System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "rich" | "pillow" (default: rich)
+- System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "textual" | "rich" | "pillow" (deprecated) | "auto" (auto currently resolves to textual when possible)
 - Per app: set preferred_screen_backend in the app's manifest.json
 
 ++++++++++

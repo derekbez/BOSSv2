@@ -8,3 +8,4 @@ python-tm1637; platform_system == "Linux"
 # Screen backends
 Pillow
 rich
+textual>=0.58

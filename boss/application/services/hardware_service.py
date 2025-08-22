@@ -224,6 +224,15 @@ class HardwareManager(HardwareService):
                     switch_state = self.switches.read_switches()
                     if switch_state.value != self._last_switch_value:
                         self._on_switch_changed(self._last_switch_value, switch_state.value)
+                # Fallback detection: if textual backend became unavailable, attempt fallback once
+                try:
+                    if self.screen and hasattr(self.screen, 'is_available'):
+                        if not self.screen.is_available and self.get_current_screen_backend() == 'textual':  # type: ignore
+                            logger.warning("Textual screen backend unavailable – falling back to 'rich'")
+                            if self.switch_screen_backend('rich'):
+                                logger.info("Fallback to 'rich' backend succeeded")
+                except Exception as e:
+                    logger.debug(f"Screen fallback check error: {e}")
                 
                 # Update hardware state
                 self._update_hardware_state()
@@ -328,6 +337,12 @@ class HardwareManager(HardwareService):
             if self.screen and not self.screen.initialize():
                 logger.error("Reinitialized screen failed to initialize")
                 return False
+            # Attach event bus if screen supports footer/events
+            try:
+                if hasattr(self.screen, 'attach_event_bus'):
+                    self.screen.attach_event_bus(self.event_bus)  # type: ignore
+            except Exception as e:
+                logger.debug(f"attach_event_bus on switched screen ignored: {e}")
             # For WebUI impls, reset event bus
             if self.screen and hasattr(self.screen, 'set_event_bus'):
                 self.screen.set_event_bus(self.event_bus)  # type: ignore

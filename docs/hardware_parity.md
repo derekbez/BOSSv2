@@ -27,6 +27,9 @@ The B.O.S.S. system implements a **Hardware Parity Principle** ensuring seamless
 - Virtual switches with binary/decimal controls
 
 ### 3. Mock Hardware (Testing)
+
+### Screen Backends Note
+The default screen backend is now the textual (Rich-based) backend for both development and production. The legacy Pillow framebuffer backend remains only for explicit legacy scenarios and is deprecated. Mini-apps should treat screen output as text-only; image APIs will no-op under textual.
 - In-memory state tracking
 - Console logging of hardware events
 - No visual interface, pure programmatic

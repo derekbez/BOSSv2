@@ -169,18 +169,15 @@ def validate_config(config: BossConfig) -> bool:
 
     # Validate screen settings and backend
     backend = (getattr(config.hardware, 'screen_backend', 'rich') or '').lower()
-    if backend not in {"rich", "pillow"}:
-        logger.warning(f"Invalid screen_backend '{backend}' in config; defaulting to 'rich'")
-        try:
-            config.hardware.screen_backend = 'rich'
-        except Exception:
-            pass
-    else:
-        # Normalize stored value
-        try:
-            config.hardware.screen_backend = backend
-        except Exception:
-            pass
+    allowed_backends = {"rich", "pillow", "textual", "auto"}  # NOTE: 'pillow' is deprecated (kept for legacy)
+    if backend not in allowed_backends:
+        logger.warning(f"Invalid screen_backend '{backend}' in config; defaulting to 'rich' (allowed: {sorted(allowed_backends)})")
+        backend = 'rich'
+    # Normalize stored value (even for auto/textual) – factory handles availability
+    try:
+        config.hardware.screen_backend = backend
+    except Exception:
+        pass
 
     if getattr(config.hardware, 'screen_width', 0) <= 0 or getattr(config.hardware, 'screen_height', 0) <= 0:
         logger.error(f"Invalid screen dimensions: {config.hardware.screen_width}x{config.hardware.screen_height}")

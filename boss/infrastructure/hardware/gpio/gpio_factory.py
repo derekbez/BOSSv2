@@ -10,6 +10,12 @@ from boss.domain.interfaces.hardware import HardwareFactory, ButtonInterface, Go
 from boss.domain.models.config import HardwareConfig
 from .gpio_hardware import GPIOButtons, GPIOGoButton, GPIOLeds, GPIOSwitches, GPIODisplay, GPIOSpeaker
 from .gpio_screens import GPIOPillowScreen, GPIORichScreen
+try:
+    from .textual_screen import TextualScreen  # type: ignore
+    HAS_TEXTUAL = True
+except Exception:  # pragma: no cover
+    TextualScreen = None  # type: ignore
+    HAS_TEXTUAL = False
 
 logger = logging.getLogger(__name__)
 
@@ -45,20 +51,42 @@ class GPIOHardwareFactory(HardwareFactory):
         return GPIODisplay(self.hardware_config)
     
     def create_screen(self) -> ScreenInterface:
-        """Create screen interface implementation based on current backend (rich or pillow)."""
-        backend = (self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich'))
-        # Heuristic: if running headless under systemd on a Pi (no TTY) and framebuffer exists, prefer Pillow
-        # This ensures HDMI output works when there is no terminal attached for Rich to render to.
-        try:
-            if backend == 'rich' and os.path.exists('/dev/fb0') and not sys.stdout.isatty():
-                logger.info("Headless + framebuffer detected; using Pillow framebuffer backend for HDMI output")
-                backend = 'pillow'
-        except Exception:
-            pass
-        if backend == 'rich':
+        """Create screen implementation (textual|rich|pillow[deprecated]|auto).
+
+        Deprecation policy:
+          - 'pillow' remains selectable explicitly for legacy framebuffer/image use
+          - Auto mode will NOT choose pillow anymore; it prefers textual (TTY/headless) then rich
+        """
+        configured = (self._current_screen_backend or getattr(self.hardware_config, 'screen_backend', 'rich')).lower()
+
+        # Env override to disable textual (US-TXT-13)
+        if os.getenv('BOSS_DISABLE_TEXTUAL') == '1' and configured == 'textual':
+            logger.info("BOSS_DISABLE_TEXTUAL=1 set; falling back from textual to rich")
+            configured = 'rich'
+
+        backend = configured
+        if configured == 'auto':
+            try:
+                if os.name == 'posix' and sys.stdout.isatty() and not os.getenv('DISPLAY') and HAS_TEXTUAL:
+                    backend = 'textual'
+                else:
+                    backend = 'rich'
+                logger.info(f"Auto screen backend selected: {backend}")
+            except Exception as e:  # pragma: no cover
+                logger.debug(f"Auto backend selection error: {e}")
+                backend = 'rich'
+
+        # Instantiate (avoid pillow unless explicitly requested)
+        if backend == 'pillow':
+            logger.warning("Pillow screen backend is DEPRECATED. Prefer 'textual' or 'rich'.")
+        if backend == 'textual' and HAS_TEXTUAL and TextualScreen is not None:  # type: ignore
+            self._screen_instance = TextualScreen(self.hardware_config)  # type: ignore
+        elif backend == 'rich' or backend == 'auto':
             self._screen_instance = GPIORichScreen(self.hardware_config)
-        else:
+        else:  # pillow explicit
             self._screen_instance = GPIOPillowScreen(self.hardware_config)
+
+        self._current_screen_backend = backend
         return self._screen_instance
 
     # --- US-027 helpers ---
@@ -67,7 +95,7 @@ class GPIOHardwareFactory(HardwareFactory):
 
     def switch_screen_backend(self, backend_type: str) -> bool:
         backend = (backend_type or '').lower()
-        if backend not in {"rich", "pillow"}:
+        if backend not in {"rich", "pillow", "textual", "auto"}:
             logger.warning(f"Invalid backend '{backend_type}', keeping current: {self._current_screen_backend}")
             return False
         try:

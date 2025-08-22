@@ -138,7 +138,7 @@ muxInpin = 8  #          blue
 - **Setup:**
   - Designed for Raspberry Pi OS Lite (no GUI)
   - Use Python 3.11+ and a virtual environment
-  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `Pillow`, etc.
+  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `rich`, `textual` (Pillow optional/legacy)
   - All configuration is in `boss/config/` (co-located with main code)
   - For Windows/dev, hardware is mocked automatically
 
@@ -185,12 +185,13 @@ If LEDs work but nothing appears on the HDMI screen after starting the service:
   ```
 - Ensure boss/config/boss_config.json matches the framebuffer size (screen_width, screen_height). If they differ, update the config and restart the service.
 
-2) Use the Pillow backend on Pi
+2) (Legacy) Pillow framebuffer backend
+- Only enable if you specifically need direct framebuffer image drawing.
 - In boss/config/boss_config.json set:
   ```json
   "screen_backend": "pillow"
   ```
-- Pillow writes directly to /dev/fb0 and is the recommended backend for headless HDMI.
+- Deprecated: prefer the textual backend for simplicity and robustness.
 
 3) Confirm permissions and service config
 - The service/user must have video group access to write /dev/fb0:
@@ -208,7 +209,7 @@ sudo systemctl restart boss
 sudo journalctl -u boss -n 100 -f
 ```
 You should see lines like:
-- GPIOPillowScreen initialized (Pillow framebuffer)
+- TextualScreen initialized (textual backend)
 - Detected framebuffer size: WxH
 - Screen updated: text
 

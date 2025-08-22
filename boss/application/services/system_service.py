@@ -113,9 +113,13 @@ class SystemManager(SystemService):
         
         # Mark as stopping
         self._running = False
-        
-        # Publish shutdown event
-        self.event_bus.publish("system_shutdown", {"reason": "normal"}, "system")
+
+        # Only publish a normal shutdown event if we're not already inside a
+        # specific shutdown handling path (reboot/poweroff/exit_to_os). This
+        # prevents a second "normal" reason from overwriting the original
+        # intent in logs and avoids re-entrancy.
+        if not getattr(self, "_handling_specific_shutdown", False):
+            self.event_bus.publish("system_shutdown", {"reason": "normal"}, "system")
         
         try:
             # Stop WebUI development interface
@@ -341,41 +345,78 @@ class SystemManager(SystemService):
         self.event_bus.publish("app_launch_requested", {}, "system")
     
     def _on_system_shutdown_requested(self, event_type: str, payload: Dict[str, Any]) -> None:
-        """Handle system shutdown requests from admin apps."""
+        """Handle system shutdown requests from admin apps.
+
+        Supported reasons:
+          reboot      - Graceful stop followed by OS reboot
+          poweroff    - Graceful stop followed by OS poweroff
+          exit_to_os  - Graceful stop only (do not restart service)
+          normal/other- Graceful stop
+        """
         reason = payload.get("reason", "normal")
-        logger.info(f"System shutdown requested: {reason}")
-        
-        if reason == "reboot":
-            # Reboot system
-            logger.info("Performing system reboot")
-            import subprocess
-            import sys
-            self.stop()  # Graceful BOSS shutdown first
-            if sys.platform.startswith('linux'):
-                subprocess.run(["sudo", "reboot"], check=False)
+        logger.info(f"System shutdown requested (reason='{reason}')")
+
+        # Mark that we are handling a specific shutdown to suppress the
+        # automatic normal event emission inside stop().
+        self._handling_specific_shutdown = reason in {"reboot", "poweroff", "exit_to_os"}
+
+        try:
+            if reason == "reboot":
+                logger.info("Initiating graceful shutdown prior to reboot")
+                self.stop()  # Does not emit normal event due to flag
+                self._execute_system_action("reboot", ["sudo", "reboot"])
+
+            elif reason == "poweroff":
+                logger.info("Initiating graceful shutdown prior to poweroff")
+                self.stop()
+                self._execute_system_action("poweroff", ["sudo", "poweroff"])
+
+            elif reason == "exit_to_os":
+                logger.info("Exiting BOSS to OS (no reboot/poweroff)")
+                self.stop()
+                # To allow returning to shell without the service auto-restarting,
+                # the systemd unit should use Restart=on-failure instead of always.
+                logger.info("BOSS exited to OS. (If it restarts, adjust systemd Restart policy)")
+
             else:
-                logger.warning("Reboot not supported on this platform")
-                
-        elif reason == "poweroff":
-            # Power off system  
-            logger.info("Performing system poweroff")
-            import subprocess
-            import sys
-            self.stop()  # Graceful BOSS shutdown first
-            if sys.platform.startswith('linux'):
-                subprocess.run(["sudo", "poweroff"], check=False)
-            else:
-                logger.warning("Poweroff not supported on this platform")
-                
-        elif reason == "exit_to_os":
-            # Exit BOSS to OS
-            logger.info("Exiting BOSS to OS")
-            self.stop()  # Graceful BOSS shutdown
-            
-        else:
-            # Normal shutdown
-            logger.info("Normal system shutdown")
-            self.stop()
+                logger.info("Normal system shutdown path engaged")
+                # Normal stop still publishes its own normal event
+                # (flag not set for 'normal')
+                self.stop()
+        finally:
+            # Clear flag so subsequent start/stop cycles behave normally
+            self._handling_specific_shutdown = False
+
+    def _execute_system_action(self, action: str, command: list) -> None:
+        """Execute a system-level action (reboot/poweroff) with logging.
+
+        Args:
+            action: Friendly action name (reboot/poweroff)
+            command: Command list to run
+        """
+        import subprocess
+        import sys
+        if not sys.platform.startswith("linux"):
+            logger.warning(f"{action.capitalize()} not supported on this platform")
+            return
+
+        # Check privileges (use getattr for cross-platform safety)
+        geteuid = getattr(os, "geteuid", None)
+        is_root = bool(geteuid and geteuid() == 0)
+        if not is_root and command and command[0] == "sudo":
+            logger.info(f"Attempting '{action}' via sudo (user={os.getenv('USER')})")
+        try:
+            result = subprocess.run(command, capture_output=True, text=True)
+            logger.info(
+                f"System {action} command executed rc={result.returncode} stdout='{result.stdout.strip()}' stderr='{result.stderr.strip()}'"
+            )
+            if result.returncode != 0:
+                logger.warning(
+                    f"{action.capitalize()} command failed (rc={result.returncode}). "
+                    "Ensure passwordless sudo is configured or adjust service permissions."
+                )
+        except Exception as e:
+            logger.error(f"Error executing {action}: {e}")
     
     def _signal_handler(self, signum, frame) -> None:
         """Handle system signals for graceful shutdown."""
