@@ -26,7 +26,7 @@
     "screen_fullscreen": true,
     "enable_audio": true,
     "audio_volume": 0.7,
-    "screen_backend": "pillow"
+    "screen_backend": "textual"
   },
   "system": {
     "app_timeout_seconds": 300,
