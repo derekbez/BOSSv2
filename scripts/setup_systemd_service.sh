@@ -110,7 +110,7 @@ fi
 echo "==> Preparing systemd service unit"
 if [[ -f "$SERVICE_FILE" && $FORCE_OVERWRITE -ne 1 ]]; then
 	echo "[INFO] Existing unit found at $SERVICE_FILE (use --force to overwrite). Backing up copy."
-	cp "$SERVICE_FILE" "${SERVICE_FILE}.${BACKUP_SUFFIX}.bak" || true
+	$SUDO cp "$SERVICE_FILE" "${SERVICE_FILE}.${BACKUP_SUFFIX}.bak" || true
 fi
 
 cat > /tmp/${SERVICE_NAME}.service.new <<EOF
@@ -142,7 +142,7 @@ Environment=BOSS_SCREEN_BACKEND=auto
 # Switch to tty1 (ignore errors if already active)
 ExecStartPre=/bin/chvt 1
 ExecStart=${PYTHON_BIN:-${BOSS_ROOT}/.venv/bin/python} -m boss.main
-ExecReload=/bin/kill -HUP $MAINPID
+ExecReload=/bin/kill -HUP \$MAINPID
 
 # Restart policy
 Restart=on-failure
