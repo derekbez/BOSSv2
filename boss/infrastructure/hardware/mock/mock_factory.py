@@ -52,7 +52,7 @@ class MockHardwareFactory(HardwareFactory):
 
     def switch_screen_backend(self, backend_type: str) -> bool:
         backend = (backend_type or '').lower()
-        if backend not in {"rich", "pillow"}:
+        if backend not in {"rich"}:
             logger.warning(f"Invalid backend '{backend_type}', keeping current: {self._current_screen_backend}")
             return False
         self._current_screen_backend = backend

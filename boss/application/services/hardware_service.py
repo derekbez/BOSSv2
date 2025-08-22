@@ -224,15 +224,12 @@ class HardwareManager(HardwareService):
                     switch_state = self.switches.read_switches()
                     if switch_state.value != self._last_switch_value:
                         self._on_switch_changed(self._last_switch_value, switch_state.value)
-                # Fallback detection: if textual backend became unavailable, attempt fallback once
+                # Simplified: no automatic backend fallback; log once if unavailable
                 try:
-                    if self.screen and hasattr(self.screen, 'is_available'):
-                        if not self.screen.is_available and self.get_current_screen_backend() == 'textual':  # type: ignore
-                            logger.warning("Textual screen backend unavailable – falling back to 'rich'")
-                            if self.switch_screen_backend('rich'):
-                                logger.info("Fallback to 'rich' backend succeeded")
+                    if self.screen and hasattr(self.screen, 'is_available') and not self.screen.is_available:  # type: ignore
+                        logger.error("Screen backend unavailable (textual expected). Please check Textual installation or disable with BOSS_DISABLE_TEXTUAL=1")
                 except Exception as e:
-                    logger.debug(f"Screen fallback check error: {e}")
+                    logger.debug(f"Screen availability check error: {e}")
                 
                 # Update hardware state
                 self._update_hardware_state()
@@ -312,42 +309,8 @@ class HardwareManager(HardwareService):
         except Exception as e:
             logger.error(f"Error updating screen: {e}")
 
-    # --- US-027: runtime switching support ---
+    # Simplified: runtime backend switching removed
     def get_current_screen_backend(self) -> str:
         if hasattr(self.hardware_factory, 'get_current_screen_backend'):
             return self.hardware_factory.get_current_screen_backend()  # type: ignore
-        return 'pillow'
-
-    def switch_screen_backend(self, backend_type: str) -> bool:
-        """Switch screen backend at runtime and reinitialize screen."""
-        try:
-            if not hasattr(self.hardware_factory, 'switch_screen_backend'):
-                logger.warning("Hardware factory does not support backend switching")
-                return False
-            ok = self.hardware_factory.switch_screen_backend(backend_type)  # type: ignore
-            if not ok:
-                return False
-            # Recreate and initialize screen
-            if self.screen:
-                try:
-                    self.screen.cleanup()
-                except Exception:
-                    pass
-            self.screen = self.hardware_factory.create_screen()
-            if self.screen and not self.screen.initialize():
-                logger.error("Reinitialized screen failed to initialize")
-                return False
-            # Attach event bus if screen supports footer/events
-            try:
-                if hasattr(self.screen, 'attach_event_bus'):
-                    self.screen.attach_event_bus(self.event_bus)  # type: ignore
-            except Exception as e:
-                logger.debug(f"attach_event_bus on switched screen ignored: {e}")
-            # For WebUI impls, reset event bus
-            if self.screen and hasattr(self.screen, 'set_event_bus'):
-                self.screen.set_event_bus(self.event_bus)  # type: ignore
-            logger.info(f"Switched screen backend to {backend_type}")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to switch screen backend: {e}")
-            return False
+        return 'textual'

@@ -164,28 +164,6 @@ class App:
             "error_message": self.error_message
         }
     
-    # --- Screen backend preference helpers (US-027) ---
-    def should_use_rich_backend(self, system_default: str = "pillow") -> bool:
-        """Determine if this app should use Rich backend based on preference."""
-        preferred = getattr(self.manifest, 'preferred_screen_backend', 'auto')
-        
-        if preferred == "rich":
-            return True
-        if preferred == "pillow":
-            return False
-        return system_default == "rich"
-    
+    # Backend preference helpers removed (single textual backend simplification)
     def get_backend_preference_info(self) -> Dict[str, Any]:
-        """Get information about backend preference for logging/debugging."""
-        preferred = getattr(self.manifest, 'preferred_screen_backend', 'auto')
-        has_preference = hasattr(self.manifest, 'preferred_screen_backend')
-        return {
-            "preferred_backend": preferred,
-            "manifest_specified": has_preference,
-            "fallback_reason": "Using system default" if preferred == "auto" else "App preference"
-        }
-    
-    def validate_backend_preference(self) -> bool:
-        """Validate that the backend preference is a valid value."""
-        preferred = getattr(self.manifest, 'preferred_screen_backend', 'auto')
-        return preferred in {"auto", "rich", "pillow"}
+        return {"preferred_backend": "textual", "manifest_specified": False, "fallback_reason": "simplified"}

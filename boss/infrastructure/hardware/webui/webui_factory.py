@@ -52,7 +52,7 @@ class WebUIHardwareFactory(HardwareFactory):
 
     def switch_screen_backend(self, backend_type: str) -> bool:
         backend = (backend_type or '').lower()
-        if backend not in {"rich", "pillow", "textual", "auto"}:  # pillow retained only for legacy parity
+        if backend not in {"rich", "textual", "auto"}:
             logger.warning(f"Invalid backend '{backend_type}', keeping current: {self._current_screen_backend}")
             return False
         # WebUI always renders via browser; we just record logical preference

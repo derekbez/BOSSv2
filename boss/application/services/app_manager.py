@@ -193,54 +193,21 @@ class AppManager(AppManagerService):
         self._app_summaries_cache = None
         self.load_apps()
 
-    # --- US-027: Backend switching support ---
-    def _determine_backend_for_app(self, app: App) -> str:
-        """Resolve which backend to use for a given app."""
-        use_rich = app.should_use_rich_backend(self._system_default_backend)
-        return 'rich' if use_rich else 'pillow'
+    # Simplified: backend switching removed (single textual backend)
+    def apply_backend_for_app(self, app: App) -> str:  # compatibility no-op
+        return 'textual'
 
-    def _apply_app_backend(self, app: App) -> str:
-        """Switch backend if needed; return previous backend to allow restore."""
-        if not self.hardware_service or not hasattr(self.hardware_service, 'get_current_screen_backend'):
-            return self._determine_backend_for_app(app)
-        previous_backend = self.hardware_service.get_current_screen_backend()
-        target_backend = self._determine_backend_for_app(app)
-        if target_backend != previous_backend:
-            ok = self.hardware_service.switch_screen_backend(target_backend)
-            if not ok:
-                logger.warning(f"Failed to switch to {target_backend}, staying on {previous_backend}")
-                return previous_backend
-            logger.info(f"Switched backend for app '{app.manifest.name}' -> {target_backend}")
-        return previous_backend
-
-    def _restore_backend(self, previous_backend: str) -> None:
-        """Restore a previously saved backend."""
-        if not self.hardware_service or not hasattr(self.hardware_service, 'get_current_screen_backend'):
-            return
-        current = self.hardware_service.get_current_screen_backend()
-        if current != previous_backend:
-            if not self.hardware_service.switch_screen_backend(previous_backend):
-                logger.error(f"Failed to restore screen backend to {previous_backend}")
-
-    # Public helpers for orchestration
-    def apply_backend_for_app(self, app: App) -> str:
-        return self._apply_app_backend(app)
-
-    def restore_backend(self, previous_backend: str) -> None:
-        self._restore_backend(previous_backend)
+    def restore_backend(self, previous_backend: str) -> None:  # no-op
+        return None
 
     def run_app(self, app: App) -> None:
-        """Run an app with backend preference switching around its lifecycle."""
-        previous_backend = self._apply_app_backend(app)
+        """Run an app lifecycle bookkeeping only (execution handled elsewhere)."""
         try:
-            # Publish app starting event
             app.mark_starting()
             self.event_bus.publish("app.starting", {"app": app.manifest.name}, "app_manager")
-            # For now, just mark running and then stopped; real execution is handled by AppRunner
             app.mark_running()
             self.event_bus.publish("app.running", {"app": app.manifest.name}, "app_manager")
         except Exception as e:
             app.mark_error(str(e))
             self.event_bus.publish("app.error", {"app": app.manifest.name, "error": str(e)}, "app_manager")
-        finally:
-            self._restore_backend(previous_backend)
+        # No finally block needed; no backend switching anymore

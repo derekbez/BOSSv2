@@ -46,10 +46,6 @@ def detect_hardware_platform() -> str:
         if has_tm1637:
             logger.info("Detected Raspberry Pi with tm1637 GPIO access")
             return "gpio"
-        # If framebuffer exists, we can still drive HDMI via Pillow even if GPIO libs are missing
-        if os.path.exists("/dev/fb0"):
-            logger.info("Raspberry Pi framebuffer detected; defaulting to GPIO for HDMI output (GPIO libs missing)")
-            return "gpio"
         logger.info("Raspberry Pi detected but no supported GPIO library available (gpiozero, lgpio, tm1637)")
     
     # Check for testing environment
