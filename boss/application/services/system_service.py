@@ -408,30 +408,18 @@ class SystemManager(SystemService):
         self._handling_specific_shutdown = reason in {"reboot", "poweroff", "exit_to_os"}
 
         try:
-            if reason == "reboot":
-                logger.info("Initiating graceful shutdown prior to reboot")
-                self.stop()  # Does not emit normal event due to flag
-                self._execute_system_action("reboot", ["sudo", "reboot"])
-
-            elif reason == "poweroff":
-                logger.info("Initiating graceful shutdown prior to poweroff")
-                self.stop()
-                self._execute_system_action("poweroff", ["sudo", "poweroff"])
-
+            if reason in {"reboot", "poweroff"}:
+                # Use new helper to ensure the system action runs AFTER a full, clean stop
+                self._graceful_stop_then_action(reason)
             elif reason == "exit_to_os":
                 logger.info("Exiting BOSS to OS (no reboot/poweroff)")
-                self.stop()
-                # To allow returning to shell without the service auto-restarting,
-                # the systemd unit should use Restart=on-failure instead of always.
+                self._graceful_stop_then_action(None)
                 logger.info("BOSS exited to OS. (If it restarts, adjust systemd Restart policy)")
-
             else:
                 logger.info("Normal system shutdown path engaged")
-                # Normal stop still publishes its own normal event
-                # (flag not set for 'normal')
-                self.stop()
+                self._graceful_stop_then_action(None)
         finally:
-            # Clear flag so subsequent start/stop cycles behave normally
+            # Clear flag so subsequent start/stop cycles behave normally (the helper sets this too)
             self._handling_specific_shutdown = False
 
     def _execute_system_action(self, action: str, command: list) -> None:
@@ -464,6 +452,60 @@ class SystemManager(SystemService):
                 )
         except Exception as e:
             logger.error(f"Error executing {action}: {e}")
+
+    # ------------------------------------------------------------------
+    # Improved graceful-stop + optional system action helper
+    # ------------------------------------------------------------------
+    def _graceful_stop_then_action(self, action: Optional[str]) -> None:
+        """Gracefully stop the BOSS system then (optionally) perform a system action.
+
+        Runs the reboot/poweroff command in a short delayed background thread so
+        that: (1) logging handlers flush, (2) resources release cleanly, and
+        (3) the calling event handler returns promptly without racing the OS
+        shutdown. On non-Linux platforms, just logs.
+
+        Args:
+            action: 'reboot', 'poweroff', or None
+        """
+        # Ensure specific-shutdown suppression flag is set for special actions
+        self._handling_specific_shutdown = action in {"reboot", "poweroff", "exit_to_os"}
+
+        # Perform normal stop sequence (suppresses extra event when flag set)
+        try:
+            self.stop()
+        except Exception:
+            logger.exception("Error during graceful stop prior to system action")
+
+        if action not in {"reboot", "poweroff"}:
+            return  # Nothing further to do
+
+        # Delay system action slightly in a daemon thread to allow log flush
+        import threading, time
+
+        def _delayed():  # inner closure
+            try:
+                # Small delay: give log handlers time to finish
+                time.sleep(0.8)
+                # Flush logging handlers explicitly
+                try:
+                    import logging as _logging
+                    for h in _logging.getLogger().handlers:
+                        try:
+                            h.flush()
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
+                if action == "reboot":
+                    logger.info("Executing OS reboot command")
+                    self._execute_system_action("reboot", ["sudo", "reboot"])
+                elif action == "poweroff":
+                    logger.info("Executing OS poweroff command")
+                    self._execute_system_action("poweroff", ["sudo", "poweroff"])
+            except Exception:
+                logger.exception("Delayed system action thread error")
+
+        threading.Thread(target=_delayed, name=f"system-{action}-thread", daemon=True).start()
     
     def _signal_handler(self, signum, frame) -> None:
         """Handle system signals for graceful shutdown."""
