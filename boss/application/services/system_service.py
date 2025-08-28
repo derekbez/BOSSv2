@@ -25,7 +25,7 @@ class SystemManager(SystemService):
         self._running = False
         self._shutdown_event = threading.Event()
         self._webui_port = None  # Track dev UI port for shutdown (if any)
-        self._previous_backend_for_app = None
+    # Legacy backend switching removed; attribute retained previously is now unnecessary.
 
         # Set up signal handlers for graceful shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -276,7 +276,7 @@ class SystemManager(SystemService):
         bus.subscribe("go_button_pressed", self._on_go_button_pressed)
         # Feedback / lifecycle events
         bus.subscribe("app_started", self._on_app_started)
-        # Restore backend after app stops (legacy no-op but kept for flow clarity)
+        # App stopped (cleanup / display restore etc.)
         bus.subscribe("app_stopped", self._on_app_stopped)
         # Handle admin shutdown requests
         bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
@@ -311,12 +311,6 @@ class SystemManager(SystemService):
                 except Exception as e:
                     logger.debug(f"stop_current_app error: {e}")
 
-                # US-027: apply preferred backend for this app
-                try:
-                    self._previous_backend_for_app = self.app_manager.apply_backend_for_app(app)
-                except Exception as e:
-                    logger.warning(f"Could not apply backend for app: {e}")
-
                 # Start new app
                 self.app_runner.start_app(app)
                 self.app_manager.set_current_app(app)
@@ -328,13 +322,7 @@ class SystemManager(SystemService):
             logger.error(f"Error launching app: {e}")
 
     def _on_app_stopped(self, event_type: str, payload: Dict[str, Any]) -> None:
-        """Restore screen backend after app completes (US-027)."""
-        try:
-            if self._previous_backend_for_app:
-                self.app_manager.restore_backend(self._previous_backend_for_app)
-                self._previous_backend_for_app = None
-        except Exception as e:
-            logger.warning(f"Failed to restore backend after app stop: {e}")
+        """Handle app stopped events (cleanup & display restore)."""
         # When an app stops, restore switch value on 7-seg if idle
         try:
             current_app = self.app_runner.get_running_app()
@@ -355,6 +343,13 @@ class SystemManager(SystemService):
                         self.hardware_service.leds.set_led(c, False)
                     except Exception:
                         pass
+            # Restore 7-seg to current switch value (clears LOAD) unless app already changed it
+            try:
+                state = self.hardware_service.get_hardware_state()
+                if state and self.hardware_service.display and hasattr(self.hardware_service.display, 'show_number'):
+                    self.hardware_service.display.show_number(state.switches.value)
+            except Exception:
+                pass
             # App may overwrite screen quickly; no extra action needed here.
         except Exception:
             pass
