@@ -268,15 +268,20 @@ class SystemManager(SystemService):
     
     def _setup_event_handlers(self) -> None:
         """Set up system event handlers."""
+        # Use a local var for brevity
+        bus = self.event_bus
         # Handle app launch requests (from Go button or API)
-        self.event_bus.subscribe("app_launch_requested", self._on_app_launch_requested)
-        self.event_bus.subscribe("go_button_pressed", self._on_go_button_pressed)
-        # Restore backend after app stops
-        self.event_bus.subscribe("app_stopped", self._on_app_stopped)
+        bus.subscribe("app_launch_requested", self._on_app_launch_requested)
+        # Go button direct event
+        bus.subscribe("go_button_pressed", self._on_go_button_pressed)
+        # Feedback / lifecycle events
+        bus.subscribe("app_started", self._on_app_started)
+        # Restore backend after app stops (legacy no-op but kept for flow clarity)
+        bus.subscribe("app_stopped", self._on_app_stopped)
         # Handle admin shutdown requests
-        self.event_bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
+        bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
         # Note: Hardware output events (led_update, display_update, screen_update)
-        # are now handled by HardwareEventHandler to avoid duplication
+        # are handled elsewhere (HardwareEventHandler)
 
     def _on_config_changed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle config change (screen backend hot-reload removed for simplicity)."""
@@ -295,9 +300,12 @@ class SystemManager(SystemService):
             if app:
                 logger.info(f"Launching app for switch {switch_value}: {app.manifest.name}")
 
-                # If an app is running, stop it first (gracefully with timeout)
+                # Immediate user feedback: set 7-seg to LOAD and light all LEDs briefly
+                self._show_transition_feedback()
+
+                # If an app is running, stop it first (shorter timeout for snappier UX)
                 try:
-                    stopped = self.app_runner.stop_current_app(timeout=3.0)
+                    stopped = self.app_runner.stop_current_app(timeout=1.2)
                     if not stopped:
                         logger.warning("Previous app did not stop within timeout; proceeding with new launch")
                 except Exception as e:
@@ -327,11 +335,66 @@ class SystemManager(SystemService):
                 self._previous_backend_for_app = None
         except Exception as e:
             logger.warning(f"Failed to restore backend after app stop: {e}")
+        # When an app stops, restore switch value on 7-seg if idle
+        try:
+            current_app = self.app_runner.get_running_app()
+            if current_app is None:
+                state = self.hardware_service.get_hardware_state()
+                if self.hardware_service.display and hasattr(self.hardware_service.display, 'show_number'):
+                    self.hardware_service.display.show_number(state.switches.value)
+        except Exception:
+            pass
+
+    def _on_app_started(self, event_type: str, payload: Dict[str, Any]) -> None:
+        """Clear transition indicators once the new app thread has started."""
+        try:
+            # Turn LEDs off after transition
+            if self.hardware_service.leds:
+                for c in ("red","yellow","green","blue"):
+                    try:
+                        self.hardware_service.leds.set_led(c, False)
+                    except Exception:
+                        pass
+            # App may overwrite screen quickly; no extra action needed here.
+        except Exception:
+            pass
     
     def _on_go_button_pressed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle Go button press."""
-        # Trigger app launch
+        # Trigger app launch (transition feedback handled in launch handler)
         self.event_bus.publish("app_launch_requested", {}, "system")
+
+    # ------------------------------------------------------------------
+    # Visual / tactile feedback helpers
+    # ------------------------------------------------------------------
+    def _show_transition_feedback(self) -> None:
+        """Provide immediate visual feedback that an app transition is in progress."""
+        try:
+            # 7-seg: show LOAD / or dashes (fallback if show_text not available)
+            disp = self.hardware_service.display
+            if disp:
+                if hasattr(disp, 'show_text'):
+                    try:
+                        disp.show_text("LOAD")
+                    except Exception:
+                        pass
+                elif hasattr(disp, 'show_number'):
+                    try:
+                        # Use 4 dashes as a neutral transition marker if possible
+                        disp.show_text("----")  # type: ignore
+                    except Exception:
+                        pass
+
+            # LEDs: turn all on to signal processing
+            leds = self.hardware_service.leds
+            if leds:
+                for c in ("red","yellow","green","blue"):
+                    try:
+                        leds.set_led(c, True)
+                    except Exception:
+                        pass
+        except Exception:
+            logger.debug("Transition feedback error", exc_info=True)
     
     def _on_system_shutdown_requested(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle system shutdown requests from admin apps.
