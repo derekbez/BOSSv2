@@ -1,9 +1,9 @@
 """
-Unit tests for GPIO screen implementations (Rich and Pillow backends)
+Unit tests for GPIO screen implementations (Textual primary, Rich fallback; Pillow removed)
 """
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from boss.infrastructure.hardware.gpio.gpio_screens import GPIORichScreen, GPIOPillowScreen
+from boss.infrastructure.hardware.gpio.gpio_screens import GPIORichScreen
 from boss.domain.models.config import HardwareConfig
 
 
@@ -11,14 +11,24 @@ from boss.domain.models.config import HardwareConfig
 def hardware_config():
     """Create a test hardware configuration."""
     return HardwareConfig(
-        screen_width=800,
-        screen_height=480,
-        screen_backend="rich"
+    switch_data_pin=18,
+    switch_select_pins=[23,24,25],
+    go_button_pin=4,
+    button_pins={"red":5,"yellow":6,"green":13,"blue":19},
+    led_pins={"red":21,"yellow":20,"green":26,"blue":12},
+    display_clk_pin=2,
+    display_dio_pin=3,
+    screen_width=800,
+    screen_height=480,
+    screen_backend="textual",
+    screen_fullscreen=False,
+    enable_audio=False,
+    audio_volume=50
     )
 
 
 class TestGPIORichScreen:
-    """Test cases for GPIORichScreen implementation."""
+    """Test cases for GPIORichScreen implementation (Pillow removed)."""
     
     def test_init(self, hardware_config):
         """Test GPIORichScreen initialization."""
@@ -36,107 +46,12 @@ class TestGPIORichScreen:
             assert result is True
             assert screen.is_available is True
     
-    def test_cleanup(self, hardware_config):
-        """Test cleanup of GPIORichScreen."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            mock_console_instance = Mock()
-            mock_console.return_value = mock_console_instance
-            
-            screen = GPIORichScreen(hardware_config)
-            screen.initialize()
-            screen.cleanup()
-            
-            assert not screen.is_available
-            mock_console_instance.clear.assert_called_once()
-    
-    def test_clear_screen(self, hardware_config):
-        """Test screen clearing functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            mock_console_instance = Mock()
-            mock_console.return_value = mock_console_instance
-            
-            screen = GPIORichScreen(hardware_config)
-            screen.initialize()
-            screen.clear_screen("blue")
-            
-            mock_console_instance.clear.assert_called()
-            mock_console_instance.print.assert_called_with("", style="on blue")
-    
-    def test_display_text_center(self, hardware_config):
-        """Test text display with center alignment."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Text') as mock_text:
-                mock_console_instance = Mock()
-                mock_console.return_value = mock_console_instance
-                mock_text_instance = Mock()
-                mock_text.return_value = mock_text_instance
-                
-                screen = GPIORichScreen(hardware_config)
-                screen.initialize()
-                screen.display_text("Hello World", color="white", background="black", align="center")
-                
-                mock_text.assert_called_with("Hello World", style="white on black")
-                mock_console_instance.clear.assert_called()
-                mock_console_instance.print.assert_called_with(mock_text_instance, justify="center")
-    
-    def test_display_text_not_available(self, hardware_config):
-        """Test text display when screen is not available."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
-            screen = GPIORichScreen(hardware_config)
-            # Don't initialize, so is_available remains False
-            screen.display_text("Test")
-            # Should not raise exception, just log warning
-    
-    def test_display_image(self, hardware_config):
-        """Test image display (shows placeholder for Rich backend)."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            mock_console_instance = Mock()
-            mock_console.return_value = mock_console_instance
-            
-            screen = GPIORichScreen(hardware_config)
-            screen.initialize()
-            screen.display_image("/path/to/image.png")
-            
-            mock_console_instance.print.assert_called_with("[Image: /path/to/image.png]", style="bold yellow")
-    
-    def test_get_screen_size(self, hardware_config):
-        """Test getting screen dimensions."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
-            screen = GPIORichScreen(hardware_config)
-            size = screen.get_screen_size()
-            assert size == (800, 480)
-
-    def test_display_table(self, hardware_config):
-        """Test Rich table display functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Table') as mock_table:
-                mock_console_instance = Mock()
-                mock_console.return_value = mock_console_instance
-                mock_table_instance = Mock()
-                mock_table.return_value = mock_table_instance
-                
-                screen = GPIORichScreen(hardware_config)
-                screen.initialize()
-                
-                table_data = {"row1": {"col1": "data1", "col2": "data2"}}
-                screen.display_table(table_data, "Test Table")
-                
-                mock_table.assert_called_with(title="Test Table")
-                mock_console_instance.clear.assert_called()
-                mock_console_instance.print.assert_called_with(mock_table_instance)
-
-    def test_display_progress(self, hardware_config):
-        """Test Rich progress bar display."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Progress') as mock_progress:
-                mock_console_instance = Mock()
-                mock_console.return_value = mock_console_instance
-                
-                screen = GPIORichScreen(hardware_config)
-                screen.initialize()
-                screen.display_progress(75.0, "Loading...")
-                
-                mock_progress.assert_called()
+    def test_only_rich_screen_present(self, hardware_config):
+        screen = GPIORichScreen(hardware_config)
+        ok = screen.initialize()
+        assert ok is True
+        size = screen.get_screen_size()
+        assert isinstance(size, tuple) and len(size) == 2
 
     def test_display_panel(self, hardware_config):
         """Test Rich panel display functionality."""
@@ -219,87 +134,6 @@ class TestGPIORichScreen:
             screen.display_markup("markup")
 
 
-class TestGPIOPillowScreen:
-    """Test cases for GPIOPillowScreen implementation."""
-    
-    def test_init(self, hardware_config):
-        """Test GPIOPillowScreen initialization."""
-        screen = GPIOPillowScreen(hardware_config)
-        assert screen.hardware_config == hardware_config
-        assert not screen.is_available
-    
-    @patch('boss.infrastructure.hardware.gpio.gpio_screens.open')
-    @patch('boss.infrastructure.hardware.gpio.gpio_screens.Image')
-    @patch('boss.infrastructure.hardware.gpio.gpio_screens.ImageDraw')
-    @patch('boss.infrastructure.hardware.gpio.gpio_screens.ImageFont')
-    def test_initialize_success(self, mock_font, mock_draw, mock_image, mock_open, hardware_config):
-        """Test successful initialization of GPIOPillowScreen."""
-        # Mock file reads for framebuffer info
-        mock_open.side_effect = [
-            Mock(__enter__=Mock(return_value=Mock(read=Mock(return_value="800,480")))),
-            Mock(__enter__=Mock(return_value=Mock(read=Mock(return_value="16"))))
-        ]
-        
-        mock_image_instance = Mock()
-        mock_image.new.return_value = mock_image_instance
-        mock_draw_instance = Mock()
-        mock_draw.Draw.return_value = mock_draw_instance
-        mock_font.load_default.return_value = Mock()
-        
-        screen = GPIOPillowScreen(hardware_config)
-        result = screen.initialize()
-        
-        assert result is True
-        assert screen.is_available is True
-    
-    def test_initialize_failure(self, hardware_config):
-        """Test failed initialization of GPIOPillowScreen."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Image.new', side_effect=Exception("Test error")):
-            screen = GPIOPillowScreen(hardware_config)
-            result = screen.initialize()
-            
-            assert result is False
-            assert not screen.is_available
-    
-    def test_cleanup(self, hardware_config):
-        """Test cleanup of GPIOPillowScreen."""
-        screen = GPIOPillowScreen(hardware_config)
-        screen._available = True
-        screen.cleanup()
-        
-        assert not screen.is_available
-        assert screen._image is None
-    
-    def test_get_screen_size(self, hardware_config):
-        """Test getting screen dimensions."""
-        screen = GPIOPillowScreen(hardware_config)
-        size = screen.get_screen_size()
-        assert size == (800, 480)
-
-
-class TestScreenBackendComparison:
-    """Test cases comparing Rich and Pillow backend behavior."""
-    
-    def test_both_backends_implement_interface(self, hardware_config):
-        """Test that both backends implement the same interface methods."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
-            rich_screen = GPIORichScreen(hardware_config)
-            pillow_screen = GPIOPillowScreen(hardware_config)
-            
-            # Both should have the same interface methods
-            interface_methods = ['initialize', 'cleanup', 'is_available', 'clear_screen', 
-                               'display_text', 'display_image', 'get_screen_size']
-            
-            for method in interface_methods:
-                assert hasattr(rich_screen, method)
-                assert hasattr(pillow_screen, method)
-                assert callable(getattr(rich_screen, method))
-                assert callable(getattr(pillow_screen, method))
-    
-    def test_screen_size_consistency(self, hardware_config):
-        """Test that both backends return consistent screen sizes."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
-            rich_screen = GPIORichScreen(hardware_config)
-            pillow_screen = GPIOPillowScreen(hardware_config)
-            
-            assert rich_screen.get_screen_size() == pillow_screen.get_screen_size()
+def test_pillow_symbol_removed():
+    import boss.infrastructure.hardware.gpio.gpio_screens as mod
+    assert 'GPIOPillowScreen' not in dir(mod)

@@ -2,7 +2,7 @@
 
 This guide sets up B.O.S.S. on a Raspberry Pi for production and on Windows for WebUI development. Dependencies are centralized in requirements/base.txt and requirements/dev.txt.
 
-Important: The screen backend is now simplified to 'textual' (Rich-based). The older Pillow and selectable Rich modes have been removed for maintenance simplicity.
+Important: The screen backend is now simplified to 'textual'. The legacy Pillow framebuffer and selectable Rich modes have been removed; Rich persists only as an internal fallback if Textual cannot start.
 
 ### Raspberry Pi Setup (64-bit Lite OS)
 
@@ -53,7 +53,7 @@ sudo systemctl start boss && sudo journalctl -u boss -f
 
 Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/config/boss_config.json match the framebuffer. Check with: fbset -fb /dev/fb0 -i
 
-Legacy backends (Pillow/Rich) have been removed from selection; keep your config at "textual" or "auto" (auto currently resolves to textual).
+Legacy backends have been removed; set `screen_backend` to "textual" (or "auto" which resolves to textual).
 
 ### Windows WebUI Development (CMD)
 
@@ -72,9 +72,9 @@ Legacy backends (Pillow/Rich) have been removed from selection; keep your config
 4) Run with WebUI hardware emulation
 - python -m boss.main --hardware webui
 
-5) Change screen backend (optional)
+5) Screen backend config
 - System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "textual" | "auto" (auto resolves to textual)
-- Per app: set preferred_screen_backend in the app's manifest.json
+- Per-app backend preference is no longer supported (field ignored if present).
 
 ++++++++++
 

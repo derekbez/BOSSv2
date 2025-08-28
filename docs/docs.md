@@ -138,7 +138,7 @@ muxInpin = 8  #          blue
 - **Setup:**
   - Designed for Raspberry Pi OS Lite (no GUI)
   - Use Python 3.11+ and a virtual environment
-  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `rich`, `textual` (Pillow optional/legacy)
+  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `rich`, `textual`
   - All configuration is in `boss/config/` (co-located with main code)
   - For Windows/dev, hardware is mocked automatically
 
@@ -185,12 +185,12 @@ If LEDs work but nothing appears on the HDMI screen after starting the service:
   ```
 - Ensure boss/config/boss_config.json matches the framebuffer size (screen_width, screen_height). If they differ, update the config and restart the service.
 
-2) Textual backend only
+2) Screen backend
 - Ensure boss/config/boss_config.json sets:
   ```json
   "screen_backend": "textual"
   ```
-- If using auto, it resolves to textual. Pillow/Rich selection removed.
+- If using `auto`, it resolves to `textual` internally.
 
 3) Confirm permissions and service config
 - The service/user must have video group access to write /dev/fb0:
@@ -212,15 +212,11 @@ You should see lines like:
 - Detected framebuffer size: WxH
 - Screen updated: text
 
-5) Quick screen test (optional)
-- Run the included test script to draw to the framebuffer:
-  ```bash
-  python3 scripts/test_pillow_screen.py
-  ```
-  If this shows text but the service does not, compare logs and config.
+5) Console notes
+- Textual runs on tty1. If the Linux login prompt is present it may interleave; use the provided systemd unit with `--allocate-tty` to take exclusive ownership of tty1 (disabling getty if needed).
 
-6) Console overlay notes
-- The Linux login console may still be visible; Pillow writes directly over it. If you never see updates, double-check bpp and geometry, and that the service logs no framebuffer write errors.
+6) Logs
+- Review journal logs for lines indicating Textual screen initialization and update metrics.
 
 If issues persist, capture the last 200 lines of the boss journal and the outputs of fbset and share them.
 

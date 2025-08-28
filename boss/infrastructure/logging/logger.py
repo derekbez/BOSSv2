@@ -5,6 +5,7 @@ Logging setup for B.O.S.S.
 import logging
 import logging.handlers
 import sys
+import os
 from pathlib import Path
 from typing import Optional
 from boss.domain.models.config import BossConfig
@@ -42,8 +43,11 @@ def setup_logging(config: BossConfig) -> None:
         '%(asctime)s - %(levelname)s - %(message)s'
     )
     
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
+    # Console handler (route to stderr so Textual can control stdout cleanly)
+    # If BOSS_CONSOLE_LOG_STDOUT=1 is set, keep legacy stdout behavior.
+    log_stdout = os.getenv("BOSS_CONSOLE_LOG_STDOUT", "0") == "1"
+    console_stream = sys.stdout if log_stdout else sys.stderr
+    console_handler = logging.StreamHandler(console_stream)
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(simple_formatter)
     root_logger.addHandler(console_handler)

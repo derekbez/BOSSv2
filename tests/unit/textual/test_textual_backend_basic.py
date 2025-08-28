@@ -91,4 +91,4 @@ def test_auto_mode_selection_prefers_textual_when_tty(boss_config, monkeypatch):
     monkeypatch.setenv('DISPLAY','')
     screen = factory.create_screen()
     # backend chosen stored internally
-    assert factory.get_current_screen_backend() in {'textual','rich','pillow'}  # pillow kept for legacy
+    assert factory.get_current_screen_backend() in {'textual','rich'}
