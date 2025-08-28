@@ -34,7 +34,7 @@ stories:
     description: |
       Provide a new backend value 'textual'. When selected the factory creates a
       TextualScreen implementing ScreenInterface. If import or runtime constraints
-      prevent initialization it falls back (pillow -> rich order) with a warning.
+  (Legacy fallback sequence removed; only textual supported now with minimal rich emergency fallback.)
     acceptance_criteria:
       - "Config validator accepts textual (case-insensitive)"
       - "Factory instantiates TextualScreen when configured and available"
@@ -94,14 +94,14 @@ stories:
     benefit: "Simpler deployments & optimal performance"
     acceptance_criteria:
       - "Config accepts 'auto'"
-      - "Decision order: If Linux & active TTY & no DISPLAY -> textual; else if /dev/fb0 -> pillow; else -> rich"
+  - "Decision order (simplified): auto -> textual (rich only if textual import missing)"
       - "Decision logged with reason"
     tasks:
       - "Implement detection helper"
       - "Unit tests for decision matrix (mock env)"
     priority: Medium
   status: Partial
-  status_notes: "Auto implemented but decision order adjusted (no longer selects pillow; chooses textual else rich). Tests incomplete."
+  status_notes: "Auto implemented; now always textual unless library missing (then rich fallback)."
 
   - id: US-TXT-05
     title: Dedicated TTY integration for textual

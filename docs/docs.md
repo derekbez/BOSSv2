@@ -185,13 +185,12 @@ If LEDs work but nothing appears on the HDMI screen after starting the service:
   ```
 - Ensure boss/config/boss_config.json matches the framebuffer size (screen_width, screen_height). If they differ, update the config and restart the service.
 
-2) (Legacy) Pillow framebuffer backend
-- Only enable if you specifically need direct framebuffer image drawing.
-- In boss/config/boss_config.json set:
+2) Textual backend only
+- Ensure boss/config/boss_config.json sets:
   ```json
-  "screen_backend": "pillow"
+  "screen_backend": "textual"
   ```
-- Deprecated: prefer the textual backend for simplicity and robustness.
+- If using auto, it resolves to textual. Pillow/Rich selection removed.
 
 3) Confirm permissions and service config
 - The service/user must have video group access to write /dev/fb0:

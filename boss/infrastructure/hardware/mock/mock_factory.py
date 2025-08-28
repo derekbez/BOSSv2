@@ -16,8 +16,8 @@ class MockHardwareFactory(HardwareFactory):
     
     def __init__(self, hardware_config: HardwareConfig):
         self.hardware_config = hardware_config
-        self._current_screen_backend = getattr(self.hardware_config, 'screen_backend', 'rich')
-        logger.info("Mock hardware factory initialized")
+        self._current_screen_backend = 'textual'
+        logger.info("Mock hardware factory initialized (logical textual backend)")
     
     def create_buttons(self) -> ButtonInterface:
         """Create mock button interface implementation."""
@@ -46,18 +46,13 @@ class MockHardwareFactory(HardwareFactory):
             height=self.hardware_config.screen_height
         )
 
-    # --- US-027 helpers ---
+    # --- Backend helpers (simplified single textual path) ---
     def get_current_screen_backend(self) -> str:
         return self._current_screen_backend
 
     def switch_screen_backend(self, backend_type: str) -> bool:
-        backend = (backend_type or '').lower()
-        if backend not in {"rich"}:
-            logger.warning(f"Invalid backend '{backend_type}', keeping current: {self._current_screen_backend}")
-            return False
-        self._current_screen_backend = backend
-        logger.info(f"Mock logical screen backend set to: {backend}")
-        return True
+        logger.info("Runtime backend switching disabled (single textual backend)")
+        return False
     
     def create_speaker(self) -> Optional[SpeakerInterface]:
         """Create mock speaker interface implementation."""

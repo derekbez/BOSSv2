@@ -179,6 +179,12 @@ StandardInput=tty
 TTYReset=yes
 TTYVHangup=yes
 TTYVTDisallocate=yes
+StandardOutput=tty
+StandardError=journal
+# Force textual backend explicitly when we own the TTY
+Environment=BOSS_SCREEN_BACKEND=textual
+# Ensure getty@tty1 is stopped first if present
+After=getty@tty1.service
 EOF
 fi
 

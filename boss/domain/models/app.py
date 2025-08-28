@@ -30,7 +30,6 @@ class AppManifest:
     requires_network: bool = False
     requires_audio: bool = False
     tags: Optional[List[str]] = None
-    preferred_screen_backend: str = "auto"  # "auto", "rich", or "pillow"
     
     def __post_init__(self):
         if self.tags is None:
@@ -60,7 +59,6 @@ class AppManifest:
             known_fields = {
                 "name", "description", "version", "author", "entry_point", 
                 "timeout_seconds", "requires_network", "requires_audio", "tags",
-                "preferred_screen_backend"
             }
             filtered_data = {k: v for k, v in data.items() if k in known_fields}
             
@@ -80,7 +78,6 @@ class AppManifest:
             "requires_network": self.requires_network,
             "requires_audio": self.requires_audio,
             "tags": self.tags,
-            "preferred_screen_backend": getattr(self, 'preferred_screen_backend', 'auto')
         }
 
 

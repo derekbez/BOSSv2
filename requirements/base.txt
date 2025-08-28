@@ -5,7 +5,5 @@ lgpio
 # TM1637 7-seg display (GPIO) — Linux only
 python-tm1637; platform_system == "Linux"
 
-# Screen backends
-Pillow
-rich
+# Screen backend (textual only; rich is a transitive dependency)
 textual>=0.58
