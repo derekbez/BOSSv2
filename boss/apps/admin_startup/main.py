@@ -58,7 +58,7 @@ def run(stop_event, api, **kwargs):
         blink_all(times=2, on_sec=0.22, off_sec=0.16)
 
         # Final message
-        api.screen.display_text("BOSS Ready", align="left", color="red", font_size=32)
+        api.screen.display_text("BOSS Ready", align="left", color="green", font_size=48)
         api.log_info("Admin Startup: Displayed 'BOSS Ready'")
 
         # Small grace period; exit early if asked
