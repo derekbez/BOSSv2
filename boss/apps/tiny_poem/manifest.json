@@ -1,0 +1,17 @@
+{
+    "name": "tiny_poem",
+    "description": "Random poem (Poemist API)",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 120,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "poetry"
+    ],
+    "config": {
+        "request_timeout_seconds": 6,
+        "refresh_seconds": 10800
+    }
+}

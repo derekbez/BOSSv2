@@ -1,0 +1,18 @@
+{
+    "name": "quote_of_the_day",
+    "description": "Fetch and display a quote from selected source (Quotable, They Said So, Shakespeare).",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 120,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "quotes",
+        "text"
+    ],
+    "config": {
+        "source": "quotable",
+        "category": "motivational"
+    }
+}

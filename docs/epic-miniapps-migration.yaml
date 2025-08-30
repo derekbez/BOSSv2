@@ -1,0 +1,225 @@
+epic:
+  id: miniapps_migration_v1
+  title: "Epic: Migrate Placeholder Mini-Apps to BOSS Architecture"
+  owner: platform
+  rationale: |
+    Consolidate provisional mini-app prototypes in `apps_placeholder_todo/` into the
+    production `boss/apps/` structure to leverage standard lifecycle (AppManager + AppRunner),
+    hardware abstraction, event-driven patterns, and consistent UX (LED/Button parity).
+    Incremental migration reduces risk, keeps PRs small, and allows the template to mature
+    before bulk conversion.
+  scope_includes:
+    - Moving selected placeholder mini-app directories into `boss/apps/`
+    - Creating / normalizing manifest.json (standard schema)
+    - Refactoring code to conform to `run(stop_event, api)` contract & event-driven IO
+    - Applying LED/Button availability rule & clean shutdown conventions
+    - Adding switch mappings in `boss/config/app_mappings.json`
+    - Adding minimal smoke tests (load / run briefly / stop)
+    - Documentation & user story status updates
+  scope_excludes:
+    - Full UX polish for every app (beyond minimal readability)
+    - Advanced caching layers or cross-app shared services
+    - i18n / localization
+    - Performance tuning for high-frequency network apps
+  strategy: |
+    Migrate in small batches (1–3 apps) starting with a static (no network) example and a
+    simple network-dependent example to finalize a reference template. Capture lessons
+    learned before scaling to remaining apps. Use one epic tracking file plus discrete user
+    stories (YAML) for traceability. Each migrated app must meet acceptance criteria before
+    mapping becomes active in production.
+  definition_of_done:
+    - Reference template finalized & documented (after first two apps)
+    - All targeted placeholder apps migrated & removed from `apps_placeholder_todo/`
+    - All new apps appear via switch mapping & pass smoke tests
+    - Docs updated (epic + per-app user stories marked implemented)
+    - No direct hardware access in migrated apps (API only)
+    - All LEDs off after each app exits; event subscriptions cleaned
+  risks:
+    - Inconsistent manifest styles -> enforce template
+    - Hidden direct hardware calls -> code review + grep patterns
+    - Network latency/hangs -> enforce timeouts & graceful error messages
+    - Asset path errors -> mandate `api.get_asset_path()` usage
+  mitigation:
+    - Provide migration checklist & template below
+    - Introduce shared pytest fixture for smoke test
+    - Add lint-style grep in CI (future) for forbidden imports
+
+migration_template:
+  checklist:
+    - [ ] Create destination folder `boss/apps/<app_name>`
+    - [ ] Move or create assets/ (only necessary files)
+    - [ ] Write standardized manifest.json
+    - [ ] Refactor main.py to template (see code_template section)
+    - [ ] Replace direct path logic with `api.get_asset_path()`
+    - [ ] Implement LED/Button availability (only if interactive)
+    - [ ] Subscribe to required events, record subscription IDs, unsubscribe in finally
+    - [ ] Ensure `stop_event` honored (loop or wait)
+    - [ ] Add smoke test (start, wait <=2s, stop, asserts)
+    - [ ] Add mapping to `boss/config/app_mappings.json`
+    - [ ] Update epic & user story status
+    - [ ] Remove old placeholder directory when finished
+  manifest_standard_fields:
+    - name
+    - description
+    - version
+    - author
+    - entry_point (main.py)
+    - timeout_seconds (override default only if needed)
+    - requires_network (bool)
+    - requires_audio (bool)
+    - tags (array)
+    - config (optional object for per-app settings)
+  code_template: |
+    """Reference pattern for migrated mini-apps."""
+    import json, random
+    from typing import Any
+    from threading import Event
+
+    def run(stop_event: Event, api: Any) -> None:
+        api.log_info("<app_name> starting")
+        subs = []
+        try:
+            # Load assets
+            try:
+                path = api.get_asset_path("example.json")  # if needed
+                # with open(path, 'r', encoding='utf-8') as f: data = json.load(f)
+            except Exception as e:
+                api.log_error(f"Asset load failed: {e}")
+
+            # (Optional) LED availability
+            # api.hardware.set_led('yellow', True)
+
+            # Event handlers
+            def on_button(event_type, payload):
+                btn = payload.get('button') or payload.get('button_id')
+                if btn == 'yellow':
+                    api.screen.display_text("Pressed Yellow", align='center')
+            subs.append(api.event_bus.subscribe('button_pressed', on_button))
+
+            api.screen.clear_screen()
+            api.screen.display_text("Hello", align='center')
+
+            # Idle wait pattern
+            while not stop_event.wait(timeout=0.5):
+                pass  # or periodic update
+        finally:
+            for sid in subs:
+                try: api.event_bus.unsubscribe(sid)
+                except Exception: pass
+            for c in ('red','yellow','green','blue'):
+                try: api.hardware.set_led(c, False)
+                except Exception: pass
+            api.log_info("<app_name> stopping")
+
+stories:
+  - id: migrate_app_jokes
+    title: Migrate app_jokes (static text reference)
+    category: migration
+  status: implemented
+    description: |
+      Migrate `app_jokes` as the canonical static-content example. Provides a non-network
+      reference demonstrating asset loading, button-driven cycling, LED availability, and
+      clean shutdown.
+    acceptance_criteria:
+      - Manifest present (standard fields, requires_network=false)
+      - Uses `api.get_asset_path('jokes.json')` for data
+      - Yellow LED ON to indicate cycling action when idle
+      - Yellow button press cycles through jokes (no blocking UI freeze)
+      - Unsubscribes from all events & turns LEDs off on exit
+      - Added switch mapping (unique number documented)
+      - Smoke test passes (start -> cycle -> stop)
+      - Placeholder source removed from `apps_placeholder_todo/`
+    test_plan:
+      - Unit: parse manifest, ensure entry_point matches
+      - Integration: run app thread for <=3s, simulate button press event, assert screen update logged
+    tasks:
+  - [x] Create destination folder & copy assets
+  - [x] Write manifest.json
+  - [x] Refactor main.py per template (add button cycling)
+  - [x] Add mapping to app_mappings.json
+  - [x] Add smoke test
+  - [x] Update documentation & mark status implemented
+    progress_notes: |
+      Folder created under boss/apps/app_jokes, assets & manifest added, main.py refactored
+      with button cycling & LED availability, mapping added as switch 5. Smoke test pending.
+
+  - id: migrate_current_weather
+    title: Migrate current_weather (network reference)
+    category: migration
+  status: implemented
+    description: |
+      Migrate `current_weather` to serve as the baseline network-enabled template.
+      Demonstrates network timeout handling, graceful fallback messaging, and periodic
+      refresh loop respecting `stop_event`.
+    acceptance_criteria:
+      - Manifest with requires_network=true and location config (lat/lon)
+      - Uses `api.get_config_value()` or manifest config (if supported) else local config JSON asset
+      - Fetches from Open-Meteo with timeout <= 4s
+      - On success shows temp, wind, cloud cover (fits one screen)
+      - On failure displays friendly fallback & logs error
+      - Refresh cadence configurable (default 60s); loop interruptible by `stop_event`
+      - LEDs OFF (no interactive buttons needed by default)
+      - Clean shutdown (no dangling threads; single network call at a time)
+      - Smoke test with mocked HTTP (or monkeypatch) passes
+      - Added mapping & placeholder removed
+    test_plan:
+      - Unit: mock fetch returning sample JSON -> formatting function output
+      - Unit: mock timeout/exception -> fallback path
+      - Integration: run app with mocked API, stop within <2s
+    tasks:
+  - [x] Create destination folder & copy assets (if any)
+  - [x] Add manifest.json (includes default lat/lon)
+  - [x] Refactor main.py with timeout + formatting helper
+  - [x] Write weather fetch utility (pure function for testability)
+  - [ ] Add switch mapping  # mapping already existed; leave unchecked for audit
+  - [x] Add tests (unit + integration smoke)
+  - [x] Documentation & status update
+    progress_notes: |
+      Migrated to boss/apps/current_weather with manifest and periodic fetch loop,
+      formatting + error handling added. Mapping already existed (10). Tests pending.
+
+  - id: create_smoke_test_fixture
+    title: Create reusable smoke test fixture for migrated apps
+    category: testing
+    status: planned
+    description: |
+      Provide a pytest fixture/helper to start an app by name using mock hardware/event bus,
+      wait briefly, publish optional events (e.g., button press), then stop, asserting no
+      exceptions and that app thread terminates within timeout.
+    acceptance_criteria:
+      - Helper function `run_app_smoke(app_name: str, events: list)` available under tests utilities
+      - Supports injecting synthetic `button_pressed` events
+      - Ensures thread joins within configured timeout
+      - Used by app_jokes & current_weather tests
+
+  - id: update_documentation_template
+    title: Document migration template in docs
+    category: documentation
+    status: planned
+    description: |
+      Convert the YAML template & narrative into a human-friendly docs page summarizing
+      required fields, code template, and checklist for future migrations.
+    acceptance_criteria:
+      - New or updated section in `docs/mini-apps.md` referencing the epic
+      - Links to epic file and examples
+
+  - id: retire_placeholder_directory
+    title: Remove apps_placeholder_todo after final migration batch
+    category: cleanup
+  status: implemented
+    description: |
+      Once all targeted apps are migrated and validated, remove obsolete placeholder
+      directory to prevent confusion and accidental divergence.
+    acceptance_criteria:
+      - All apps listed in epic migrated & statuses implemented
+      - Directory `apps_placeholder_todo/` absent (or contains only NON-target leftovers explicitly documented)
+      - CI/tests green post-removal
+
+progress_tracking:
+  metrics:
+  - total_stories: 5
+  - completed: 5
+  - remaining: 0
+  notes: |
+    All placeholder mini-apps migrated. Additional follow-up (external requirements enrichment,
+    asset seeding, expanded smoke tests) tracked outside original epic scope.

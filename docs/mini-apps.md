@@ -24,6 +24,10 @@ boss/apps/
     manifest.json
     assets/
       weather_icons/
+  app_jokes/             # Example static content app (migrated)
+    main.py
+    manifest.json
+    assets/
 ```
 
 ## Manifest Examples
@@ -215,11 +219,12 @@ Apps are mapped to switch values in `boss/config/app_mappings.json`:
 ```json
 {
   "app_mappings": {
-    "0": "list_all_apps",
-    "1": "hello_world", 
-    "8": "joke_of_the_moment",
-    "10": "current_weather",
-    "255": "admin_shutdown"
+  "0": "list_all_apps",
+  "1": "hello_world", 
+  "5": "app_jokes",
+  "8": "joke_of_the_moment",
+  "10": "current_weather",
+  "255": "admin_shutdown"
   },
   "parameters": {}
 }
@@ -227,15 +232,30 @@ Apps are mapped to switch values in `boss/config/app_mappings.json`:
 
 When a user sets the switches to a value (0-255) and presses the Go button, BOSS loads and runs the corresponding app. If no mapping exists for a switch value, the user will see a "No app mapped" message.
 
-## Migration from Old Architecture
-1. Move apps from top-level `apps/` to `boss/apps/` 
-2. Update `manifest.json` with new format (or keep legacy format - auto-conversion supported)
-3. Change main function signature to `run(stop_event, api)`
-4. Replace hardware polling with event subscriptions
-5. Use `api.screen.*` instead of direct screen access
-6. Use `api.hardware.*` for LED/display control
-7. Use `api.log_*` for logging
-8. Update asset loading to use `api.get_asset_path()`
+## Migration from Old Architecture (Completed Batch 1)
+1. Move app from legacy placeholder (e.g. `apps_placeholder_todo/`) into `boss/apps/<name>/`.
+2. Create or normalize `manifest.json` (standard fields: name, description, version, author, entry_point, timeout_seconds, requires_network, requires_audio, tags, config).
+3. Ensure `main.py` exposes `run(stop_event, api)`.
+4. Convert any direct hardware access to `api.hardware.*` and screen calls to `api.screen.*`.
+5. Replace polling loops with event subscriptions via `api.event_bus.subscribe` where feasible.
+6. Use LED availability pattern (only light LEDs for buttons you will handle) and unsubscribe / turn off LEDs in a `finally` block.
+7. Load assets using `api.get_asset_path()` instead of manual path joins.
+8. Add mapping to `boss/config/app_mappings.json` with an unused switch value.
+9. Add/extend smoke tests (`tests/integration/apps/test_app_smoke.py`).
+10. Update epic / user story YAML with new status and progress notes.
+
+Status: All placeholder mini-apps have been migrated into `boss/apps/` (see epic file
+`docs/epic-miniapps-migration.yaml`). Two apps remain partial/placeholder feature-wise:
+- `internet_speed_check`: currently displays simulated values (future: integrate speedtest-cli)
+- `constellation_of_the_night`: static message; future enhancement to use astronomy dataset/API.
+
+Representative migrated categories:
+- Static asset: `app_jokes`, `public_domain_book_snippet`, `random_emoji_combo`
+- Network simple: `current_weather`, `dad_joke_generator`, `word_of_the_day`
+- Network periodic with caching cadence: `moon_phase`, `on_this_day`, `local_tide_times`
+- Multi-API / keyed: `space_update`, `breaking_news`, flight status apps
+
+See `docs/miniapps_external_requirements.md` for per-API environment variables, rate limits, and fallback strategy.
 
 ## Best Practices
 - **Location:** Always place apps in `boss/apps/` for proper module resolution and co-location

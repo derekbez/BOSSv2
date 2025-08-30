@@ -139,6 +139,21 @@ class AppAPI(AppAPIInterface):
         self._app_name = app_name
         self._app_path = app_path
         self._app_manager = app_manager
+        # Attempt to extract manifest config via manager (best-effort)
+        self._config_cache: Dict[str, Any] = {}
+        try:
+            if app_manager is not None:
+                # Find the App object to read its manifest config section
+                apps = app_manager.get_all_apps() if hasattr(app_manager, 'get_all_apps') else {}
+                for _switch, app in (apps or {}).items():
+                    if getattr(app.manifest, 'name', None) == app_name:
+                        cfg = getattr(app.manifest, 'config', None)
+                        if isinstance(cfg, dict):
+                            self._config_cache = dict(cfg)
+                        break
+        except Exception:
+            # Non-fatal; leave empty
+            pass
         
         # Create sub-interfaces
         self._event_bus = AppEventBus(event_bus, app_name)
@@ -223,3 +238,25 @@ class AppAPI(AppAPIInterface):
     def cleanup(self) -> None:
         """Clean up API resources when app stops."""
         self._event_bus.cleanup()
+
+    # ------------------------------------------------------------------
+    # Config helpers (new)
+    # ------------------------------------------------------------------
+    def get_config_value(self, key: str, default: Any = None) -> Any:
+        """Return a single config value from manifest config or default.
+
+        This allows mini-apps to request configuration without parsing the
+        manifest themselves. Values are cached at AppAPI construction.
+        """
+        return self._config_cache.get(key, default)
+
+    def get_app_config(self, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:  # type: ignore[override]
+        """Return full manifest config dictionary or provided default.
+
+        Args:
+            default: value returned if no config exists.
+        """
+        if self._config_cache:
+            # Return shallow copy to prevent accidental mutation
+            return dict(self._config_cache)
+        return dict(default) if default else {}

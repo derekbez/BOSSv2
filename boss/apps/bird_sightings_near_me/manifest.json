@@ -1,0 +1,19 @@
+{
+    "name": "bird_sightings_near_me",
+    "description": "Recent nearby bird species via eBird API.",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 180,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "birds",
+        "wildlife"
+    ],
+    "config": {
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "radius": 10
+    }
+}

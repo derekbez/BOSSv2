@@ -1,0 +1,19 @@
+{
+    "name": "today_in_music",
+    "description": "Top track for a tag (Last.fm)",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 120,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "music"
+    ],
+    "config": {
+        "tag": "rock",
+        "request_timeout_seconds": 6,
+        "refresh_seconds": 3600,
+        "api_key": null
+    }
+}

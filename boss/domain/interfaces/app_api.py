@@ -117,3 +117,14 @@ class AppAPIInterface(ABC):
     def get_all_apps(self) -> list:
         """Get list of all available apps. Returns list of App objects."""
         pass
+
+    # Optional convenience helpers (not originally present) -----------------
+    @abstractmethod
+    def get_config_value(self, key: str, default: Any = None) -> Any:  # type: ignore[name-defined]
+        """Return a single value from the app's manifest config (or default)."""
+        pass
+
+    @abstractmethod
+    def get_app_config(self, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:  # type: ignore[name-defined]
+        """Return the full config dict from the manifest (or provided default)."""
+        pass

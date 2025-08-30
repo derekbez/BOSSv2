@@ -1,0 +1,19 @@
+{
+    "name": "breaking_news",
+    "description": "Latest headlines (NewsData.io).",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 150,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "news"
+    ],
+    "config": {
+        "country": "gb",
+        "category": "technology",
+        "request_timeout_seconds": 6,
+        "refresh_seconds": 300
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": "random_useless_fact",
+    "description": "Displays a random useless fact with refresh button.",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 120,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "fun",
+        "facts"
+    ],
+    "config": {
+        "refresh_seconds": 45,
+        "request_timeout_seconds": 6
+    }
+}

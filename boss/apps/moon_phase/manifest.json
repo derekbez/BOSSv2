@@ -1,0 +1,20 @@
+{
+    "name": "moon_phase",
+    "description": "Moon phase and sun/moon times (ipgeolocation.io)",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 150,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "astronomy"
+    ],
+    "config": {
+        "latitude": 51.5074,
+        "longitude": -0.1278,
+        "request_timeout_seconds": 6,
+        "refresh_seconds": 21600,
+        "api_key": null
+    }
+}

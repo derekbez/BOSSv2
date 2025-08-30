@@ -1,0 +1,19 @@
+{
+    "name": "flights_leaving_heathrow",
+    "description": "Upcoming departures from Heathrow (Aviationstack).",
+    "version": "1.0.0",
+    "author": "BOSS Team",
+    "entry_point": "main.py",
+    "timeout_seconds": 180,
+    "requires_network": true,
+    "requires_audio": false,
+    "tags": [
+        "travel",
+        "flights"
+    ],
+    "config": {
+        "request_timeout_seconds": 6,
+        "refresh_seconds": 600,
+        "api_key": null
+    }
+}
