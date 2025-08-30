@@ -1,5 +1,5 @@
 {
-    "name": "joke_of_the_moment",
+    "name": "Joke of the Moment",
     "description": "Random joke (JokeAPI)",
     "version": "1.0.0",
     "author": "BOSS Team",
@@ -10,6 +10,10 @@
     "tags": [
         "jokes"
     ],
+    "external_apis": [
+        "jokeapi"
+    ],
+    "required_env": [],
     "config": {
         "category": "Any",
         "type": "single,twopart",

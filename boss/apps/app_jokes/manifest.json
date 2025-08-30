@@ -1,5 +1,5 @@
 {
-    "name": "app_jokes",
+    "name": "Jokes",
     "description": "Displays random jokes; Yellow button cycles to next joke.",
     "version": "1.0.0",
     "author": "BOSS Team",

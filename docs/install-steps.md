@@ -4,6 +4,13 @@ This guide sets up B.O.S.S. on a Raspberry Pi for production and on Windows for 
 
 Important: The screen backend is now simplified to 'textual'. The legacy Pillow framebuffer and selectable Rich modes have been removed; Rich persists only as an internal fallback if Textual cannot start.
 
+Secrets / External API Keys:
+- Real secrets live outside git: `secrets/secrets.env` (ignored) on dev, `/etc/boss/secrets.env` on the Pi.
+- Template committed at `secrets/secrets.sample.env` — copy & fill in values.
+- Sync helper: `python scripts/sync_secrets.py push --host <pi-host>` (also: pull / verify).
+- Environment variable naming convention: `BOSS_APP_<APPNAME>_<PURPOSE>` (per app) or `BOSS_GLOBAL_<PURPOSE>`.
+- See `docs/external_apis.md` for registry and usage patterns.
+
 ### Raspberry Pi Setup (64-bit Lite OS)
 
 1) Update system and install prerequisites (includes lgpio)
@@ -55,6 +62,10 @@ Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/confi
 
 Legacy backends have been removed; set `screen_backend` to "textual" (or "auto" which resolves to textual).
 
+Secrets on Pi (systemd):
+- Place secrets in `/etc/boss/secrets.env` (chmod 600) and add `EnvironmentFile=/etc/boss/secrets.env` to the service unit if not already present.
+- Restart service after updating secrets.
+
 ### Windows WebUI Development (CMD)
 
 1) Create a virtual environment in the repo
@@ -75,6 +86,11 @@ Legacy backends have been removed; set `screen_backend` to "textual" (or "auto" 
 5) Screen backend config
 - System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "textual" | "auto" (auto resolves to textual)
 - Per-app backend preference is no longer supported (field ignored if present).
+
+Local secrets usage (Windows):
+- Copy `secrets/secrets.sample.env` -> `secrets/secrets.env` and fill values.
+- (Optional) Add a `setx` persistent env var if you prefer not to load from file.
+
 
 ++++++++++
 

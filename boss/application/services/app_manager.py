@@ -4,6 +4,7 @@ App Manager Service - Manages loading and tracking of mini-apps.
 
 import logging
 import json
+import os
 from pathlib import Path
 from typing import Dict, Optional, List
 from boss.domain.models.app import App, AppManifest, AppStatus
@@ -62,6 +63,18 @@ class AppManager(AppManagerService):
             try:
                 app = self._load_app(app_dir, mappings)
                 if app:
+                    # Validate required_env presence
+                    missing = []
+                    for env_name in getattr(app.manifest, 'required_env', []) or []:
+                        if not env_name:
+                            continue
+                        if env_name not in os.environ:
+                            missing.append(env_name)
+                    if missing:
+                        app.mark_error(f"Missing required env vars: {', '.join(missing)}")
+                        logger.warning(
+                            "App '%s' disabled (missing env): %s", app.manifest.name, ", ".join(missing)
+                        )
                     self._apps[app.switch_value] = app
                     loaded_count += 1
                     logger.debug(f"Loaded app: {app.manifest.name} -> switch {app.switch_value}")

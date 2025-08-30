@@ -1,7 +1,7 @@
 {
     "name": "bird_sightings_near_me",
     "description": "Recent nearby bird species via eBird API.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "BOSS Team",
     "entry_point": "main.py",
     "timeout_seconds": 180,
@@ -10,6 +10,12 @@
     "tags": [
         "birds",
         "wildlife"
+    ],
+    "external_apis": [
+        "ebird"
+    ],
+    "required_env": [
+        "BOSS_APP_EBIRD_API_KEY"
     ],
     "config": {
         "latitude": 51.5074,

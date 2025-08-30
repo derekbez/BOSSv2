@@ -11,6 +11,12 @@
         "travel",
         "flights"
     ],
+    "external_apis": [
+        "aviationstack"
+    ],
+    "required_env": [
+        "BOSS_APP_AVIATIONSTACK_API_KEY"
+    ],
     "config": {
         "request_timeout_seconds": 6,
         "refresh_seconds": 600,

@@ -1,3 +1,19 @@
+# BOSSv2 gitignore additions
+__pycache__/
+*.pyc
+.venv/
+
+# Secrets (do not commit real secrets)
+secrets/secrets.env
+secrets/*.env.bak
+
+# Logs
+logs/
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.swp
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

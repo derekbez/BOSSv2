@@ -20,7 +20,13 @@ class AppStatus(Enum):
 
 @dataclass
 class AppManifest:
-    """Manifest metadata for a mini-app."""
+    """Manifest metadata for a mini-app.
+
+    New (2025-08-30):
+      - external_apis: list of registry IDs from docs/external_apis.md
+      - required_env: list of environment variable names the app expects
+    These are advisory and used for startup validation & auditing.
+    """
     name: str
     description: str
     version: str
@@ -30,10 +36,16 @@ class AppManifest:
     requires_network: bool = False
     requires_audio: bool = False
     tags: Optional[List[str]] = None
-    
+    external_apis: Optional[List[str]] = None
+    required_env: Optional[List[str]] = None
+
     def __post_init__(self):
         if self.tags is None:
             self.tags = []
+        if self.external_apis is None:
+            self.external_apis = []
+        if self.required_env is None:
+            self.required_env = []
     
     @classmethod
     def from_file(cls, manifest_path: Path) -> "AppManifest":
@@ -57,8 +69,9 @@ class AppManifest:
             
             # Remove unknown fields that would cause TypeError
             known_fields = {
-                "name", "description", "version", "author", "entry_point", 
+                "name", "description", "version", "author", "entry_point",
                 "timeout_seconds", "requires_network", "requires_audio", "tags",
+                "external_apis", "required_env",
             }
             filtered_data = {k: v for k, v in data.items() if k in known_fields}
             
@@ -78,6 +91,8 @@ class AppManifest:
             "requires_network": self.requires_network,
             "requires_audio": self.requires_audio,
             "tags": self.tags,
+            "external_apis": self.external_apis,
+            "required_env": self.required_env,
         }
 
 
