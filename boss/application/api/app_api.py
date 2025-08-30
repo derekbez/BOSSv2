@@ -54,6 +54,43 @@ class AppScreenAPI(ScreenAPIInterface):
     def __init__(self, event_bus, app_name: str):
         self._event_bus = event_bus
         self._app_name = app_name
+        # Legacy character-mode compatibility buffer
+        # Many existing mini-apps expect a simple line-based text API with attributes:
+        #   write_line(text, line_no)
+        #   write_wrapped(text, start_line=..., max_lines=...)
+        #   clear_body(start_line=...)
+        #   clear_screen()
+        #   screen.width property
+        # Provide a lightweight in-process text buffer we emit as a single screen_update event
+        # with content_type 'text_block'. A future richer renderer can interpret richer
+        # operations; for now we keep apps functional and avoid AttributeError crashes.
+        self._char_width = 80  # logical columns
+        self._char_height = 25  # logical rows
+        self._lines = [""] * self._char_height
+        self._dirty = False
+
+    # ---------------- New unified event emit helpers -----------------
+    def _emit_text_block(self) -> None:
+        """Emit the full buffered text block if dirty."""
+        if not self._dirty:
+            return
+        payload = {
+            "content_type": "text_block",
+            "lines": self._lines,
+            "width": self._char_width,
+            "height": self._char_height,
+            "mode": "legacy-buffer"
+        }
+        self._event_bus.publish("screen_update", payload, f"app:{self._app_name}")
+        self._dirty = False
+
+    def _set_line(self, index: int, text: str) -> None:
+        if 0 <= index < self._char_height:
+            truncated = text[: self._char_width]
+            self._lines[index] = truncated
+            self._dirty = True
+
+    # ---------------- Modern (high-level) API -----------------
     
     def display_text(self, text: str, font_size: int = 24, color: str = "white", 
                     background: str = "black", align: str = "center") -> None:
@@ -78,15 +115,55 @@ class AppScreenAPI(ScreenAPIInterface):
     
     def clear_screen(self, color: str = "black") -> None:
         """Clear screen with specified color."""
-        self._event_bus.publish("screen_update", {
-            "content_type": "clear",
-            "content": color
-        }, f"app:{self._app_name}")
+        # Reset legacy buffer too
+        self._lines = [""] * self._char_height
+        self._dirty = True
+        # Emit a clear event for any renderer plus the empty buffer state
+        self._event_bus.publish("screen_update", {"content_type": "clear", "content": color}, f"app:{self._app_name}")
+        self._emit_text_block()
     
     def get_screen_size(self) -> tuple:
         """Get screen dimensions (width, height)."""
         # This could be retrieved from hardware service, for now return default
         return (800, 480)
+
+    # ---------------- Legacy compatibility API -----------------
+    # These methods allow existing mini-apps to continue working without changes.
+
+    @property
+    def width(self) -> int:  # type: ignore[override]
+        return self._char_width
+
+    @property
+    def height(self) -> int:  # optional convenience
+        return self._char_height
+
+    def write_line(self, text: str, line_no: int) -> None:  # type: ignore[override]
+        self._set_line(line_no, text)
+        self._emit_text_block()
+
+    def clear_body(self, start_line: int = 1) -> None:  # type: ignore[override]
+        if start_line < 0:
+            start_line = 0
+        for i in range(start_line, self._char_height):
+            if self._lines[i]:
+                self._lines[i] = ""
+                self._dirty = True
+        self._emit_text_block()
+
+    def write_wrapped(self, text: str, start_line: int = 0, max_lines: int | None = None) -> None:  # type: ignore[override]
+        import textwrap
+        if max_lines is None:
+            max_lines = self._char_height - start_line
+        wrapped = textwrap.wrap(text, width=self._char_width)[:max_lines]
+        for offset, line in enumerate(wrapped):
+            self._set_line(start_line + offset, line)
+        # Clear any remaining lines within the max_lines window (legacy behavior expectation)
+        for clear_i in range(start_line + len(wrapped), min(start_line + max_lines, self._char_height)):
+            if self._lines[clear_i]:
+                self._lines[clear_i] = ""
+                self._dirty = True
+        self._emit_text_block()
 
 
 class AppHardwareAPI(HardwareAPIInterface):
