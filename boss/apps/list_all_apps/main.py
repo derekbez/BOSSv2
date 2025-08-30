@@ -48,7 +48,7 @@ def run(stop_event: Event, api: Any) -> None:
         api (AppAPI): Provided API for hardware/display access.
     """
     # Use default configuration values since we don't have ConfigManager access
-    per_page = 12  # Default entries per page
+    per_page = 24  # Default entries per page
     app_list = get_app_list(api)
     
     if not app_list:

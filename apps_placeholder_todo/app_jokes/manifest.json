@@ -1,7 +1,0 @@
-{
-  "name": "Random Joke App",
-  "description": "Displays a random joke from a list when launched.",
-  "hardware_used": ["screen"],
-  "author": "BOSS Team",
-  "version": "1.0"
-}
