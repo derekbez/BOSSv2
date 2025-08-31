@@ -336,12 +336,14 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
                 logger.info(f"Button {button_id} press ignored - corresponding LED is OFF (button not active)")
                 return {"status": "ignored", "button": button_id, "reason": "LED not active"}
             
-            logger.info(f"Color buttons object: {buttons}")
+            # Process button press since LED is active
             if buttons and hasattr(buttons, 'handle_button_press'):
+                logger.debug(f"Processing {button_id} button press (LED is active)")
                 buttons.handle_button_press(button_id)
-                logger.info(f"Color button {button_id} handle_button_press called")
+                logger.info(f"Color button {button_id} press processed successfully")
             else:
-                logger.warning(f"Button {button_id} not properly connected")
+                logger.error(f"Button {button_id} hardware not properly initialized - buttons object: {buttons}")
+                raise HTTPException(status_code=500, detail=f"Button hardware not available for {button_id}")
         
         return {"status": "success", "button": button_id, "action": "pressed"}
     
