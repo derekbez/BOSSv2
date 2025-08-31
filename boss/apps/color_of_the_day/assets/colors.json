@@ -1,0 +1,82 @@
+[
+    {
+        "title": "Ocean Blue",
+        "hex": "006994"
+    },
+    {
+        "title": "Sunset Orange",
+        "hex": "FF6B35"
+    },
+    {
+        "title": "Forest Green",
+        "hex": "228B22"
+    },
+    {
+        "title": "Royal Purple",
+        "hex": "7851A9"
+    },
+    {
+        "title": "Cherry Red",
+        "hex": "DE3163"
+    },
+    {
+        "title": "Golden Yellow",
+        "hex": "FFD700"
+    },
+    {
+        "title": "Sky Blue",
+        "hex": "87CEEB"
+    },
+    {
+        "title": "Coral Pink",
+        "hex": "FF7F7F"
+    },
+    {
+        "title": "Emerald Green",
+        "hex": "50C878"
+    },
+    {
+        "title": "Lavender",
+        "hex": "E6E6FA"
+    },
+    {
+        "title": "Crimson",
+        "hex": "DC143C"
+    },
+    {
+        "title": "Turquoise",
+        "hex": "40E0D0"
+    },
+    {
+        "title": "Burgundy",
+        "hex": "800020"
+    },
+    {
+        "title": "Mint Green",
+        "hex": "98FB98"
+    },
+    {
+        "title": "Midnight Blue",
+        "hex": "191970"
+    },
+    {
+        "title": "Rose Gold",
+        "hex": "ECC5C0"
+    },
+    {
+        "title": "Olive Green",
+        "hex": "808000"
+    },
+    {
+        "title": "Magenta",
+        "hex": "FF00FF"
+    },
+    {
+        "title": "Amber",
+        "hex": "FFBF00"
+    },
+    {
+        "title": "Indigo",
+        "hex": "4B0082"
+    }
+]
