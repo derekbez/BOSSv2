@@ -30,17 +30,17 @@ def run(stop_event, api):
     emojis = load_emojis(asset_dir)
 
     api.screen.clear_screen()
-    api.screen.write_line("Emoji Combo", 0)
+    title = "Emoji Combo"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_shuffle = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         n = random.randint(min_n, max_n)
         combo = "".join(random.sample(emojis, k=min(len(emojis), n)))
-        api.screen.write_line(combo[: api.screen.width - 1], 2)
+        api.screen.display_text(f"{title}\n\n{combo}", align="center")
 
     def on_button(ev):
         nonlocal last_shuffle

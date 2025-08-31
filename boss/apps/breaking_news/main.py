@@ -6,6 +6,7 @@ Graceful errors and manual refresh via green button.
 from __future__ import annotations
 from typing import Any
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -52,24 +53,20 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Headlines", 0)
+    title = "Headlines"
+    api.screen.display_text(title, font_size=22, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show_news():
-        api.screen.clear_body(start_line=1)
         heads = fetch_headlines(api_key, country, category, timeout=timeout)
         if not heads:
-            api.screen.write_wrapped("(no news / network error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(no news / network error)", align="left")
             return
-        line = 2
-        for h in heads:
-            if line >= api.screen.height - 1:
-                break
-            api.screen.write_line(h[: api.screen.width - 1], line)
-            line += 1
+        body = "\n".join(shorten(h, width=60, placeholder="…") for h in heads[:8])
+        api.screen.display_text(f"{title}\n\n{body}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

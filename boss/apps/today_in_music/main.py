@@ -5,6 +5,7 @@ Refresh hourly or via green button.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -48,19 +49,19 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Music Top", 0)
+    title = "Music Top"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         line = fetch_track(api_key, tag, timeout=timeout)
         if not line:
-            api.screen.write_wrapped("(error/no data)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
             return
-        api.screen.write_line(line[: api.screen.width - 1], 2)
+        api.screen.display_text(f"{title}\n\n" + shorten(line, width=180, placeholder="…"), align="left")
 
     def on_button(ev):
         nonlocal last_fetch

@@ -12,8 +12,7 @@ def run(stop_event, api):
     message = cfg.get("message", "Orion visible tonight! (placeholder)")
 
     api.screen.clear_screen()
-    api.screen.write_line("Constellation", 0)
-    api.screen.write_wrapped(message, start_line=2)
+    api.screen.display_text(f"Constellation\n\n{message}", align="left")
 
     # simple idle loop until stopped
     while not stop_event.is_set():

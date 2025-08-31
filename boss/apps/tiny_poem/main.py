@@ -4,6 +4,7 @@ Fetches a short poem via Poemist API. Refresh every 3h or manual.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -37,22 +38,22 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Tiny Poem", 0)
+    title = "Tiny Poem"
+    api.screen.display_text(title, font_size=26, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         result = fetch_poem(timeout=timeout)
         if not result:
-            api.screen.write_wrapped("(error/no data)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
             return
-        title, content, author = result
-        api.screen.write_line(title[: api.screen.width - 1], 2)
-        api.screen.write_wrapped(content, start_line=3, max_lines=4)
-        api.screen.write_line(f"- {author}"[: api.screen.width - 1], 8)
+        pt, content, author = result
+        body = shorten(content, width=220, placeholder="…")
+        lines = [title, "", pt, body, "", f"- {author}"]
+        api.screen.display_text("\n".join(lines), align="left")
 
     def on_button(ev):
         nonlocal last_fetch

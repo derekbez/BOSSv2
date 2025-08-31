@@ -13,19 +13,17 @@ def run(stop_event, api):
     refresh_seconds = float(cfg.get("refresh_seconds", 1800))
 
     api.screen.clear_screen()
-    api.screen.write_line("Net Speed", 0)
+    title = "Net Speed"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         down = random.uniform(20, 120)
         up = random.uniform(10, 40)
         ping = random.uniform(10, 60)
-        api.screen.write_line(f"Down {down:0.1f} Mbps", 2)
-        api.screen.write_line(f"Up   {up:0.1f} Mbps", 3)
-        api.screen.write_line(f"Ping {ping:0.0f} ms", 5)
+        api.screen.display_text(f"{title}\n\nDown {down:0.1f} Mbps\nUp   {up:0.1f} Mbps\nPing {ping:0.0f} ms", align="left")
 
     show()
     last_fetch = time.time()

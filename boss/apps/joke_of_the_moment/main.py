@@ -5,6 +5,7 @@ Refreshes periodically or via button.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -37,41 +38,45 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Joke", 0)
+    title = "Joke"
+    api.screen.display_text(title, font_size=26, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
+    punchline_state = {"pending": False, "delivery": ""}
+
     def show():
-        api.screen.clear_body(start_line=1)
         joke = fetch_joke(category, jtype, blacklist, timeout=timeout)
         if not joke:
-            api.screen.write_wrapped("(error/no data)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
+            punchline_state["pending"] = False
             return
-        if joke.get("type") == "single":
-            api.screen.write_wrapped(joke.get("joke", "No joke."), start_line=2)
-        elif joke.get("type") == "twopart":
-            setup = joke.get("setup", "No setup")
-            delivery = joke.get("delivery", "No punchline")
-            api.screen.write_wrapped(setup, start_line=2, max_lines=4)
-            # wait for button or refresh interval or stop
-            waited = 0.0
-            while waited < 30 and not stop_event.is_set():
-                if api.hardware.any_button_pressed():  # assuming helper
-                    break
-                time.sleep(0.25)
-                waited += 0.25
-            api.screen.clear_body(start_line=1)
-            api.screen.write_wrapped(delivery, start_line=2, max_lines=4)
+        jtype_local = joke.get("type")
+        if jtype_local == "single":
+            text = shorten(joke.get("joke", "No joke."), width=240, placeholder="…")
+            api.screen.display_text(f"{title}\n\n{text}", align="left")
+            punchline_state["pending"] = False
+        elif jtype_local == "twopart":
+            setup = shorten(joke.get("setup", "No setup"), width=220, placeholder="…")
+            delivery = shorten(joke.get("delivery", "No punchline"), width=220, placeholder="…")
+            punchline_state["pending"] = True
+            punchline_state["delivery"] = delivery
+            api.screen.display_text(f"{title}\n\n{setup}\n\n(press green)", align="left")
         else:
-            api.screen.write_wrapped("No joke.", start_line=2)
+            api.screen.display_text(f"{title}\n\nNo joke.", align="left")
+            punchline_state["pending"] = False
 
     def on_button(ev):
         nonlocal last_fetch
         if ev.get("button") == "green":
-            last_fetch = time.time()
-            show()
+            if punchline_state["pending"]:
+                punchline_state["pending"] = False
+                api.screen.display_text(f"{title}\n\n{punchline_state['delivery']}", align="left")
+            else:
+                last_fetch = time.time()
+                show()
 
     sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
 

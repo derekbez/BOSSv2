@@ -14,10 +14,13 @@ except Exception:  # pragma: no cover
 API_URL = "https://api.ipgeolocation.io/astronomy"
 
 
+from typing import Dict, Any
+
+
 def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0):
     if requests is None:
         return None
-    params = {"lat": lat, "long": lon}
+    params: Dict[str, Any] = {"lat": lat, "long": lon}
     if api_key:
         params["apiKey"] = api_key
     try:
@@ -44,22 +47,20 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Moon Phase", 0)
+    title = "Moon Phase"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         info = fetch_data(api_key, lat, lon, timeout=timeout)
         if not info:
-            api.screen.write_wrapped("(error/no data)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
             return
-        api.screen.write_line(f"{info['phase']}", 2)
-        api.screen.write_line(f"Illum {info['illum']}%", 3)
-        api.screen.write_line(f"Rise {info['rise']}", 5)
-        api.screen.write_line(f"Set  {info['set']}", 6)
+        body = f"{info['phase']}\nIllum {info['illum']}%\n\nRise {info['rise']}\nSet  {info['set']}"
+        api.screen.display_text(f"{title}\n\n{body}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

@@ -27,16 +27,16 @@ def run(stop_event, api):
     places = load_places(api.get_app_asset_path())
 
     api.screen.clear_screen()
-    api.screen.write_line("Place Name", 0)
+    title = "Place Name"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_shuffle = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         place = random.choice(places)
-        api.screen.write_line(place[: api.screen.width - 1], 2)
+        api.screen.display_text(f"{title}\n\n{place}", align="center")
 
     def on_button(ev):
         nonlocal last_shuffle

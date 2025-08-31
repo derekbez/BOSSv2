@@ -4,6 +4,7 @@ Uses Wordnik API. Refresh infrequently (half-day) or manually.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -39,23 +40,25 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Word Day", 0)
+    title = "Word of the Day"
+    api.screen.display_text(title, font_size=28, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         result = fetch_word(api_key, timeout=timeout)
         if not result:
-            api.screen.write_wrapped("(error/ no data)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(error/ no data)", align="left")
             return
         word, defs, example = result
-        api.screen.write_line(word[: api.screen.width - 1], 2)
-        api.screen.write_wrapped(defs, start_line=3, max_lines=3)
+        defs_txt = shorten(defs, width=200, placeholder="…")
+        lines = [title, "", word, defs_txt]
         if example:
-            api.screen.write_wrapped(f"Ex: {example}", start_line=6, max_lines=3)
+            lines.append("")
+            lines.append("Ex: " + shorten(example, width=160, placeholder="…"))
+        api.screen.display_text("\n".join(lines), align="left")
 
     def on_button(ev):
         nonlocal last_fetch

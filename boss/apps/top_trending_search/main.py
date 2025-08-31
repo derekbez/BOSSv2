@@ -4,6 +4,7 @@ Fetches trending search term from local backend service.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -31,19 +32,19 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 5))
 
     api.screen.clear_screen()
-    api.screen.write_line("Trending", 0)
+    title = "Trending"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         trend = fetch_trend(url, timeout=timeout)
         if not trend:
-            api.screen.write_wrapped("(no trend / error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(no trend / error)", align="left")
             return
-        api.screen.write_wrapped(trend, start_line=2)
+        api.screen.display_text(f"{title}\n\n" + shorten(trend, width=200, placeholder="…"), align="left")
 
     def on_button(ev):
         nonlocal last_fetch

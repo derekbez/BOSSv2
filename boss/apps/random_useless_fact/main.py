@@ -6,6 +6,7 @@ Uses https://uselessfacts.jsph.pl/ API (no key) with graceful error fallback.
 from __future__ import annotations
 from typing import Any
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -36,19 +37,19 @@ def run(stop_event, api):
     request_timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Random Fact", 0)
+    title = "Random Fact"
+    api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)  # green for refresh
 
     sub_ids = []
     last_fetch = 0.0
 
     def show_fact():
-        api.screen.clear_body(start_line=1)
         fact = fetch_fact(timeout=request_timeout)
         if not fact:
-            api.screen.write_wrapped("(network error fetching fact)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(network error fetching fact)", align="left")
             return
-        api.screen.write_wrapped(fact, start_line=2)
+        api.screen.display_text(f"{title}\n\n" + shorten(fact, width=220, placeholder="…"), align="left")
 
     def on_button(event):
         nonlocal last_fetch

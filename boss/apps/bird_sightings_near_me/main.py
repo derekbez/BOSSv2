@@ -6,6 +6,7 @@ with lat/long). Allows manual refresh with green button.
 from __future__ import annotations
 from typing import Any, List
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -45,24 +46,20 @@ def run(stop_event, api):
     refresh_seconds = float(cfg.get("refresh_seconds", 120))
 
     api.screen.clear_screen()
-    api.screen.write_line("Nearby Birds", 0)
+    title = "Nearby Birds"
+    api.screen.display_text(title, font_size=22, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show_sightings():
-        api.screen.clear_body(start_line=1)
         species = fetch_sightings(lat, lng, radius, timeout=request_timeout)
         if not species:
-            api.screen.write_wrapped("(no data / network error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(no data / network error)", align="left")
             return
-        line = 2
-        for name in species:
-            if line >= api.screen.height - 1:
-                break
-            api.screen.write_line(name[: api.screen.width - 1], line)
-            line += 1
+        lines = [title, ""] + [shorten(s, width=40, placeholder="…") for s in species[:10]]
+        api.screen.display_text("\n".join(lines), align="left")
 
     def on_button(event):
         nonlocal last_fetch

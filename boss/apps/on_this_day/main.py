@@ -6,6 +6,7 @@ Refresh infrequently (half-day) or manually via green button.
 from __future__ import annotations
 import datetime as _dt
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -40,25 +41,21 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("On This Day", 0)
+    title = "On This Day"
+    api.screen.display_text(title, font_size=22, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         today = _dt.date.today()
         lines = fetch_events(today.month, today.day, timeout=timeout)
         if not lines:
-            api.screen.write_wrapped("(no events / error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(no events / error)", align="left")
             return
-        line_no = 2
-        for l in lines:
-            if line_no >= api.screen.height - 1:
-                break
-            api.screen.write_line(l[: api.screen.width - 1], line_no)
-            line_no += 1
+        body = "\n".join(shorten(l, width=60, placeholder="…") for l in lines[:8])
+        api.screen.display_text(f"{title}\n\n{body}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

@@ -5,6 +5,7 @@ Shows limited list of departing flights using Aviationstack API.
 from __future__ import annotations
 import time
 from typing import Any
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -48,24 +49,20 @@ def run(stop_event, api):
     refresh_seconds = float(cfg.get("refresh_seconds", 600))
 
     api.screen.clear_screen()
-    api.screen.write_line("LHR Departures", 0)
+    title = "LHR Departures"
+    api.screen.display_text(title, font_size=22, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show():
-        api.screen.clear_body(start_line=1)
         lines = fetch_flights(api_key, timeout=timeout)
         if not lines:
-            api.screen.write_wrapped("(no data / error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(no data / error)", align="left")
             return
-        line_no = 2
-        for l in lines:
-            if line_no >= api.screen.height - 1:
-                break
-            api.screen.write_line(l[: api.screen.width - 1], line_no)
-            line_no += 1
+        body = "\n".join(shorten(l, width=42, placeholder="…") for l in lines[:8])
+        api.screen.display_text(f"{title}\n\n{body}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

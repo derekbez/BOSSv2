@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Any
 import json
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -36,21 +37,24 @@ def run(stop_event, api):  # signature required by platform
     cfg = api.get_app_config() or {}
     refresh_timeout = float(cfg.get("request_timeout_seconds", 5))
     api.screen.clear_screen()
-    api.screen.write_line("Quote of the Day", 0)
+    title = "Quote of the Day"
+    api.screen.display_text(title, font_size=26, align="center")
 
     api.hardware.set_led("green", True)  # green=fetch new
     sub_ids = []
 
     def show_quote():
-        api.screen.clear_body(start_line=1)
         q = fetch_quote(timeout=refresh_timeout)
         if not q:
-            api.screen.write_wrapped("(network error fetching quote)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(network error fetching quote)", align="left")
             return
         text, author = q
-        api.screen.write_wrapped(text, start_line=2)
+        body = shorten(text, width=240, placeholder="…")
+        lines = [title, "", body]
         if author:
-            api.screen.write_line(f"- {author}", api.screen.height - 2)
+            lines.append("")
+            lines.append(f"- {author}")
+        api.screen.display_text("\n".join(lines), align="left")
 
     def on_button(event):
         if event.get("button") == "green":

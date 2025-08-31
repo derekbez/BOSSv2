@@ -38,21 +38,20 @@ def run(stop_event, api):
     timeout = float(cfg.get("request_timeout_seconds", 6))
 
     api.screen.clear_screen()
-    api.screen.write_line("Color of Day", 0)
+    title = "Color of Day"
+    api.screen.display_text(title, font_size=22, align="center")
     api.hardware.set_led("green", True)
 
     sub_ids = []
     last_fetch = 0.0
 
     def show_color():
-        api.screen.clear_body(start_line=1)
         c = fetch_color(timeout=timeout)
         if not c:
-            api.screen.write_wrapped("(network error)", start_line=2)
+            api.screen.display_text(f"{title}\n\n(network error)", align="left")
             return
-        title, hexcode = c
-        api.screen.write_line(title[: api.screen.width - 1], 2)
-        api.screen.write_line(f"#{hexcode}"[: api.screen.width - 1], 3)
+        cname, hexcode = c
+        api.screen.display_text(f"{title}\n\n{cname}\n#{hexcode}", align="center")
 
     def on_button(ev):
         nonlocal last_fetch
