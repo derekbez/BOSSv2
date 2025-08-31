@@ -17,6 +17,7 @@ API_URL = "https://api.ipgeolocation.io/astronomy"
 
 from typing import Dict, Any
 import os
+import logging
 
 
 def _summarize_error(err: Exception) -> str:
@@ -42,6 +43,9 @@ def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0
     if api_key:
         params["apiKey"] = api_key
     r = requests.get(API_URL, params=params, timeout=timeout)
+    if r.status_code == 401 and not api_key:
+        # Provide a more explicit hint for missing API key
+        raise RuntimeError("401 Unauthorized (missing ipgeolocation.io API key). Set BOSS_APP_IPGEO_API_KEY or app config 'api_key'.")
     r.raise_for_status()
     d = r.json()
     return {
@@ -60,6 +64,10 @@ def run(stop_event, api):
         or os.environ.get("BOSS_APP_IPGEO_API_KEY")
         or api.get_config_value("IPGEO_API_KEY")  # legacy fallback if still set
     )
+    if not api_key:
+        logging.getLogger(__name__).info(
+            "moon_phase: no API key resolved (looked for config 'api_key', env BOSS_APP_IPGEO_API_KEY, or legacy IPGEO_API_KEY)."
+        )
     lat = float(cfg.get("latitude", 51.5074))
     lon = float(cfg.get("longitude", -0.1278))
     refresh_seconds = float(cfg.get("refresh_seconds", 21600))
