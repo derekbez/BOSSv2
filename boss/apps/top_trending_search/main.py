@@ -11,18 +11,33 @@ try:
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 
 def fetch_trend(url: str, timeout: float = 5.0):
     if requests is None:
-        return None
-    try:
-        r = requests.get(url, timeout=timeout)
-        if r.status_code == 200:
-            data = r.json()
-            return data.get("trend") or None
-    except Exception:
-        return None
-    return None
+        raise RuntimeError("requests not available")
+    r = requests.get(url, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
+    trend = data.get("trend")
+    if not trend:
+        raise ValueError("No trend field")
+    return trend
 
 
 def run(stop_event, api):
@@ -40,11 +55,11 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        trend = fetch_trend(url, timeout=timeout)
-        if not trend:
-            api.screen.display_text(f"{title}\n\n(no trend / error)", align="left")
-            return
-        api.screen.display_text(f"{title}\n\n" + shorten(trend, width=200, placeholder="…"), align="left")
+        try:
+            trend = fetch_trend(url, timeout=timeout)
+            api.screen.display_text(f"{title}\n\n" + shorten(trend, width=200, placeholder="…"), align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

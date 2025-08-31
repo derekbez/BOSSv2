@@ -14,23 +14,36 @@ try:
 except Exception:  # pragma: no cover - requests may be absent in some test envs
     requests = None  # type: ignore
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 API_URL = "https://api.quotable.io/random"
 
 
-def fetch_quote(timeout: float = 5.0) -> tuple[str, str] | None:
+def fetch_quote(timeout: float = 5.0) -> tuple[str, str]:
     if requests is None:
-        return None
-    try:
-        r = requests.get(API_URL, timeout=timeout)
-        if r.status_code == 200:
-            data: dict[str, Any] = r.json()
-            content = data.get("content") or data.get("quote")
-            author = data.get("author") or data.get("authorName") or ""  # some APIs
-            if content:
-                return content, author
-    except Exception:
-        return None
-    return None
+        raise RuntimeError("requests not available")
+    r = requests.get(API_URL, timeout=timeout)
+    r.raise_for_status()
+    data: dict[str, Any] = r.json()
+    content = data.get("content") or data.get("quote")
+    if not content:
+        raise ValueError("No quote content")
+    author = data.get("author") or data.get("authorName") or ""
+    return content, author
 
 
 def run(stop_event, api):  # signature required by platform
@@ -44,17 +57,16 @@ def run(stop_event, api):  # signature required by platform
     sub_ids = []
 
     def show_quote():
-        q = fetch_quote(timeout=refresh_timeout)
-        if not q:
-            api.screen.display_text(f"{title}\n\n(network error fetching quote)", align="left")
-            return
-        text, author = q
-        body = shorten(text, width=240, placeholder="…")
-        lines = [title, "", body]
-        if author:
-            lines.append("")
-            lines.append(f"- {author}")
-        api.screen.display_text("\n".join(lines), align="left")
+        try:
+            text, author = fetch_quote(timeout=refresh_timeout)
+            body = shorten(text, width=240, placeholder="…")
+            lines = [title, "", body]
+            if author:
+                lines.append("")
+                lines.append(f"- {author}")
+            api.screen.display_text("\n".join(lines), align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(event):
         if event.get("button") == "green":

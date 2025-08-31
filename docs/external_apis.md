@@ -121,10 +121,19 @@ if not API_KEY:
 ## 11. Validation Checklist (Per API App)
 Use when reviewing or adding an app:
 * [ ] Manifest has `requires_network: true`.
-* [ ] Timeout set on every requests call.
+* [ ] Timeout set on every `requests` call.
 * [ ] Fallback text path exercised (tested or simulated).
 * [ ] LED/button usage adheres to parity pattern (if interactive).
-* [ ] No direct `requests` without timeout.
+* [ ] No direct `requests` usage without explicit `timeout=`.
+* [ ] Import guard uses standard pattern:
+```python
+try:
+    import requests  # type: ignore
+except Exception:  # pragma: no cover
+    requests = None  # type: ignore
+    # (Future enhancement: central warning log if missing)
+```
+If `requests` is None the fetch helper returns `None`; ensure dependency installed via `pip install -r requirements/base.txt`.
 * [ ] Uses canonical env var name (or transitional mapping documented) and present in sample env.
 
 ## 12. Future Improvements

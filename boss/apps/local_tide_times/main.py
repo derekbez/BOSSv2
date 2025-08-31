@@ -6,6 +6,22 @@ from __future__ import annotations
 import time
 from textwrap import shorten
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 try:
     import requests  # type: ignore
 except Exception:  # pragma: no cover
@@ -16,28 +32,26 @@ API_URL = "https://www.worldtides.info/api"
 
 def fetch_tides(api_key: str | None, lat: float, lon: float, timeout: float = 6.0):
     if requests is None:
-        return None
+        raise RuntimeError("requests not available")
     params = {"lat": lat, "lon": lon, "extremes": ""}
     if api_key:
         params["key"] = api_key
-    try:
-        r = requests.get(API_URL, params=params, timeout=timeout)
-        if r.status_code == 200:
-            data = r.json()
-            tides = data.get("extremes", [])
-            lines = []
-            for t in tides[:4]:
-                date = t.get("date") or "?"
-                typ = t.get("type") or "?"
-                if date and len(date) >= 16:
-                    clock = date[11:16]
-                else:
-                    clock = date
-                lines.append(f"{clock} {typ}")
-            return lines
-    except Exception:
-        return None
-    return None
+    r = requests.get(API_URL, params=params, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
+    tides = data.get("extremes", [])
+    lines = []
+    for t in tides[:4]:
+        date = t.get("date") or "?"
+        typ = t.get("type") or "?"
+        if date and len(date) >= 16:
+            clock = date[11:16]
+        else:
+            clock = date
+        lines.append(f"{clock} {typ}")
+    if not lines:
+        raise ValueError("No extremes data")
+    return lines
 
 
 def run(stop_event, api):
@@ -57,12 +71,12 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        lines = fetch_tides(api_key, lat, lon, timeout=timeout)
-        if not lines:
-            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
-            return
-        body = "\n".join(shorten(l, width=40, placeholder="…") for l in lines[:6])
-        api.screen.display_text(f"{title}\n\n{body}", align="left")
+        try:
+            lines = fetch_tides(api_key, lat, lon, timeout=timeout)
+            body = "\n".join(shorten(l, width=40, placeholder="…") for l in lines[:6])
+            api.screen.display_text(f"{title}\n\n{body}", align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

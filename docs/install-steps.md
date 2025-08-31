@@ -36,6 +36,10 @@ python -m pip install --upgrade pip
 ```
 pip install -r requirements/base.txt -r requirements/dev.txt
 ```
+`requests` is now an explicit runtime dependency for network mini‑apps. If it is missing all external data apps will fall back to messages like "network error". Verify with:
+```
+python -c "import requests, sys; print('requests', requests.__version__)"
+```
 
 4) GPIO backend (recommended)
 - Set GPIOZERO_PIN_FACTORY=lgpio in your service environment (see scripts/boss-dev.service)
@@ -74,7 +78,8 @@ Secrets on Pi (systemd):
 - .\.venv\Scripts\activate
 
 2) Install dependencies
-- pip install -r requirements/base.txt -r requirements/dev.txt
+ - pip install -r requirements/base.txt -r requirements/dev.txt
+	 - Verify: `python -c "import requests; print('requests OK')"`
 
 3) Verify WebUI server deps
 - python -c "import uvicorn, fastapi; print('uvicorn', uvicorn.__version__)"
@@ -82,6 +87,7 @@ Secrets on Pi (systemd):
 
 4) Run with WebUI hardware emulation
 - python -m boss.main --hardware webui
+If multiple apps show generic "unavailable" errors, first confirm `requests` installed and required API keys are set.
 
 5) Screen backend config
 - System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "textual" | "auto" (auto resolves to textual)

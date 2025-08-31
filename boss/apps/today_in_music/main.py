@@ -12,12 +12,28 @@ try:
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 API_URL = "http://ws.audioscrobbler.com/2.0/"
 
 
 def fetch_track(api_key: str | None, tag: str, timeout: float = 6.0):
     if requests is None:
-        return None
+        raise RuntimeError("requests not available")
     params = {
         "method": "tag.gettoptracks",
         "tag": tag,
@@ -26,19 +42,16 @@ def fetch_track(api_key: str | None, tag: str, timeout: float = 6.0):
     }
     if api_key:
         params["api_key"] = api_key
-    try:
-        r = requests.get(API_URL, params=params, timeout=timeout)
-        if r.status_code == 200:
-            data = r.json()
-            track = (data.get("tracks", {}) or {}).get("track")
-            if isinstance(track, list) and track:
-                t0 = track[0]
-                artist = (t0.get("artist") or {}).get("name") or "?"
-                name = t0.get("name") or "?"
-                return f"{artist} - {name}"
-    except Exception:
-        return None
-    return None
+    r = requests.get(API_URL, params=params, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
+    track = (data.get("tracks", {}) or {}).get("track")
+    if isinstance(track, list) and track:
+        t0 = track[0]
+        artist = (t0.get("artist") or {}).get("name") or "?"
+        name = t0.get("name") or "?"
+        return f"{artist} - {name}"
+    raise ValueError("No track data")
 
 
 def run(stop_event, api):
@@ -57,11 +70,11 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        line = fetch_track(api_key, tag, timeout=timeout)
-        if not line:
-            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
-            return
-        api.screen.display_text(f"{title}\n\n" + shorten(line, width=180, placeholder="…"), align="left")
+        try:
+            line = fetch_track(api_key, tag, timeout=timeout)
+            api.screen.display_text(f"{title}\n\n" + shorten(line, width=180, placeholder="…"), align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

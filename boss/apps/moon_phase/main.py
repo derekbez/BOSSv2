@@ -5,6 +5,7 @@ Refresh every 6h or via green button.
 """
 from __future__ import annotations
 import time
+from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -18,25 +19,37 @@ from typing import Dict, Any
 import os
 
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0):
     if requests is None:
-        return None
+        raise RuntimeError("requests not available")
     params: Dict[str, Any] = {"lat": lat, "long": lon}
     if api_key:
         params["apiKey"] = api_key
-    try:
-        r = requests.get(API_URL, params=params, timeout=timeout)
-        if r.status_code == 200:
-            d = r.json()
-            return {
-                "phase": d.get("moon_phase"),
-                "illum": d.get("moon_illumination"),
-                "rise": d.get("moonrise"),
-                "set": d.get("moonset"),
-            }
-    except Exception:
-        return None
-    return None
+    r = requests.get(API_URL, params=params, timeout=timeout)
+    r.raise_for_status()
+    d = r.json()
+    return {
+        "phase": d.get("moon_phase"),
+        "illum": d.get("moon_illumination"),
+        "rise": d.get("moonrise"),
+        "set": d.get("moonset"),
+    }
 
 
 def run(stop_event, api):
@@ -61,12 +74,12 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        info = fetch_data(api_key, lat, lon, timeout=timeout)
-        if not info:
-            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
-            return
-        body = f"{info['phase']}\nIllum {info['illum']}%\n\nRise {info['rise']}\nSet  {info['set']}"
-        api.screen.display_text(f"{title}\n\n{body}", align="left")
+        try:
+            info = fetch_data(api_key, lat, lon, timeout=timeout)
+            body = f"{info['phase']}\nIllum {info['illum']}%\n\nRise {info['rise']}\nSet  {info['set']}"
+            api.screen.display_text(f"{title}\n\n{body}", align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

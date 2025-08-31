@@ -7,3 +7,6 @@ python-tm1637; platform_system == "Linux"
 
 # Screen backend (textual only; rich is a transitive dependency)
 textual>=0.58
+
+# HTTP client for external API mini-apps
+requests>=2.32,<3

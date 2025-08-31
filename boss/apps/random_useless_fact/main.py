@@ -8,6 +8,22 @@ from typing import Any
 import time
 from textwrap import shorten
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 try:
     import requests  # type: ignore
 except Exception:  # pragma: no cover
@@ -16,19 +32,16 @@ except Exception:  # pragma: no cover
 API_URL = "https://uselessfacts.jsph.pl/random.json?language=en"
 
 
-def fetch_fact(timeout: float = 5.0) -> str | None:
+def fetch_fact(timeout: float = 5.0) -> str:
     if requests is None:
-        return None
-    try:
-        r = requests.get(API_URL, timeout=timeout, headers={"Accept": "application/json"})
-        if r.status_code == 200:
-            data: dict[str, Any] = r.json()
-            fact = data.get("text") or data.get("fact")
-            if fact:
-                return fact.strip()
-    except Exception:
-        return None
-    return None
+        raise RuntimeError("requests not available")
+    r = requests.get(API_URL, timeout=timeout, headers={"Accept": "application/json"})
+    r.raise_for_status()
+    data: dict[str, Any] = r.json()
+    fact = data.get("text") or data.get("fact")
+    if not fact:
+        raise ValueError("No fact in response")
+    return fact.strip()
 
 
 def run(stop_event, api):
@@ -45,11 +58,11 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show_fact():
-        fact = fetch_fact(timeout=request_timeout)
-        if not fact:
-            api.screen.display_text(f"{title}\n\n(network error fetching fact)", align="left")
-            return
-        api.screen.display_text(f"{title}\n\n" + shorten(fact, width=220, placeholder="…"), align="left")
+        try:
+            fact = fetch_fact(timeout=request_timeout)
+            api.screen.display_text(f"{title}\n\n" + shorten(fact, width=220, placeholder="…"), align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(event):
         nonlocal last_fetch

@@ -11,26 +11,38 @@ try:
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 API_URL = "https://api.wordnik.com/v4/words.json/wordOfTheDay"
 
 
 def fetch_word(api_key: str | None, timeout: float = 6.0):
     if requests is None:
-        return None
+        raise RuntimeError("requests not available")
     params = {}
     if api_key:
         params["api_key"] = api_key
-    try:
-        r = requests.get(API_URL, params=params, timeout=timeout)
-        if r.status_code == 200:
-            data = r.json()
-            word = data.get("word") or "?"
-            defs = data.get("definitions", [{}])[0].get("text", "No definition.")
-            example = data.get("examples", [{}])[0].get("text", "")
-            return word, defs, example
-    except Exception:
-        return None
-    return None
+    r = requests.get(API_URL, params=params, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
+    word = data.get("word") or "?"
+    defs = data.get("definitions", [{}])[0].get("text", "No definition.")
+    example = data.get("examples", [{}])[0].get("text", "")
+    return word, defs, example
 
 
 def run(stop_event, api):
@@ -48,17 +60,16 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        result = fetch_word(api_key, timeout=timeout)
-        if not result:
-            api.screen.display_text(f"{title}\n\n(error/ no data)", align="left")
-            return
-        word, defs, example = result
-        defs_txt = shorten(defs, width=200, placeholder="…")
-        lines = [title, "", word, defs_txt]
-        if example:
-            lines.append("")
-            lines.append("Ex: " + shorten(example, width=160, placeholder="…"))
-        api.screen.display_text("\n".join(lines), align="left")
+        try:
+            word, defs, example = fetch_word(api_key, timeout=timeout)
+            defs_txt = shorten(defs, width=200, placeholder="…")
+            lines = [title, "", word, defs_txt]
+            if example:
+                lines.append("")
+                lines.append("Ex: " + shorten(example, width=160, placeholder="…"))
+            api.screen.display_text("\n".join(lines), align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

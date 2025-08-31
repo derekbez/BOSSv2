@@ -12,21 +12,33 @@ try:
 except Exception:  # pragma: no cover
     requests = None  # type: ignore
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 BASE_URL = "https://v2.jokeapi.dev/joke/"
 
 
 def fetch_joke(category: str, jtype: str, blacklist: list[str], timeout: float = 6.0):
     if requests is None:
-        return None
+        raise RuntimeError("requests not available")
     params = {"type": jtype, "blacklistFlags": ",".join(blacklist)}
     url = f"{BASE_URL}{category}"
-    try:
-        r = requests.get(url, params=params, timeout=timeout)
-        if r.status_code == 200:
-            return r.json()
-    except Exception:
-        return None
-    return None
+    r = requests.get(url, params=params, timeout=timeout)
+    r.raise_for_status()
+    return r.json()
 
 
 def run(stop_event, api):
@@ -48,24 +60,24 @@ def run(stop_event, api):
     punchline_state = {"pending": False, "delivery": ""}
 
     def show():
-        joke = fetch_joke(category, jtype, blacklist, timeout=timeout)
-        if not joke:
-            api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
-            punchline_state["pending"] = False
-            return
-        jtype_local = joke.get("type")
-        if jtype_local == "single":
-            text = shorten(joke.get("joke", "No joke."), width=240, placeholder="…")
-            api.screen.display_text(f"{title}\n\n{text}", align="left")
-            punchline_state["pending"] = False
-        elif jtype_local == "twopart":
-            setup = shorten(joke.get("setup", "No setup"), width=220, placeholder="…")
-            delivery = shorten(joke.get("delivery", "No punchline"), width=220, placeholder="…")
-            punchline_state["pending"] = True
-            punchline_state["delivery"] = delivery
-            api.screen.display_text(f"{title}\n\n{setup}\n\n(press green)", align="left")
-        else:
-            api.screen.display_text(f"{title}\n\nNo joke.", align="left")
+        try:
+            joke = fetch_joke(category, jtype, blacklist, timeout=timeout)
+            jtype_local = joke.get("type")
+            if jtype_local == "single":
+                text = shorten(joke.get("joke", "No joke."), width=240, placeholder="…")
+                api.screen.display_text(f"{title}\n\n{text}", align="left")
+                punchline_state["pending"] = False
+            elif jtype_local == "twopart":
+                setup = shorten(joke.get("setup", "No setup"), width=220, placeholder="…")
+                delivery = shorten(joke.get("delivery", "No punchline"), width=220, placeholder="…")
+                punchline_state["pending"] = True
+                punchline_state["delivery"] = delivery
+                api.screen.display_text(f"{title}\n\n{setup}\n\n(press green)", align="left")
+            else:
+                api.screen.display_text(f"{title}\n\nNo joke.", align="left")
+                punchline_state["pending"] = False
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
             punchline_state["pending"] = False
 
     def on_button(ev):

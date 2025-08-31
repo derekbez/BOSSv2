@@ -7,6 +7,22 @@ from __future__ import annotations
 import time
 import xml.etree.ElementTree as ET
 
+def _summarize_error(err: Exception) -> str:
+    resp = getattr(err, 'response', None)
+    if resp is not None and hasattr(resp, 'status_code'):
+        try:
+            reason = getattr(resp, 'reason', '') or ''
+            msg = f"HTTP {resp.status_code} {reason}".strip()
+        except Exception:
+            msg = ''
+    else:
+        msg = str(err) or err.__class__.__name__
+    if not msg:
+        msg = err.__class__.__name__
+    if len(msg) > 60:
+        msg = msg[:57] + '...'
+    return msg
+
 try:
     import requests  # type: ignore
 except Exception:  # pragma: no cover
@@ -17,19 +33,16 @@ API_URL = "https://www.colourlovers.com/api/colors/random?format=xml"
 
 def fetch_color(timeout: float = 6.0):
     if requests is None:
-        return None
-    try:
-        r = requests.get(API_URL, timeout=timeout, headers={"User-Agent": "BOSS-Color/1.0"})
-        if r.status_code == 200:
-            root = ET.fromstring(r.text)
-            color = root.find("color")
-            if color is not None:
-                title = (color.findtext("title") or "?").strip()
-                hexcode = (color.findtext("hex") or "??????").strip()
-                return title, hexcode
-    except Exception:
-        return None
-    return None
+        raise RuntimeError("requests not available")
+    r = requests.get(API_URL, timeout=timeout, headers={"User-Agent": "BOSS-Color/1.0"})
+    r.raise_for_status()
+    root = ET.fromstring(r.text)
+    color = root.find("color")
+    if color is None:
+        raise ValueError("No <color> element")
+    title = (color.findtext("title") or "?").strip()
+    hexcode = (color.findtext("hex") or "??????").strip()
+    return title, hexcode
 
 
 def run(stop_event, api):
@@ -46,12 +59,11 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show_color():
-        c = fetch_color(timeout=timeout)
-        if not c:
-            api.screen.display_text(f"{title}\n\n(network error)", align="left")
-            return
-        cname, hexcode = c
-        api.screen.display_text(f"{title}\n\n{cname}\n#{hexcode}", align="center")
+        try:
+            cname, hexcode = fetch_color(timeout=timeout)
+            api.screen.display_text(f"{title}\n\n{cname}\n#{hexcode}", align="center")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch
