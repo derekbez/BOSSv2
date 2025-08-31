@@ -15,6 +15,7 @@ API_URL = "https://api.ipgeolocation.io/astronomy"
 
 
 from typing import Dict, Any
+import os
 
 
 def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0):
@@ -40,7 +41,12 @@ def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    api_key = cfg.get("api_key") or api.get_config_value("IPGEO_API_KEY")
+    # Canonical env var name per secrets convention
+    api_key = (
+        cfg.get("api_key")
+        or os.environ.get("BOSS_APP_IPGEO_API_KEY")
+        or api.get_config_value("IPGEO_API_KEY")  # legacy fallback if still set
+    )
     lat = float(cfg.get("latitude", 51.5074))
     lon = float(cfg.get("longitude", -0.1278))
     refresh_seconds = float(cfg.get("refresh_seconds", 21600))
