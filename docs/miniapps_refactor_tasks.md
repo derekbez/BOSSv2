@@ -25,7 +25,7 @@ Status Legend:
 5. Use `stop_event` cooperatively: loops must check at least every 0.5s (target ≤0.2s for responsive exit). Replace long sleeps with `stop_event.wait(interval)`.
 6. Log meaningful errors via `api.log_error` instead of silent failures.
 7. Validate required secrets via manifest (`required_env`) — already enforced by AppManager; ensure manifests are updated if new env vars introduced.
-8. After all apps migrated, remove legacy compatibility methods from `AppScreenAPI` and add a CI grep guard.
+8. After all apps migrated, remove legacy compatibility methods from `AppScreenAPI` and add a CI grep guard. (DONE 2025-08-31) Legacy methods removed and unit test `test_no_legacy_screen_api.py` enforces absence.
 
 ## Quick Classification (current scan)
 Modern (already using `display_text` only):
@@ -83,29 +83,29 @@ For each: (A) Replace legacy screen writes with single `display_text` call (opti
 
 | App | Legacy Methods Present | Interaction? | External API(s) | Special Notes | Status |
 |-----|------------------------|--------------|-----------------|--------------|--------|
-| bird_sightings_near_me | write_line, write_wrapped, clear_body | No (display only) | eBird | Format species list via joined lines | [ ] |
-| breaking_news | write_line, write_wrapped, clear_body | No | (News API?) none listed yet | Headlines list join; ellipsize | [ ] |
-| color_of_the_day | write_line, write_wrapped, clear_body | No | (Color API?) | Keep hex + name styling | [ ] |
-| constellation_of_the_night | write_line, write_wrapped | No | (Astronomy?) | Single message only — trivial | [ ] |
-| dad_joke_generator | write_line, write_wrapped, clear_body | No | Joke API (icanhazdad?) | Multi-line joke; fallback text | [ ] |
-| flight_status_favorite_airline | write_line, write_wrapped, clear_body | No | aviationstack | Table-like layout; use \n lines | [ ] |
-| flights_leaving_heathrow | write_line, write_wrapped, clear_body | No | aviationstack | Same pattern as above | [ ] |
-| internet_speed_check | write_line, clear_body | No | Speed test (internal) | Replace multi-line metrics | [ ] |
-| joke_of_the_moment | write_line, write_wrapped, clear_body, any_button_pressed | Potential (button to reveal punchline) | Joke API(s) | Must replace button logic with events; show setup then subscribe | [ ] |
-| local_tide_times | write_line, write_wrapped, clear_body | No | (Tide API) | Multi-line schedule | [ ] |
-| moon_phase | write_line, write_wrapped, clear_body | No | ipgeolocation (moon) | Could consolidate metrics | [ ] |
-| name_that_animal | write_line, write_wrapped, clear_body | No | (Animal API) | Manage wrapping of diet info | [ ] |
-| on_this_day | write_line, write_wrapped, clear_body | No | (History API) | List of events; maybe limit lines | [ ] |
-| public_domain_book_snippet | write_line, clear_body | No | (Book/Gutenberg) | Multi-line snippet; preserve indentation? | [ ] |
-| quote_of_the_day | write_line, write_wrapped, clear_body | No | (Quote API) | Author on last line prefixed dash | [ ] |
-| random_emoji_combo | write_line, clear_body | No | (Local/random) | Centered emoji string | [ ] |
-| random_local_place_name | write_line, clear_body | No | (Local dataset) | Possibly uppercase styling | [ ] |
-| random_useless_fact | write_line, write_wrapped, clear_body | No | (Fact API) | Might need wrapping | [ ] |
-| space_update | write_line, write_wrapped, clear_body | No | NASA | Potential long text; ensure truncation | [ ] |
-| tiny_poem | write_line, write_wrapped, clear_body | No | (Poem API) | Title + poem + author signature; spacing | [ ] |
-| today_in_music | write_line, write_wrapped, clear_body | No | (Music chart API) | Headline + item lines | [ ] |
-| top_trending_search | write_line, write_wrapped, clear_body | No | (Trends API) | Single trend line possibly | [ ] |
-| word_of_the_day | write_line, write_wrapped, clear_body | No | (Dictionary API) | Word + defs + example lines | [ ] |
+| bird_sightings_near_me | write_line, write_wrapped, clear_body | No (display only) | eBird | Refactored batch 2 | [x] |
+| breaking_news | write_line, write_wrapped, clear_body | No | (News API?) none listed yet | Refactored batch 2 | [x] |
+| color_of_the_day | write_line, write_wrapped, clear_body | No | (Color API?) | Refactored batch 3 | [x] |
+| constellation_of_the_night | write_line, write_wrapped | No | (Astronomy?) | Refactored batch 3 | [x] |
+| dad_joke_generator | write_line, write_wrapped, clear_body | No | Joke API (icanhazdad?) | Refactored batch 5 | [x] |
+| flight_status_favorite_airline | write_line, write_wrapped, clear_body | No | aviationstack | Refactored batch 2 | [x] |
+| flights_leaving_heathrow | write_line, write_wrapped, clear_body | No | aviationstack | Refactored batch 2 | [x] |
+| internet_speed_check | write_line, clear_body | No | Speed test (internal) | Refactored batch 4 | [x] |
+| joke_of_the_moment | write_line, write_wrapped, clear_body, any_button_pressed | Potential (button to reveal punchline) | Joke API(s) | Refactored: event-driven punchline reveal | [x] |
+| local_tide_times | write_line, write_wrapped, clear_body | No | (Tide API) | Refactored batch 4 | [x] |
+| moon_phase | write_line, write_wrapped, clear_body | No | ipgeolocation (moon) | Refactored batch 4 | [x] |
+| name_that_animal | write_line, write_wrapped, clear_body | No | (Animal API) | Refactored batch 4 | [x] |
+| on_this_day | write_line, write_wrapped, clear_body | No | (History API) | Refactored batch 2 | [x] |
+| public_domain_book_snippet | write_line, clear_body | No | (Book/Gutenberg) | Refactored batch 4 | [x] |
+| quote_of_the_day | write_line, write_wrapped, clear_body | No | (Quote API) | Refactored batch 1 | [x] |
+| random_emoji_combo | write_line, clear_body | No | (Local/random) | Refactored batch 3 | [x] |
+| random_local_place_name | write_line, clear_body | No | (Local dataset) | Refactored batch 3 | [x] |
+| random_useless_fact | write_line, write_wrapped, clear_body | No | (Fact API) | Refactored batch 3 | [x] |
+| space_update | write_line, write_wrapped, clear_body | No | NASA | Refactored batch 1 (truncate) | [x] |
+| tiny_poem | write_line, write_wrapped, clear_body | No | (Poem API) | Refactored batch 1 | [x] |
+| today_in_music | write_line, write_wrapped, clear_body | No | (Music chart API) | Refactored batch 4 | [x] |
+| top_trending_search | write_line, write_wrapped, clear_body | No | (Trends API) | Refactored batch 4 | [x] |
+| word_of_the_day | write_line, write_wrapped, clear_body | No | (Dictionary API) | Refactored batch 1 | [x] |
 
 ## Suggested Refactor Order (Batching)
 1. Critical (blocking removal): `joke_of_the_moment` (unsupported button logic).

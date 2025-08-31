@@ -27,16 +27,19 @@ Implementation reference: `boss/application/api/app_api.py` (contains some TODO 
 | Path helpers | Asset resolution | `get_asset_path(filename)` |
 | Logging | Central logging | `log_info(msg)`, `log_error(msg)` |
 
-### 3.1 LED/Button Parity (MANDATORY UX RULE)
+### 3.1 Legacy Method Removal (2025-08-31)
+Former line-based helpers (`write_line`, `write_wrapped`, `clear_body`, `width`, `height`, and polling like `any_button_pressed`) were fully removed after migration. A CI guard test (`tests/unit/test_no_legacy_screen_api.py`) prevents reintroduction. Mini-apps must compose multi-line strings and call `display_text()`.
+
+### 3.2 LED/Button Parity (MANDATORY UX RULE)
 If a button is a valid action, its LED must be ON. A press while OFF is ignored (identical behavior on physical + WebUI). Turn all LEDs off in cleanup.
 
-### 3.2 Long Loops & Shutdown
+### 3.3 Long Loops & Shutdown
 Check `stop_event.is_set()` frequently (≤100ms typical) so forced termination is graceful.
 
-### 3.3 Asset Access
+### 3.4 Asset Access
 Use `api.get_asset_path()` instead of constructing file paths manually.
 
-### 3.4 Logging
+### 3.5 Logging
 Always use provided logging helpers; they tag messages with app context.
 
 ---
