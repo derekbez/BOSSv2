@@ -10,6 +10,9 @@
     "tags": [
         "news"
     ],
+    "required_env": [
+        "BOSS_APP_NEWSDATA_API_KEY"
+    ],
     "config": {
         "country": "gb",
         "category": "technology",

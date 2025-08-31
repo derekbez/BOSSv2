@@ -63,7 +63,7 @@ def run(stop_event, api):
             cname, hexcode = fetch_color(timeout=timeout)
             api.screen.display_text(f"{title}\n\n{cname}\n#{hexcode}", align="center")
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

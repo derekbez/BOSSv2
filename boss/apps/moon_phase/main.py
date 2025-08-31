@@ -79,7 +79,7 @@ def run(stop_event, api):
             body = f"{info['phase']}\nIllum {info['illum']}%\n\nRise {info['rise']}\nSet  {info['set']}"
             api.screen.display_text(f"{title}\n\n{body}", align="left")
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

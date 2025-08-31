@@ -368,7 +368,14 @@ class WebUIScreen(ScreenInterface):
                 "content_type": "text"
             }, "webui_screen")
         
-        logger.info(f"WebUI screen text updated: '{text}' (size: {font_size}, color: {color}, align: {align})")
+        # Unicode-safe logging: some Windows consoles can't encode certain glyphs (e.g. ₹)
+        max_log_len = 500
+        log_text = text if len(text) <= max_log_len else text[:max_log_len] + "…"
+        try:
+            logger.info(f"WebUI screen text updated: '{log_text}' (size: {font_size}, color: {color}, align: {align})")
+        except UnicodeEncodeError:
+            safe = log_text.encode(errors="replace").decode()
+            logger.info(f"WebUI screen text updated (unicode-normalized): '{safe}' (size: {font_size}, color: {color}, align: {align})")
     
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
         """Display an image on screen."""

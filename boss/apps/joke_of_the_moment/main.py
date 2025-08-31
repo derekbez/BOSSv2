@@ -77,7 +77,7 @@ def run(stop_event, api):
                 api.screen.display_text(f"{title}\n\nNo joke.", align="left")
                 punchline_state["pending"] = False
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
             punchline_state["pending"] = False
 
     def on_button(ev):

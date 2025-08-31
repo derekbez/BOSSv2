@@ -14,21 +14,7 @@ try:
 except Exception:  # pragma: no cover - requests may be absent in some test envs
     requests = None  # type: ignore
 
-def _summarize_error(err: Exception) -> str:
-    resp = getattr(err, 'response', None)
-    if resp is not None and hasattr(resp, 'status_code'):
-        try:
-            reason = getattr(resp, 'reason', '') or ''
-            msg = f"HTTP {resp.status_code} {reason}".strip()
-        except Exception:
-            msg = ''
-    else:
-        msg = str(err) or err.__class__.__name__
-    if not msg:
-        msg = err.__class__.__name__
-    if len(msg) > 60:
-        msg = msg[:57] + '...'
-    return msg
+from boss.apps._error_utils import summarize_error
 
 API_URL = "https://api.quotable.io/random"
 
@@ -66,7 +52,7 @@ def run(stop_event, api):  # signature required by platform
                 lines.append(f"- {author}")
             api.screen.display_text("\n".join(lines), align="left")
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
     def on_button(event):
         if event.get("button") == "green":

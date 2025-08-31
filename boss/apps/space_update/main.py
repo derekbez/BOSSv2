@@ -73,7 +73,7 @@ def run(stop_event, api):
             text = fetch_space(api_key, timeout=timeout)
             api.screen.display_text(f"{title}\n\n" + shorten(text, width=240, placeholder="…"), align="left")
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

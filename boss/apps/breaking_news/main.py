@@ -5,8 +5,10 @@ Graceful errors and manual refresh via green button.
 """
 from __future__ import annotations
 from typing import Any
+import os
+from boss.infrastructure.config.secrets_manager import secrets
 import time
-from textwrap import shorten
+from textwrap import shorten  # retained if user later toggles truncation (will remove if fully unused)
 
 try:
     import requests  # type: ignore
@@ -16,41 +18,70 @@ except Exception:  # pragma: no cover
 API_URL = "https://newsdata.io/api/1/news"
 
 
-def fetch_headlines(api_key: str | None, country: str, category: str, timeout: float = 6.0) -> list[str] | None:
+def fetch_headlines(api_key: str | None, country: str, category: str, timeout: float = 6.0, retries: int = 0, backoff: float = 1.5) -> list[str]:
     if requests is None:
-        return None
-    params = {
-        "country": country,
-        "category": category,
-        "language": "en"
-    }
+        raise RuntimeError("requests not available")
+    params = {"country": country, "category": category, "language": "en"}
     if api_key:
         params["apikey"] = api_key
-    try:
-        r = requests.get(API_URL, params=params, timeout=timeout)
-        if r.status_code == 200:
+    attempt = 0
+    last_exc: Exception | None = None
+    data = {}
+    while attempt <= retries:
+        try:
+            r = requests.get(API_URL, params=params, timeout=timeout)
+            if r.status_code == 401 and not api_key:
+                raise RuntimeError("401 Unauthorized (missing NewsData API key). Set BOSS_APP_NEWSDATA_API_KEY or manifest config 'api_key'.")
+            r.raise_for_status()
             data = r.json()
-            articles = data.get("results", [])
-            heads = []
-            for a in articles:
-                title = a.get("title")
-                if title:
-                    heads.append(title[:80])
-                if len(heads) >= 6:
-                    break
-            return heads
-    except Exception:
-        return None
-    return None
+            break
+        except requests.exceptions.ReadTimeout as e:  # type: ignore[attr-defined]
+            last_exc = e
+            if attempt >= retries:
+                raise RuntimeError(f"Read timeout after {timeout}s (attempt {attempt+1}); increase request_timeout_seconds or reduce category scope.") from e
+        except requests.exceptions.ConnectTimeout as e:  # type: ignore[attr-defined]
+            last_exc = e
+            if attempt >= retries:
+                raise RuntimeError(f"Connect timeout after {timeout}s (attempt {attempt+1}); check network connectivity.") from e
+        except Exception as e:
+            last_exc = e
+            if attempt >= retries:
+                raise
+        attempt += 1
+        if attempt <= retries:
+            time.sleep(backoff * attempt)
+    if last_exc:
+        # Should have been raised earlier; safeguard
+        raise last_exc
+    articles = data.get("results", [])
+    heads: list[str] = []
+    for a in articles:
+        title = a.get("title")
+        if title:
+            heads.append(title[:80])
+        if len(heads) >= 6:
+            break
+    if not heads:
+        raise ValueError("No headlines")
+    return heads
 
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    api_key = cfg.get("api_key") or api.get_config_value("NEWS_API_KEY")
+    api_key = (
+        cfg.get("api_key")
+        or secrets.get("BOSS_APP_NEWSDATA_API_KEY")
+        or secrets.get("NEWSDATA_API_KEY")  # legacy/raw fallback
+        or os.environ.get("BOSS_APP_NEWSDATA_API_KEY")  # process env (if exported)
+        or os.environ.get("NEWSDATA_API_KEY")
+        or api.get_config_value("NEWSDATA_API_KEY")
+    )
     country = cfg.get("country", "gb")
     category = cfg.get("category", "technology")
     refresh_seconds = float(cfg.get("refresh_seconds", 300))
     timeout = float(cfg.get("request_timeout_seconds", 6))
+    retries = int(cfg.get("retries", 1))
+    backoff = float(cfg.get("retry_backoff_seconds", 1.5))
 
     api.screen.clear_screen()
     title = "Headlines"
@@ -61,12 +92,13 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show_news():
-        heads = fetch_headlines(api_key, country, category, timeout=timeout)
-        if not heads:
-            api.screen.display_text(f"{title}\n\n(no news / network error)", align="left")
-            return
-        body = "\n".join(shorten(h, width=60, placeholder="…") for h in heads[:8])
-        api.screen.display_text(f"{title}\n\n{body}", align="left")
+        try:
+            heads = fetch_headlines(api_key, country, category, timeout=timeout, retries=retries, backoff=backoff)
+            # Show full headline text; allow UI to wrap naturally
+            body = "\n".join(heads[:8])
+            api.screen.display_text(f"{title}\n\n{body}", align="left")
+        except Exception as e:
+            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

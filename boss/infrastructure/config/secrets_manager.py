@@ -20,6 +20,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 _DEFAULT_SECRET_FILE = Path(__file__).resolve().parent.parent.parent.parent / "secrets" / "secrets.env"
+_SYSTEM_SECRET_FILE = Path("/etc/boss/secrets.env")  # production Pi standard
 
 
 class _SecretsManager:
@@ -58,23 +59,42 @@ class _SecretsManager:
             self._loaded = True
 
     def _load_file(self) -> None:
-        if not self._secret_file.exists():
-            return
-        try:
-            for line in self._secret_file.read_text(encoding="utf-8").splitlines():
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-                if "=" not in line:
-                    logger.warning("Ignoring malformed secret line (no '='): %s", line)
-                    continue
-                key, value = line.split("=", 1)
-                key = key.strip()
-                value = value.strip()
-                if key and key not in os.environ:  # do not override real env
-                    self._file_cache[key] = value
-        except Exception:  # pragma: no cover - defensive
-            logger.exception("Failed loading secrets file: %s", self._secret_file)
+        """Load secrets from first existing candidate file.
+
+        Precedence for file loading (process env still wins overall):
+        1. Explicit override via env BOSS_SECRETS_FILE
+        2. Instance-provided path (repo local secrets/secrets.env)
+        3. System path /etc/boss/secrets.env
+        """
+        candidates = []
+        override = os.environ.get("BOSS_SECRETS_FILE")
+        if override:
+            candidates.append(Path(override))
+        candidates.append(self._secret_file)
+        if _SYSTEM_SECRET_FILE not in candidates:
+            candidates.append(_SYSTEM_SECRET_FILE)
+
+        for path in candidates:
+            if not path.exists():
+                continue
+            try:
+                for line in path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    if "=" not in line:
+                        logger.warning("Ignoring malformed secret line (no '='): %s", line)
+                        continue
+                    key, value = line.split("=", 1)
+                    key = key.strip()
+                    value = value.strip()
+                    if key and key not in os.environ:  # do not override real env
+                        self._file_cache[key] = value
+                logger.debug("Loaded secrets from %s (keys=%d)", path, len(self._file_cache))
+                return  # stop after first existing file
+            except Exception:  # pragma: no cover - defensive
+                logger.exception("Failed loading secrets file: %s", path)
+        # None found; silent (acceptable) — rely purely on process env
 
 
 # Singleton instance
