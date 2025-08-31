@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import Any
 import json
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -45,7 +44,7 @@ def run(stop_event, api):  # signature required by platform
     def show_quote():
         try:
             text, author = fetch_quote(timeout=refresh_timeout)
-            body = shorten(text, width=240, placeholder="…")
+            body = text  # full quote, backend wraps
             lines = [title, "", body]
             if author:
                 lines.append("")

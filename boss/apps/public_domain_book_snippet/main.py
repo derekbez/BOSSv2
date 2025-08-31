@@ -6,7 +6,6 @@ from __future__ import annotations
 import os
 import random
 import time
-from textwrap import shorten
 
 
 def choose_snippet(asset_dir: str, lines: int):
@@ -42,8 +41,8 @@ def run(stop_event, api):
 
     def show():
         snippet_lines = choose_snippet(asset_dir, lines)
-        body = "\n".join(shorten(line, width=80, placeholder="…") for line in snippet_lines[:10])
-        api.screen.display_text(f"{title}\n\n{body}", align="left")
+        local_body = "\n".join(snippet_lines[:10])
+        api.screen.display_text(f"{title}\n\n{local_body}", align="left")
 
     def on_button(ev):
         nonlocal last_shuffle

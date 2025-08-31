@@ -115,7 +115,9 @@ class HardwareEventHandler:
                     font_size=payload.get("font_size", 24),
                     color=payload.get("color", "white"),
                     background=payload.get("background", "black"),
-                    align=payload.get("align", "center")
+                    align=payload.get("align", "center"),
+                    wrap=payload.get("wrap", True),
+                    wrap_width=payload.get("wrap_width")
                 )
             elif content_type == "image":
                 self.hardware_service.update_screen(

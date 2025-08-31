@@ -287,10 +287,21 @@ class MockScreen(ScreenInterface):
         return self._available
     
     def display_text(self, text: str, font_size: int = 24, color: str = "white", 
-                    background: str = "black", align: str = "center") -> None:
-        """Display text on screen."""
-        self._current_content = text
-        logger.info(f"Mock screen text: '{text}' (size: {font_size}, color: {color}, align: {align})")
+                    background: str = "black", align: str = "center", wrap: bool = True, wrap_width: int | None = None) -> None:
+        """Display text on screen (with optional wrapping)."""
+        processed = text
+        if wrap:
+            try:
+                import textwrap
+                eff_width = wrap_width if wrap_width else (self._width if self._width <= 240 else 80)
+                wrapped_lines = []
+                for line in str(processed).splitlines():
+                    wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])
+                processed = "\n".join(wrapped_lines)
+            except Exception as e:
+                logger.debug(f"Mock wrap failed: {e}")
+        self._current_content = processed
+        logger.info(f"Mock screen text: '{processed}' (size: {font_size}, color: {color}, align: {align})")
     
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
         """Display an image on screen."""

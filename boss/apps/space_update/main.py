@@ -6,7 +6,6 @@ Refresh every 6h or via green.
 from __future__ import annotations
 import time
 import random
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -71,7 +70,7 @@ def run(stop_event, api):
     def show():
         try:
             text = fetch_space(api_key, timeout=timeout)
-            api.screen.display_text(f"{title}\n\n" + shorten(text, width=240, placeholder="…"), align="left")
+            api.screen.display_text(f"{title}\n\n{text}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 

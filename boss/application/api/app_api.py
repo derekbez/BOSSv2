@@ -61,15 +61,31 @@ class AppScreenAPI(ScreenAPIInterface):
         self._app_name = app_name
     
     def display_text(self, text: str, font_size: int = 24, color: str = "white", 
-                    background: str = "black", align: str = "center") -> None:
-        """Display text on screen."""
+                    background: str = "black", align: str = "center", wrap: bool = True, wrap_width: Optional[int] = None) -> None:
+        """Display text on screen.
+
+        Args:
+            text: Full text (may include newlines). If `wrap` is True the backend will
+                  soft-wrap lines to `wrap_width` (or inferred width) without truncation.
+            font_size: Logical requested font size (advisory in text backends).
+            color: Foreground color name.
+            background: Background color name.
+            align: left|center|right alignment.
+            wrap: Whether to auto-wrap long lines (default True).
+            wrap_width: Optional explicit wrap width in characters. If omitted the
+                        backend derives width from configured screen width (treating
+                        values <=200 as character columns; otherwise it derives an
+                        approximate column count).
+        """
         self._event_bus.publish("screen_update", {
             "content_type": "text",
             "content": text,
             "font_size": font_size,
             "color": color,
             "background": background,
-            "align": align
+            "align": align,
+            "wrap": wrap,
+            "wrap_width": wrap_width
         }, f"app:{self._app_name}")
     
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:

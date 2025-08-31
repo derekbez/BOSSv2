@@ -81,12 +81,12 @@ class TextualScreen(ScreenInterface):
     def is_available(self) -> bool:  # pragma: no cover
         return self._available and HAS_RICH
 
-    def display_text(self, text: str, font_size: int = 24, color: str = "white", background: str = "black", align: str = "center") -> None:
+    def display_text(self, text: str, font_size: int = 24, color: str = "white", background: str = "black", align: str = "center", wrap: bool = True, wrap_width: Optional[int] = None) -> None:
         if not self.is_available:
             return
         if text == self._last_render_text:  # duplicate suppression
             return
-        self._queue.put(_Cmd("text", {"text": text, "color": color, "background": background, "align": align}))
+        self._queue.put(_Cmd("text", {"text": text, "color": color, "background": background, "align": align, "wrap": wrap, "wrap_width": wrap_width}))
 
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:  # pragma: no cover simple
         if not hasattr(self, "_warned_image"):
@@ -156,7 +156,22 @@ class TextualScreen(ScreenInterface):
             if cmd.kind == "text":
                 p = cmd.payload
                 justify = p.get("align", "left")
-                rt = RichText(p.get("text", ""), style=f"{p.get('color','white')} on {p.get('background','black')}")  # type: ignore
+                raw_text = p.get("text", "")
+                if p.get("wrap", True):
+                    try:
+                        import textwrap
+                        # Determine effective width: if explicit wrap_width use it; else derive from configured width
+                        eff_width = p.get("wrap_width")
+                        if eff_width is None:
+                            # Treat hardware_config.screen_width as character columns if <= 240, else approximate
+                            eff_width = self._screen_width if self._screen_width <= 240 else 80
+                        wrapped_lines = []
+                        for line in str(raw_text).splitlines():
+                            wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])
+                        raw_text = "\n".join(wrapped_lines)
+                    except Exception as e:  # pragma: no cover
+                        logger.debug(f"Wrapping failed: {e}")
+                rt = RichText(raw_text, style=f"{p.get('color','white')} on {p.get('background','black')}")  # type: ignore
                 self._console.clear()
                 self._console.print(rt, justify=justify if justify in ("left", "center", "right") else "left")
                 self._last_render_text = p.get("text", "")

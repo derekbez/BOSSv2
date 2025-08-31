@@ -5,7 +5,6 @@ Refreshes periodically or via button.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -64,12 +63,12 @@ def run(stop_event, api):
             joke = fetch_joke(category, jtype, blacklist, timeout=timeout)
             jtype_local = joke.get("type")
             if jtype_local == "single":
-                text = shorten(joke.get("joke", "No joke."), width=240, placeholder="…")
+                text = joke.get("joke", "No joke.")
                 api.screen.display_text(f"{title}\n\n{text}", align="left")
                 punchline_state["pending"] = False
             elif jtype_local == "twopart":
-                setup = shorten(joke.get("setup", "No setup"), width=220, placeholder="…")
-                delivery = shorten(joke.get("delivery", "No punchline"), width=220, placeholder="…")
+                setup = joke.get("setup", "No setup")
+                delivery = joke.get("delivery", "No punchline")
                 punchline_state["pending"] = True
                 punchline_state["delivery"] = delivery
                 api.screen.display_text(f"{title}\n\n{setup}\n\n(press green)", align="left")

@@ -4,7 +4,6 @@ Fetches a dad joke periodically or via green button from icanhazdadjoke.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -48,7 +47,7 @@ def run(stop_event, api):
         if not joke:
             api.screen.display_text(f"{title}\n\n(network error)", align="left")
             return
-        api.screen.display_text(f"{title}\n\n" + shorten(joke, width=220, placeholder="…"), align="left")
+        api.screen.display_text(f"{title}\n\n{joke}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

@@ -4,7 +4,6 @@ Shows a random animal name + diet from Zoo Animal API.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -48,7 +47,7 @@ def run(stop_event, api):
             api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
             return
         name, diet = res
-        api.screen.display_text(f"{title}\n\n{name}\n\n" + shorten(diet, width=200, placeholder="…"), align="left")
+        api.screen.display_text(f"{title}\n\n{name}\n\n{diet}", align="left")
 
     def on_button(ev):
         nonlocal last_fetch

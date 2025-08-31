@@ -4,7 +4,6 @@ Shows next tide extremes using WorldTides API. Refresh every 3h.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 def _summarize_error(err: Exception) -> str:
     resp = getattr(err, 'response', None)
@@ -73,7 +72,7 @@ def run(stop_event, api):
     def show():
         try:
             lines = fetch_tides(api_key, lat, lon, timeout=timeout)
-            body = "\n".join(shorten(l, width=40, placeholder="…") for l in lines[:6])
+            body = "\n".join(lines[:6])
             api.screen.display_text(f"{title}\n\n{body}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")

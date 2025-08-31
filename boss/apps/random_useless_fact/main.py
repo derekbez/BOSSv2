@@ -6,7 +6,6 @@ Uses https://uselessfacts.jsph.pl/ API (no key) with graceful error fallback.
 from __future__ import annotations
 from typing import Any
 import time
-from textwrap import shorten
 
 def _summarize_error(err: Exception) -> str:
     resp = getattr(err, 'response', None)
@@ -60,7 +59,7 @@ def run(stop_event, api):
     def show_fact():
         try:
             fact = fetch_fact(timeout=request_timeout)
-            api.screen.display_text(f"{title}\n\n" + shorten(fact, width=220, placeholder="…"), align="left")
+            api.screen.display_text(f"{title}\n\n{fact}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 

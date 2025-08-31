@@ -294,18 +294,31 @@ class HardwareManager(HardwareService):
             logger.error(f"Error updating display: {e}")
     
     def update_screen(self, content_type: str, content, **kwargs) -> None:
-        """Update main screen."""
+        """Update main screen.
+
+        Supports text auto-wrapping by passing wrap / wrap_width through to
+        the backend if present. Backends that do not accept these parameters
+        should ignore them gracefully (Python will raise if signature mismatch;
+        we guard via hasattr check below).
+        """
         try:
-            if self.screen:
-                if content_type == "text":
-                    self.screen.display_text(content, **kwargs)
-                elif content_type == "image":
-                    self.screen.display_image(content, **kwargs)
-                elif content_type == "clear":
-                    # When clearing, 'content' carries the color
-                    color = content if isinstance(content, str) else kwargs.get("color", "black")
-                    self.screen.clear_screen(color)
-                logger.debug(f"Screen updated: {content_type}")
+            if not self.screen:
+                return
+            if content_type == "text":
+                # Some legacy screen backends may not yet accept wrap params; fall back gracefully
+                wrap = kwargs.pop('wrap', True)
+                wrap_width = kwargs.pop('wrap_width', None)
+                try:
+                    self.screen.display_text(content, wrap=wrap, wrap_width=wrap_width, **kwargs)  # type: ignore[arg-type]
+                except TypeError:
+                    # Backend without wrap support
+                    self.screen.display_text(content, **kwargs)  # type: ignore[arg-type]
+            elif content_type == "image":
+                self.screen.display_image(content, **kwargs)  # type: ignore[arg-type]
+            elif content_type == "clear":
+                color = content if isinstance(content, str) else kwargs.get("color", "black")
+                self.screen.clear_screen(color)  # type: ignore[arg-type]
+            logger.debug(f"Screen updated: {content_type}")
         except Exception as e:
             logger.error(f"Error updating screen: {e}")
 

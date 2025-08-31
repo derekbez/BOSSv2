@@ -62,11 +62,11 @@ def run(stop_event, api):
     def show():
         try:
             word, defs, example = fetch_word(api_key, timeout=timeout)
-            defs_txt = shorten(defs, width=200, placeholder="…")
+            defs_txt = defs  # no truncation; backend will wrap
             lines = [title, "", word, defs_txt]
             if example:
                 lines.append("")
-                lines.append("Ex: " + shorten(example, width=160, placeholder="…"))
+                lines.append("Ex: " + example)
             api.screen.display_text("\n".join(lines), align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")

@@ -4,7 +4,6 @@ Displays limited set of flights for chosen airline using Aviationstack.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -61,7 +60,7 @@ def run(stop_event, api):
         if not lines:
             api.screen.display_text(f"{title}\n\n(no data / error)", align="left")
             return
-        body = "\n".join(shorten(l, width=42, placeholder="…") for l in lines[:8])
+        body = "\n".join(lines[:8])
         api.screen.display_text(f"{title}\n\n{body}", align="left")
 
     def on_button(ev):

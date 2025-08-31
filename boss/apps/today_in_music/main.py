@@ -5,7 +5,6 @@ Refresh hourly or via green button.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -72,7 +71,7 @@ def run(stop_event, api):
     def show():
         try:
             line = fetch_track(api_key, tag, timeout=timeout)
-            api.screen.display_text(f"{title}\n\n" + shorten(line, width=180, placeholder="…"), align="left")
+            api.screen.display_text(f"{title}\n\n{line}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 

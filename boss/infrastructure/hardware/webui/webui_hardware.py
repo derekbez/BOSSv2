@@ -353,14 +353,25 @@ class WebUIScreen(ScreenInterface):
         return self._available
     
     def display_text(self, text: str, font_size: int = 24, color: str = "white", 
-                    background: str = "black", align: str = "center") -> None:
+                    background: str = "black", align: str = "center", wrap: bool = True, wrap_width: int | None = None) -> None:
         """Display text on screen."""
-        self._current_content = text
+        processed = text
+        if wrap:
+            try:
+                import textwrap
+                eff_width = wrap_width if wrap_width else (self._width if self._width <= 240 else 80)
+                wrapped_lines = []
+                for line in str(processed).splitlines():
+                    wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])
+                processed = "\n".join(wrapped_lines)
+            except Exception as e:  # pragma: no cover
+                logger.debug(f"WebUI wrap failed: {e}")
+        self._current_content = processed
         
         # Publish event for WebUI update - use the correct event that WebSocket manager listens for
         if self._event_bus:
             self._event_bus.publish("output.screen.updated", {
-                "text": text,
+                "text": processed,
                 "font_size": font_size,
                 "color": color,
                 "background": background,
@@ -370,7 +381,7 @@ class WebUIScreen(ScreenInterface):
         
         # Unicode-safe logging: some Windows consoles can't encode certain glyphs (e.g. ₹)
         max_log_len = 500
-        log_text = text if len(text) <= max_log_len else text[:max_log_len] + "…"
+        log_text = processed if len(processed) <= max_log_len else processed[:max_log_len] + "…"
         try:
             logger.info(f"WebUI screen text updated: '{log_text}' (size: {font_size}, color: {color}, align: {align})")
         except UnicodeEncodeError:

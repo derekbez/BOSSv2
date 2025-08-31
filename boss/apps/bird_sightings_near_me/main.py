@@ -110,7 +110,7 @@ def run(stop_event, api):
             end = start + per_page
             for name, loc in sightings_cache[start:end]:
                 display = f"{name} @ {loc}" if loc else name
-                lines.append(shorten(display, width=60, placeholder="…"))
+                lines.append(display)
             lines.append("")
             lines.append(f"Page {page+1}/{total_pages}  radius={radius}")
             lines.append("[YEL] Prev  [GRN] Refresh  [BLU] Next")
