@@ -64,6 +64,8 @@ class DummyAPI:
         pass
     def get_asset_path(self, name: str) -> str:
         return str(self._app_dir / "assets" / name)
+    def get_app_asset_path(self) -> str:
+        return str(self._app_dir / "assets")
     def get_config_value(self, key: str, default=None):
         return self._config.get(key, default)
     def get_app_config(self, default=None):
