@@ -80,9 +80,9 @@ def run(stop_event, api):
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
             punchline_state["pending"] = False
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             if punchline_state["pending"]:
                 punchline_state["pending"] = False
                 api.screen.display_text(f"{title}\n\n{punchline_state['delivery']}", align="left")
