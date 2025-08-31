@@ -24,7 +24,7 @@ Implementation reference: `boss/application/api/app_api.py` (contains some TODO 
 | `api.screen` | Request screen changes | `display_text(text, font_size=24, color='white', background='black', align='center')`, `display_image(path, scale=1.0, position=(0,0))`, `clear_screen(color='black')`, `get_screen_size()` |
 | `api.hardware` | LEDs (and placeholder sound) | `set_led(color, is_on, brightness=1.0)`, `play_sound(path, volume=1.0)` (future) |
 | `api.event_bus` | Event integration | `subscribe(event_type, handler, filter_dict=None)`, `unsubscribe(id)`, `publish(event_type, payload)` |
-| Path helpers | Asset resolution | `get_asset_path(filename)` |
+| Path/helpers | Asset & system info | `get_asset_path(filename)`, `get_global_location()` |
 | Logging | Central logging | `log_info(msg)`, `log_error(msg)` |
 
 ### 3.1 Legacy Method Removal (2025-08-31)

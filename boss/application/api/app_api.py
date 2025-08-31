@@ -261,3 +261,28 @@ class AppAPI(AppAPIInterface):
             # Return shallow copy to prevent accidental mutation
             return dict(self._config_cache)
         return dict(default) if default else {}
+
+    # ------------------------------------------------------------------
+    # Global location helper (added 2025-08-31)
+    # ------------------------------------------------------------------
+    def get_global_location(self) -> Dict[str, float]:
+        """Return system-wide latitude/longitude if configured.
+
+        Returns a dict: {"latitude": <float>, "longitude": <float>}.
+        If not configured, returns an empty dict.
+        """
+        # Attempt to pull from app_manager's config loader if present
+        try:
+            cfg_mgr = getattr(self._app_manager, 'config_manager', None)
+            if cfg_mgr:
+                root_cfg = getattr(cfg_mgr, 'config', None)
+                if isinstance(root_cfg, dict):
+                    loc = root_cfg.get('system', {}).get('location') or root_cfg.get('location')
+                    if isinstance(loc, dict):
+                        lat = loc.get('latitude')
+                        lon = loc.get('longitude')
+                        if isinstance(lat, (int, float)) and isinstance(lon, (int, float)):
+                            return {"latitude": float(lat), "longitude": float(lon)}
+        except Exception:  # pragma: no cover - non-critical
+            pass
+        return {}

@@ -43,6 +43,11 @@
     "enable_api": false,
     "api_port": 5000,
     "auto_detect_hardware": true,
-    "force_hardware_type": null
+    "force_hardware_type": null,
+    "location": {
+      "latitude": 51.8167,
+      "longitude": -0.8146,
+      "source": "user_provided"
+    }
   }
 }
