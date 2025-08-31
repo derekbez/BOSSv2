@@ -68,6 +68,9 @@ class DummyAPI:
         return self._config.get(key, default)
     def get_app_config(self, default=None):
         return default or {}
+    def get_global_location(self):
+        # Return a default location for testing
+        return {"latitude": 51.5074, "longitude": -0.1278}
 
 # ---------------------------------------------------------------------------
 # Parametrized smoke test
@@ -108,6 +111,12 @@ APP_CASES = [
         "module": "boss.apps.random_emoji_combo.main",
         "simulate": ["green"],
         "duration": 1.0,
+    },
+    {  # constellation location-based app
+        "name": "constellation_of_the_night",
+        "module": "boss.apps.constellation_of_the_night.main",
+        "simulate": [],
+        "duration": 0.5,
     },
 ]
 
