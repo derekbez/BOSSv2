@@ -293,7 +293,9 @@ class MockScreen(ScreenInterface):
         if wrap:
             try:
                 import textwrap
-                eff_width = wrap_width if wrap_width else (self._width if self._width <= 240 else 80)
+                eff_width = wrap_width
+                if eff_width is None:
+                    eff_width = getattr(self, 'screen_wrap_width_chars', 80)
                 wrapped_lines = []
                 for line in str(processed).splitlines():
                     wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])

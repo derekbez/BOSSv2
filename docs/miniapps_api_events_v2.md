@@ -27,19 +27,33 @@ Implementation reference: `boss/application/api/app_api.py` (contains some TODO 
 | Path/helpers | Asset & system info | `get_asset_path(filename)`, `get_global_location()` |
 | Logging | Central logging | `log_info(msg)`, `log_error(msg)` |
 
-### 3.1 Legacy Method Removal (2025-08-31)
+### 3.1 Text Auto-Wrapping (NEW 2025-08-31)
+`display_text()` now supports backend auto-wrapping:
+```
+display_text(text, font_size=24, color='white', background='black', align='center', wrap=True, wrap_width=None)
+```
+Behavior:
+* When `wrap=True` (default) each backend soft-wraps all lines to `wrap_width` (if provided) or to the global default configured via `hardware.screen_wrap_width_chars` (defaults to 80 if unspecified).
+* No truncation is performed; apps should supply full text (including newlines) and rely on wrapping.
+* To disable wrapping for pre-formatted ASCII layouts pass `wrap=False`.
+* Mini-apps should no longer call `textwrap.shorten()` for screen output.
+
+Config:
+* Add `"screen_wrap_width_chars": 80` under the `hardware` section of `boss_config.json` to override the global wrap width.
+
+### 3.2 Legacy Method Removal (2025-08-31)
 Former line-based helpers (`write_line`, `write_wrapped`, `clear_body`, `width`, `height`, and polling like `any_button_pressed`) were fully removed after migration. A CI guard test (`tests/unit/test_no_legacy_screen_api.py`) prevents reintroduction. Mini-apps must compose multi-line strings and call `display_text()`.
 
-### 3.2 LED/Button Parity (MANDATORY UX RULE)
+### 3.3 LED/Button Parity (MANDATORY UX RULE)
 If a button is a valid action, its LED must be ON. A press while OFF is ignored (identical behavior on physical + WebUI). Turn all LEDs off in cleanup.
 
-### 3.3 Long Loops & Shutdown
+### 3.4 Long Loops & Shutdown
 Check `stop_event.is_set()` frequently (≤100ms typical) so forced termination is graceful.
 
-### 3.4 Asset Access
+### 3.5 Asset Access
 Use `api.get_asset_path()` instead of constructing file paths manually.
 
-### 3.5 Logging
+### 3.6 Logging
 Always use provided logging helpers; they tag messages with app context.
 
 ---

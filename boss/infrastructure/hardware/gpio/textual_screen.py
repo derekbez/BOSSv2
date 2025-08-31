@@ -163,8 +163,9 @@ class TextualScreen(ScreenInterface):
                         # Determine effective width: if explicit wrap_width use it; else derive from configured width
                         eff_width = p.get("wrap_width")
                         if eff_width is None:
-                            # Treat hardware_config.screen_width as character columns if <= 240, else approximate
-                            eff_width = self._screen_width if self._screen_width <= 240 else 80
+                            # Use configured default wrap width (screen_wrap_width_chars) if present
+                            cfg_width = getattr(self.hardware_config, 'screen_wrap_width_chars', 80)
+                            eff_width = int(cfg_width) if cfg_width else 80
                         wrapped_lines = []
                         for line in str(raw_text).splitlines():
                             wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])

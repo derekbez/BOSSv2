@@ -359,7 +359,13 @@ class WebUIScreen(ScreenInterface):
         if wrap:
             try:
                 import textwrap
-                eff_width = wrap_width if wrap_width else (self._width if self._width <= 240 else 80)
+                # If not explicitly provided, prefer config default (if width looks like pixels, fallback to 80)
+                eff_width = wrap_width
+                if eff_width is None:
+                    # Attempt to pull from event bus attached hardware config via attribute (best-effort)
+                    eff_width = getattr(getattr(self._event_bus, 'hardware_config', None), 'screen_wrap_width_chars', None)
+                if eff_width is None:
+                    eff_width = 80
                 wrapped_lines = []
                 for line in str(processed).splitlines():
                     wrapped_lines.extend(textwrap.wrap(line, width=int(eff_width)) or [""])

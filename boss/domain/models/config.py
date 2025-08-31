@@ -37,6 +37,8 @@ class HardwareConfig:
     audio_volume: float
     # Optional polarity for LEDs (True = active-high, False = active-low)
     led_active_high: bool = True
+    # Default character wrap width for text screen auto-wrapping (optional)
+    screen_wrap_width_chars: int = 80
 
 
 @dataclass
@@ -107,7 +109,8 @@ class BossConfig:
                 screen_backend=hardware_data.get('screen_backend', 'rich'),
                 enable_audio=hardware_data['enable_audio'],
                 audio_volume=hardware_data['audio_volume'],
-                led_active_high=hardware_data.get('led_active_high', True)
+                led_active_high=hardware_data.get('led_active_high', True),
+                screen_wrap_width_chars=hardware_data.get('screen_wrap_width_chars', 80)
             )
             
             # Create system config - all values required
