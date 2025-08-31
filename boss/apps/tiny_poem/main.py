@@ -46,18 +46,22 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
-        result = fetch_poem(timeout=timeout)
-        if not result:
+        try:
+            result = fetch_poem(timeout=timeout)
+            if not result:
+                api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
+                return
+            pt, content, author = result
+            body = shorten(content, width=220, placeholder="…")
+            lines = [title, "", pt, body, "", f"- {author}"]
+            api.screen.display_text("\n".join(lines), align="left")
+        except Exception:
+            # Extra safeguard: ensure no error details leak to screen
             api.screen.display_text(f"{title}\n\n(error/no data)", align="left")
-            return
-        pt, content, author = result
-        body = shorten(content, width=220, placeholder="…")
-        lines = [title, "", pt, body, "", f"- {author}"]
-        api.screen.display_text("\n".join(lines), align="left")
 
-    def on_button(ev):
+    def on_button(event_type, event):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if event_type == "button_pressed" and event.get("button") == "green":
             last_fetch = time.time()
             show()
 

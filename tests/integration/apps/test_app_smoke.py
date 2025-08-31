@@ -109,6 +109,14 @@ APP_CASES = [
         "simulate": ["green"],
         "duration": 1.0,
     },
+    {  # tiny poem network app (mocked to fail for testing error handling)
+        "name": "tiny_poem",
+        "module": "boss.apps.tiny_poem.main",
+        "simulate": ["green"],
+        "duration": 1.2,
+        "mock_fn": "fetch_poem",
+        "mock_value": None,  # Simulate API failure
+    },
 ]
 
 @pytest.mark.parametrize("case", APP_CASES, ids=lambda c: c["name"])
