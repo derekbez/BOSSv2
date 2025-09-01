@@ -330,6 +330,16 @@ class SystemManager(SystemService):
                 state = self.hardware_service.get_hardware_state()
                 if self.hardware_service.display and hasattr(self.hardware_service.display, 'show_number'):
                     self.hardware_service.display.show_number(state.switches.value)
+                # Central LED normalization: ensure all LEDs are off when no app is running.
+                try:
+                    if self.hardware_service.leds:
+                        for c in ("red", "yellow", "green", "blue"):
+                            try:
+                                self.hardware_service.leds.set_led(c, False)  # type: ignore[arg-type]
+                            except Exception:
+                                pass
+                except Exception:
+                    pass
         except Exception:
             pass
 

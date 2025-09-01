@@ -128,3 +128,9 @@ def run(stop_event: Event, api: Any) -> None:
     finally:
         # Unsubscribe on exit
         api.event_bus.unsubscribe(sub_id)
+        # Turn off navigation LEDs that may have been lit
+        try:
+            api.hardware.set_led('yellow', False)
+            api.hardware.set_led('blue', False)
+        except Exception:
+            pass
