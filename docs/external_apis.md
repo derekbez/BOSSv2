@@ -75,7 +75,7 @@ Legend:
 | public_domain_book_snippet | Local assets | (none) | None | n/a | n/a | "(no book files)" | Ensure assets present |
 | random_local_place_name | Local assets | (none) | None | n/a | n/a | Built-in fallback list | Provide curated list |
 | random_emoji_combo | Local assets | (none) | None | n/a | n/a | Built-in fallback list | Provide emoji.json |
-| constellation_of_the_night | Placeholder/local dataset | (TBD future) | TBD | n/a | n/a | Static message | Placeholder state |
+| constellation_of_the_night | Local astronomical data | (none) | None | n/a | n/a | Uses global location + seasonal data | Location-based algorithm |
 
 ## 5. Implementation Guidelines
 1. Always set an explicit timeout (<= 6s) on network calls.
