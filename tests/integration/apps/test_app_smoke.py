@@ -109,6 +109,14 @@ APP_CASES = [
         "simulate": ["green"],
         "duration": 1.0,
     },
+    {  # joke fetching app with button punchline reveal
+        "name": "joke_of_the_moment",
+        "module": "boss.apps.joke_of_the_moment.main", 
+        "simulate": ["green"],
+        "duration": 1.2,
+        "mock_fn": "fetch_joke",
+        "mock_value": {"type": "twopart", "setup": "Test setup", "delivery": "Test punchline"},
+    },
 ]
 
 @pytest.mark.parametrize("case", APP_CASES, ids=lambda c: c["name"])
