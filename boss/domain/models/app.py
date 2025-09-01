@@ -32,7 +32,8 @@ class AppManifest:
     version: str
     author: str
     entry_point: str = "main.py"
-    timeout_seconds: int = 300  # 5 minutes default
+    # this timeout should come from the config, not hardcoded
+    timeout_seconds: int = 900  # 15 minutes default (global default; per-app override via manifest)
     requires_network: bool = False
     requires_audio: bool = False
     tags: Optional[List[str]] = None

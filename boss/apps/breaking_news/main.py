@@ -5,10 +5,8 @@ Graceful errors and manual refresh via green button.
 """
 from __future__ import annotations
 from typing import Any
-import os
 from boss.infrastructure.config.secrets_manager import secrets
 import time
-from textwrap import shorten  # retained if user later toggles truncation (will remove if fully unused)
 
 try:
     import requests  # type: ignore
@@ -68,14 +66,8 @@ def fetch_headlines(api_key: str | None, country: str, category: str, timeout: f
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    api_key = (
-        cfg.get("api_key")
-        or secrets.get("BOSS_APP_NEWSDATA_API_KEY")
-        or secrets.get("NEWSDATA_API_KEY")  # legacy/raw fallback
-        or os.environ.get("BOSS_APP_NEWSDATA_API_KEY")  # process env (if exported)
-        or os.environ.get("NEWSDATA_API_KEY")
-        or api.get_config_value("NEWSDATA_API_KEY")
-    )
+    # STRICT canonical key only (2025-09-01): per-app config 'api_key' OR secrets canonical.
+    api_key = cfg.get("api_key") or secrets.get("BOSS_APP_NEWSDATA_API_KEY")
     country = cfg.get("country", "gb")
     category = cfg.get("category", "technology")
     refresh_seconds = float(cfg.get("refresh_seconds", 300))
@@ -86,7 +78,8 @@ def run(stop_event, api):
     api.screen.clear_screen()
     title = "Headlines"
     api.screen.display_text(title, font_size=22, align="center")
-    api.hardware.set_led("green", True)
+    # Green LED indicates a manual refresh is AVAILABLE (cooldown elapsed). Start off.
+    api.hardware.set_led("green", False)
 
     sub_ids = []
     last_fetch = 0.0
@@ -94,15 +87,19 @@ def run(stop_event, api):
     def show_news():
         try:
             heads = fetch_headlines(api_key, country, category, timeout=timeout, retries=retries, backoff=backoff)
-            # Show full headline text; allow UI to wrap naturally
             body = "\n".join(heads[:8])
             api.screen.display_text(f"{title}\n\n{body}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
+        update_led()
 
-    def on_button(ev):
+    def update_led():
+        ready = (time.time() - last_fetch) >= refresh_seconds
+        api.hardware.set_led("green", ready)
+
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green" and (time.time() - last_fetch) >= refresh_seconds:
             last_fetch = time.time()
             show_news()
 
@@ -111,11 +108,14 @@ def run(stop_event, api):
     try:
         show_news()
         last_fetch = time.time()
+        update_led()
         while not stop_event.is_set():
             now = time.time()
             if now - last_fetch >= refresh_seconds:
                 last_fetch = now
                 show_news()
+            else:
+                update_led()
             time.sleep(0.25)
     finally:
         for sid in sub_ids:

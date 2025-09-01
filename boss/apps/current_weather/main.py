@@ -1,7 +1,8 @@
 """current_weather - Periodic weather snapshot via Open-Meteo.
 
-Enhancements (2025-08-31):
-* Uses global system location if provided (api.get_global_location()).
+STRICT MODE (2025-09-01):
+* Requires a valid GLOBAL system location (api.get_global_location must supply numeric latitude/longitude).
+* No silent fallback to default coordinates. If missing -> display error & abort.
 * Displays current weather plus next 8 hours (temp, wind, humidity, cloud, precipitation).
 * Adds humidity and precipitation to current conditions view.
 """
@@ -102,18 +103,27 @@ def format_next_hours(data: Dict[str, Any], hours: int = 8) -> str:
 def run(stop_event: Event, api: Any) -> None:
     api.log_info("current_weather starting")
     cfg = api.get_app_config(default={}) or {}
-    # Global system location has priority
-    global_loc = api.get_global_location() if hasattr(api, "get_global_location") else {}
-    if global_loc and global_loc.get("latitude") is not None and global_loc.get("longitude") is not None:
-        try:
-            lat = float(global_loc.get("latitude"))  # type: ignore[arg-type]
-            lon = float(global_loc.get("longitude"))  # type: ignore[arg-type]
-        except Exception:  # fallback to per-app config
-            lat = float(cfg.get("latitude", 51.5074))
-            lon = float(cfg.get("longitude", -0.1278))
-    else:
-        lat = float(cfg.get("latitude", 51.5074))
-        lon = float(cfg.get("longitude", -0.1278))
+    global_loc = api.get_global_location() if hasattr(api, "get_global_location") else None
+    if not global_loc or global_loc.get("latitude") is None or global_loc.get("longitude") is None:
+        api.screen.clear_screen()
+        api.screen.display_text(
+            "Weather Error:\nGlobal location not set. Configure system latitude/longitude.",
+            align="center",
+        )
+        api.log_error("current_weather aborted: missing global location")
+        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        return
+    try:
+        lat = float(global_loc.get("latitude"))  # type: ignore[arg-type]
+        lon = float(global_loc.get("longitude"))  # type: ignore[arg-type]
+    except Exception:
+        api.screen.clear_screen()
+        api.screen.display_text(
+            "Weather Error:\nInvalid global location values (non-numeric).", align="center"
+        )
+        api.log_error("current_weather aborted: invalid global location numeric conversion")
+        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        return
     refresh = int(cfg.get("refresh_seconds", 60))
     timeout = float(cfg.get("request_timeout_seconds", 4))
 

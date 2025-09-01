@@ -5,7 +5,6 @@ Refresh every 6h or via green button.
 """
 from __future__ import annotations
 import time
-from textwrap import shorten
 
 try:
     import requests  # type: ignore
@@ -16,7 +15,7 @@ API_URL = "https://api.ipgeolocation.io/astronomy"
 
 
 from typing import Dict, Any
-import os
+from boss.infrastructure.config.secrets_manager import secrets
 
 
 def _summarize_error(err: Exception) -> str:
@@ -55,11 +54,8 @@ def fetch_data(api_key: str | None, lat: float, lon: float, timeout: float = 6.0
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
     # Canonical env var name per secrets convention
-    api_key = (
-        cfg.get("api_key")
-        or os.environ.get("BOSS_APP_IPGEO_API_KEY")
-        or api.get_config_value("IPGEO_API_KEY")  # legacy fallback if still set
-    )
+    # STRICT canonical key only (2025-09-01): per-app config 'api_key' OR secrets canonical.
+    api_key = cfg.get("api_key") or secrets.get("BOSS_APP_IPGEO_API_KEY")
     lat = float(cfg.get("latitude", 51.5074))
     lon = float(cfg.get("longitude", -0.1278))
     refresh_seconds = float(cfg.get("refresh_seconds", 21600))
@@ -81,9 +77,9 @@ def run(stop_event, api):
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show()
 

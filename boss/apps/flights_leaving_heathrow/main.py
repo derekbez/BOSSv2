@@ -5,6 +5,7 @@ Shows limited list of departing flights using Aviationstack API.
 from __future__ import annotations
 import time
 from typing import Any
+from boss.infrastructure.config.secrets_manager import secrets
 
 try:
     import requests  # type: ignore
@@ -43,7 +44,8 @@ def fetch_flights(api_key: str | None, timeout: float = 6.0, limit: int = 8):
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    api_key = cfg.get("api_key") or api.get_config_value("AVIATIONSTACK_API_KEY")
+    # STRICT canonical key only (2025-09-01): per-app config 'api_key' OR secrets canonical.
+    api_key = cfg.get("api_key") or secrets.get("BOSS_APP_AVIATIONSTACK_API_KEY")
     timeout = float(cfg.get("request_timeout_seconds", 6))
     refresh_seconds = float(cfg.get("refresh_seconds", 600))
 
@@ -56,16 +58,20 @@ def run(stop_event, api):
     last_fetch = 0.0
 
     def show():
+        if not api_key:
+            api.screen.display_text(f"{title}\n\n(missing API key)", align="left")
+            return
         lines = fetch_flights(api_key, timeout=timeout)
         if not lines:
+            api.log_warning("Heathrow departures fetch returned no data")
             api.screen.display_text(f"{title}\n\n(no data / error)", align="left")
             return
         body = "\n".join(lines[:8])
         api.screen.display_text(f"{title}\n\n{body}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show()
 

@@ -52,7 +52,6 @@ def run(stop_event, api):
     title = "Random Fact"
     api.screen.display_text(title, font_size=24, align="center")
     api.hardware.set_led("green", True)  # green for refresh
-
     sub_ids = []
     last_fetch = 0.0
 
@@ -63,9 +62,9 @@ def run(stop_event, api):
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
-    def on_button(event):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if event.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show_fact()
 

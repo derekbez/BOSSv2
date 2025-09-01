@@ -29,7 +29,7 @@
     "screen_backend": "textual"
   },
   "system": {
-    "app_timeout_seconds": 300,
+    "app_timeout_seconds": 900,
     "apps_directory": "apps",
     "log_level": "INFO",
     "log_file": "logs/boss.log",

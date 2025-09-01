@@ -1,15 +1,19 @@
 """Bird Sightings Near Me mini-app.
 
-Displays recent nearby bird species using the eBird API (no auth for recent observations endpoint
-with lat/long). Allows manual refresh with green button.
+STRICT MODE (2025-09-01):
+* Requires a valid GLOBAL location (set via system provisioning). If absent -> immediate error and abort.
+* Uses ONLY the canonical secret/env `BOSS_APP_EBIRD_API_KEY` (if provided) or per-app config `api_key`.
+    All legacy / multi-source fallbacks removed to enforce consistency & fail-fast semantics.
+* No silent coordinate fallback to defaults; developer must supply global location. (App config lat/long
+    retained only as an override mechanism if explicitly configured AND global is present.)
+* Manual refresh with GREEN; paging with YELLOW (prev) and BLUE (next).
 """
 from __future__ import annotations
 from typing import Any, List
-import os
 import logging
 from boss.infrastructure.config.secrets_manager import secrets
 import time
-from textwrap import shorten
+## NOTE: Per centralized screen wrapping policy, we DO NOT manually truncate/wrap lines here.
 
 try:
     import requests  # type: ignore
@@ -50,34 +54,52 @@ def fetch_sightings(lat: float, lng: float, radius: int, api_key: str | None, ti
 
 
 def run(stop_event, api):
+    log = logging.getLogger(__name__)
     cfg = api.get_app_config() or {}
-    # Prefer global system location if defined; fallback to app config / defaults
-    global_loc = api.get_global_location() if hasattr(api, "get_global_location") else {}
-    if global_loc and global_loc.get("latitude") is not None and global_loc.get("longitude") is not None:
+
+    # Enforce presence of global location (fail fast if missing)
+    global_loc = api.get_global_location() if hasattr(api, "get_global_location") else None
+    if not global_loc or global_loc.get("latitude") is None or global_loc.get("longitude") is None:
+        api.screen.clear_screen()
+        api.screen.display_text(
+            "Birds Error:\nGlobal location not set. Configure system latitude/longitude to use this app.",
+            align="left",
+        )
+        log.error("bird_sightings_near_me aborted: missing global location")
+        # Brief pause so user can read error before app thread exits
+        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        return
+
+    # Use global coords; allow explicit override ONLY if cfg provides both (explicit choice)
+    try:
+        lat = float(global_loc.get("latitude"))  # type: ignore[arg-type]
+        lng = float(global_loc.get("longitude"))  # type: ignore[arg-type]
+    except Exception:  # pragma: no cover - already validated above
+        api.screen.display_text(
+            "Birds Error:\nInvalid global location values (non-numeric).", align="left"
+        )
+        log.error("bird_sightings_near_me aborted: invalid global location numeric conversion")
+        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        return
+
+    if "latitude" in cfg and "longitude" in cfg:
+        # Explicit per-app override (intended advanced usage only)
         try:
-            lat = float(global_loc.get("latitude"))  # type: ignore[arg-type]
-            lng = float(global_loc.get("longitude"))  # type: ignore[arg-type]
+            lat = float(cfg.get("latitude"))  # type: ignore[arg-type]
+            lng = float(cfg.get("longitude"))  # type: ignore[arg-type]
+            log.info("bird_sightings_near_me: using explicit app-level lat/long override")
         except Exception:
-            lat = float(cfg.get("latitude", 51.5074))
-            lng = float(cfg.get("longitude", -0.1278))
-    else:
-        lat = float(cfg.get("latitude", 51.5074))
-        lng = float(cfg.get("longitude", -0.1278))
+            log.warning("bird_sightings_near_me: app-level lat/long override invalid; using global values")
+
     radius = int(cfg.get("radius", 10))  # configurable via manifest config
     per_page = int(cfg.get("per_page", 10))  # number of sighting rows per page
     request_timeout = float(cfg.get("request_timeout_seconds", 6))
-    api_key = (
-        cfg.get("api_key")
-        or secrets.get("BOSS_APP_EBIRD_API_KEY")
-        or secrets.get("EBIRD_API_KEY")
-        or os.environ.get("BOSS_APP_EBIRD_API_KEY")
-        or os.environ.get("EBIRD_API_KEY")
-        or api.get_config_value("EBIRD_API_KEY")
-    )
+
+    # Strict canonical API key resolution: only per-app config 'api_key' OR secrets canonical variable
+    api_key = cfg.get("api_key") or secrets.get("BOSS_APP_EBIRD_API_KEY")
     if not api_key:
-        logging.getLogger(__name__).info(
-            "bird_sightings_near_me: no API key resolved (looked for config 'api_key', env BOSS_APP_EBIRD_API_KEY / EBIRD_API_KEY, or manifest EBIRD_API_KEY)."
-        )
+        log.info("bird_sightings_near_me: no API key provided (proceeding unauthenticated; some endpoints may limit data)")
+
     refresh_seconds = float(cfg.get("refresh_seconds", 120))
 
     api.screen.clear_screen()
@@ -131,7 +153,7 @@ def run(stop_event, api):
         last_fetch = time.time()
         display_page()
 
-    def on_button(event):
+    def on_button(event_type, event):
         nonlocal page
         btn = event.get("button")
         if btn == "green":

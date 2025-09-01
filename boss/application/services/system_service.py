@@ -340,6 +340,18 @@ class SystemManager(SystemService):
                                 pass
                 except Exception:
                     pass
+                # If the app ended due to timeout, auto-launch the startup app (switch 0) to show ready state
+                try:
+                    if payload.get("reason") == "timeout":
+                        startup_app = self.app_manager.get_app_by_switch_value(0)
+                        if startup_app:
+                            logger.info("Timed-out app; launching startup app (switch 0)")
+                            # Provide quick visual feedback
+                            self._show_transition_feedback()
+                            self.app_runner.start_app(startup_app)
+                            self.app_manager.set_current_app(startup_app)
+                except Exception as e:
+                    logger.debug(f"Failed to auto-launch startup app after timeout: {e}")
         except Exception:
             pass
 

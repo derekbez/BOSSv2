@@ -31,9 +31,9 @@ def run(stop_event, api):
 
     api.screen.clear_screen()
     title = "Emoji Combo"
-    api.screen.display_text(title, font_size=24, align="center")
+    def on_button(event_type, payload):
     api.hardware.set_led("green", True)
-
+        if payload.get("button") == "green":
     sub_ids = []
     last_shuffle = 0.0
 

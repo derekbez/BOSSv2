@@ -55,7 +55,8 @@ def fetch_track(api_key: str | None, tag: str, timeout: float = 6.0):
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    api_key = cfg.get("api_key") or api.get_config_value("LASTFM_API_KEY")
+    from boss.infrastructure.config.secrets_manager import secrets
+    api_key = cfg.get("api_key") or secrets.get("BOSS_APP_LASTFM_API_KEY")
     tag = cfg.get("tag", "rock")
     refresh_seconds = float(cfg.get("refresh_seconds", 3600))
     timeout = float(cfg.get("request_timeout_seconds", 6))
@@ -75,9 +76,9 @@ def run(stop_event, api):
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show()
 

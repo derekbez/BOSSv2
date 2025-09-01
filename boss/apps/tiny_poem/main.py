@@ -43,7 +43,6 @@ def run(stop_event, api):
     title = "Tiny Poem"
     api.screen.display_text(title, font_size=26, align="center")
     api.hardware.set_led("green", True)
-
     sub_ids = []
     last_fetch = 0.0
 
@@ -57,12 +56,11 @@ def run(stop_event, api):
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show()
-
     sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
 
     try:

@@ -29,8 +29,6 @@ def run(stop_event, api):
     api.screen.clear_screen()
     title = "Place Name"
     api.screen.display_text(title, font_size=24, align="center")
-    api.hardware.set_led("green", True)
-
     sub_ids = []
     last_shuffle = 0.0
 
@@ -38,9 +36,9 @@ def run(stop_event, api):
         place = random.choice(places)
         api.screen.display_text(f"{title}\n\n{place}", align="center")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_shuffle
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_shuffle = time.time()
             show()
 

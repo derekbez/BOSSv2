@@ -24,7 +24,7 @@ This document is the single source of truth for:
 ## 2. Transitional Env Var Mapping (to remove after migration)
 | Legacy (used in code today) | Canonical Prefixed Form |
 |----------------------------|-------------------------|
-| AVIATIONSTACK_API_KEY | BOSS_APP_AVIATIONSTACK_API_KEY |
+| AVIATIONSTACK_API_KEY | BOSS_APP_AVIATIONSTACK_API_KEY (migration COMPLETE – legacy no longer referenced in code) |
 | NASA_API_KEY | BOSS_APP_NASA_API_KEY |
 | IPGEO_API_KEY | BOSS_APP_IPGEO_API_KEY |
 | WORDNIK_API_KEY | BOSS_APP_WORDNIK_API_KEY |
@@ -33,49 +33,236 @@ This document is the single source of truth for:
 Action: create follow-up task to refactor apps to use only canonical names, then drop this section.
 
 ## 3. Service Registry
-Add a row when adopting a new third‑party service (NOT for purely local data sources).
+Add a row when adopting a new third‑party service (NOT for purely local data sources). Reformatted to YAML for plain‑text readability.
 
-| Service ID | Description | Base URL | Canonical Env Var(s) | Rate Limit Notes | Test Command Example |
-|------------|-------------|----------|----------------------|------------------|---------------------|
-| openweather | Weather data | https://api.openweathermap.org | `BOSS_APP_WEATHER_API_KEY` | 60/min free tier | `curl "https://api.openweathermap.org/data/2.5/weather?q=London&appid=$BOSS_APP_WEATHER_API_KEY"` |
-| aviationstack | Flights (real-time/historical) | http://api.aviationstack.com | `BOSS_APP_AVIATIONSTACK_API_KEY` | 500 req/mo (free) | `curl "http://api.aviationstack.com/v1/flights?access_key=$BOSS_APP_AVIATIONSTACK_API_KEY&limit=1"` |
-| ebird | Recent bird observations (Docs: https://documenter.getpostman.com/view/664302/S1ENwy59) | https://api.ebird.org | `BOSS_APP_EBIRD_API_KEY` (X-eBirdApiToken) | Undocumented (be conservative) | `curl -H "X-eBirdApiToken: $BOSS_APP_EBIRD_API_KEY" "https://api.ebird.org/v2/data/obs/geo/recent?lat=51.5074&lng=-0.1278&dist=5&maxResults=1"` |
-| nasa | NASA datasets (APOD, etc.) | https://api.nasa.gov | `BOSS_APP_NASA_API_KEY` | Varies by endpoint | `curl "https://api.nasa.gov/planetary/apod?api_key=$BOSS_APP_NASA_API_KEY&count=1"` |
-| ipgeolocation | Astronomy (sun/moon phase) | https://api.ipgeolocation.io | `BOSS_APP_IPGEO_API_KEY` | Free tier limited | `curl "https://api.ipgeolocation.io/astronomy?apiKey=$BOSS_APP_IPGEO_API_KEY&lat=51.5074&long=-0.1278"` |
-| wordnik | Dictionary / word data | https://api.wordnik.com | `BOSS_APP_WORDNIK_API_KEY` | 1000 req/day | (see docs) |
-| newsdata | News headlines | https://newsdata.io | `BOSS_APP_NEWSDATA_API_KEY` | 200 req/day | `curl "https://newsdata.io/api/1/news?apikey=$BOSS_APP_NEWSDATA_API_KEY&country=us&language=en"` |
-| lastfm | Music metadata | https://ws.audioscrobbler.com | `BOSS_APP_LASTFM_API_KEY` | 5 req/sec | (see docs) |
-| worldtides | Tide predictions | https://www.worldtides.info | `BOSS_APP_WORLDTIDES_API_KEY` | 4 req/hr (free) | (see docs) |
+```yaml
+services:
+    - id: openweather
+        description: Weather data
+        site: https://openweathermap.org
+        base_api: https://api.openweathermap.org
+        env: BOSS_APP_WEATHER_API_KEY
+        rate_limit: "60/min free tier"
+        test: curl "https://api.openweathermap.org/data/2.5/weather?q=London&appid=$BOSS_APP_WEATHER_API_KEY"
+    - id: aviationstack
+        description: Flights (real-time/historical)
+        site: https://aviationstack.com
+        base_api: http://api.aviationstack.com
+        env: BOSS_APP_AVIATIONSTACK_API_KEY
+        rate_limit: "500 req/mo (free)"
+        test: curl "http://api.aviationstack.com/v1/flights?access_key=$BOSS_APP_AVIATIONSTACK_API_KEY&limit=1"
+    - id: ebird
+        description: Recent bird observations
+        docs: https://documenter.getpostman.com/view/664302/S1ENwy59
+        site: https://ebird.org
+        base_api: https://api.ebird.org
+        env: BOSS_APP_EBIRD_API_KEY
+        auth_header: X-eBirdApiToken
+        rate_limit: "Undocumented (be conservative)"
+        test: curl -H "X-eBirdApiToken: $BOSS_APP_EBIRD_API_KEY" "https://api.ebird.org/v2/data/obs/geo/recent?lat=51.5074&lng=-0.1278&dist=5&maxResults=1"
+    - id: nasa
+        description: NASA datasets (APOD, Mars, etc.)
+        site: https://www.nasa.gov
+        base_api: https://api.nasa.gov
+        env: BOSS_APP_NASA_API_KEY
+        rate_limit: "Varies by endpoint"
+        test: curl "https://api.nasa.gov/planetary/apod?api_key=$BOSS_APP_NASA_API_KEY&count=1"
+    - id: ipgeolocation
+        description: Astronomy (sun/moon phase)
+        site: https://ipgeolocation.io
+        base_api: https://api.ipgeolocation.io
+        env: BOSS_APP_IPGEO_API_KEY
+        rate_limit: "Free tier limited"
+        test: curl "https://api.ipgeolocation.io/astronomy?apiKey=$BOSS_APP_IPGEO_API_KEY&lat=51.5074&long=-0.1278"
+    - id: wordnik
+        description: Dictionary / word data
+        site: https://www.wordnik.com
+        base_api: https://api.wordnik.com
+        env: BOSS_APP_WORDNIK_API_KEY
+        rate_limit: "1000 req/day"
+    - id: newsdata
+        description: News headlines
+        site: https://newsdata.io
+        base_api: https://newsdata.io
+        env: BOSS_APP_NEWSDATA_API_KEY
+        rate_limit: "200 req/day"
+        test: curl "https://newsdata.io/api/1/news?apikey=$BOSS_APP_NEWSDATA_API_KEY&country=us&language=en"
+    - id: lastfm
+        description: Music metadata
+        site: https://www.last.fm
+        base_api: https://ws.audioscrobbler.com
+        env: BOSS_APP_LASTFM_API_KEY
+        rate_limit: "5 req/sec"
+    - id: worldtides
+        description: Tide predictions
+        site: https://www.worldtides.info
+        base_api: https://www.worldtides.info
+        env: BOSS_APP_WORLDTIDES_API_KEY
+        rate_limit: "4 req/hr (free)"
+```
 
 ## 4. Per-App External Requirements (Merged)
 Legend:
 * Env Var: canonical preferred name (legacy name in parentheses if still used in code)
 * Fallback: User-friendly text shown on screen when data unavailable
 
-| App | API / Source | Env Var (canonical) | Auth Type | Header / Usage | Rate Limit (approx) | Fallback Behavior | Notes |
-|-----|--------------|--------------------|-----------|----------------|--------------------|-------------------|-------|
-| quote_of_the_day | Quotable / (They Said So optional) | (optional) `BOSS_APP_THEYSAIDSO_API_KEY` | Key (optional) | `X-Api-Key` | ~10/min (TheySaidSo) | "(error/no data)" | Currently using free Quotable (no key) |
-| breaking_news | NewsData.io | `BOSS_APP_NEWSDATA_API_KEY` (legacy NEWSDATA_API_KEY) | Key (query param) | `?apikey=...` | 200 req/day | "(no news / network error)" | Consider alt provider later |
-| flights_leaving_heathrow | Aviationstack | `BOSS_APP_AVIATIONSTACK_API_KEY` (legacy AVIATIONSTACK_API_KEY) | Key (query param) | `access_key` | 500 req/mo | "(no data / error)" | Share key w/ other flight app |
-| flight_status_favorite_airline | Aviationstack | `BOSS_APP_AVIATIONSTACK_API_KEY` (legacy AVIATIONSTACK_API_KEY) | Key | `access_key` | 500 req/mo | "(no data / error)" | Deduplicate fetch interval |
-| bird_sightings_near_me | eBird recent observations | `BOSS_APP_EBIRD_API_KEY` | Token header | `X-eBirdApiToken` | Be conservative | "(no data / network error)" | Consider geo restriction |
-| word_of_the_day | Wordnik | `BOSS_APP_WORDNIK_API_KEY` (legacy WORDNIK_API_KEY) | Key | Query param | 1000 req/day | "(error/ no data)" | Cache 12h |
-| moon_phase | ipgeolocation.io astronomy | `BOSS_APP_IPGEO_API_KEY` (legacy IPGEO_API_KEY) | Key | Query param | 1000 req/day | "(error/no data)" | Refresh 6h |
-| today_in_music | Last.fm | `BOSS_APP_LASTFM_API_KEY` | Key | Query param | 5 req/sec | "(error/no data)" | Hourly refresh |
-| space_update | NASA (APOD / Mars) | `BOSS_APP_NASA_API_KEY` (legacy NASA_API_KEY) | Key | Query param | 30 req/hr (DEMO lower) | "(error/no data)" or demo | Prefer real key |
-| local_tide_times | WorldTides | `BOSS_APP_WORLDTIDES_API_KEY` | Key | Query param | 4 req/hr | "(error/no data)" | 3h refresh |
-| dad_joke_generator | icanhazdadjoke | (none) | None | `Accept: application/json` | Light | "(network error)" | Add UA if throttled |
-| joke_of_the_moment | JokeAPI | (none) | None | Query params | Generous | "(error/no data)" | Respect blacklist flags |
-| name_that_animal | Zoo Animal API | (none) | None | n/a | Unspecified | "(error/no data)" | Basic JSON |
-| color_of_the_day | ColourLovers | (none) | None | n/a | Low | "(network error)" | Cache daily |
-| on_this_day | byabbe.se | (none) | None | n/a | Unspecified | "(no events / error)" | Half-day refresh |
-| tiny_poem | Poemist | (none) | None | n/a | Unspecified | "(error/no data)" | 3h refresh |
-| top_trending_search | Local backend (Google Trends) | (backend managed) | Depends | Internal | Local | "(no trend / error)" | Backend doc separately |
-| internet_speed_check | speedtest-cli (future) | (none) | None | CLI | Tool-defined | Placeholder text | Pending real integration |
-| public_domain_book_snippet | Local assets | (none) | None | n/a | n/a | "(no book files)" | Ensure assets present |
-| random_local_place_name | Local assets | (none) | None | n/a | n/a | Built-in fallback list | Provide curated list |
-| random_emoji_combo | Local assets | (none) | None | n/a | n/a | Built-in fallback list | Provide emoji.json |
-| constellation_of_the_night | Placeholder/local dataset | (TBD future) | TBD | n/a | n/a | Static message | Placeholder state |
+```yaml
+apps_requirements:
+    - app: quote_of_the_day
+        api: quotable (They Said So optional)
+        env: BOSS_APP_THEYSAIDSO_API_KEY (optional)
+        auth: "Key (optional) via X-Api-Key"
+        rate_limit: "~10/min (TheySaidSo)"
+        fallback: "(error/no data)"
+        notes: Free Quotable endpoint needs no key
+    - app: breaking_news
+        api: newsdata
+        env: BOSS_APP_NEWSDATA_API_KEY (legacy NEWSDATA_API_KEY)
+        auth: "Key query param ?apikey=..."
+        rate_limit: "200 req/day"
+        fallback: "(no news / network error)"
+        notes: Consider alternative provider later
+    - app: flights_leaving_heathrow
+        api: aviationstack
+        env: BOSS_APP_AVIATIONSTACK_API_KEY
+        auth: "Key query param access_key"
+        rate_limit: "500 req/mo"
+        fallback: "(no data / error)"
+        notes: Shares key with other flight app
+    - app: flight_status_favorite_airline
+        api: aviationstack
+        env: BOSS_APP_AVIATIONSTACK_API_KEY
+        auth: "Key query param access_key"
+        rate_limit: "500 req/mo"
+        fallback: "(no data / error)"
+        notes: Deduplicate fetch interval
+    - app: bird_sightings_near_me
+        api: ebird
+        env: BOSS_APP_EBIRD_API_KEY
+        auth: "Token header X-eBirdApiToken"
+        rate_limit: conservative
+        fallback: "(no data / network error)"
+        notes: Consider geo restriction
+    - app: word_of_the_day
+        api: wordnik
+        env: BOSS_APP_WORDNIK_API_KEY (legacy WORDNIK_API_KEY)
+        auth: "Key query param"
+        rate_limit: "1000 req/day"
+        fallback: "(error/no data)"
+        notes: Cache 12h
+    - app: moon_phase
+        api: ipgeolocation
+        env: BOSS_APP_IPGEO_API_KEY (legacy IPGEO_API_KEY)
+        auth: "Key query param"
+        rate_limit: "1000 req/day"
+        fallback: "(error/no data)"
+        notes: Refresh 6h
+    - app: today_in_music
+        api: lastfm
+        env: BOSS_APP_LASTFM_API_KEY
+        auth: "Key query param"
+        rate_limit: "5 req/sec"
+        fallback: "(error/no data)"
+        notes: Hourly refresh
+    - app: space_update
+        api: nasa
+        env: BOSS_APP_NASA_API_KEY (legacy NASA_API_KEY)
+        auth: "Key query param"
+        rate_limit: "30 req/hr (demo lower)"
+        fallback: "(error/no data) or demo"
+        notes: Prefer real key
+    - app: local_tide_times
+        api: worldtides
+        env: BOSS_APP_WORLDTIDES_API_KEY
+        auth: "Key query param"
+        rate_limit: "4 req/hr"
+        fallback: "(error/no data)"
+        notes: Refresh 3h
+    - app: dad_joke_generator
+        api: icanhazdadjoke
+        env: none
+        auth: "None (Accept: application/json)"
+        rate_limit: light
+        fallback: "(network error)"
+        notes: Add UA if throttled
+    - app: joke_of_the_moment
+        api: jokeapi
+        env: none
+        auth: None
+        rate_limit: generous
+        fallback: "(error/no data)"
+        notes: Respect blacklist flags
+    - app: name_that_animal
+        api: zoo_animal_api
+        env: none
+        auth: None
+        rate_limit: unspecified
+        fallback: "(error/no data)"
+        notes: Basic JSON
+    - app: color_of_the_day
+        api: colourlovers
+        env: none
+        auth: None
+        rate_limit: low
+        fallback: "(network error)"
+        notes: Cache daily
+    - app: on_this_day
+        api: byabbe.se
+        env: none
+        auth: None
+        rate_limit: unspecified
+        fallback: "(no events / error)"
+        notes: Half-day refresh
+    - app: tiny_poem
+        api: poemist
+        env: none
+        auth: None
+        rate_limit: unspecified
+        fallback: "(error/no data)"
+        notes: Refresh 3h
+    - app: top_trending_search
+        api: internal_google_trends_backend
+        env: backend managed
+        auth: internal
+        rate_limit: local
+        fallback: "(no trend / error)"
+        notes: Backend documented separately
+    - app: internet_speed_check
+        api: speedtest_cli (future)
+        env: none
+        auth: None
+        rate_limit: tool-defined
+        fallback: "Placeholder text"
+        notes: Pending real integration
+    - app: public_domain_book_snippet
+        api: local_assets
+        env: none
+        auth: None
+        rate_limit: n/a
+        fallback: "(no book files)"
+        notes: Ensure assets present
+    - app: random_local_place_name
+        api: local_assets
+        env: none
+        auth: None
+        rate_limit: n/a
+        fallback: built-in list
+        notes: Provide curated list
+    - app: random_emoji_combo
+        api: local_assets
+        env: none
+        auth: None
+        rate_limit: n/a
+        fallback: built-in list
+        notes: Provide emoji.json
+    - app: constellation_of_the_night
+        api: placeholder_dataset
+        env: TBD
+        auth: TBD
+        rate_limit: n/a
+        fallback: Static message
+        notes: Placeholder state
+```
 
 ## 5. Implementation Guidelines
 1. Always set an explicit timeout (<= 6s) on network calls.
