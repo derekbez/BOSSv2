@@ -44,9 +44,9 @@ def run(stop_event, api):
         local_body = "\n".join(snippet_lines[:10])
         api.screen.display_text(f"{title}\n\n{local_body}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type: str, payload: dict):
         nonlocal last_shuffle
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_shuffle = time.time()
             show()
 

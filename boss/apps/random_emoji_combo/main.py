@@ -42,9 +42,9 @@ def run(stop_event, api):
         combo = "".join(random.sample(emojis, k=min(len(emojis), n)))
         api.screen.display_text(f"{title}\n\n{combo}", align="center")
 
-    def on_button(ev):
+    def on_button(event_type: str, payload: dict):
         nonlocal last_shuffle
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_shuffle = time.time()
             show()
 

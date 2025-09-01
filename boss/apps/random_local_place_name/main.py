@@ -38,9 +38,9 @@ def run(stop_event, api):
         place = random.choice(places)
         api.screen.display_text(f"{title}\n\n{place}", align="center")
 
-    def on_button(ev):
+    def on_button(event_type: str, payload: dict):
         nonlocal last_shuffle
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_shuffle = time.time()
             show()
 
