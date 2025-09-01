@@ -64,6 +64,8 @@ class DummyAPI:
         pass
     def get_asset_path(self, name: str) -> str:
         return str(self._app_dir / "assets" / name)
+    def get_app_asset_path(self) -> str:
+        return str(self._app_dir / "assets")
     def get_config_value(self, key: str, default=None):
         return self._config.get(key, default)
     def get_app_config(self, default=None):
@@ -109,6 +111,14 @@ APP_CASES = [
         "simulate": ["green"],
         "duration": 1.0,
     },
+    {  # color of the day with local fallback
+        "name": "color_of_the_day",
+        "module": "boss.apps.color_of_the_day.main",
+        "simulate": ["green"],
+        "duration": 1.2,
+        "mock_fn": "fetch_color_from_api",
+        "mock_exception": "ConnectionError",  # Simulate API failure to test fallback
+    },
 ]
 
 @pytest.mark.parametrize("case", APP_CASES, ids=lambda c: c["name"])
@@ -119,7 +129,17 @@ def test_app_smoke(case, monkeypatch):
     if case["name"] == "current_weather" and hasattr(mod, "fetch_weather"):
         monkeypatch.setattr(mod, "fetch_weather", lambda lat, lon, timeout: case["mock_weather"])
     if case.get("mock_fn") and hasattr(mod, case["mock_fn"]):
-        monkeypatch.setattr(mod, case["mock_fn"], lambda *a, **k: case.get("mock_value"))
+        if case.get("mock_exception"):
+            # Mock function to raise an exception (for testing fallback behavior)
+            def mock_raise(*a, **k):
+                if case["mock_exception"] == "ConnectionError":
+                    import requests
+                    raise requests.ConnectionError("Mocked connection error")
+                else:
+                    raise Exception(case["mock_exception"])
+            monkeypatch.setattr(mod, case["mock_fn"], mock_raise)
+        else:
+            monkeypatch.setattr(mod, case["mock_fn"], lambda *a, **k: case.get("mock_value"))
 
     app_dir = Path(__file__).parents[3] / "boss" / "apps" / case["name"]
     assert app_dir.exists(), f"App directory missing: {app_dir}"

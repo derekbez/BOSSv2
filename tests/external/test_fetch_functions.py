@@ -49,7 +49,7 @@ TEST_CASES = [
     ("boss.apps.joke_of_the_moment.main", "fetch_joke", lambda: {"category": "Programming", "jtype": "single", "blacklist": [], "timeout": 5.0}, [], "joke single"),
     ("boss.apps.dad_joke_generator.main", "fetch_joke", lambda: {"timeout": 5.0}, [], "dad joke"),
     ("boss.apps.random_useless_fact.main", "fetch_fact", lambda: {"timeout": 5.0}, [], "fact"),
-    ("boss.apps.color_of_the_day.main", "fetch_color", lambda: {"timeout": 5.0}, [], "color"),
+    ("boss.apps.color_of_the_day.main", "fetch_color", lambda: {"timeout": 5.0, "asset_dir": str(Path(__file__).parents[2] / "boss" / "apps" / "color_of_the_day" / "assets")}, [], "color"),
     ("boss.apps.name_that_animal.main", "fetch_animal", lambda: {"timeout": 5.0}, [], "animal"),
     ("boss.apps.top_trending_search.main", "fetch_trend", lambda: {"url": "https://trends.google.com/trends/hottrends/visualize/internal/data/en-US", "timeout": 5.0}, [], "trending"),
     ("boss.apps.moon_phase.main", "fetch_data", lambda: {"api_key": os.getenv("BOSS_APP_IPGEO_API_KEY"), "lat": LAT, "lon": LON, "timeout": 6.0}, [], "moon"),
