@@ -101,8 +101,8 @@ class TestHardwareManager:
         hm = HardwareManager(mock_hardware_factory, event_bus)
         hm.display = Mock()
         hm.update_display(123, 0.9)
-    # Accept positional or keyword brightness
-    assert hm.display.show_number.called
+        # Accept positional or keyword brightness
+        assert hm.display.show_number.called
         hm.update_display(None, 1.0)
         hm.display.clear.assert_called_with()
 
