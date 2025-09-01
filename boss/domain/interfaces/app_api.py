@@ -104,6 +104,11 @@ class AppAPIInterface(ABC):
         pass
     
     @abstractmethod
+    def get_app_asset_path(self) -> str:
+        """Get the path to the app's assets directory."""
+        pass
+    
+    @abstractmethod
     def log_info(self, message: str) -> None:
         """Log an info message."""
         pass

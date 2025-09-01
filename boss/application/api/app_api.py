@@ -202,6 +202,11 @@ class AppAPI(AppAPIInterface):
         asset_path = assets_dir / filename
         return str(asset_path)
     
+    def get_app_asset_path(self) -> str:
+        """Get the path to the app's assets directory."""
+        assets_dir = self._app_path / "assets"
+        return str(assets_dir)
+    
     def log_info(self, message: str) -> None:
         """Log an info message."""
         logger.info(f"[{self._app_name}] {message}")
