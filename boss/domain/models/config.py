@@ -70,6 +70,8 @@ class SystemConfig:
     # Hardware detection
     auto_detect_hardware: bool
     force_hardware_type: Optional[str]
+    # Optional global location (latitude/longitude dict)
+    location: Optional[dict] = None
 
 
 @dataclass
@@ -129,7 +131,8 @@ class BossConfig:
                 enable_api=system_data['enable_api'],
                 api_port=system_data['api_port'],
                 auto_detect_hardware=system_data['auto_detect_hardware'],
-                force_hardware_type=system_data['force_hardware_type']
+                force_hardware_type=system_data['force_hardware_type'],
+                location=system_data.get('location')
             )
             
             return cls(hardware=hardware_config, system=system_config)

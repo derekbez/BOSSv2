@@ -8,6 +8,11 @@ import os
 from pathlib import Path
 from typing import Dict, Optional, List
 from boss.domain.models.app import App, AppManifest, AppStatus
+try:
+    # Import secrets manager to allow required_env validation to succeed with file-based secrets
+    from boss.infrastructure.config.secrets_manager import secrets  # type: ignore
+except Exception:  # pragma: no cover - fallback if import fails very early
+    secrets = None  # type: ignore
 from boss.domain.interfaces.services import AppManagerService
 
 logger = logging.getLogger(__name__)
@@ -68,7 +73,17 @@ class AppManager(AppManagerService):
                     for env_name in getattr(app.manifest, 'required_env', []) or []:
                         if not env_name:
                             continue
-                        if env_name not in os.environ:
+                        present = False
+                        if env_name in os.environ:
+                            present = True
+                        elif secrets is not None:
+                            try:
+                                if secrets.get(env_name):  # triggers lazy file load once
+                                    present = True
+                            except Exception:
+                                # Conservative: treat as missing if secrets manager errors
+                                present = False
+                        if not present:
                             missing.append(env_name)
                     if missing:
                         app.mark_error(f"Missing required env vars: {', '.join(missing)}")

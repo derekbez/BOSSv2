@@ -296,12 +296,29 @@ class AppAPI(AppAPIInterface):
         try:
             cfg_mgr = getattr(self._app_manager, 'config_manager', None)
             if cfg_mgr:
+                # Case 1: adapter / dict-based structure (legacy path)
                 root_cfg = getattr(cfg_mgr, 'config', None)
                 if isinstance(root_cfg, dict):
                     loc = root_cfg.get('system', {}).get('location') or root_cfg.get('location')
                     if isinstance(loc, dict):
                         lat = loc.get('latitude')
                         lon = loc.get('longitude')
+                        if isinstance(lat, (int, float)) and isinstance(lon, (int, float)):
+                            return {"latitude": float(lat), "longitude": float(lon)}
+                # Case 2: BossConfig instance accessible via get_effective_config()/get_config()
+                get_eff = getattr(cfg_mgr, 'get_effective_config', None)
+                cfg_obj = get_eff() if callable(get_eff) else None
+                if cfg_obj is None:
+                    get_cfg = getattr(cfg_mgr, 'get_config', None)
+                    if callable(get_cfg):
+                        cfg_obj = get_cfg()
+                if cfg_obj is not None:
+                    # Access system.location if present
+                    system_obj = getattr(cfg_obj, 'system', None)
+                    loc_dict = getattr(system_obj, 'location', None) if system_obj else None
+                    if isinstance(loc_dict, dict):
+                        lat = loc_dict.get('latitude')
+                        lon = loc_dict.get('longitude')
                         if isinstance(lat, (int, float)) and isinstance(lon, (int, float)):
                             return {"latitude": float(lat), "longitude": float(lon)}
         except Exception:  # pragma: no cover - non-critical

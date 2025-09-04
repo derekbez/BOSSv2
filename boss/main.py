@@ -66,11 +66,32 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     apps_directory = Path(__file__).parent / config.system.apps_directory
     # Pass hardware_service and config manager module for backend default resolution
     from boss.infrastructure import config as config_module
+    # Provide BOTH the loaded config instance and the module so downstream
+    # code (e.g. AppAPI.get_global_location) can reliably access the parsed
+    # BossConfig object for fields like system.location.
+    # The AppManager only requires an object with either get_effective_config()/get_config()
+    # or a 'config' attribute; we add a lightweight adapter here.
+    class _ConfigAdapter:
+        def __init__(self, cfg, module):
+            self._cfg = cfg
+            self._module = module
+            # Expose for direct attribute access if code expects it
+            self.config = {
+                'hardware': cfg.hardware.__dict__,
+                'system': {**cfg.system.__dict__}
+            }
+        def get_effective_config(self):
+            return self._cfg
+        def get_config(self):  # fallback name
+            return self._cfg
+
+    config_adapter = _ConfigAdapter(config, config_module)
+
     app_manager = AppManager(
         apps_directory,
         event_bus,
         hardware_service,
-        config_module,
+        config_adapter,
         system_default_backend=getattr(config.hardware, 'screen_backend', 'rich'),
     )
     

@@ -116,6 +116,9 @@ if [[ -f "$SERVICE_FILE" && $FORCE_OVERWRITE -ne 1 ]]; then
 	$SUDO cp "$SERVICE_FILE" "${SERVICE_FILE}.${BACKUP_SUFFIX}.bak" || true
 fi
 
+# Ensure standard secrets directory exists (file may be provisioned separately by sync_secrets.py)
+$SUDO mkdir -p /etc/boss || true
+
 cat > /tmp/${SERVICE_NAME}.service.new <<EOF
 [Unit]
 Description=B.O.S.S. (Buttons, Operations, Switches & Screen)
@@ -128,8 +131,9 @@ Type=simple
 User=${RUN_USER}
 Group=gpio
 SupplementaryGroups=video audio
+EnvironmentFile=-/etc/boss/secrets.env  # optional; if present variables injected before start
 
-# Working directory and environment
+# Working directory and explicit environment overrides (anything in secrets file can override)
 WorkingDirectory=${BOSS_ROOT}
 Environment=PYTHONPATH=${BOSS_ROOT}
 Environment=BOSS_LOG_LEVEL=INFO
