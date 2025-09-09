@@ -199,6 +199,35 @@ class AppRunner(AppRunnerService):
                     self._current_app = None
                     self._current_thread = None
                     self._stop_event = None
+            # Post-timeout behavior: if app timed out, decide next action based on manifest or tag-based defaults
+            try:
+                behavior = getattr(app.manifest, 'timeout_behavior', None)
+                # Tag-based defaults: network/weather apps typically want to rerun
+                if behavior is None:
+                    tags = getattr(app.manifest, 'tags', []) or []
+                    if any(t in ('weather', 'network') for t in tags):
+                        behavior = 'rerun'
+                    else:
+                        behavior = 'return'
+                if timed_out.get("value"):
+                    logger.info(f"App {app.manifest.name} timeout behavior: {behavior}")
+                    if behavior == 'rerun':
+                        # Relaunch the same app after a short cooldown
+                        cooldown = getattr(app.manifest, 'timeout_cooldown_seconds', 1)
+                        time.sleep(float(cooldown))
+                        try:
+                            # Ensure no other app is running
+                            self.start_app(app)
+                        except Exception:
+                            logger.exception(f"Failed to relaunch app {app.manifest.name} after timeout")
+                    elif behavior == 'none':
+                        # Do nothing - treat as normal stop but do not force return
+                        pass
+                    else:
+                        # Default 'return' behavior: publish an event to return to startup
+                        self.event_bus.publish("return_to_startup", {"reason": "timeout", "app_name": app.manifest.name}, "app_runner")
+            except Exception:
+                logger.exception("Error handling post-timeout behavior")
     
     def _load_app_module(self, app: App) -> Optional[Any]:
         """Dynamically load app module."""

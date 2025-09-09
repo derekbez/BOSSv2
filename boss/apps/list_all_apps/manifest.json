@@ -6,8 +6,12 @@
   "config": {
     "entries_per_page": 15,
     "layout": "Tabular list: Number | Name | Short Description",
-    "navigation_buttons": ["yellow", "blue"]
+    "navigation_buttons": [
+      "yellow",
+      "blue"
+    ]
   },
+  "timeout_behavior": "none",
   "assets_required": [],
   "api_keys": [],
   "instructions": "Reads app_mappings.json and each mini-app's manifest.json. Configurable entries per page. Uses yellow/blue buttons for navigation."

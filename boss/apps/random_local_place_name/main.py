@@ -22,7 +22,7 @@ def load_places(asset_dir: str):
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    shuffle_seconds = float(cfg.get("shuffle_seconds", 300))
+    refresh_seconds = float(cfg.get("refresh_seconds", 60))
 
     places = load_places(api.get_app_asset_path())
 
@@ -48,7 +48,7 @@ def run(stop_event, api):
         show()
         last_shuffle = time.time()
         while not stop_event.is_set():
-            if time.time() - last_shuffle >= shuffle_seconds:
+            if time.time() - last_shuffle >= refresh_seconds:
                 last_shuffle = time.time()
                 show()
             time.sleep(0.5)

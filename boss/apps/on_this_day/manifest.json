@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "author": "BOSS Team",
     "entry_point": "main.py",
-    "timeout_seconds": 120,
+    "timeout_seconds": 900,
     "requires_network": true,
     "requires_audio": false,
     "tags": [
@@ -12,6 +12,7 @@
     ],
     "config": {
         "request_timeout_seconds": 6,
-        "refresh_seconds": 43200
+        "refresh_seconds": 43200,
+        "wrap_width": 100
     }
 }

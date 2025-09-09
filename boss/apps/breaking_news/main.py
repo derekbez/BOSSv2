@@ -6,6 +6,7 @@ Graceful errors and manual refresh via green button.
 from __future__ import annotations
 from typing import Any
 from boss.infrastructure.config.secrets_manager import secrets
+from boss.presentation.text.utils import TextPaginator, wrap_plain, estimate_char_columns
 import time
 
 try:
@@ -84,11 +85,20 @@ def run(stop_event, api):
     sub_ids = []
     last_fetch = 0.0
 
+    # Prepare paginator (will be filled after first fetch)
+    cols = api.screen.estimate_columns() if hasattr(api.screen, 'estimate_columns') else estimate_char_columns(api.screen.width_px if hasattr(api.screen, 'width_px') else 800)
+    per_page = max(6, (api.screen.height_lines // 2) if hasattr(api.screen, 'height_lines') else 6)
+    paginator = TextPaginator([], per_page, led_update=lambda color, on: api.hardware.set_led(color, on))
+
     def show_news():
         try:
             heads = fetch_headlines(api_key, country, category, timeout=timeout, retries=retries, backoff=backoff)
-            body = "\n".join(heads[:8])
-            api.screen.display_text(f"{title}\n\n{body}", align="left")
+            lines: list[str] = []
+            for h in heads:
+                lines.extend(wrap_plain(h, cols))
+            paginator.set_lines(lines)
+            page_text = "\n".join(paginator.page_lines())
+            api.screen.display_text(f"{title}\n\n{page_text}", align="left")
         except Exception as e:
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
         update_led()
@@ -99,9 +109,16 @@ def run(stop_event, api):
 
     def on_button(event_type, payload):
         nonlocal last_fetch
-        if payload.get("button") == "green" and (time.time() - last_fetch) >= refresh_seconds:
+        button = payload.get("button")
+        if button == "green" and (time.time() - last_fetch) >= refresh_seconds:
             last_fetch = time.time()
             show_news()
+        elif button == "yellow":
+            if paginator.prev():
+                api.screen.display_text(f"{title}\n\n" + "\n".join(paginator.page_lines()), align="left")
+        elif button == "blue":
+            if paginator.next():
+                api.screen.display_text(f"{title}\n\n" + "\n".join(paginator.page_lines()), align="left")
 
     sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
 

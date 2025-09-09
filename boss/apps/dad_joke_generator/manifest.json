@@ -12,6 +12,6 @@
     ],
     "config": {
         "request_timeout_seconds": 6,
-        "refresh_seconds": 300
+        "refresh_seconds": 90
     }
 }

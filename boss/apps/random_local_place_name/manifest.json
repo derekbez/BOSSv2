@@ -10,7 +10,5 @@
     "tags": [
         "places"
     ],
-    "config": {
-        "shuffle_seconds": 300
-    }
+    "config": {}
 }

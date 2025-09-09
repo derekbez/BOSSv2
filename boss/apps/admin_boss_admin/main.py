@@ -28,17 +28,21 @@ class AdminHandler(BaseHTTPRequestHandler):
             <!DOCTYPE html>
             <html><head><title>BOSS Admin Panel</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
-                .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                h1 { color: #333; text-align: center; margin-bottom: 30px; }
-                .section { margin: 20px 0; }
-                .section h2 { color: #555; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+                /* Slightly smaller text to better match the physical screen */
+                body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; font-size: 14px; -webkit-user-select: text; -moz-user-select: text; user-select: text; }
+                /* Make the central container scroll when viewport is small */
+                .container { max-width: 800px; max-height: 80vh; overflow: auto; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                h1 { color: #333; text-align: center; margin-bottom: 20px; font-size: 1.4em; }
+                .section { margin: 16px 0; }
+                .section h2 { color: #555; border-bottom: 2px solid #ddd; padding-bottom: 8px; }
                 ul { list-style-type: none; padding: 0; }
-                li { margin: 10px 0; }
-                a { text-decoration: none; color: #0066cc; padding: 12px; display: block; border: 1px solid #ddd; border-radius: 4px; transition: all 0.3s; }
+                li { margin: 8px 0; }
+                a { text-decoration: none; color: #0066cc; padding: 10px; display: block; border: 1px solid #ddd; border-radius: 4px; transition: all 0.2s; }
                 a:hover { background-color: #f0f8ff; border-color: #0066cc; }
-                .icon { font-size: 1.2em; margin-right: 8px; }
-                .status { background: #e8f5e8; padding: 15px; border-radius: 4px; margin: 15px 0; }
+                .icon { font-size: 1.1em; margin-right: 8px; }
+                .status { background: #e8f5e8; padding: 12px; border-radius: 4px; margin: 12px 0; }
+                /* Make link/button text selectable for copy */
+                a, .status, .section { -webkit-user-select: text; -moz-user-select: text; user-select: text; }
             </style>
             </head><body>
             <div class="container">
@@ -170,22 +174,25 @@ class AdminHandler(BaseHTTPRequestHandler):
                     api_ref.log_error(f"Admin status endpoint error: {e}")
                 
         elif self.path == '/logs':
+            # Render logs as an HTML page with preformatted selectable text and scrolling
             self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
+            self.send_header('Content-type', 'text/html')
             self.end_headers()
             try:
-                # Try to read recent log entries
                 log_path = Path(__file__).parent.parent.parent / 'logs' / 'boss.log'
                 if log_path.exists():
-                    # Read last 100 lines
                     with open(log_path, 'r') as f:
                         lines = f.readlines()
                     recent_lines = lines[-100:] if len(lines) > 100 else lines
-                    self.wfile.write(''.join(recent_lines).encode('utf-8'))
+                    logs_html = '<html><head><title>BOSS Logs</title><style>body{font-family:monospace;padding:16px} pre{white-space:pre-wrap;word-break:break-word;}</style></head><body>'
+                    logs_html += '<h2>Recent Logs</h2>'
+                    logs_html += '<pre>' + '\n'.join([l.rstrip() for l in recent_lines]) + '</pre>'
+                    logs_html += '</body></html>'
+                    self.wfile.write(logs_html.encode('utf-8'))
                 else:
-                    self.wfile.write(b'Log file not found')
+                    self.wfile.write(b'<html><body><p>Log file not found</p></body></html>')
             except Exception as e:
-                self.wfile.write(f'Error reading logs: {e}'.encode('utf-8'))
+                self.wfile.write(f'<html><body><p>Error reading logs: {e}</p></body></html>'.encode('utf-8'))
                 if api_ref:
                     api_ref.log_error(f"Admin logs endpoint error: {e}")
                 

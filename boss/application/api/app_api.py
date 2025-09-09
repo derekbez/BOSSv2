@@ -5,6 +5,10 @@ App API implementation - The interface provided to mini-apps.
 import logging
 from pathlib import Path
 from typing import Optional, Callable, Dict, Any
+try:
+    from boss.presentation.text.utils import estimate_char_columns
+except Exception:  # pragma: no cover - fallback if import path changes early
+    estimate_char_columns = None  # type: ignore
 from boss.domain.interfaces.app_api import AppAPIInterface, EventBusInterface, ScreenAPIInterface, HardwareAPIInterface
 
 logger = logging.getLogger(__name__)
@@ -56,9 +60,29 @@ class AppScreenAPI(ScreenAPIInterface):
     compose full multiline strings client-side and call display_text().
     """
 
-    def __init__(self, event_bus, app_name: str):
+    def __init__(self, event_bus, app_name: str, app_manager=None):
         self._event_bus = event_bus
         self._app_name = app_name
+        self._screen_width_px: int = 800
+        try:
+            if app_manager is not None:
+                cfg_mgr = getattr(app_manager, 'config_manager', None)
+                if cfg_mgr is not None:
+                    root_cfg = getattr(cfg_mgr, 'config', None)
+                    if isinstance(root_cfg, dict):
+                        hw = root_cfg.get('hardware') or {}
+                        sw = hw.get('screen_width')
+                        if isinstance(sw, (int, float)) and sw > 0:
+                            self._screen_width_px = int(sw)
+                    else:
+                        eff = getattr(cfg_mgr, 'get_effective_config', None)
+                        if callable(eff):
+                            cfg_obj = eff()
+                            sw = getattr(getattr(cfg_obj, 'hardware', None), 'screen_width', None)
+                            if isinstance(sw, (int, float)) and sw > 0:
+                                self._screen_width_px = int(sw)
+        except Exception:  # pragma: no cover
+            pass
     
     def display_text(self, text: str, font_size: int = 24, color: str = "white", 
                     background: str = "black", align: str = "center", wrap: bool = True, wrap_width: Optional[int] = None) -> None:
@@ -104,6 +128,16 @@ class AppScreenAPI(ScreenAPIInterface):
     def get_screen_size(self) -> tuple:
         """Get screen dimensions (width, height)."""
         return (800, 480)
+
+    def estimate_columns(self, font_size: int = 18) -> int:
+        """Best-effort estimate of character columns for given font size.
+
+        Uses configured screen_width if available via app manager config adapter;
+        falls back to internal default width heuristic.
+        """
+        if estimate_char_columns is None:
+            return 80
+        return estimate_char_columns(self._screen_width_px, font_size=font_size)
 
 
 class AppHardwareAPI(HardwareAPIInterface):
@@ -174,7 +208,7 @@ class AppAPI(AppAPIInterface):
         
         # Create sub-interfaces
         self._event_bus = AppEventBus(event_bus, app_name)
-        self._screen = AppScreenAPI(event_bus, app_name)
+        self._screen = AppScreenAPI(event_bus, app_name, app_manager)
         self._hardware = AppHardwareAPI(event_bus, app_name)
     
     @property
@@ -323,4 +357,23 @@ class AppAPI(AppAPIInterface):
                             return {"latitude": float(lat), "longitude": float(lon)}
         except Exception:  # pragma: no cover - non-critical
             pass
+
+        # Fallback: check this app's manifest config for latitude/longitude
+        try:
+            app_cfg = self.get_app_config({})
+            if app_cfg:
+                lat_v = app_cfg.get('latitude')
+                lon_v = app_cfg.get('longitude')
+                if lat_v is not None and lon_v is not None:
+                    try:
+                        lat = float(lat_v)
+                        lon = float(lon_v)
+                        logger.debug(f"Using app manifest location for {self._app_name}: {lat},{lon}")
+                        return {"latitude": lat, "longitude": lon}
+                    except Exception:
+                        # ignore malformed values
+                        logger.debug(f"App manifest location values malformed for {self._app_name}: {lat_v},{lon_v}")
+        except Exception:
+            pass
+
         return {}

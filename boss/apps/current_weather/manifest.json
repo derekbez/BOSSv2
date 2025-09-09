@@ -5,6 +5,7 @@
     "author": "BOSS Team",
     "entry_point": "main.py",
     "timeout_seconds": 180,
+    "timeout_behavior": "rerun",
     "requires_network": true,
     "requires_audio": false,
     "tags": [

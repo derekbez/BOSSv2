@@ -13,6 +13,7 @@ from typing import Any, List
 import logging
 from boss.infrastructure.config.secrets_manager import secrets
 import time
+from boss.presentation.text.utils import TextPaginator, wrap_plain
 ## NOTE: Per centralized screen wrapping policy, we DO NOT manually truncate/wrap lines here.
 
 try:
@@ -92,7 +93,7 @@ def run(stop_event, api):
             log.warning("bird_sightings_near_me: app-level lat/long override invalid; using global values")
 
     radius = int(cfg.get("radius", 10))  # configurable via manifest config
-    per_page = int(cfg.get("per_page", 10))  # number of sighting rows per page
+    per_page = int(cfg.get("per_page", 10))  # number of sighting rows per page (logical rows after wrapping)
     request_timeout = float(cfg.get("request_timeout_seconds", 6))
 
     # Strict canonical API key resolution: only per-app config 'api_key' OR secrets canonical variable
@@ -109,61 +110,68 @@ def run(stop_event, api):
     sub_ids: list[str] = []
     last_fetch = 0.0
     sightings_cache: list[tuple[str, str]] = []
-    page = 0
 
-    def compute_pages() -> int:
-        if not sightings_cache:
-            return 1
-        return (len(sightings_cache) - 1) // per_page + 1
+    # LED updater used by paginator (yellow=prev, blue=next)
+    def _led_update(color: str, state: bool):
+        api.hardware.set_led(color, state)
 
-    def set_nav_leds():
-        total_pages = compute_pages()
-        # Yellow = prev, Blue = next
-        api.hardware.set_led("yellow", page > 0)
-        api.hardware.set_led("blue", page < total_pages - 1)
+    paginator = TextPaginator([], per_page=per_page, led_update=_led_update,
+                              prev_color="yellow", next_color="blue")
 
-    def display_page():
-        lines = [title, ""]
+    def _rebuild_lines() -> List[str]:
+        lines: List[str] = []
+        # Title & spacing
+        lines.append(title)
+        lines.append("")
         if not sightings_cache:
             lines.append("(no data)")
         else:
-            total_pages = compute_pages()
-            start = page * per_page
-            end = start + per_page
-            for name, loc in sightings_cache[start:end]:
-                display = f"{name} @ {loc}" if loc else name
-                lines.append(display)
-            lines.append("")
-            lines.append(f"Page {page+1}/{total_pages}  radius={radius}")
-            lines.append("[YEL] Prev  [GRN] Refresh  [BLU] Next")
+            for name, loc in sightings_cache:
+                base = f"{name} @ {loc}" if loc else name
+                # Each sighting might wrap; we rely on backend wrapping, so keep simple line
+                lines.extend(wrap_plain(base, width=120))  # logical wrap safeguard; backend may re-wrap narrower
+        lines.append("")
+        lines.append(f"radius={radius}  total={len(sightings_cache)}")
+        lines.append("[YEL] Prev  [GRN] Refresh  [BLU] Next")
         lines.append("docs: ebird")
-        api.screen.display_text("\n".join(lines), font_size=18, align="left")
-        set_nav_leds()
+        return lines
+
+    def _render():
+        total_pages = paginator.total_pages
+        page_lines = paginator.page_lines()
+        header = [f"{title} ({len(sightings_cache)} records) Page {paginator.page+1}/{total_pages}"]
+        if not page_lines:
+            body = ["(no data)"]
+        else:
+            body = page_lines
+        footer = ["", "[YEL] Prev  [GRN] Refresh  [BLU] Next", "docs: ebird"]
+        api.screen.display_text("\n".join(header + [""] + body + footer), font_size=18, align="left", wrap=True)
 
     def refresh_data():
-        nonlocal sightings_cache, page, last_fetch
+        nonlocal sightings_cache, last_fetch
         try:
             sightings_cache = fetch_sightings(lat, lng, radius, api_key, timeout=request_timeout)
-            total_pages = compute_pages()
-            if page >= total_pages:
-                page = total_pages - 1
         except Exception as e:
             sightings_cache = []
             api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
+            paginator.set_lines([])
+            last_fetch = time.time()
+            return
+        paginator.set_lines(_rebuild_lines()[2: -2])  # exclude duplicated title & footer for pagination slice
+        paginator.reset()
         last_fetch = time.time()
-        display_page()
+        _render()
 
     def on_button(event_type, event):
-        nonlocal page
         btn = event.get("button")
         if btn == "green":
             refresh_data()
-        elif btn == "yellow" and page > 0:
-            page -= 1
-            display_page()
-        elif btn == "blue" and page < compute_pages() - 1:
-            page += 1
-            display_page()
+        elif btn == "yellow":
+            if paginator.prev():
+                _render()
+        elif btn == "blue":
+            if paginator.next():
+                _render()
 
     sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
 

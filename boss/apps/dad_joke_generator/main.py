@@ -49,9 +49,9 @@ def run(stop_event, api):
             return
         api.screen.display_text(f"{title}\n\n{joke}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, payload):
         nonlocal last_fetch
-        if ev.get("button") == "green":
+        if payload.get("button") == "green":
             last_fetch = time.time()
             show_joke()
 

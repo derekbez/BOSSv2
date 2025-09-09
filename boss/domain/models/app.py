@@ -34,6 +34,9 @@ class AppManifest:
     entry_point: str = "main.py"
     # this timeout should come from the config, not hardcoded
     timeout_seconds: int = 900  # 15 minutes default (global default; per-app override via manifest)
+    # New: timeout behavior controls what happens when timeout occurs
+    # Values: 'return' (stop and show startup), 'rerun' (restart app), 'none' (disable timeout)
+    timeout_behavior: str = "return"
     requires_network: bool = False
     requires_audio: bool = False
     tags: Optional[List[str]] = None
@@ -71,7 +74,7 @@ class AppManifest:
             # Remove unknown fields that would cause TypeError
             known_fields = {
                 "name", "description", "version", "author", "entry_point",
-                "timeout_seconds", "requires_network", "requires_audio", "tags",
+                "timeout_seconds", "timeout_behavior", "requires_network", "requires_audio", "tags",
                 "external_apis", "required_env",
             }
             filtered_data = {k: v for k, v in data.items() if k in known_fields}
