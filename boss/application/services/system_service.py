@@ -7,6 +7,7 @@ import os
 import signal
 import sys
 import threading
+import time
 from typing import Dict, Any, Optional
 from boss.domain.interfaces.services import SystemService
 
@@ -378,6 +379,33 @@ class SystemManager(SystemService):
     
     def _on_go_button_pressed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle Go button press."""
+        # Snapshot current switch value immediately to avoid races with the
+        # background monitor or multiplexed switch settling. Publish a
+        # display_update using the sampled value so the 7-seg shows the
+        # canonical value at the moment of launch.
+        try:
+            # Small stabilization delay to allow mechanical switches/mux to settle
+            # (10ms is conservative for common hardware)
+            try:
+                time.sleep(0.01)
+            except Exception:
+                pass
+
+            hw_state = self.hardware_service.get_hardware_state()
+            switch_value = 0
+            if hw_state and hw_state.switches:
+                switch_value = hw_state.switches.value
+
+            logger.info(f"Go button pressed. Snapshot switch value: {switch_value}")
+            # Ensure the display mirrors the sampled value immediately
+            try:
+                self.event_bus.publish("display_update", {"value": switch_value}, "system")
+            except Exception:
+                logger.debug("Failed to publish immediate display_update on go press")
+
+        except Exception as e:
+            logger.debug(f"Error snapshotting switches on go press: {e}")
+
         # Trigger app launch (transition feedback handled in launch handler)
         self.event_bus.publish("app_launch_requested", {}, "system")
 
