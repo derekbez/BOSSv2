@@ -7,7 +7,7 @@ import time
 import threading
 from unittest.mock import Mock, patch
 
-from boss.application.events.event_bus import EventBus
+from boss.core import EventBus
 
 
 class TestEventBus:
@@ -156,7 +156,7 @@ class TestEventBus:
         event_bus.subscribe("test_event", failing_handler)
         event_bus.subscribe("test_event", working_handler)
         
-        with patch('boss.application.events.event_bus.logger') as mock_logger:
+        with patch('boss.core.event_bus.logger') as mock_logger:
             event_bus.publish("test_event", {"test": "data"})
             time.sleep(0.1)
             

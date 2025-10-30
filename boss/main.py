@@ -9,17 +9,21 @@ from pathlib import Path
 from typing import Optional
 
 # Add boss package to Python path
-boss_root = Path(__file__).parent
-if str(boss_root) not in sys.path:
-    sys.path.insert(0, str(boss_root))
+# Add repository root to Python path (avoid shadowing stdlib modules like `logging`).
+# Previously we inserted the `boss` package directory which caused imports like
+# `import logging` to resolve to `boss/logging` instead of the stdlib `logging`.
+repo_root = Path(__file__).parent.parent
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
 
 # Now we can import BOSS modules
-from boss.infrastructure.config import get_effective_config, validate_config, setup_directories
-from boss.infrastructure.logging import setup_logging, log_startup_banner, log_system_info, configure_external_loggers
-from boss.infrastructure.hardware import create_hardware_factory, log_hardware_summary
-from boss.application.events import EventBus, SystemEventHandler, HardwareEventHandler
-from boss.application.services import AppManager, AppRunner, HardwareManager, SystemManager
-from boss.application.api import AppAPI
+from boss.config import get_effective_config, validate_config, setup_directories
+from boss.logging import setup_logging, log_startup_banner, log_system_info, configure_external_loggers
+from boss.hardware import create_hardware_factory, log_hardware_summary
+from boss.core import EventBus
+from boss.core.event_handlers import SystemEventHandler, HardwareEventHandler
+from boss.core import AppManager, AppRunner, HardwareManager, SystemManager
+from boss.core import AppAPI
 
 
 def create_boss_system(force_hardware_type: Optional[str] = None):
@@ -64,35 +68,15 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     hardware_service = HardwareManager(hardware_factory, event_bus)
     
     apps_directory = Path(__file__).parent / config.system.apps_directory
-    # Pass hardware_service and config manager module for backend default resolution
-    from boss.infrastructure import config as config_module
-    # Provide BOTH the loaded config instance and the module so downstream
-    # code (e.g. AppAPI.get_global_location) can reliably access the parsed
-    # BossConfig object for fields like system.location.
-    # The AppManager only requires an object with either get_effective_config()/get_config()
-    # or a 'config' attribute; we add a lightweight adapter here.
-    class _ConfigAdapter:
-        def __init__(self, cfg, module):
-            self._cfg = cfg
-            self._module = module
-            # Expose for direct attribute access if code expects it
-            self.config = {
-                'hardware': cfg.hardware.__dict__,
-                'system': {**cfg.system.__dict__}
-            }
-        def get_effective_config(self):
-            return self._cfg
-        def get_config(self):  # fallback name
-            return self._cfg
-
-    config_adapter = _ConfigAdapter(config, config_module)
+    # Pass hardware_service and config module directly for any downstream helpers
+    from boss import config as config_module
 
     app_manager = AppManager(
         apps_directory,
         event_bus,
         hardware_service,
-        config_adapter,
-        system_default_backend=getattr(config.hardware, 'screen_backend', 'rich'),
+        config_module,
+        system_default_backend=getattr(config.hardware, 'screen_backend', 'textual'),
     )
     
     # Create app API factory function

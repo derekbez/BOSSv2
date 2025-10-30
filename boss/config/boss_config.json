@@ -1,11 +1,7 @@
 {
   "hardware": {
     "switch_data_pin": 8,
-    "switch_select_pins": [
-      23,
-      24,
-      25
-    ],
+    "switch_select_pins": [23, 24, 25],
     "go_button_pin": 17,
     "button_pins": {
       "red": 26,
@@ -24,9 +20,9 @@
     "screen_width": 1024,
     "screen_height": 600,
     "screen_fullscreen": true,
+    "screen_backend": "textual",
     "enable_audio": true,
-    "audio_volume": 0.7,
-    "screen_backend": "textual"
+    "audio_volume": 0.7
   },
   "system": {
     "app_timeout_seconds": 900,

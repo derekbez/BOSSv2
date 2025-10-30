@@ -1,7 +1,7 @@
 import threading
 import time
-from boss.application.services.app_runner import AppRunner
-from boss.domain.models.app import App, AppManifest
+from boss.core import AppRunner
+from boss.core.models import App, AppManifest
 
 
 class DummyEventBus:

@@ -104,6 +104,11 @@ def run(stop_event: Event, api: Any) -> None:
     api.log_info("current_weather starting")
     cfg = api.get_app_config(default={}) or {}
     global_loc = api.get_global_location() if hasattr(api, "get_global_location") else None
+    def _sleep_with_stop(seconds: float) -> None:
+        end = time.time() + seconds
+        while time.time() < end and not stop_event.wait(0.1):
+            pass
+
     if not global_loc or global_loc.get("latitude") is None or global_loc.get("longitude") is None:
         api.screen.clear_screen()
         api.screen.display_text(
@@ -111,7 +116,14 @@ def run(stop_event: Event, api: Any) -> None:
             align="center",
         )
         api.log_error("current_weather aborted: missing global location")
-        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        # Be responsive to stop_event during brief display
+        if hasattr(api, "sleep"):
+            try:
+                api.sleep(4)
+            except Exception:
+                _sleep_with_stop(4)
+        else:
+            _sleep_with_stop(4)
         return
     try:
         lat = float(global_loc.get("latitude"))  # type: ignore[arg-type]
@@ -122,7 +134,14 @@ def run(stop_event: Event, api: Any) -> None:
             "Weather Error:\nInvalid global location values (non-numeric).", align="center"
         )
         api.log_error("current_weather aborted: invalid global location numeric conversion")
-        api.sleep(4) if hasattr(api, "sleep") else time.sleep(4)
+        # Be responsive to stop_event during brief display
+        if hasattr(api, "sleep"):
+            try:
+                api.sleep(4)
+            except Exception:
+                _sleep_with_stop(4)
+        else:
+            _sleep_with_stop(4)
         return
     refresh = int(cfg.get("refresh_seconds", 60))
     timeout = float(cfg.get("request_timeout_seconds", 4))

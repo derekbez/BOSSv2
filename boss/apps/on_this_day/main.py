@@ -12,7 +12,7 @@ from __future__ import annotations
 import datetime as _dt
 import time
 from typing import Optional
-from boss.presentation.text.utils import wrap_events, estimate_char_columns, TextPaginator
+from boss.ui.text.utils import wrap_events, estimate_char_columns, TextPaginator
 
 try:
     import requests  # type: ignore

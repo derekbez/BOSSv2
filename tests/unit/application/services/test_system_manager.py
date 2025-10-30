@@ -7,8 +7,7 @@ import signal
 import threading
 from unittest.mock import Mock, patch, MagicMock
 
-from boss.application.services.system_service import SystemManager
-from boss.application.events.event_bus import EventBus
+from boss.core import SystemManager
 
 
 class TestSystemManager:
@@ -84,7 +83,7 @@ class TestSystemManager:
         # Mark as already running
         system_manager._running = True
         
-        with patch('boss.application.services.system_service.logger') as mock_logger:
+        with patch('boss.core.system_manager.logger') as mock_logger:
             system_manager.start()
         
         # Should log warning and not start components
@@ -206,8 +205,8 @@ class TestSystemManager:
         # Simulate shutdown already in progress
         system_manager._shutdown_event.set()
         
-        with patch('boss.application.services.system_service.sys.exit') as mock_exit:
-            with patch('boss.application.services.system_service.logger') as mock_logger:
+        with patch('boss.core.system_manager.sys.exit') as mock_exit:
+            with patch('boss.core.system_manager.logger') as mock_logger:
                 system_manager._signal_handler(signal.SIGINT, None)
         
         mock_logger.warning.assert_called_with("Force exit: Ctrl+C pressed during shutdown")
@@ -235,7 +234,7 @@ class TestSystemManager:
             app_runner=app_runner
         )
         
-        with patch('boss.application.services.system_service.start_web_ui') as mock_start_webui:
+        with patch('boss.core.system_manager.start_web_ui') as mock_start_webui:
             mock_start_webui.return_value = 8080
             
             system_manager.start_webui_if_needed("webui")
@@ -257,7 +256,7 @@ class TestSystemManager:
             app_runner=app_runner
         )
         
-        with patch('boss.application.services.system_service.start_web_ui') as mock_start_webui:
+        with patch('boss.core.system_manager.start_web_ui') as mock_start_webui:
             system_manager.start_webui_if_needed("raspberry_pi")
         
         # Should not start WebUI
@@ -281,7 +280,7 @@ class TestSystemManager:
         # Set WebUI as running
         system_manager._webui_port = 8080
         
-        with patch('boss.application.services.system_service.stop_web_ui') as mock_stop_webui:
+        with patch('boss.core.system_manager.stop_web_ui') as mock_stop_webui:
             system_manager.stop_webui_if_running()
         
         mock_stop_webui.assert_called_once()
@@ -304,7 +303,7 @@ class TestSystemManager:
         # WebUI not running
         assert system_manager._webui_port is None
         
-        with patch('boss.application.services.system_service.stop_web_ui') as mock_stop_webui:
+        with patch('boss.core.system_manager.stop_web_ui') as mock_stop_webui:
             system_manager.stop_webui_if_running()
         
         # Should not call stop

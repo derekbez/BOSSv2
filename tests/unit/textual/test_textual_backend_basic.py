@@ -3,10 +3,10 @@ import time
 import types
 import pytest
 
-from boss.infrastructure.config.config_manager import validate_config
-from boss.domain.models.config import HardwareConfig, SystemConfig, BossConfig
-from boss.infrastructure.hardware.gpio.gpio_factory import GPIOHardwareFactory
-from boss.application.services.hardware_service import HardwareManager
+from boss.config import validate_config
+from boss.core.models import HardwareConfig, SystemConfig, BossConfig
+from boss.hardware import GPIOHardwareFactory
+from boss.core import HardwareManager
 
 class DummyEventBus:
     def __init__(self):

@@ -7,8 +7,8 @@ import json
 from pathlib import Path
 from unittest.mock import Mock, patch, mock_open
 
-from boss.application.services.app_manager import AppManager
-from boss.domain.models.app import App, AppManifest
+from boss.core import AppManager
+from boss.core.models import App, AppManifest
 
 
 class TestAppManager:

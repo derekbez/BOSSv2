@@ -11,9 +11,9 @@ STRICT MODE (2025-09-01):
 from __future__ import annotations
 from typing import Any, List
 import logging
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config.secrets_manager import secrets
 import time
-from boss.presentation.text.utils import TextPaginator, wrap_plain
+from boss.ui.text.utils import TextPaginator, wrap_plain
 ## NOTE: Per centralized screen wrapping policy, we DO NOT manually truncate/wrap lines here.
 
 try:

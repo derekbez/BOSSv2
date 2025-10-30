@@ -15,7 +15,7 @@ API_URL = "https://api.ipgeolocation.io/astronomy"
 
 
 from typing import Dict, Any
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config.secrets_manager import secrets
 
 
 def _summarize_error(err: Exception) -> str:

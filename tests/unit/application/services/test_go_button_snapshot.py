@@ -1,7 +1,7 @@
 import logging
 import threading
 
-from boss.application.services.system_service import SystemManager
+from boss.core import SystemManager
 
 
 class DummyEventBus:

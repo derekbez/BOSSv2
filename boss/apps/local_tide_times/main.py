@@ -55,7 +55,7 @@ def fetch_tides(api_key: str | None, lat: float, lon: float, timeout: float = 6.
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    from boss.infrastructure.config.secrets_manager import secrets
+    from boss.config.secrets_manager import secrets
     api_key = cfg.get("api_key") or secrets.get("BOSS_APP_WORLDTIDES_API_KEY")
     lat = float(cfg.get("latitude", 51.5074))
     lon = float(cfg.get("longitude", -0.1278))

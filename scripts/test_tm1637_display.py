@@ -13,8 +13,8 @@ PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from boss.domain.models.config import BossConfig
-from boss.infrastructure.hardware.gpio.gpio_hardware import GPIODisplay
+from boss.core.models.config import BossConfig
+from boss.hardware import GPIODisplay
 
 CONFIG_PATH = PROJECT_ROOT / "boss" / "config" / "boss_config.json"
 

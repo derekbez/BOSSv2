@@ -1,7 +1,7 @@
 # HDMI Screen Output Best Practices
 
 - The HDMI screen is driven by a Textual (Rich-based) terminal UI on tty1. The legacy Pillow framebuffer backend has been removed.
-- **Ensure `screen_width` and `screen_height` in `boss_config.json` reflect your intended logical layout.** (Framebuffer geometry matching is no longer required for Pillow rendering, but keep values consistent for layout.)
+- **Ensure `screen_width` and `screen_height` in `boss_config.json` reflect your intended logical layout.** (Framebuffer geometry matching is no longer required; Textual renders in a terminal. Keep values consistent for layout.)
     - Check physical framebuffer (optional) with: `fbset -fb /dev/fb0 -i`
     - Example logical config:
       - `"screen_width": 80,`
@@ -77,11 +77,52 @@ See `docs/remote_development.md` for complete setup and troubleshooting guide.
   - Speaker (optional)
 - **Setup:**
   - Python 3.11+
-  - Use a Python virtual environment
-  - Install dependencies: `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `textual`, `rich`, `numpy`, etc.
+  - Use a Python virtual environment (recommended). See the "Python virtual environment" subsection below for platform-specific creation and activation steps.
+  - Install dependencies from the repository root after activating the virtual environment:
+
+    ```bash
+    pip install -r requirements/base.txt
+    ```
+
+    This will install core dependencies such as `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `textual`, `rich`, `numpy`, `uvicorn`, and `fastapi`.
+
   - All configuration is in `boss/config/` (co-located with main code for modularity)
     - `boss/config/boss_config.json` - Hardware pins, system settings
     - `boss/config/app_mappings.json` - Switch-to-app mappings
+
+### Python virtual environment (recommended)
+
+Create and activate a virtual environment before installing dependencies. Examples below use a `.venv` directory in the project root.
+
+Windows (cmd.exe):
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements/base.txt
+```
+
+Windows (PowerShell):
+
+```powershell
+python -m venv .venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements/base.txt
+```
+
+POSIX (macOS / Linux):
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements/base.txt
+```
+
+If you prefer not to create a project-local virtual environment, ensure you use a dedicated, isolated Python environment to avoid system-wide package conflicts. In VSCode, select the `.venv` interpreter (Command Palette -> Python: Select Interpreter) to make the editor use the virtual environment automatically.
 
 ## Directory Structure
 ```
@@ -258,19 +299,32 @@ def cleanup_leds():
 ```json
 {
   "hardware": {
-    "switch_data_pin": 18,
-    "button_pins": {"red": 5, "yellow": 6, "green": 13, "blue": 19},
-    "led_pins": {"red": 21, "yellow": 20, "green": 26, "blue": 12},
-    "display_clk_pin": 2,
-    "display_dio_pin": 3,
-    "screen_width": 800,
-    "screen_height": 480,
+    // GPIO Pin Assignments (BCM numbering)
+    "switch_select_pins": [23, 24, 25], // Mux select [A, B, C]
+    "switch_data_pin": 8,               // Mux data out
+    "go_button_pin": 17,
+    "button_pins": {
+      "red": 26,
+      "yellow": 19,
+      "green": 13,
+      "blue": 6
+    },
+    "led_pins": {
+      "red": 21,
+      "yellow": 20,
+      "green": 16,
+      "blue": 12
+    },
+    "display_clk_pin": 5,
+    "display_dio_pin": 4,
+    "screen_width": 1024,
+    "screen_height": 600,
     "enable_audio": true
   },
   "system": {
     "apps_directory": "apps",
     "log_level": "INFO",
-    "app_timeout_seconds": 300
+    "app_timeout_seconds": 900
   }
 }
 ```

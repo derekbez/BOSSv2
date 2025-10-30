@@ -13,9 +13,9 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # Import after path setup
-from boss.domain.models.config import BossConfig, HardwareConfig, SystemConfig
-from boss.application.events.event_bus import EventBus
-from boss.infrastructure.hardware.mock.mock_hardware import (
+from boss.core.models import BossConfig, HardwareConfig, SystemConfig
+from boss.core import EventBus
+from boss.hardware import (
     MockButtons, MockGoButton, MockLeds, MockSwitches, MockDisplay, MockScreen, MockSpeaker
 )
 

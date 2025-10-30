@@ -91,8 +91,8 @@ def run_hardware_test():
     print("\n🔧 Hardware Component Tests")
     print("=" * 40)
     
-    from boss.infrastructure.config.config_manager import load_config
-    from boss.infrastructure.hardware.gpio.gpio_hardware import (
+    from boss.config import load_config
+    from boss.hardware.gpio.gpio_hardware import (
         GPIOButtons, GPIOLeds, GPIOSwitches, GPIODisplay
     )
     
@@ -108,7 +108,7 @@ def run_hardware_test():
             # Quick blink test
             for color in ['red', 'yellow', 'green', 'blue']:
                 try:
-                    from boss.domain.models.hardware_state import LedColor
+                    from boss.core.models import LedColor
                     led_color = LedColor(color)
                     leds.set_led(led_color, True)
                     time.sleep(0.2)

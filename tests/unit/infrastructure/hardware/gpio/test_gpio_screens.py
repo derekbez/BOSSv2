@@ -2,9 +2,10 @@
 Unit tests for GPIO screen implementations (Textual primary, Rich fallback; Pillow removed)
 """
 import pytest
+import sys
 from unittest.mock import Mock, patch, MagicMock
-from boss.infrastructure.hardware.gpio.gpio_screens import GPIORichScreen
-from boss.domain.models.config import HardwareConfig
+from boss.hardware import GPIORichScreen
+from boss.core.models import HardwareConfig
 
 
 @pytest.fixture
@@ -32,7 +33,8 @@ class TestGPIORichScreen:
     
     def test_init(self, hardware_config):
         """Test GPIORichScreen initialization."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console') as mock_console:
             screen = GPIORichScreen(hardware_config)
             assert screen.hardware_config == hardware_config
             assert not screen.is_available
@@ -40,7 +42,8 @@ class TestGPIORichScreen:
     
     def test_initialize_success(self, hardware_config):
         """Test successful initialization of GPIORichScreen."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console'):
             screen = GPIORichScreen(hardware_config)
             result = screen.initialize()
             assert result is True
@@ -55,8 +58,9 @@ class TestGPIORichScreen:
 
     def test_display_panel(self, hardware_config):
         """Test Rich panel display functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Panel') as mock_panel:
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console') as mock_console:
+            with patch(f'{MOD}.Panel') as mock_panel:
                 mock_console_instance = Mock()
                 mock_console.return_value = mock_console_instance
                 mock_panel_instance = Mock()
@@ -72,8 +76,9 @@ class TestGPIORichScreen:
 
     def test_display_tree(self, hardware_config):
         """Test Rich tree display functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Tree') as mock_tree:
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console') as mock_console:
+            with patch(f'{MOD}.Tree') as mock_tree:
                 mock_console_instance = Mock()
                 mock_console.return_value = mock_console_instance
                 mock_tree_instance = Mock()
@@ -91,8 +96,9 @@ class TestGPIORichScreen:
 
     def test_display_code(self, hardware_config):
         """Test Rich syntax highlighting functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
-            with patch('boss.infrastructure.hardware.gpio.gpio_screens.Syntax') as mock_syntax:
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console') as mock_console:
+            with patch(f'{MOD}.Syntax') as mock_syntax:
                 mock_console_instance = Mock()
                 mock_console.return_value = mock_console_instance
                 mock_syntax_instance = Mock()
@@ -108,7 +114,8 @@ class TestGPIORichScreen:
 
     def test_display_markup(self, hardware_config):
         """Test Rich markup display functionality."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console') as mock_console:
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console') as mock_console:
             mock_console_instance = Mock()
             mock_console.return_value = mock_console_instance
             
@@ -121,7 +128,8 @@ class TestGPIORichScreen:
 
     def test_rich_features_not_available(self, hardware_config):
         """Test Rich-specific features when screen is not available."""
-        with patch('boss.infrastructure.hardware.gpio.gpio_screens.Console'):
+        MOD = GPIORichScreen.__module__
+        with patch(f'{MOD}.Console'):
             screen = GPIORichScreen(hardware_config)
             # Don't initialize, so is_available remains False
             
@@ -135,5 +143,7 @@ class TestGPIORichScreen:
 
 
 def test_pillow_symbol_removed():
-    import boss.infrastructure.hardware.gpio.gpio_screens as mod
+    # Ensure no legacy Pillow screen remains in the module where GPIORichScreen lives
+    import importlib
+    mod = importlib.import_module(GPIORichScreen.__module__)
     assert 'GPIOPillowScreen' not in dir(mod)

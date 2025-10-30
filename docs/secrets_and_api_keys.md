@@ -18,7 +18,11 @@ This document explains the practical workflow for adding, storing, syncing, rota
 | Windows Dev | `secrets/secrets.env` | Process env > file | File is git‑ignored; create from sample |
 | Raspberry Pi | `/etc/boss/secrets.env` | Process env > file | Owned by root:root, chmod 600, referenced by systemd `EnvironmentFile=` |
 
-`boss.infrastructure.config.secrets_manager.SecretsManager` handles loading (lazy). You can also rely on `os.getenv` directly—just keep names consistent.
+`boss.config.secrets_manager._SecretsManager` handles loading (lazy) and is exposed via a singleton `secrets`. You can also rely on `os.getenv` directly—just keep names consistent. Prefer importing the singleton:
+
+```python
+from boss.config import secrets
+```
 
 ## 3. Naming Conventions
 | Type | Pattern | Example |
@@ -41,7 +45,7 @@ Rules:
 ```
 4. In app code obtain the value:
 ```python
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config import secrets
 API_KEY = secrets.get("BOSS_APP_MYAPP_API_KEY")
 if not API_KEY:
     api.log_error("Missing API key; aborting")

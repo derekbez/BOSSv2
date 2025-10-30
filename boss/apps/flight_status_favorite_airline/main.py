@@ -4,7 +4,7 @@ Displays limited set of flights for chosen airline using Aviationstack.
 """
 from __future__ import annotations
 import time
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config.secrets_manager import secrets
 
 try:
     import requests  # type: ignore

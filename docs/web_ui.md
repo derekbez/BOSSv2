@@ -44,7 +44,7 @@ boss/presentation/api/         # ✅ WebUI server in correct layer
 │   └── style.css            # Professional dark theme
 └── __pycache__/
 
-boss/infrastructure/hardware/webui/  # ✅ Hardware implementations (already correct)
+boss/hardware/webui/  # ✅ Hardware implementations (localized)
 ├── webui_factory.py          # Hardware factory
 ├── webui_hardware.py         # Hardware implementations
 └── __init__.py
@@ -189,7 +189,7 @@ python -m boss.main --hardware webui
    ```python
    # In main.py, after system creation
    if hardware_type == "webui":
-       from boss.presentation.api.web_ui_main import start_web_ui
+       from boss.ui.api.web_ui_main import start_web_ui
        start_web_ui(hardware_dict, event_bus)
    ```
 
@@ -223,7 +223,7 @@ boss/presentation/api/           # ✅ WebUI server in correct location
 │   └── style.css               # Professional dark theme
 └── __pycache__/
 
-boss/infrastructure/hardware/webui/  # ✅ Hardware implementations
+boss/hardware/webui/  # ✅ Hardware implementations
 ├── webui_factory.py            # Creates all WebUI hardware instances
 ├── webui_hardware.py           # Button/LED/Display/Switch/Screen implementations
 └── __init__.py

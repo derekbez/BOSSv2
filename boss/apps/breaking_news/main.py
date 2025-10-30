@@ -5,8 +5,8 @@ Graceful errors and manual refresh via green button.
 """
 from __future__ import annotations
 from typing import Any
-from boss.infrastructure.config.secrets_manager import secrets
-from boss.presentation.text.utils import TextPaginator, wrap_plain, estimate_char_columns
+from boss.config.secrets_manager import secrets
+from boss.ui.text.utils import TextPaginator, wrap_plain, estimate_char_columns
 import time
 
 try:

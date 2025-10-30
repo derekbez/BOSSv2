@@ -3,8 +3,8 @@ import sys
 
 import pytest
 
-from boss.domain.models.config import HardwareConfig
-from boss.infrastructure.hardware.gpio.gpio_hardware import GPIODisplay
+from boss.core.models import HardwareConfig
+from boss.hardware import GPIODisplay
 
 
 class DummyTM1637:
@@ -67,9 +67,9 @@ def make_hw_config():
 
 def test_tm1637_display_initialize_and_basic_ops(monkeypatch):
     # Pretend gpiozero is present to allow initialization path
-    monkeypatch.setattr(
-        "boss.infrastructure.hardware.gpio.gpio_hardware.HAS_GPIO", True, raising=False
-    )
+    # Patch HAS_GPIO on the module where GPIODisplay is defined without hardcoding path
+    mod = sys.modules[GPIODisplay.__module__]
+    monkeypatch.setattr(mod, "HAS_GPIO", True, raising=False)
 
     disp = GPIODisplay(make_hw_config())
 

@@ -29,7 +29,13 @@ def run(stop_event, api):
     lines = int(cfg.get("lines", 5))
     shuffle_seconds = float(cfg.get("shuffle_seconds", 600))
 
-    asset_dir = api.get_app_asset_path()
+    # Derive assets directory using available API helper
+    try:
+        # get_asset_path returns path within the assets folder; use dirname to obtain the folder
+        asset_dir = os.path.dirname(api.get_asset_path("__dummy__"))
+    except Exception:
+        # Fallback: attempt conventional location based on app structure
+        asset_dir = os.path.join(os.path.dirname(__file__), "assets")
 
     api.screen.clear_screen()
     title = "Book Snippet"
@@ -44,7 +50,7 @@ def run(stop_event, api):
         local_body = "\n".join(snippet_lines[:10])
         api.screen.display_text(f"{title}\n\n{local_body}", align="left")
 
-    def on_button(ev):
+    def on_button(event_type, ev):
         nonlocal last_shuffle
         if ev.get("button") == "green":
             last_shuffle = time.time()

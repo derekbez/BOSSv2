@@ -2,15 +2,12 @@ import json
 from pathlib import Path
 from unittest.mock import Mock
 
-from boss.application.services.app_manager import AppManager
-from boss.application.services.app_runner import AppRunner
-from boss.application.services.hardware_service import HardwareManager
-from boss.application.events.event_bus import EventBus
-from boss.infrastructure.hardware.mock.mock_factory import MockHardwareFactory
-from boss.domain.models.config import HardwareConfig, SystemConfig, BossConfig
+from boss.core import AppManager, AppRunner, HardwareManager, EventBus
+from boss.hardware import MockHardwareFactory
+from boss.core.models import HardwareConfig, SystemConfig, BossConfig
 
 
-def make_min_config(tmp_path: Path, backend: str = "rich") -> BossConfig:
+def make_min_config(tmp_path: Path, backend: str = "textual") -> BossConfig:
     hardware = HardwareConfig(
         switch_data_pin=18,
         switch_select_pins=[22, 23, 25],
@@ -75,15 +72,15 @@ def run(stop_event, api):
 
 def test_preferred_backend_applied_and_restored(tmp_path: Path):
     # Arrange environment
-    cfg = make_min_config(tmp_path, backend="rich")
+    cfg = make_min_config(tmp_path, backend="textual")
     apps_dir = tmp_path / "apps"
     apps_dir.mkdir()
     # map switch 1 to app
     config_dir = tmp_path / "config"
     config_dir.mkdir()
-    (config_dir / "app_mappings.json").write_text(json.dumps({"app_mappings": {"1": "app_pref_pillow"}}))
-    # create app preferring pillow at apps_dir/app_pref_pillow
-    write_simple_app(apps_dir, "app_pref_pillow", preferred="pillow")
+    (config_dir / "app_mappings.json").write_text(json.dumps({"app_mappings": {"1": "app_pref_textual"}}))
+    # create app preferring textual (preference is a no-op in single-backend system)
+    write_simple_app(apps_dir, "app_pref_textual", preferred="textual")
 
     # Wire services with mock hardware factory
     event_bus = EventBus(queue_size=100)
@@ -95,42 +92,42 @@ def test_preferred_backend_applied_and_restored(tmp_path: Path):
 
     # Initialize hardware and set starting backend
     hardware.initialize()
-    assert hardware.get_current_screen_backend() == "rich"
+    assert hardware.get_current_screen_backend() == "textual"
 
-    # Act: apply backend for app and simulate run
+    # Act: apply backend for app and simulate run (no-op in single-backend system)
     app = app_manager.get_app_by_switch_value(1)
     assert app is not None
     prev = app_manager.apply_backend_for_app(app)
-    # After applying, backend should be pillow
-    assert hardware.get_current_screen_backend() == "pillow"
-    # Now restore
+    # After applying, backend remains textual; previous backend reported as textual
+    assert prev == "textual"
+    assert hardware.get_current_screen_backend() == "textual"
+    # Now restore (no-op)
     app_manager.restore_backend(prev)
-    assert hardware.get_current_screen_backend() == "rich"
+    assert hardware.get_current_screen_backend() == "textual"
 
 
 def test_config_validation_normalizes_backend(tmp_path: Path):
-    from boss.infrastructure.config.config_manager import validate_config
-    cfg = make_min_config(tmp_path, backend="RiCh")
+    from boss.config import validate_config
+    cfg = make_min_config(tmp_path, backend="TeXtUaL")
     ok = validate_config(cfg)
     assert ok is True
-    assert cfg.hardware.screen_backend == "rich"
+    assert cfg.hardware.screen_backend == "textual"
 
 
 def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: Path):
     """System-level: ensure backend switches to app preference on start and restores after stop."""
-    from boss.application.services.system_service import SystemManager
-    from boss.application.api.app_api import AppAPI
+    from boss.core import SystemManager, AppAPI
 
     # Arrange environment
-    cfg = make_min_config(tmp_path, backend="rich")
+    cfg = make_min_config(tmp_path, backend="textual")
     apps_dir = tmp_path / "apps"
     apps_dir.mkdir()
     config_dir = tmp_path / "config"
     config_dir.mkdir()
-    # map switch 1 to app
-    (config_dir / "app_mappings.json").write_text(json.dumps({"app_mappings": {"1": "app_pref_pillow"}}))
-    # create app preferring pillow, with a small delay to sample during run
-    write_simple_app(apps_dir, "app_pref_pillow", preferred="pillow", run_delay=0.2)
+    # map switch 1 to app (preference ignored in single-backend system)
+    (config_dir / "app_mappings.json").write_text(json.dumps({"app_mappings": {"1": "app_pref_textual"}}))
+    # create app with textual preference
+    write_simple_app(apps_dir, "app_pref_textual", preferred="textual", run_delay=0.2)
 
     # Wire services with mock hardware factory
     event_bus = EventBus(queue_size=100)
@@ -150,8 +147,8 @@ def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: 
     system.start()
 
     try:
-        # Ensure initial backend is rich
-        assert hardware.get_current_screen_backend() == "rich"
+        # Ensure initial backend is textual
+        assert hardware.get_current_screen_backend() == "textual"
 
         # Simulate switches at 1 and request app launch
         assert hardware.switches is not None
@@ -161,24 +158,24 @@ def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: 
         simulate(1)
         event_bus.publish("app_launch_requested", {}, "test")
 
-        # During run (short delay), backend should be pillow
+        # During run, backend should remain textual (no switching)
         import time
-        deadline = time.time() + 1.0
-        seen_pillow = False
+        deadline = time.time() + 0.5
+        seen_textual = False
         while time.time() < deadline:
-            if hardware.get_current_screen_backend() == "pillow":
-                seen_pillow = True
+            if hardware.get_current_screen_backend() == "textual":
+                seen_textual = True
                 break
             time.sleep(0.02)
-        assert seen_pillow, "Expected backend to switch to pillow during app run"
+        assert seen_textual, "Expected backend to remain textual during app run"
 
-        # After app finishes, backend should restore to rich
+        # After app finishes, backend should restore to textual
         deadline = time.time() + 2.0
         while time.time() < deadline:
-            if hardware.get_current_screen_backend() == "rich":
+            if hardware.get_current_screen_backend() == "textual":
                 break
             time.sleep(0.02)
-        assert hardware.get_current_screen_backend() == "rich"
+        assert hardware.get_current_screen_backend() == "textual"
     finally:
         # Stop system and event bus
         system.stop()

@@ -55,7 +55,7 @@ def fetch_space(api_key: str | None, timeout: float = 6.0):
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    from boss.infrastructure.config.secrets_manager import secrets
+    from boss.config.secrets_manager import secrets
     api_key = cfg.get("api_key") or secrets.get("BOSS_APP_NASA_API_KEY")
     refresh_seconds = float(cfg.get("refresh_seconds", 21600))
     timeout = float(cfg.get("request_timeout_seconds", 6))

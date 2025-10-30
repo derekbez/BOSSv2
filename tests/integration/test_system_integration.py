@@ -8,11 +8,7 @@ import threading
 from unittest.mock import Mock, patch
 from pathlib import Path
 
-from boss.application.services.app_manager import AppManager
-from boss.application.services.app_runner import AppRunner
-from boss.application.services.hardware_service import HardwareManager
-from boss.application.events.event_bus import EventBus
-from boss.application.api.app_api import AppAPI
+from boss.core import AppManager, AppRunner, HardwareManager, EventBus, AppAPI
 
 
 class TestSystemIntegration:
@@ -84,7 +80,7 @@ class TestSystemIntegration:
             handler.assert_called_once_with("test_event", {"test": "data"})
             
             # Test logging
-            with patch('boss.application.api.app_api.logging.getLogger') as mock_get_logger:
+            with patch('boss.core.api.logging.getLogger') as mock_get_logger:
                 mock_logger = Mock()
                 mock_get_logger.return_value = mock_logger
                 

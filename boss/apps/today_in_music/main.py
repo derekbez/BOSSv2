@@ -55,7 +55,7 @@ def fetch_track(api_key: str | None, tag: str, timeout: float = 6.0):
 
 def run(stop_event, api):
     cfg = api.get_app_config() or {}
-    from boss.infrastructure.config.secrets_manager import secrets
+    from boss.config.secrets_manager import secrets
     api_key = cfg.get("api_key") or secrets.get("BOSS_APP_LASTFM_API_KEY")
     tag = cfg.get("tag", "rock")
     refresh_seconds = float(cfg.get("refresh_seconds", 3600))

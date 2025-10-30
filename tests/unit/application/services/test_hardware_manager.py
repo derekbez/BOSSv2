@@ -4,7 +4,7 @@ Unit tests for HardwareManager service.
 
 from unittest.mock import Mock, patch
 
-from boss.application.services.hardware_service import HardwareManager
+from boss.core import HardwareManager
 
 
 class TestHardwareManager:

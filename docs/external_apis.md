@@ -278,7 +278,7 @@ apps_requirements:
 
 ## 7. Example Mini‑App Snippet
 ```python
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config import secrets
 
 API_KEY = secrets.get("BOSS_APP_WEATHER_API_KEY")  # canonical
 if not API_KEY:

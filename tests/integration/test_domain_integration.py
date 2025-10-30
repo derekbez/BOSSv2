@@ -6,9 +6,8 @@ import pytest
 from unittest.mock import Mock, patch
 from pathlib import Path
 
-from boss.domain.models.app import App, AppManifest, AppStatus
-from boss.application.services.system_service import SystemManager
-from boss.application.events.event_bus import EventBus
+from boss.core.models import App, AppManifest, AppStatus
+from boss.core import SystemManager, EventBus
 
 
 class TestDomainModelIntegration:
@@ -126,9 +125,7 @@ class TestSystemManagerIntegration:
         event_bus.start()
         
         try:
-            from boss.application.services.app_manager import AppManager
-            from boss.application.services.app_runner import AppRunner
-            from boss.application.services.hardware_service import HardwareManager
+            from boss.core import AppManager, AppRunner, HardwareManager
             
             # Create mock components
             hardware_service = Mock()
@@ -224,8 +221,7 @@ class TestServiceIntegration:
         event_bus.start()
         
         try:
-            from boss.application.services.app_manager import AppManager
-            from boss.application.services.hardware_service import HardwareManager
+            from boss.core import AppManager, HardwareManager
             
             # Create managers
             app_manager = AppManager(temp_apps_directory, event_bus)

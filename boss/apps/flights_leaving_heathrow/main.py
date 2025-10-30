@@ -5,7 +5,7 @@ Shows limited list of departing flights using Aviationstack API.
 from __future__ import annotations
 import time
 from typing import Any
-from boss.infrastructure.config.secrets_manager import secrets
+from boss.config.secrets_manager import secrets
 
 try:
     import requests  # type: ignore
