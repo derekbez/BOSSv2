@@ -1,425 +1,51 @@
-# HDMI Screen Output Best Practices
+ # B.O.S.S. Developer & Copilot Instruction Index
 
-- The HDMI screen is driven by a Textual (Rich-based) terminal UI on tty1. The legacy Pillow framebuffer backend has been removed.
-- **Ensure `screen_width` and `screen_height` in `boss_config.json` reflect your intended logical layout.** (Framebuffer geometry matching is no longer required; Textual renders in a terminal. Keep values consistent for layout.)
-    - Check physical framebuffer (optional) with: `fbset -fb /dev/fb0 -i`
-    - Example logical config:
-      - `"screen_width": 80,`
-      - `"screen_height": 25,`
-- If dimensions feel cramped, adjust these logical values (they inform layout, not raw pixel scaling now).
-- Document any changes to screen dimensions in both the config and this documentation.
+This file now serves as a minimal index pointing to focused guidance documents under `.github/instructions/`. Each topic is isolated for clarity and easier maintenance after the architectural flattening (facades: `core`, `hardware`, `config`, `logging`, `ui`).
 
-# Copilot Instructions for B.O.S.S. (Board Of Switches and Screen)
+## Core Topics
+- Architecture & Principles: `.github/instructions/architecture.md`
+- Development Environment & Run Modes: `.github/instructions/development_environment.md`
+- Hardware Abstraction & Parity Rules: `.github/instructions/hardware_and_parity.md`
+- Mini-App Authoring & Lifecycle: `.github/instructions/app_authoring.md`
+- Event Bus & Logging Taxonomy: `.github/instructions/event_bus_and_logging.md`
+- Configuration & Secrets Handling: `.github/instructions/configuration_and_secrets.md`
+- Web UI & Debugging Tools: `.github/instructions/web_ui_and_debugging.md`
+- Testing Strategy & Fixtures: `.github/instructions/testing_strategy.md`
+- Deployment & Remote Operations: `.github/instructions/deployment_and_remote_ops.md`
+- Troubleshooting & Diagnostics: `.github/instructions/troubleshooting.md`
 
-## Project Overview
-B.O.S.S. is a modular, event-driven Python application for Raspberry Pi. It provides a physical interface to select and run mini-apps using 8 toggle switches (0–255), a 7-segment display, 4 color LEDs, 4 color buttons, a main "Go" button, a 7-inch screen, and optionally a speaker. The system is designed for extensibility, robust hardware abstraction, and seamless development/testing with or without real hardware.
+## Quick Start
+1. Create & activate venv (`python -m venv .venv` then `.venv\Scripts\activate`).
+2. Install deps: `pip install -r requirements/base.txt`.
+3. Run locally (mock/webui hardware): `python -m boss.main`.
+4. For Raspberry Pi deployment: see deployment & remote ops doc.
 
-## Remote Development & Debugging
-For production hardware development and testing, B.O.S.S. runs as a systemd service with remote management capabilities:
+## HDMI Screen Notes
+- Textual terminal UI (no legacy Pillow framebuffer). Logical `screen_width`/`screen_height` in `boss_config.json` control layout.
+- Adjust dimensions for readability; they are not pixel mappings.
 
-### **Systemd Service Setup (Raspberry Pi)**
-```bash
-# One-time setup
-cd ~/boss
-./scripts/setup_systemd_service.sh
+## LED/Button Parity (Critical UX)
+Always gate button events by LED state. Details & code pattern: see hardware parity doc.
 
-# Service management
-sudo systemctl start boss        # Start service
-sudo systemctl stop boss         # Stop service
-sudo systemctl restart boss      # Restart service
-sudo systemctl status boss       # Check status
-sudo journalctl -u boss -f       # View live logs
-```
+## Event Naming Convention
+Canonical taxonomy described in event bus doc. Avoid ad-hoc names; follow `input.*`, `output.*`, `system.*` structure.
 
-### **Remote Management (Windows/VSCode)**
-```bash
-# Setup SSH authentication first (one-time)
-ssh-keygen -t rsa -b 4096
-type ~/.ssh/id_rsa.pub | ssh rpi@192.168.1.143 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+## When Adding New Functionality
+- Update only the relevant instruction file (avoid bloating this index).
+- Keep cross-references minimal; prefer a single authoritative location per concept.
+- If a new concern doesn’t fit existing files, create an additional markdown in the instructions directory and add it to the list above.
 
-# Interactive management console
-python scripts/boss_remote_manager.py
+## Legacy Directories Removed
+Deprecated layered folders (`presentation`, `application`, `domain`, `infrastructure`) replaced by flattened facade packages. Remove any new references to legacy paths in future contributions.
 
-# Quick commands
-python scripts/boss_remote_manager.py start     # Start service
-python scripts/boss_remote_manager.py restart   # Restart service
-python scripts/boss_remote_manager.py logs      # Follow live logs
-python scripts/boss_remote_manager.py status    # Show detailed status
-python scripts/boss_remote_manager.py test      # Run hardware test
-python scripts/boss_remote_manager.py ssh-setup # Setup SSH authentication
-```
+## Maintenance Checklist
+- After structural changes: verify docs still align (run `grep` for legacy names).
+- After adding events: update event bus document.
+- After adding apps: ensure app authoring guidelines still apply.
+- After changing hardware mapping: reflect in config & hardware parity doc.
 
-### **Development Workflow**
-1. **Code on Windows**: Develop in VSCode with full editor features
-2. **Deploy to Pi**: Use remote manager "Deploy & Restart" or git workflow
-3. **Test on Hardware**: Monitor via live logs and hardware tests
-4. **Debug**: Use systemd logs and remote status monitoring
-5. **Iterate**: Fast cycle with automatic service restarts
-
-### **Key Benefits**
-- **Service Reliability**: Auto-restart, proper permissions, resource limits
-- **Remote Control**: Full service management from Windows terminal
-- **Live Monitoring**: Real-time logs and status from development machine
-- **Hardware Access**: Proper gpio/video/audio group permissions
-- **Professional Workflow**: Git-based deployment with service integration
-
-See `docs/remote_development.md` for complete setup and troubleshooting guide.
-
-## System Requirements & Installation
-- **Hardware:**
-  - Raspberry Pi (64bit Lite OS, no GUI)
-  - 8 toggle switches (via 74HC151 multiplexer)
-  - 4 color buttons (Red, Yellow, Green, Blue)
-  - 4 color LEDs (Red, Yellow, Green, Blue)
-  - Main "Go" button
-  - TM1637 7-segment display
-  - 7-inch HDMI screen (Textual terminal UI on tty1)
-  - Speaker (optional)
-- **Setup:**
-  - Python 3.11+
-  - Use a Python virtual environment (recommended). See the "Python virtual environment" subsection below for platform-specific creation and activation steps.
-  - Install dependencies from the repository root after activating the virtual environment:
-
-    ```bash
-    pip install -r requirements/base.txt
-    ```
-
-    This will install core dependencies such as `gpiozero`, `lgpio`, `python-tm1637`, `pytest`, `textual`, `rich`, `numpy`, `uvicorn`, and `fastapi`.
-
-  - All configuration is in `boss/config/` (co-located with main code for modularity)
-    - `boss/config/boss_config.json` - Hardware pins, system settings
-    - `boss/config/app_mappings.json` - Switch-to-app mappings
-
-### Python virtual environment (recommended)
-
-Create and activate a virtual environment before installing dependencies. Examples below use a `.venv` directory in the project root.
-
-Windows (cmd.exe):
-
-```cmd
-python -m venv .venv
-.venv\Scripts\activate
-python -m pip install --upgrade pip
-pip install -r requirements/base.txt
-```
-
-Windows (PowerShell):
-
-```powershell
-python -m venv .venv
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements/base.txt
-```
-
-POSIX (macOS / Linux):
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements/base.txt
-```
-
-If you prefer not to create a project-local virtual environment, ensure you use a dedicated, isolated Python environment to avoid system-wide package conflicts. In VSCode, select the `.venv` interpreter (Command Palette -> Python: Select Interpreter) to make the editor use the virtual environment automatically.
-
-## Directory Structure
-```
-boss/
-├── __init__.py
-├── main.py                     # Entry point with dependency injection setup
-├── presentation/              # UI/API interfaces (no business logic)
-│   ├── __init__.py
-│   ├── physical_ui/
-│   │   ├── __init__.py
-│   │   ├── button_handler.py   # Physical button event handling
-│   │   └── switch_handler.py   # Switch state monitoring
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── rest_api.py        # REST endpoints for remote management
-│   │   ├── websocket_api.py   # Real-time event streaming
-│   │   └── web_ui.py          # Development web interface
-│   └── cli/
-│       ├── __init__.py
-│       └── debug_cli.py       # Debug and maintenance commands
-├── application/               # Service classes and business logic
-│   ├── __init__.py
-│   ├── services/
-│   │   ├── __init__.py
-│   │   ├── app_manager.py     # App lifecycle management
-│   │   ├── app_runner.py      # Thread management for mini-apps
-│   │   ├── switch_monitor.py  # Switch state monitoring and events
-│   │   ├── hardware_service.py # Hardware coordination
-│   │   └── system_service.py  # System health and shutdown
-│   ├── events/
-│   │   ├── __init__.py
-│   │   ├── event_bus.py       # Simple, robust event bus
-│   │   └── event_handlers.py  # System event handlers
-│   └── api/
-│       ├── __init__.py
-│       └── app_api.py         # API provided to mini-apps
-├── domain/                    # Core models and business rules
-│   ├── __init__.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── app.py            # App entity and business rules
-│   │   ├── hardware_state.py # Hardware state models
-│   │   └── config.py         # Configuration models
-│   ├── events/
-│   │   ├── __init__.py
-│   │   └── domain_events.py  # Domain event definitions
-│   └── interfaces/
-│       ├── __init__.py
-│       ├── hardware.py       # Hardware abstraction interfaces
-│       ├── app_api.py        # App API interface
-│       └── services.py       # Service interfaces
-├── infrastructure/           # Hardware, config, logging implementations
-│   ├── __init__.py
-│   ├── hardware/
-│   │   ├── __init__.py
-│   │   ├── factory.py        # Hardware factory (GPIO/WebUI/Mock)
-│   │   ├── gpio/             # Real hardware implementations
-│   │   │   ├── __init__.py
-│   │   │   ├── buttons.py
-│   │   │   ├── leds.py
-│   │   │   ├── display.py
-│   │   │   ├── switches.py
-│   │   │   ├── screen.py
-│   │   │   └── speaker.py
-│   │   ├── webui/           # Web UI implementations for development
-│   │   │   ├── __init__.py
-│   │   │   ├── webui_buttons.py
-│   │   │   ├── webui_leds.py
-│   │   │   └── webui_display.py
-│   │   └── mocks/           # Mock implementations for testing
-│   │       ├── __init__.py
-│   │       ├── mock_buttons.py
-│   │       ├── mock_leds.py
-│   │       ├── mock_display.py
-│   │       └── mock_switches.py
-│   ├── config/
-│   │   ├── __init__.py
-│   │   ├── config_loader.py  # JSON config loading and validation
-│   │   └── config_manager.py # Runtime config management
-│   └── logging/
-│       ├── __init__.py
-│       ├── logger.py         # Centralized logging setup
-│       └── formatters.py     # Log formatting
-├── apps/                     # Mini-apps directory
-│   ├── __init__.py
-│   ├── app_template/         # Template for new apps
-│   └── app_matrixrain/       # Example app
-└── tests/                    # Test structure mirrors main structure
-    ├── __init__.py
-    ├── unit/
-    ├── integration/
-    └── test_fixtures/
-```
-
-## Key Principles & Coding Guidelines
-- **Clean Architecture:** Layer separation (Presentation, Application, Domain, Infrastructure) with dependency inversion
-- **Event-Driven:** All hardware and app events are published to the event bus. Display, LED, and screen updates are event-driven (no polling in production code)
-- **Hardware Abstraction:** All hardware (buttons, LEDs, display, screen, speaker) is abstracted with real, WebUI, and mock implementations. Fallback to mocks if hardware is not detected, enabling dev/testing on any platform
-- **Hardware Parity Principle:** The WebUI is a development emulation layer that mirrors real hardware behavior exactly. Any behavior implemented for real GPIO hardware must work identically in the WebUI, and any feature developed/tested in the WebUI must work identically on real hardware. This ensures seamless development-to-production transitions
-- **App API:** Mini-apps must not access hardware directly. All hardware and display access is via the provided API object
-- **Threading:** Mini-apps run in threads, with forced termination if they exceed a timeout. Use `stop_event` for clean shutdown
-- **Configuration:** System config in `boss/config/boss_config.json`, app mappings in `boss/config/app_mappings.json` (JSON format). Co-located with main code for modularity. If missing, auto-generated with defaults
-- **Logging:** Use the central logger for all events and errors. All hardware and app events are logged for auditing
-- **Remote Management:** The system exposes a secure API for remote configuration and status
-- **Testing:** Use dependency injection and mocks for hardware in tests. Place all tests in `tests/`, mirroring the main structure. Use `pytest` and ensure coverage
-- **Extensibility:**
-  - Add new apps by creating a new subdirectory in `boss/apps/` with `main.py`, `manifest.json`, and any assets
-  - Add new hardware by extending the hardware abstraction layer (screen output is Textual-only; Rich remains an internal fallback)
-  - Register new event types with the event bus as needed
-- **Type Hints & Docstrings:** Use type hints and docstrings throughout for clarity and maintainability
-- **Validation:** Validate all configuration and user input
-- **Single Responsibility:** Keep code modular and follow the single-responsibility principle
-- **Dependency Injection:** Pass dependencies (e.g., hardware, event bus) into constructors instead of creating them inside classes
-
-## Best Practices
-- Print/log all pin assignments and a hardware startup summary at launch, indicating which devices are real or mocked.
-- Use event-driven patterns for all hardware events and outputs.
-  - Document all new apps and hardware modules. For screen output, use the `rich` library for text and simple graphics.
-- All code is inside the `boss/` package for import clarity.
-- Each app is a subdirectory in `boss/apps/` with its own code, manifest, and assets.
-  - All configuration is co-located in `boss/config/`.
-  - All documentation is in `docs/`.
-  - All tests are in `tests/`, mirroring the main structure.
-  - The HDMI screen is driven by Textual (with Rich as an internal fallback only).
-
-## App Structure
-- Each mini-app is a subdirectory under `boss/apps/`, e.g.:
-  - `main.py`: Entry point, must implement `run(stop_event, api)`
-  - `manifest.json`: Metadata (name, description, etc.) - supports both standard and legacy formats with auto-conversion
-  - `assets/`: Data files (e.g., images, sounds, JSON)
-- Apps load assets at runtime and use the API for all hardware/display access.
-- All mini-apps and tests use real or mock hardware as appropriate.
-
-## Critical UX Pattern: LED/Button Coordination
-**IMPORTANT**: Mini-apps MUST follow this LED/Button pattern for consistent user experience across BOTH real hardware and WebUI development:
-
-### LED State Rule (Hardware Parity)
-- **LEDs indicate which buttons are active/expected** (applies to both physical LEDs and WebUI LED indicators)
-- If app expects RED button press → RED LED should be ON (physical LED on Pi, virtual LED in WebUI)
-- If app expects BLUE and YELLOW buttons → BLUE and YELLOW LEDs ON, others OFF (both environments)
-- If no button expected → ALL LEDs OFF (both environments)
-- **Button presses are filtered**: If LED is OFF, button press is ignored (both physical buttons and WebUI buttons)
-- LEDs provide immediate visual feedback about available actions in both development and production
-
-### Hardware Parity Implementation
-- **Real Hardware**: Physical button press when LED is OFF → no event reaches app
-- **WebUI Development**: Virtual button click when LED is OFF → no event reaches app  
-- **Behavioral Consistency**: What works in WebUI development works identically on real hardware
-
-### Implementation Pattern
-```python
-def setup_button_state():
-    # Example: App expects Red and Blue buttons
-    api.hardware.set_led('red', True)     # RED button available
-    api.hardware.set_led('blue', True)    # BLUE button available  
-    api.hardware.set_led('yellow', False) # YELLOW not used
-    api.hardware.set_led('green', False)  # GREEN not used
-
-def cleanup_leds():
-    # Always turn off all LEDs when app exits
-    for color in ['red', 'yellow', 'green', 'blue']:
-        api.hardware.set_led(color, False)
-```
-
-### Event Subscription
-- Use `api.event_bus.subscribe('button_pressed', handler)` for button presses
-- Use `api.event_bus.subscribe('button_released', handler)` for button releases  
-- Check `event.get('button_id')` or `event.get('button')` for button color
-- Always unsubscribe in `finally` block: `api.event_bus.unsubscribe(sub_id)`
-
-## Configuration Files Structure
-
-### System Configuration (`boss/config/boss_config.json`)
-```json
-{
-  "hardware": {
-    // GPIO Pin Assignments (BCM numbering)
-    "switch_select_pins": [23, 24, 25], // Mux select [A, B, C]
-    "switch_data_pin": 8,               // Mux data out
-    "go_button_pin": 17,
-    "button_pins": {
-      "red": 26,
-      "yellow": 19,
-      "green": 13,
-      "blue": 6
-    },
-    "led_pins": {
-      "red": 21,
-      "yellow": 20,
-      "green": 16,
-      "blue": 12
-    },
-    "display_clk_pin": 5,
-    "display_dio_pin": 4,
-    "screen_width": 1024,
-    "screen_height": 600,
-    "enable_audio": true
-  },
-  "system": {
-    "apps_directory": "apps",
-    "log_level": "INFO",
-    "app_timeout_seconds": 900
-  }
-}
-```
-
-### App Mappings (`boss/config/app_mappings.json`)
-```json
-{
-  "app_mappings": {
-    "0": "list_all_apps",
-    "1": "hello_world",
-    "255": "admin_shutdown"
-  },
-  "parameters": {}
-}
-```
-
-## Workflow & Usage
-- **Production**: Always run BOSS as a systemd service for real hardware:
-  ```bash
-  sudo systemctl start boss
-  sudo journalctl -u boss -f
-  ```
-- **Development**: Use remote management from Windows/VSCode:
-  ```bash
-  python scripts/boss_remote_manager.py
-  ```
-- **Local Testing**: Run directly for development/testing:
-  ```bash
-  cd ~/boss
-  python3 -m boss.main
-  ```
-- Do NOT run from inside the boss/boss subfolder.
-- At startup, the system prints/logs all pin assignments and a hardware startup summary.
-- Each hardware device falls back to a mock if not detected, allowing seamless development and testing without hardware.
-
-## Git Workflow
-- Main branch must always be deployable.
-- Use feature branches for new development.
-- Keep PRs focused and atomic; squash and rebase as needed.
-- Ignore generated files and sensitive config.
-- Tag releases with semantic versioning.
-
-## Testing Framework
-  - Use `pytest` for all tests.
-  - Mock hardware interfaces in tests.
-  - Run tests with `pytest` and coverage.
-  - Place all tests in `tests/`.
-  - For screen output, use the `rich` library for all new development.
-
-## Remote Development Troubleshooting
-
-### Common Issues
-1. **Service Won't Start**: Check `sudo systemctl status boss` and `sudo journalctl -u boss -n 50`
-2. **Permission Denied**: Ensure user is in `gpio`, `video`, and `audio` groups
-3. **GPIO Not Working**: Install `lgpio` and check `/dev/gpiomem` permissions
-4. **Display Issues**: Verify framebuffer geometry matches config with `fbset -fb /dev/fb0 -i`
-5. **SSH Connection Issues**: Run `python scripts/boss_remote_manager.py ssh-setup` to fix authentication
-6. **Remote Manager Issues**: Update `RPI_HOST` and ensure SSH key authentication (see `docs/ssh_authentication_setup.md`)
-
-### Debug Commands
-```bash
-# Service management
-python scripts/boss_remote_manager.py status    # Check service status
-python scripts/boss_remote_manager.py logs      # View live logs
-python scripts/boss_remote_manager.py test      # Run hardware test
-python scripts/boss_remote_manager.py groups    # Check permissions
-python scripts/boss_remote_manager.py ssh-setup # Setup SSH authentication
-
-# Direct SSH access
-ssh rpi@your-pi-hostname
-sudo systemctl status boss
-sudo journalctl -u boss -f
-```
-
-### Hardware Validation
-- Use `python scripts/boss_remote_manager.py test` to validate hardware
-- Check group membership: `groups` should include `gpio video audio`
-- Verify framebuffer access: `ls -la /dev/fb0`
-- Test GPIO access: `ls -la /dev/gpiomem`
-
-## Acceptance Criteria
-- Meets all functional requirements
-- Robust to hardware errors
-- Clean shutdown support
-- No direct hardware access in apps
-- Modular and extensible design
-- Complete test coverage
-- Up-to-date documentation
-- Remote management support
-- WiFi connectivity
-- Secure API endpoints
-
-## User Stories
-- When working from User Stories, always update the user story after implementing the feature to reflect the actual implementation. Set the status, add relevant implementation notes, and any todos for future improvements.
+## Updating This Index
+Keep this file short. Link, don’t replicate. Large conceptual edits belong in their dedicated instruction file.
 
 ---
-
-*This file guides GitHub Copilot and human developers in understanding the BOSS project's architecture, patterns, and requirements. Update as needed to reflect the latest best practices and system design.*
+This index replaces the previous monolithic guidance. For historical reference see archived docs under `docs/archive/` if needed.
