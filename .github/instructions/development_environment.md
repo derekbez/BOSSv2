@@ -1,8 +1,9 @@
 # Development Environment
 
-## Python & Virtual Environment
+## Python & Virtual Environment (MANDATORY)
 - Require Python 3.11+.
-- Create local venv (`.venv`) at repo root:
+- All development and runtime commands MUST be executed inside a project-local virtual environment (`.venv`). Running outside a venv is unsupported.
+- Create local venv (`.venv`) at repo root and activate before installing dependencies:
   - Windows cmd:
     ```cmd
     python -m venv .venv
@@ -26,6 +27,7 @@
     pip install -r requirements/base.txt
     ```
 - Select interpreter in VSCode: Command Palette → "Python: Select Interpreter" → choose `.venv`.
+- Tip: If VS Code reverts the interpreter, re-select `.venv` and reload the window.
 
 ## Dependencies
 - Base requirements: GPIO (gpiozero/lgpio), TM1637, FastAPI/Uvicorn, Textual/Rich, pytest.

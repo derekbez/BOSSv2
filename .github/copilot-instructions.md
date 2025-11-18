@@ -1,6 +1,11 @@
- # B.O.S.S. Developer & Copilot Instruction Index
+# B.O.S.S. Developer & Copilot Instruction Index
 
 This file now serves as a minimal index pointing to focused guidance documents under `.github/instructions/`. Each topic is isolated for clarity and easier maintenance after the architectural flattening (facades: `core`, `hardware`, `config`, `logging`, `ui`).
+
+> IMPORTANT: Mandatory Virtual Environment
+> - Always run Python inside a project-local virtual environment (`.venv`).
+> - All commands and tooling assume an active venv; running outside a venv is unsupported and leads to inconsistent dependencies.
+> - In VS Code, select the `.venv` interpreter (Command Palette → Python: Select Interpreter).
 
 ## Core Topics
 - Architecture & Principles: `.github/instructions/architecture.md`
@@ -14,11 +19,32 @@ This file now serves as a minimal index pointing to focused guidance documents u
 - Deployment & Remote Operations: `.github/instructions/deployment_and_remote_ops.md`
 - Troubleshooting & Diagnostics: `.github/instructions/troubleshooting.md`
 
-## Quick Start
-1. Create & activate venv (`python -m venv .venv` then `.venv\Scripts\activate`).
-2. Install deps: `pip install -r requirements/base.txt`.
-3. Run locally (mock/webui hardware): `python -m boss.main`.
-4. For Raspberry Pi deployment: see deployment & remote ops doc.
+## Quick Start (Venv is mandatory)
+1. Create & activate venv, then install deps.
+	 - Windows (cmd.exe):
+		 ```cmd
+		 python -m venv .venv
+		 .venv\Scripts\activate
+		 python -m pip install --upgrade pip
+		 pip install -r requirements/base.txt
+		 ```
+	 - Windows (PowerShell):
+		 ```powershell
+		 python -m venv .venv
+		 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+		 .venv\Scripts\Activate.ps1
+		 python -m pip install --upgrade pip
+		 pip install -r requirements/base.txt
+		 ```
+	 - macOS/Linux:
+		 ```bash
+		 python3 -m venv .venv
+		 source .venv/bin/activate
+		 python -m pip install --upgrade pip
+		 pip install -r requirements/base.txt
+		 ```
+2. Run locally (webui/mock hardware): `python -m boss.main`.
+3. For Raspberry Pi deployment: see deployment & remote ops doc.
 
 ## HDMI Screen Notes
 - Textual terminal UI (no legacy Pillow framebuffer). Logical `screen_width`/`screen_height` in `boss_config.json` control layout.
