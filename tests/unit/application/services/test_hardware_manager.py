@@ -27,10 +27,9 @@ class TestHardwareManager:
     def test_initialize(self, mock_hardware_factory):
         event_bus = Mock()
     # components from fixture already return objects whose initialize() returns True
-        hm = HardwareManager(mock_hardware_factory, event_bus)
-        with patch.object(hm, '_setup_callbacks'), \
-             patch.object(hm, '_setup_webui_event_bus'), \
-             patch.object(hm, '_update_hardware_state'):
+           hm = HardwareManager(mock_hardware_factory, event_bus)
+           with patch.object(hm, '_setup_callbacks'), \
+               patch.object(hm, '_update_hardware_state'):
             hm.initialize()
 
         assert hm.buttons is not None
@@ -111,7 +110,11 @@ class TestHardwareManager:
         hm = HardwareManager(mock_hardware_factory, event_bus)
         hm.screen = Mock()
         hm.update_screen("text", "Hello World", color="white")
-        hm.screen.display_text.assert_called_with("Hello World", color="white")
+        # display_text may receive wrap/wrap_width kwargs; assert message and color present
+        call_args = hm.screen.display_text.call_args
+        assert call_args is not None
+        assert call_args[0][0] == "Hello World"
+        assert call_args[1].get('color') == 'white'
         hm.update_screen("image", "/path/to/image.png", scale=2.0)
         hm.screen.display_image.assert_called_with("/path/to/image.png", scale=2.0)
         hm.update_screen("clear", "", color="black")

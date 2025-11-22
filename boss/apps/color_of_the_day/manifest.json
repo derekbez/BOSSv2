@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "color"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "request_timeout_seconds": 6,
         "refresh_seconds": 86400

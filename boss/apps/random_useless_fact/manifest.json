@@ -8,9 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "fun",
-        "facts"
+        "novelty",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "refresh_seconds": 45,
         "request_timeout_seconds": 6

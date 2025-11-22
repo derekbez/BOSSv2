@@ -9,7 +9,7 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "weather",
+        "content",
         "network"
     ],
     "config": {

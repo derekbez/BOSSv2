@@ -12,6 +12,7 @@ This file now serves as a minimal index pointing to focused guidance documents u
 - Development Environment & Run Modes: `.github/instructions/development_environment.md`
 - Hardware Abstraction & Parity Rules: `.github/instructions/hardware_and_parity.md`
 - Mini-App Authoring & Lifecycle: `.github/instructions/app_authoring.md`
+- **Mini-App Blueprint (Authoritative Standard):** `.github/instructions/mini_app_blueprint.md`
 - Event Bus & Logging Taxonomy: `.github/instructions/event_bus_and_logging.md`
 - Configuration & Secrets Handling: `.github/instructions/configuration_and_secrets.md`
 - Web UI & Debugging Tools: `.github/instructions/web_ui_and_debugging.md`
@@ -67,8 +68,9 @@ Deprecated layered folders (`presentation`, `application`, `domain`, `infrastruc
 ## Maintenance Checklist
 - After structural changes: verify docs still align (run `grep` for legacy names).
 - After adding events: update event bus document.
-- After adding apps: ensure app authoring guidelines still apply.
+- **After adding/modifying apps:** run `python scripts/validate_manifests.py` to ensure blueprint compliance.
 - After changing hardware mapping: reflect in config & hardware parity doc.
+- Before commits: ensure tests pass (`pytest`) and manifests validate cleanly.
 
 ## Updating This Index
 Keep this file short. Link, don’t replicate. Large conceptual edits belong in their dedicated instruction file.

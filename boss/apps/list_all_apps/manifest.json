@@ -1,8 +1,14 @@
 {
-  "id": "list_all_apps",
-  "title": "Mini-App Directory Viewer",
+  "name": "list_all_apps",
   "description": "Displays a paginated list of all available mini-apps by reading their number, name, and description from configuration files.",
+  "version": "1.0.0",
+  "author": "B.O.S.S. Team",
   "entry_point": "main.py",
+  "timeout_behavior": "none",
+  "tags": [
+    "system",
+    "utility"
+  ],
   "config": {
     "entries_per_page": 15,
     "layout": "Tabular list: Number | Name | Short Description",
@@ -10,9 +16,5 @@
       "yellow",
       "blue"
     ]
-  },
-  "timeout_behavior": "none",
-  "assets_required": [],
-  "api_keys": [],
-  "instructions": "Reads app_mappings.json and each mini-app's manifest.json. Configurable entries per page. Uses yellow/blue buttons for navigation."
+  }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "Hello World",
+    "name": "hello_world",
     "description": "Comprehensive BOSS API demonstration - LED control, button handling, screen display, and event management. Perfect template for new mini-apps.",
     "version": "2.0.0",
     "author": "BOSS Team",
@@ -8,12 +8,7 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "example",
-        "template",
-        "demo",
-        "led",
-        "buttons",
-        "screen",
-        "events"
-    ]
+        "utility"
+    ],
+    "timeout_behavior": "return"
 }

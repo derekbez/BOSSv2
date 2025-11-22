@@ -53,8 +53,11 @@ def test_return_on_timeout(tmp_path):
 
 
 def test_rerun_on_timeout(tmp_path):
+    # Use a short cooldown so the rerun happens quickly in the test
     manifest = AppManifest(name="t2", description="x", version="1", author="a", timeout_seconds=1, timeout_behavior="rerun")
     app = make_app(manifest, tmp_path)
+    # Set optional cooldown attribute dynamically (manifest dataclass doesn't declare it)
+    manifest.timeout_cooldown_seconds = 0.1
     bus = DummyEventBus()
     started = []
 

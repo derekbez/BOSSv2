@@ -8,9 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "travel",
-        "flights"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "external_apis": [
         "aviationstack"
     ],

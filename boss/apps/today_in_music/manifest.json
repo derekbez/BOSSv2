@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "music"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "tag": "rock",
         "request_timeout_seconds": 6,

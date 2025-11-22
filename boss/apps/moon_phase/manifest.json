@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "astronomy"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "external_apis": [
         "ipgeolocation"
     ],

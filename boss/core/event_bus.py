@@ -82,9 +82,9 @@ class EventBus:
             payload: Event data
             source: Source of the event
         """
-        if not self._running:
-            logger.warning(f"Event bus not running, dropping event: {event_type}")
-            return
+        # Allow publishing before start: queue the event and process once started.
+        # This avoids losing early boot events (e.g., hardware init) while keeping
+        # start/stop lifecycle explicit.
         
         event = DomainEvent(
             event_type=event_type,
@@ -95,7 +95,10 @@ class EventBus:
         
         try:
             self._event_queue.put(event, timeout=1.0)
-            logger.debug(f"Published event: {event_type} from {source}")
+            if self._running:
+                logger.debug(f"Published event: {event_type} from {source}")
+            else:
+                logger.debug(f"Queued (pre-start) event: {event_type} from {source}")
         except queue.Full:
             logger.error(f"Event queue full, dropping event: {event_type}")
     

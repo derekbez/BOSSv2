@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "trends"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "backend_url": "http://localhost:3000/toptrends",
         "request_timeout_seconds": 5,

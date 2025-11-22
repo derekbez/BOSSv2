@@ -1,5 +1,5 @@
 {
-    "name": "Joke of the Moment",
+    "name": "joke_of_the_moment",
     "description": "Random joke (JokeAPI)",
     "version": "1.0.0",
     "author": "BOSS Team",
@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "jokes"
+        "novelty",
+        "network"
     ],
+    "timeout_behavior": "return",
     "external_apis": [
         "jokeapi"
     ],

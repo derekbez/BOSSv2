@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "news"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "required_env": [
         "BOSS_APP_NEWSDATA_API_KEY"
     ],

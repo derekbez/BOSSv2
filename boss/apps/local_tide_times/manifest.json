@@ -8,8 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "tides"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "latitude": 51.5074,
         "longitude": -0.1278,

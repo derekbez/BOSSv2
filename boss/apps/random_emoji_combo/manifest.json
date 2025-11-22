@@ -8,8 +8,9 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "fun"
+        "novelty"
     ],
+    "timeout_behavior": "return",
     "config": {
         "min": 2,
         "max": 5,

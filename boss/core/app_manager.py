@@ -21,26 +21,25 @@ logger = logging.getLogger(__name__)
 class AppManager(AppManagerService):
     """Service for managing mini-apps."""
     
-    def __init__(self, apps_directory: Path, event_bus, hardware_service=None, config_manager=None, system_default_backend: Optional[str] = None):
+    def __init__(self, apps_directory: Path, event_bus, hardware_service, config, system_default_backend: Optional[str] = None):
         self.apps_directory = apps_directory
         self.event_bus = event_bus
         self.hardware_service = hardware_service
-        self.config_manager = config_manager
+        self.config = config
         # Determine system default screen backend with safe fallbacks
         try:
             if system_default_backend:
                 # Prefer explicitly provided backend to avoid reloading config and duplicate logs
                 self._system_default_backend = system_default_backend
-            elif self.config_manager is not None:
-                # Fallback: query config manager if available
-                cfg = (self.config_manager.get_effective_config() 
-                       if hasattr(self.config_manager, 'get_effective_config') 
-                       else self.config_manager.get_config())
-                self._system_default_backend = getattr(cfg.hardware, 'screen_backend', 'rich')
+            elif self.config is not None:
+                # Fallback: query config if available
+                self._system_default_backend = getattr(self.config.hardware, 'screen_backend', 'rich')
             else:
-                self._system_default_backend = 'rich'
+                self._system_default_backend = 'rich' # Final fallback
         except Exception:
+            logger.warning("Could not determine system default screen backend. Falling back to 'rich'.")
             self._system_default_backend = 'rich'
+        
         # Internal state
         self._apps = {}
         # Cached lightweight summaries for fast access (number, name, description)

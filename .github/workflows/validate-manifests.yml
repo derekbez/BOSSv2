@@ -1,0 +1,39 @@
+name: Manifest Validation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'boss/apps/**/manifest.json'
+      - 'scripts/validate_manifests.py'
+      - '.github/workflows/validate-manifests.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'boss/apps/**/manifest.json'
+      - 'scripts/validate_manifests.py'
+      - '.github/workflows/validate-manifests.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Run manifest validator
+      run: |
+        python scripts/validate_manifests.py
+    
+    - name: Report validation results
+      if: failure()
+      run: |
+        echo "❌ Manifest validation failed. Please fix errors and re-run:"
+        echo "   python scripts/validate_manifests.py"
+        exit 1

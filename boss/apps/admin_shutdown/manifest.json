@@ -1,10 +1,13 @@
 {
-  "id": "admin_shutdown",
-  "title": "Graceful Application and System Shutdown",
+  "name": "admin_shutdown",
   "description": "Provides UI for shutting down, rebooting, or exiting BOSS.",
+  "version": "1.0.0",
+  "author": "B.O.S.S. Team",
   "entry_point": "main.py",
-  "config": {},
-  "assets_required": [],
-  "api_keys": [],
-  "instructions": "Triggered by mini-app number 255. Uses yellow, blue, green buttons for actions. No authentication required."
+  "timeout_behavior": "none",
+  "tags": [
+    "admin",
+    "system"
+  ],
+  "config": {}
 }

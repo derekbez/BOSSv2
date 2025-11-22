@@ -119,193 +119,119 @@ class TestDomainModelIntegration:
 class TestSystemManagerIntegration:
     """Integration tests for SystemManager."""
     
-    def test_system_manager_initialization(self, mock_config, mock_hardware_factory):
+    def test_system_manager_initialization(self, event_bus, hardware_manager, app_manager, app_runner):
         """Test SystemManager initialization with all components."""
-        event_bus = EventBus()
-        event_bus.start()
-        
-        try:
-            from boss.core import AppManager, AppRunner, HardwareManager
-            
-            # Create mock components
-            hardware_service = Mock()
-            app_manager = Mock()
-            app_runner = Mock()
-            
-            # Create system manager with dependencies
-            system_manager = SystemManager(
-                event_bus=event_bus,
-                hardware_service=hardware_service,
-                app_manager=app_manager,
-                app_runner=app_runner
-            )
-            
-            # Test that system manager was created with dependencies
-            assert system_manager.event_bus == event_bus
-            assert system_manager.hardware_service == hardware_service
-            assert system_manager.app_manager == app_manager
-            assert system_manager.app_runner == app_runner
-            
-        finally:
-            event_bus.stop()
-    
-    def test_system_manager_signal_handling(self):
-        """Test SystemManager signal handling integration."""
-        import signal
-        import threading
-        
-        event_bus = EventBus()
-        
-        # Create system manager with mock dependencies
+        # Create system manager using fixtures (mirrors main.py composition)
         system_manager = SystemManager(
             event_bus=event_bus,
-            hardware_service=Mock(),
-            app_manager=Mock(),
-            app_runner=Mock()
+            hardware_service=hardware_manager,
+            app_manager=app_manager,
+            app_runner=app_runner
         )
         
-        # Test signal handler directly
-        # Note: We test the handler function rather than actual signals
-        original_running = system_manager._running
+        # Test that system manager was created with dependencies
+        assert system_manager.event_bus == event_bus
+        assert system_manager.hardware_service == hardware_manager
+        assert system_manager.app_manager == app_manager
+        assert system_manager.app_runner == app_runner
+    
+    def test_system_manager_signal_handling(self, system_manager):
+        """Test SystemManager signal handling integration."""
+        import signal
+        
+        # Test signal handler directly (test the handler function rather than actual signals)
         system_manager._running = True
         
         # Call signal handler
         system_manager._signal_handler(signal.SIGTERM, None)
         
         # Verify shutdown was initiated
-        # (The actual implementation would call stop())
         assert system_manager._shutdown_event is not None
     
-    def test_system_manager_lifecycle(self):
-        """Test SystemManager start/stop lifecycle."""
-        event_bus = EventBus()
-        hardware_service = Mock()
-        app_manager = Mock()
-        app_runner = Mock()
-        
-        # Configure hardware service mock
-        hardware_service.hardware_factory.hardware_type = "mock"
+    def test_system_manager_lifecycle(self, event_bus, hardware_manager, app_manager, app_runner):
+        """Test SystemManager start/stop lifecycle with lifecycle event assertions."""
+        from tests.helpers.runtime import wait_for
         
         system_manager = SystemManager(
             event_bus=event_bus,
-            hardware_service=hardware_service,
+            hardware_service=hardware_manager,
             app_manager=app_manager,
             app_runner=app_runner
         )
         
-        # Test start
+        # Track lifecycle events
+        events_received = []
+        def event_handler(event_type, payload):
+            events_received.append(event_type)
+        
+        event_bus.subscribe("system_started", event_handler)
+        event_bus.subscribe("system_shutdown", event_handler)
+        
+        # Start and verify
         system_manager.start()
+        assert wait_for(lambda: system_manager._running, timeout=1.0)
+        assert wait_for(lambda: "system_started" in events_received, timeout=1.0)
         
-        # Verify start sequence
-        assert system_manager._running == True
-        hardware_service.initialize.assert_called_once()
-        app_manager.load_apps.assert_called_once()
-        hardware_service.start_monitoring.assert_called_once()
-        
-        # Test stop
+        # Stop and verify
         system_manager.stop()
-        
-        # Verify stop sequence
-        assert system_manager._running == False
-        app_runner.stop_current_app.assert_called_once()
-        hardware_service.stop_monitoring.assert_called_once()
-        hardware_service.cleanup.assert_called_once()
+        assert wait_for(lambda: not system_manager._running, timeout=1.0)
+        assert wait_for(lambda: "system_shutdown" in events_received, timeout=1.0)
 
 
 class TestServiceIntegration:
     """Integration tests for service layer components."""
     
-    def test_hardware_and_app_manager_integration(self, temp_apps_directory, temp_config_directory, mock_hardware_factory):
+    def test_hardware_and_app_manager_integration(self, event_bus, app_manager, hardware_manager):
         """Test integration between hardware events and app management."""
-        event_bus = EventBus()
-        event_bus.start()
+        from tests.helpers.runtime import wait_for
         
-        try:
-            from boss.core import AppManager, HardwareManager
-            
-            # Create managers
-            app_manager = AppManager(temp_apps_directory, event_bus)
-            app_manager._app_mappings_file = temp_config_directory / "app_mappings.json"
-            app_manager.load_apps()
-            
-            hardware_manager = HardwareManager(mock_hardware_factory, event_bus)
-            hardware_manager.initialize()
-            
-            # Simulate hardware switch change that should trigger app lookup
-            switch_events = []
-            
-            def switch_handler(event_type, payload):
-                if event_type == "switch_changed":
-                    switch_events.append(payload)
-                    # Simulate looking up app for new switch value
-                    app = app_manager.get_app_by_switch_value(payload.get("new_value", 0))
-                    if app:
-                        # Simulate app found event
-                        event_bus.publish("app_selected", {
-                            "app_name": app.manifest.name,
-                            "switch_value": app.switch_value
-                        })
-            
-            event_bus.subscribe("switch_changed", switch_handler)
-            
-            # Simulate switch change
-            event_bus.publish("switch_changed", {"old_value": 0, "new_value": 0})
-            
-            import time
-            time.sleep(0.1)  # Let events process
-            
-            # Verify integration worked
-            assert len(switch_events) == 1
-            assert switch_events[0]["new_value"] == 0
-            
-        finally:
-            event_bus.stop()
+        # Simulate hardware switch change that should trigger app lookup
+        switch_events = []
+        
+        def switch_handler(event_type, payload):
+            switch_events.append(payload)
+            # Simulate looking up app for new switch value
+            app = app_manager.get_app_by_switch_value(payload.get("new_value", 0))
+            if app:
+                # Simulate app found event
+                event_bus.publish("app_selected", {
+                    "app_name": app.manifest.name,
+                    "switch_value": app.switch_value
+                }, "test")
+        
+        event_bus.subscribe("switch_changed", switch_handler)
+        
+        # Simulate switch change
+        event_bus.publish("switch_changed", {"old_value": 0, "new_value": 0}, "test")
+        
+        # Event-driven wait instead of sleep
+        assert wait_for(lambda: len(switch_events) == 1, timeout=0.5)
+        assert switch_events[0]["new_value"] == 0
     
-    def test_webui_and_system_integration(self, mock_config):
-        """Test WebUI integration with system events."""
-        event_bus = EventBus()
-        event_bus.start()
+    def test_webui_and_system_integration(self, event_bus):
+        """Test WebUI integration with system events and lifecycle assertions."""
+        from tests.helpers.runtime import wait_for
         
-        try:
-            # Test WebUI functionality through the presentation layer
-            # Track events that would be relevant to WebUI
-            webui_relevant_events = []
-            
-            def webui_handler(event_type, payload):
-                if event_type in ["app_started", "app_stopped", "hardware_status", "system_started"]:
-                    webui_relevant_events.append((event_type, payload))
-            
-            # Subscribe to events that WebUI would care about
-            event_bus.subscribe("app_started", webui_handler)
-            event_bus.subscribe("app_stopped", webui_handler)
-            event_bus.subscribe("hardware_status", webui_handler)
-            event_bus.subscribe("system_started", webui_handler)
-            
-            # Simulate system events that WebUI should respond to
-            event_bus.publish("app_started", {
-                "app_name": "Test App",
-                "switch_value": 42
-            })
-            
-            event_bus.publish("hardware_status", {
-                "component": "display",
-                "status": "active",
-                "value": 123
-            })
-            
-            event_bus.publish("system_started", {
-                "hardware_type": "webui"
-            })
-            
-            import time
-            time.sleep(0.1)  # Let events process
-            
-            # Verify WebUI-relevant events were captured
-            assert len(webui_relevant_events) == 3
-            event_types = [event[0] for event in webui_relevant_events]
-            assert "app_started" in event_types
-            assert "hardware_status" in event_types
-            assert "system_started" in event_types
-            
-        finally:
-            event_bus.stop()
+        # Track events that would be relevant to WebUI
+        webui_relevant_events = []
+        
+        def webui_handler(event_type, payload):
+            webui_relevant_events.append((event_type, payload))
+        
+        # Subscribe to lifecycle events that WebUI would care about
+        event_bus.subscribe("app_started", webui_handler)
+        event_bus.subscribe("app_stopped", webui_handler)
+        event_bus.subscribe("hardware_status", webui_handler)
+        event_bus.subscribe("system_started", webui_handler)
+        
+        # Simulate system events that WebUI should respond to
+        event_bus.publish("app_started", {"app_name": "Test App", "switch_value": 42}, "test")
+        event_bus.publish("hardware_status", {"component": "display", "status": "active", "value": 123}, "test")
+        event_bus.publish("system_started", {"hardware_type": "webui"}, "test")
+        
+        # Event-driven wait for all events
+        assert wait_for(lambda: len(webui_relevant_events) == 3, timeout=0.5)
+        event_types = [event[0] for event in webui_relevant_events]
+        assert "app_started" in event_types
+        assert "hardware_status" in event_types
+        assert "system_started" in event_types

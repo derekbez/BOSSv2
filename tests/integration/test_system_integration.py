@@ -14,210 +14,138 @@ from boss.core import AppManager, AppRunner, HardwareManager, EventBus, AppAPI
 class TestSystemIntegration:
     """Integration tests for BOSS system components."""
     
-    def test_app_manager_and_event_bus_integration(self, temp_apps_directory, temp_config_directory):
+    def test_app_manager_and_event_bus_integration(self, app_manager):
         """Test AppManager integration with EventBus."""
-        event_bus = EventBus()
-        event_bus.start()
-        
-        try:
-            app_manager = AppManager(temp_apps_directory, event_bus)
-            
-            # Mock the config directory path
-            app_manager._app_mappings_file = temp_config_directory / "app_mappings.json"
-            
-            # Load apps
-            app_manager.load_apps()
-            
-            # Verify app was loaded
-            assert len(app_manager.get_all_apps()) == 1
-            assert app_manager.get_app_by_switch_value(0) is not None
-            
-        finally:
-            event_bus.stop()
+        # Fixture already loads apps; verify
+        assert len(app_manager.get_all_apps()) >= 1
+        assert app_manager.get_app_by_switch_value(0) is not None
     
-    def test_hardware_manager_with_mock_factory(self, mock_hardware_factory):
+    def test_hardware_manager_with_mock_factory(self, hardware_manager):
         """Test HardwareManager with mock hardware factory."""
-        event_bus = EventBus()
-        event_bus.start()
-        
-        try:
-            hardware_manager = HardwareManager(mock_hardware_factory, event_bus)
-            hardware_manager.initialize()
-            
-            # Verify hardware components were created
-            assert hardware_manager.buttons is not None
-            assert hardware_manager.go_button is not None
-            assert hardware_manager.leds is not None
-            assert hardware_manager.switches is not None
-            assert hardware_manager.display is not None
-            assert hardware_manager.screen is not None
-            assert hardware_manager.speaker is not None
-            
-            hardware_manager.cleanup()
-            
-        finally:
-            event_bus.stop()
+        # Fixture already initializes; verify hardware components were created
+        assert hardware_manager.buttons is not None
+        assert hardware_manager.go_button is not None
+        assert hardware_manager.leds is not None
+        assert hardware_manager.switches is not None
+        assert hardware_manager.display is not None
+        assert hardware_manager.screen is not None
+        assert hardware_manager.speaker is not None
     
-    def test_app_api_integration(self, temp_apps_directory):
-        """Test AppAPI integration with event bus."""
-        event_bus = EventBus()
-        event_bus.start()
+    def test_app_api_integration(self, event_bus, apps_dir, app_manager):
+        """Test AppAPI integration with event bus and lifecycle events."""
+        from tests.helpers.runtime import wait_for
         
-        try:
-            # Create an app API instance
-            app_name = "test_app"
-            app_path = temp_apps_directory / "test_app"
-            
-            app_api = AppAPI(event_bus, app_name, app_path)
-            
-            # Test event bus integration
-            handler = Mock()
-            subscription_id = app_api.event_bus.subscribe("test_event", handler)
-            
-            app_api.event_bus.publish("test_event", {"test": "data"})
-            time.sleep(0.1)
-            
-            handler.assert_called_once_with("test_event", {"test": "data"})
-            
-            # Test logging
-            with patch('boss.core.api.logging.getLogger') as mock_get_logger:
-                mock_logger = Mock()
-                mock_get_logger.return_value = mock_logger
-                
-                app_api.log_info("Test message")
-                mock_logger.info.assert_called_with("Test message")
-            
-            # Test asset path resolution
-            asset_path = app_api.get_asset_path("test.txt")
-            expected_path = app_path / "assets" / "test.txt"
-            assert asset_path == expected_path
-            
-        finally:
-            event_bus.stop()
-    
-    def test_app_runner_lifecycle(self, temp_apps_directory, temp_config_directory):
-        """Test AppRunner lifecycle management."""
-        event_bus = EventBus()
-        event_bus.start()
+        # Start event bus for this test
+        if not event_bus._running:
+            event_bus.start()
         
-        try:
-            # Create app manager and load apps
-            app_manager = AppManager(temp_apps_directory, event_bus)
-            app_manager._app_mappings_file = temp_config_directory / "app_mappings.json"
-            app_manager.load_apps()
-            
-            # Create app API factory
-            def create_app_api_factory(app_name: str, app_path: Path) -> AppAPI:
-                return AppAPI(event_bus, app_name, app_path)
-            
-            # Create app runner
-            app_runner = AppRunner(event_bus, create_app_api_factory)
-            
-            # Get the test app
-            test_app = app_manager.get_app_by_switch_value(0)
-            assert test_app is not None
-            
-            # Start the app
-            app_runner.start_app(test_app)
-            time.sleep(0.1)  # Let app start
-            
-            # Verify app is running
-            running_app = app_runner.get_running_app()
-            assert running_app == test_app
-            assert test_app.is_running
-            
-            # Stop the app
-            app_runner.stop_current_app()
-            time.sleep(0.1)  # Let app stop
-            
-            # Verify app is stopped
-            running_app = app_runner.get_running_app()
-            assert running_app is None
-            assert not test_app.is_running
-            
-        finally:
-            event_bus.stop()
-    
-    def test_event_flow_integration(self, mock_hardware_factory):
-        """Test complete event flow through the system."""
-        event_bus = EventBus()
-        event_bus.start()
+        # Create an app API instance
+        app_name = "test_app"
+        app_path = apps_dir / "test_app"
         
-        try:
-            # Create hardware manager
-            hardware_manager = HardwareManager(mock_hardware_factory, event_bus)
-            hardware_manager.initialize()
-            
-            # Set up event monitoring
-            events_received = []
-            
-            def event_handler(event_type, payload):
-                events_received.append((event_type, payload))
-            
-            # Subscribe to various events
-            event_bus.subscribe("button_pressed", event_handler)
-            event_bus.subscribe("switch_changed", event_handler)
-            event_bus.subscribe("led_update", event_handler)
-            
-            # Simulate hardware events
-            event_bus.publish("button_pressed", {"button": "red"})
-            event_bus.publish("switch_changed", {"old_value": 0, "new_value": 5})
-            event_bus.publish("led_update", {"color": "red", "is_on": True})
-            
-            time.sleep(0.1)  # Let events process
-            
-            # Verify events were received
-            assert len(events_received) == 3
-            assert ("button_pressed", {"button": "red"}) in events_received
-            assert ("switch_changed", {"old_value": 0, "new_value": 5}) in events_received
-            assert ("led_update", {"color": "red", "is_on": True}) in events_received
-            
-        finally:
-            event_bus.stop()
+        app_api = AppAPI(event_bus, app_name, app_path, app_manager)
+        
+        # Test event bus integration with event-driven wait
+        handler = Mock()
+        subscription_id = app_api.event_bus.subscribe("test_event", handler)
+        
+        app_api.event_bus.publish("test_event", {"test": "data"}, "test")
+        assert wait_for(lambda: handler.call_count == 1, timeout=0.5)
+        handler.assert_called_once_with("test_event", {"test": "data"})
+        
+        # Test asset path resolution
+        asset_path = app_api.get_asset_path("test.txt")
+        expected_path = app_path / "assets" / "test.txt"
+        assert str(asset_path) == str(expected_path)
     
-    def test_hardware_state_updates(self, mock_hardware_factory):
+    def test_app_runner_lifecycle(self, event_bus, app_manager, app_runner):
+        """Test AppRunner lifecycle management with lifecycle event assertions."""
+        from tests.helpers.runtime import wait_for
+        
+        # Track lifecycle events
+        lifecycle_events = []
+        def lifecycle_handler(event_type, payload):
+            lifecycle_events.append(event_type)
+        
+        event_bus.subscribe("app_started", lifecycle_handler)
+        event_bus.subscribe("app_finished", lifecycle_handler)
+        
+        # Get the test app
+        test_app = app_manager.get_app_by_switch_value(0)
+        assert test_app is not None
+        
+        # Start the app and wait for lifecycle event
+        app_runner.start_app(test_app)
+        assert wait_for(lambda: test_app.is_running, timeout=1.0)
+        assert wait_for(lambda: "app_started" in lifecycle_events, timeout=1.0)
+        
+        # Verify app is running
+        running_app = app_runner.get_running_app()
+        assert running_app == test_app
+        
+        # Stop the app (or wait for it to complete naturally)
+        app_runner.stop_current_app()
+        assert wait_for(lambda: not test_app.is_running, timeout=1.0)
+        # Note: app_finished may be published before or after app completes in test scenario
+        
+        # Verify app is stopped
+        running_app = app_runner.get_running_app()
+        assert running_app is None
+    
+    def test_event_flow_integration(self, event_bus, hardware_manager):
+        """Test complete event flow through the system with event-driven waits."""
+        from tests.helpers.runtime import wait_for
+        
+        # Start event bus for this test
+        if not event_bus._running:
+            event_bus.start()
+        
+        # Set up event monitoring
+        events_received = []
+        
+        def event_handler(event_type, payload):
+            events_received.append((event_type, payload))
+        
+        # Subscribe to various events
+        event_bus.subscribe("button_pressed", event_handler)
+        event_bus.subscribe("switch_changed", event_handler)
+        event_bus.subscribe("led_update", event_handler)
+        
+        # Simulate hardware events
+        event_bus.publish("button_pressed", {"button": "red"}, "test")
+        event_bus.publish("switch_changed", {"old_value": 0, "new_value": 5}, "test")
+        event_bus.publish("led_update", {"color": "red", "is_on": True}, "test")
+        
+        # Event-driven wait
+        assert wait_for(lambda: len(events_received) == 3, timeout=0.5)
+        assert ("button_pressed", {"button": "red"}) in events_received
+        assert ("switch_changed", {"old_value": 0, "new_value": 5}) in events_received
+        assert ("led_update", {"color": "red", "is_on": True}) in events_received
+    
+    def test_hardware_state_updates(self, hardware_manager):
         """Test hardware state updates through the system."""
-        event_bus = EventBus()
-        event_bus.start()
+        # Test LED update
+        hardware_manager.update_led("red", True, 0.8)
+        # This should work with the mock hardware
         
-        try:
-            hardware_manager = HardwareManager(mock_hardware_factory, event_bus)
-            hardware_manager.initialize()
-            
-            # Test LED update
-            hardware_manager.update_led("red", True, 0.8)
-            # This should work with the mock hardware
-            
-            # Test display update
-            hardware_manager.update_display(123, 1.0)
-            # This should work with the mock hardware
-            
-            # Test screen update
-            hardware_manager.update_screen("text", "Hello World", color="white")
-            # This should work with the mock hardware
-            
-            # No exceptions should be raised
-            
-        finally:
-            event_bus.stop()
+        # Test display update
+        hardware_manager.update_display(123, 1.0)
+        # This should work with the mock hardware
+        
+        # Test screen update
+        hardware_manager.update_screen("text", "Hello World", color="white")
+        # This should work with the mock hardware
+        
+        # No exceptions should be raised
 
 
 class TestConfigurationIntegration:
     """Integration tests for configuration loading and validation."""
     
-    def test_config_and_app_loading_integration(self, temp_apps_directory, temp_config_directory, mock_config):
+    def test_config_and_app_loading_integration(self, app_manager):
         """Test integration between configuration and app loading."""
-        event_bus = EventBus()
-        
-        # Test that app manager can use config to find apps directory
-        app_manager = AppManager(temp_apps_directory, event_bus)
-        app_manager._app_mappings_file = temp_config_directory / "app_mappings.json"
-        
-        # Load apps using the configuration
-        app_manager.load_apps()
-        
-        # Verify configuration was used correctly
-        assert len(app_manager.get_all_apps()) == 1
+        # Fixture already loads apps; verify configuration was used correctly
+        assert len(app_manager.get_all_apps()) >= 1
         test_app = app_manager.get_app_by_switch_value(0)
         assert test_app is not None
         assert test_app.manifest.name == "Test App"

@@ -14,10 +14,11 @@ if str(project_root) not in sys.path:
 
 # Import after path setup
 from boss.core.models import BossConfig, HardwareConfig, SystemConfig
-from boss.core import EventBus
+from boss.core import EventBus, AppManager, AppRunner, HardwareManager, SystemManager, AppAPI
 from boss.hardware import (
     MockButtons, MockGoButton, MockLeds, MockSwitches, MockDisplay, MockScreen, MockSpeaker
 )
+from boss.hardware import MockHardwareFactory
 
 
 @pytest.fixture
@@ -66,6 +67,82 @@ def mock_event_bus():
     return Mock(spec=EventBus)
 
 
+# ----------------------------------------------------------------------------
+# New standardized fixtures (preferred for new tests)
+# ----------------------------------------------------------------------------
+
+@pytest.fixture
+def event_bus():
+    """Real EventBus instance (started, auto-stopped)."""
+    bus = EventBus(queue_size=256)
+    bus.start()
+    yield bus
+    try:
+        bus.stop()
+    except Exception:
+        pass
+
+
+@pytest.fixture
+def boss_config(mock_config):  # reuse existing mock_config
+    """Alias to legacy mock_config for clearer naming in new tests."""
+    return mock_config
+
+
+@pytest.fixture
+def hardware_factory(boss_config):
+    """Mock hardware factory built from BossConfig."""
+    return MockHardwareFactory(boss_config.hardware)
+
+
+@pytest.fixture
+def hardware_manager(hardware_factory, event_bus):
+    """Initialized HardwareManager (not yet started monitoring)."""
+    mgr = HardwareManager(hardware_factory, event_bus)
+    mgr.initialize()
+    return mgr
+
+
+@pytest.fixture
+def apps_dir(temp_apps_directory):  # reuse existing temp app scaffold
+    return temp_apps_directory
+
+
+@pytest.fixture
+def app_manager(apps_dir, event_bus, hardware_manager, boss_config, tmp_path):
+    """AppManager loaded with apps from apps_dir."""
+    manager = AppManager(
+        apps_directory=apps_dir,
+        event_bus=event_bus,
+        hardware_service=hardware_manager,
+        config=boss_config,
+        system_default_backend=getattr(boss_config.hardware, 'screen_backend', 'rich'),
+    )
+    # Point to app_mappings.json created by temp_apps_directory
+    manager._app_mappings_file = tmp_path / "config" / "app_mappings.json"
+    manager.load_apps()
+    return manager
+
+
+@pytest.fixture
+def app_api_factory(event_bus, app_manager):
+    """Factory producing AppAPI instances for given app name/path."""
+    def _factory(name: str, path: Path):
+        return AppAPI(event_bus=event_bus, app_name=name, app_path=path, app_manager=app_manager)
+    return _factory
+
+
+@pytest.fixture
+def app_runner(event_bus, app_api_factory):
+    return AppRunner(event_bus=event_bus, app_api_factory=app_api_factory)
+
+
+@pytest.fixture
+def system_manager(event_bus, hardware_manager, app_manager, app_runner):
+    mgr = SystemManager(event_bus=event_bus, hardware_service=hardware_manager, app_manager=app_manager, app_runner=app_runner)
+    return mgr
+
+
 @pytest.fixture
 def mock_hardware_factory():
     """Create a mock hardware factory with mock hardware components."""
@@ -110,9 +187,16 @@ def temp_apps_directory(tmp_path):
     main_py.write_text('''def run(stop_event, api):
     """Test app main function."""
     api.log_info("Test app started")
-    stop_event.wait()
-    api.log_info("Test app stopped")
+    import time
+    time.sleep(0.05)  # Brief delay to simulate work
+    api.log_info("Test app finished")
 ''')
+    
+    # Create app_mappings.json in config directory
+    config_dir = tmp_path / "config"
+    config_dir.mkdir(exist_ok=True)
+    app_mappings_file = config_dir / "app_mappings.json"
+    app_mappings_file.write_text('''{"app_mappings": {"0": "test_app"}, "parameters": {}}''')
     
     return apps_dir
 

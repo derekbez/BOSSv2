@@ -9,6 +9,7 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
+        "utility",
         "network"
     ],
     "config": {

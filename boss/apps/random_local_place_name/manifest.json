@@ -8,7 +8,9 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "places"
+        "novelty",
+        "utility"
     ],
+    "timeout_behavior": "return",
     "config": {}
 }

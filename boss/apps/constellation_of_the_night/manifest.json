@@ -8,9 +8,9 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "astronomy",
-        "placeholder"
+        "content"
     ],
+    "timeout_behavior": "return",
     "config": {
         "message": "Orion visible tonight!"
     }

@@ -86,7 +86,7 @@ def test_preferred_backend_applied_and_restored(tmp_path: Path):
     event_bus = EventBus(queue_size=100)
     hw_factory = MockHardwareFactory(cfg.hardware)
     hardware = HardwareManager(hw_factory, event_bus)
-    app_manager = AppManager(apps_dir, event_bus, hardware_service=hardware)
+    app_manager = AppManager(apps_dir, event_bus, hardware_service=hardware, config=cfg)
     app_manager.load_apps()
     runner = AppRunner(event_bus, lambda n, p: Mock())
 
@@ -133,11 +133,11 @@ def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: 
     event_bus = EventBus(queue_size=100)
     hw_factory = MockHardwareFactory(cfg.hardware)
     hardware = HardwareManager(hw_factory, event_bus)
-    app_manager = AppManager(apps_dir, event_bus, hardware_service=hardware)
+    app_manager = AppManager(apps_dir, event_bus, hardware_service=hardware, config=cfg)
     app_manager.load_apps()
 
     # Minimal AppAPI factory (not used by this simple app)
-    app_api_factory = lambda name, path: AppAPI(event_bus, name, path)
+    app_api_factory = lambda name, path: AppAPI(event_bus, name, path, app_manager)
     runner = AppRunner(event_bus, app_api_factory)
 
     # System manager
@@ -158,24 +158,12 @@ def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: 
         simulate(1)
         event_bus.publish("app_launch_requested", {}, "test")
 
-        # During run, backend should remain textual (no switching)
-        import time
-        deadline = time.time() + 0.5
-        seen_textual = False
-        while time.time() < deadline:
-            if hardware.get_current_screen_backend() == "textual":
-                seen_textual = True
-                break
-            time.sleep(0.02)
-        assert seen_textual, "Expected backend to remain textual during app run"
+            # During run, backend should remain textual (no switching) using event-driven wait
+        from tests.helpers.runtime import wait_for
+        assert wait_for(lambda: hardware.get_current_screen_backend() == "textual", timeout=0.5), "Expected backend to remain textual during app run"
 
-        # After app finishes, backend should restore to textual
-        deadline = time.time() + 2.0
-        while time.time() < deadline:
-            if hardware.get_current_screen_backend() == "textual":
-                break
-            time.sleep(0.02)
-        assert hardware.get_current_screen_backend() == "textual"
+        # After app finishes, backend should restore to textual (app is short-lived)
+        assert wait_for(lambda: hardware.get_current_screen_backend() == "textual", timeout=2.0), "Backend should restore to textual after app completion"
     finally:
         # Stop system and event bus
         system.stop()

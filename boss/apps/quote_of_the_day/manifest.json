@@ -8,9 +8,10 @@
     "requires_network": true,
     "requires_audio": false,
     "tags": [
-        "quotes",
-        "text"
+        "content",
+        "network"
     ],
+    "timeout_behavior": "return",
     "config": {
         "source": "quotable",
         "category": "motivational"

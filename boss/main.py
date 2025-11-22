@@ -62,37 +62,46 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     log_hardware_summary(hardware_factory, config.hardware)
     
     # Create event bus
-    event_bus = EventBus(queue_size=config.system.event_queue_size)
+    # Use positional arg to avoid analyzer confusion on dynamic exports
+    event_bus = EventBus(config.system.event_queue_size)
     
     # Create services
-    hardware_service = HardwareManager(hardware_factory, event_bus)
+    hardware_manager = HardwareManager(hardware_factory, event_bus)
     
     apps_directory = Path(__file__).parent / config.system.apps_directory
-    # Pass hardware_service and config module directly for any downstream helpers
-    from boss import config as config_module
 
     app_manager = AppManager(
-        apps_directory,
-        event_bus,
-        hardware_service,
-        config_module,
+        apps_directory=apps_directory,
+        event_bus=event_bus,
+        hardware_service=hardware_manager,
+        config=config,
         system_default_backend=getattr(config.hardware, 'screen_backend', 'textual'),
     )
     
     # Create app API factory function
     def create_app_api_factory(app_name: str, app_path: Path) -> AppAPI:
-        return AppAPI(event_bus, app_name, app_path, app_manager)
+        return AppAPI(
+            event_bus=event_bus, 
+            app_name=app_name, 
+            app_path=app_path, 
+            app_manager=app_manager
+        )
     
-    app_runner = AppRunner(event_bus, create_app_api_factory)
+    app_runner = AppRunner(event_bus=event_bus, app_api_factory=create_app_api_factory)
     
     # Create system manager
-    system_manager = SystemManager(event_bus, hardware_service, app_manager, app_runner)
+    system_manager = SystemManager(
+        event_bus=event_bus, 
+        hardware_service=hardware_manager, 
+        app_manager=app_manager, 
+        app_runner=app_runner
+    )
     
     # Set up event handlers
     # - SystemEventHandler: bridges core events (e.g., switch_changed -> display_update)
     # - HardwareEventHandler: applies output events to hardware
-    _ = SystemEventHandler(event_bus)
-    _ = HardwareEventHandler(event_bus, hardware_service)
+    _ = SystemEventHandler(event_bus=event_bus)
+    _ = HardwareEventHandler(event_bus=event_bus, hardware_service=hardware_manager)
     
     return system_manager, config
 

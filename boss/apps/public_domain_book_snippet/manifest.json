@@ -8,8 +8,9 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "books"
+        "content"
     ],
+    "timeout_behavior": "return",
     "config": {
         "lines": 5,
         "shuffle_seconds": 600

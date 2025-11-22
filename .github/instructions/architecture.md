@@ -23,13 +23,18 @@ boss/
 - Deterministic Startup: `main.py` composes services; no hidden side-effects in module import.
 
 ## Core Runtime Flow
-1. Load & validate config.
-2. Initialize logging.
-3. Create hardware factory (gpio/webui/mock selection).
-4. Create `EventBus`.
-5. Instantiate managers: `HardwareManager`, `AppManager`, `AppRunner`, `SystemManager`.
-6. Register event handlers (system + hardware output).
-7. System waits on shutdown signal while apps run in threads.
+1.  `main.py` acts as the composition root.
+2.  Load & validate configuration (`boss.config`).
+3.  Initialize logging (`boss.logging`).
+4.  Create a hardware factory based on config (`boss.hardware`). This factory provides access to specific hardware implementations (GPIO, WebUI, or mock).
+5.  Instantiate the central `EventBus` (`boss.core`).
+6.  Instantiate core services, injecting dependencies explicitly:
+    -   `HardwareManager`: Manages hardware components provided by the factory.
+    -   `AppManager`: Discovers and manages the lifecycle of mini-apps.
+    -   `AppRunner`: Executes mini-apps in separate threads.
+    -   `SystemManager`: Orchestrates the overall system state and startup/shutdown sequences.
+7.  Register event handlers (`SystemEventHandler`, `HardwareEventHandler`) to connect system logic and hardware actions.
+8.  The `SystemManager` starts all services. The system then runs, processing events and app logic until a shutdown signal is received.
 
 ## Event Model (Simplified)
 Categories:

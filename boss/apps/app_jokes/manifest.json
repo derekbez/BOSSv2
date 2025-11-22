@@ -1,5 +1,5 @@
 {
-    "name": "Jokes",
+    "name": "app_jokes",
     "description": "Displays random jokes; Yellow button cycles to next joke.",
     "version": "1.0.0",
     "author": "BOSS Team",
@@ -8,9 +8,9 @@
     "requires_network": false,
     "requires_audio": false,
     "tags": [
-        "fun",
-        "static"
+        "novelty"
     ],
+    "timeout_behavior": "return",
     "config": {
         "shuffle": true
     }

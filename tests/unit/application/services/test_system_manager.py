@@ -204,13 +204,17 @@ class TestSystemManager:
         
         # Simulate shutdown already in progress
         system_manager._shutdown_event.set()
-        
-        with patch('boss.core.system_manager.sys.exit') as mock_exit:
-            with patch('boss.core.system_manager.logger') as mock_logger:
-                system_manager._signal_handler(signal.SIGINT, None)
-        
-        mock_logger.warning.assert_called_with("Force exit: Ctrl+C pressed during shutdown")
-        mock_exit.assert_called_with(1)
+
+        # Patch os._exit and sleep so the force-exit thread runs without delay
+        with patch('boss.core.system_manager.os._exit') as mock_exit, \
+             patch('time.sleep', return_value=None), \
+             patch('boss.core.system_manager.logger') as mock_logger:
+            system_manager._signal_handler(signal.SIGINT, None)
+
+        # The force-exit path should have tried to exit the process
+        assert mock_exit.called
+        # The force-exit thread logs a warning when forcing exit
+        mock_logger.warning.assert_any_call('Forcing exit due to shutdown timeout')
     
     def test_start_webui_if_needed_webui_type(self):
         """Test starting WebUI for webui hardware type."""
