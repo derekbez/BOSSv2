@@ -32,7 +32,7 @@ API_URL = "https://www.worldtides.info/api"
 def fetch_tides(api_key: str | None, lat: float, lon: float, timeout: float = 6.0):
     if requests is None:
         raise RuntimeError("requests not available")
-    params = {"lat": lat, "lon": lon, "extremes": ""}
+    params = {"lat": lat, "lon": lon, "extremes": "true"}
     if api_key:
         params["key"] = api_key
     r = requests.get(API_URL, params=params, timeout=timeout)
