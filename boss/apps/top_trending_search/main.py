@@ -57,7 +57,7 @@ def run(stop_event, api):
             trend = fetch_trend(url, timeout=timeout)
             api.screen.display_text(f"{title}\n\n{trend}", align="left")
         except Exception as e:
-            api.screen.display_text(f"{title}\n\nErr: {e}", align="left")
+            api.screen.display_text(f"{title}\n\nErr: {_summarize_error(e)}", align="left")
 
     def on_button(event_type, payload):
         nonlocal last_fetch
