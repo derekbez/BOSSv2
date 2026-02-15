@@ -67,7 +67,7 @@ def run(stop_event: Event, api: Any) -> None:
     except Exception:
         pass
 
-    subs.append(api.event_bus.subscribe("button_pressed", on_button))
+    subs.append(api.event_bus.subscribe("input.button.pressed", on_button))
 
     try:
         while not stop_event.wait(0.5):

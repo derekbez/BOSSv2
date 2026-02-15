@@ -98,7 +98,7 @@ def create_boss_system(force_hardware_type: Optional[str] = None):
     )
     
     # Set up event handlers
-    # - SystemEventHandler: bridges core events (e.g., switch_changed -> display_update)
+    # - SystemEventHandler: bridges core events (e.g., input.switch.changed -> output.display.updated)
     # - HardwareEventHandler: applies output events to hardware
     _ = SystemEventHandler(event_bus=event_bus)
     _ = HardwareEventHandler(event_bus=event_bus, hardware_service=hardware_manager)

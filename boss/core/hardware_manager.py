@@ -36,6 +36,7 @@ class HardwareManager(HardwareService):
         
         # State
         self._hardware_state = HardwareState.create_default()
+        self._led_states = {"red": False, "yellow": False, "green": False, "blue": False}
     
     def initialize(self) -> None:
         """Initialize all hardware components."""
@@ -80,6 +81,12 @@ class HardwareManager(HardwareService):
             try:
                 if self.display and hasattr(self.display, 'show_text'):
                     self.display.show_text("BOSS")
+                    # Ensure UI clients see the startup cue (hardware does not re-publish)
+                    try:
+                        if self.event_bus:
+                            self.event_bus.publish("output.display.updated", {"text": "BOSS", "type": "text"}, "system")
+                    except Exception:
+                        pass
             except Exception as e:
                 logger.debug(f"Startup 7-seg cue skipped: {e}")
             
@@ -192,22 +199,29 @@ class HardwareManager(HardwareService):
     def _on_go_button_pressed(self) -> None:
         """Handle Go button press."""
         logger.debug("Go button pressed")
-        self.event_bus.publish("go_button_pressed", {}, "hardware")
+        self.event_bus.publish("input.go_button.pressed", {}, "hardware")
     
     def _on_button_pressed(self, color: str) -> None:
         """Handle color button press."""
         logger.debug(f"{color} button pressed")
-        self.event_bus.publish("button_pressed", {"button": color}, "hardware")
+        led_enabled = self._led_states.get(color, False)
+        if not led_enabled:
+            logger.debug("Ignoring %s button press; LED is off", color)
+            return
+        self.event_bus.publish("input.button.pressed", {"button": color}, "hardware")
     
     def _on_button_released(self, color: str) -> None:
         """Handle color button release."""
         logger.debug(f"{color} button released")
-        self.event_bus.publish("button_released", {"button": color}, "hardware")
+        if not self._led_states.get(color, False):
+            logger.debug("Ignoring %s button release; LED is off", color)
+            return
+        self.event_bus.publish("input.button.released", {"button": color}, "hardware")
     
     def _on_switch_changed(self, old_value: int, new_value: int) -> None:
         """Handle switch change."""
         logger.debug(f"Switches changed: {old_value} -> {new_value}")
-        self.event_bus.publish("switch_changed", {
+        self.event_bus.publish("input.switch.changed", {
             "old_value": old_value,
             "new_value": new_value
         }, "hardware")
@@ -276,6 +290,7 @@ class HardwareManager(HardwareService):
             if self.leds:
                 from boss.core.models import LedColor
                 led_color = LedColor(color)
+                self._led_states[color] = bool(is_on)
                 self.leds.set_led(led_color, is_on, brightness)
                 logger.debug(f"LED {color} {'on' if is_on else 'off'}")
         except Exception as e:

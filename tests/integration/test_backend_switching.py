@@ -156,7 +156,7 @@ def test_system_manager_applies_and_restores_backend_on_app_lifecycle(tmp_path: 
         simulate = getattr(hardware.switches, "simulate_switch_change", None)
         assert callable(simulate), "Mock switches missing simulate_switch_change"
         simulate(1)
-        event_bus.publish("app_launch_requested", {}, "test")
+        event_bus.publish("system.app.launch.requested", {}, "test")
 
             # During run, backend should remain textual (no switching) using event-driven wait
         from tests.helpers.runtime import wait_for

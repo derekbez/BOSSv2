@@ -273,14 +273,14 @@ Press any button to exit"""
     
     # Add button handler for exit
     def on_button_press(event_type, event):
-        if event_type == 'button_pressed':
+        if event_type == 'input.button.pressed':
             # Any button press should exit
             button = event.get('button_id') or event.get('button')
             api.log_info(f"Admin panel exit requested via {button} button")
             stop_event.set()
     
     # Subscribe to button events
-    button_sub_id = api.event_bus.subscribe('button_pressed', on_button_press)
+    button_sub_id = api.event_bus.subscribe('input.button.pressed', on_button_press)
     
     # Start HTTP server
     server = HTTPServer(("0.0.0.0", WEB_PORT), AdminHandler)

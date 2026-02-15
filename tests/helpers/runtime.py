@@ -21,11 +21,10 @@ def wait_for_app_started(event_bus, app_name: str, timeout: float = 2.0) -> bool
     """Wait for lifecycle event that an app has started."""
     started = {"flag": False}
     def _handler(event_type, payload):
-        # Accept both canonical or transitional names if present
         name = payload.get("name") or payload.get("app_name")
         if name == app_name:
             started["flag"] = True
-    sub_id = event_bus.subscribe("app_started", _handler)
+    sub_id = event_bus.subscribe("system.app.started", _handler)
     try:
         return wait_for(lambda: started["flag"], timeout=timeout)
     finally:
@@ -38,7 +37,7 @@ def wait_for_app_finished(event_bus, app_name: str, timeout: float = 3.0) -> boo
         name = payload.get("name") or payload.get("app_name")
         if name == app_name:
             finished["flag"] = True
-    sub_id = event_bus.subscribe("app_finished", _handler)
+    sub_id = event_bus.subscribe("system.app.finished", _handler)
     try:
         return wait_for(lambda: finished["flag"], timeout=timeout)
     finally:

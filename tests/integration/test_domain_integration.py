@@ -164,18 +164,18 @@ class TestSystemManagerIntegration:
         def event_handler(event_type, payload):
             events_received.append(event_type)
         
-        event_bus.subscribe("system_started", event_handler)
-        event_bus.subscribe("system_shutdown", event_handler)
+        event_bus.subscribe("system.started", event_handler)
+        event_bus.subscribe("system.shutdown.initiated", event_handler)
         
         # Start and verify
         system_manager.start()
         assert wait_for(lambda: system_manager._running, timeout=1.0)
-        assert wait_for(lambda: "system_started" in events_received, timeout=1.0)
+        assert wait_for(lambda: "system.started" in events_received, timeout=1.0)
         
         # Stop and verify
         system_manager.stop()
         assert wait_for(lambda: not system_manager._running, timeout=1.0)
-        assert wait_for(lambda: "system_shutdown" in events_received, timeout=1.0)
+        assert wait_for(lambda: "system.shutdown.initiated" in events_received, timeout=1.0)
 
 
 class TestServiceIntegration:
@@ -199,10 +199,10 @@ class TestServiceIntegration:
                     "switch_value": app.switch_value
                 }, "test")
         
-        event_bus.subscribe("switch_changed", switch_handler)
+        event_bus.subscribe("input.switch.changed", switch_handler)
         
         # Simulate switch change
-        event_bus.publish("switch_changed", {"old_value": 0, "new_value": 0}, "test")
+        event_bus.publish("input.switch.changed", {"old_value": 0, "new_value": 0}, "test")
         
         # Event-driven wait instead of sleep
         assert wait_for(lambda: len(switch_events) == 1, timeout=0.5)
@@ -219,19 +219,19 @@ class TestServiceIntegration:
             webui_relevant_events.append((event_type, payload))
         
         # Subscribe to lifecycle events that WebUI would care about
-        event_bus.subscribe("app_started", webui_handler)
-        event_bus.subscribe("app_stopped", webui_handler)
+        event_bus.subscribe("system.app.started", webui_handler)
+        event_bus.subscribe("system.app.finished", webui_handler)
         event_bus.subscribe("hardware_status", webui_handler)
-        event_bus.subscribe("system_started", webui_handler)
+        event_bus.subscribe("system.started", webui_handler)
         
         # Simulate system events that WebUI should respond to
-        event_bus.publish("app_started", {"app_name": "Test App", "switch_value": 42}, "test")
+        event_bus.publish("system.app.started", {"app_name": "Test App", "switch_value": 42}, "test")
         event_bus.publish("hardware_status", {"component": "display", "status": "active", "value": 123}, "test")
-        event_bus.publish("system_started", {"hardware_type": "webui"}, "test")
+        event_bus.publish("system.started", {"hardware_type": "webui"}, "test")
         
         # Event-driven wait for all events
         assert wait_for(lambda: len(webui_relevant_events) == 3, timeout=0.5)
         event_types = [event[0] for event in webui_relevant_events]
-        assert "app_started" in event_types
+        assert "system.app.started" in event_types
         assert "hardware_status" in event_types
-        assert "system_started" in event_types
+        assert "system.started" in event_types

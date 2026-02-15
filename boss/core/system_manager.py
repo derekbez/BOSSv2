@@ -88,7 +88,7 @@ class SystemManager(SystemService):
             try:
                 state = self.hardware_service.get_hardware_state()
                 if state and state.switches:
-                    self.event_bus.publish("display_update", {"value": state.switches.value}, "system")
+                    self.event_bus.publish("output.display.updated", {"value": state.switches.value}, "system")
             except Exception as e:
                 logger.debug(f"Initial display update skipped: {e}")
 
@@ -96,7 +96,7 @@ class SystemManager(SystemService):
             self._run_startup_app()
             
             # Publish system started event
-            self.event_bus.publish("system_started", {"hardware_type": hardware_type}, "system")
+            self.event_bus.publish("system.started", {"hardware_type": hardware_type}, "system")
             
             logger.info("BOSS system started successfully")
             
@@ -120,7 +120,7 @@ class SystemManager(SystemService):
         # prevents a second "normal" reason from overwriting the original
         # intent in logs and avoids re-entrancy.
         if not getattr(self, "_handling_specific_shutdown", False):
-            self.event_bus.publish("system_shutdown", {"reason": "normal"}, "system")
+            self.event_bus.publish("system.shutdown.initiated", {"reason": "normal"}, "system")
         
         try:
             # Stop WebUI development interface
@@ -194,29 +194,40 @@ class SystemManager(SystemService):
         """Provide basic startup feedback if no startup app is available."""
         try:
             import time
-            from boss.core.models import LedColor
-            led_colors = [LedColor("red"), LedColor("yellow"), LedColor("green"), LedColor("blue")]
+            led_colors = ["red", "yellow", "green", "blue"]
 
             # Blink all LEDs 5 times
             for i in range(5):
                 for color in led_colors:
-                    if hasattr(self.hardware_service, 'leds') and self.hardware_service.leds:
-                        self.hardware_service.leds.set_led(color, True)
+                    if hasattr(self.hardware_service, 'update_led'):
+                        self.hardware_service.update_led(color, True)
                 time.sleep(0.2)
                 for color in led_colors:
-                    if hasattr(self.hardware_service, 'leds') and self.hardware_service.leds:
-                        self.hardware_service.leds.set_led(color, False)
+                    if hasattr(self.hardware_service, 'update_led'):
+                        self.hardware_service.update_led(color, False)
                 time.sleep(0.15)
 
             # Show message on screen if available
             try:
                 if hasattr(self.hardware_service, 'screen') and self.hardware_service.screen:
+                    msg = "BOSS might not be ready\n\nThe expected Startup app could not be found."
                     self.hardware_service.screen.display_text(
-                        "BOSS might not be ready\n\nThe expected Startup app could not be found.",
+                        msg,
                         align='center',
                         color='yellow',
                         font_size=28
                     )
+                    try:
+                        # Publish so the WebUI mirrors the startup message
+                        self.event_bus.publish("output.screen.updated", {
+                            "content_type": "text",
+                            "content": msg,
+                            "font_size": 28,
+                            "color": "yellow",
+                            "align": "center"
+                        }, "system")
+                    except Exception:
+                        pass
             except Exception:
                 pass
 
@@ -225,8 +236,16 @@ class SystemManager(SystemService):
                 if hasattr(self.hardware_service, 'display') and self.hardware_service.display:
                     try:
                         self.hardware_service.display.show_number(0)  # Show 0000
+                        try:
+                            self.event_bus.publish("output.display.updated", {"value": 0}, "system")
+                        except Exception:
+                            pass
                     except:
                         self.hardware_service.display.show_text("BOSS")
+                        try:
+                            self.event_bus.publish("output.display.updated", {"text": "BOSS", "type": "text"}, "system")
+                        except Exception:
+                            pass
             except Exception:
                 pass
 
@@ -272,16 +291,16 @@ class SystemManager(SystemService):
         # Use a local var for brevity
         bus = self.event_bus
         # Handle app launch requests (from Go button or API)
-        bus.subscribe("app_launch_requested", self._on_app_launch_requested)
+        bus.subscribe("system.app.launch.requested", self._on_app_launch_requested)
         # Go button direct event
-        bus.subscribe("go_button_pressed", self._on_go_button_pressed)
+        bus.subscribe("input.go_button.pressed", self._on_go_button_pressed)
         # Feedback / lifecycle events
-        bus.subscribe("app_started", self._on_app_started)
+        bus.subscribe("system.app.started", self._on_app_started)
         # App stopped (cleanup / display restore etc.)
-        bus.subscribe("app_stopped", self._on_app_stopped)
+        bus.subscribe("system.app.finished", self._on_app_stopped)
         # Handle admin shutdown requests
-        bus.subscribe("system_shutdown", self._on_system_shutdown_requested)
-        # Note: Hardware output events (led_update, display_update, screen_update)
+        bus.subscribe("system.shutdown.requested", self._on_system_shutdown_requested)
+        # Note: Hardware output events (output.led.state_changed, output.display.updated, output.screen.updated)
         # are handled elsewhere (HardwareEventHandler)
 
     def _on_config_changed(self, event_type: str, payload: Dict[str, Any]) -> None:
@@ -331,12 +350,17 @@ class SystemManager(SystemService):
                 state = self.hardware_service.get_hardware_state()
                 if self.hardware_service.display and hasattr(self.hardware_service.display, 'show_number'):
                     self.hardware_service.display.show_number(state.switches.value)
+                    try:
+                        # Publish so WebUI / other listeners mirror the restored value
+                        self.event_bus.publish("output.display.updated", {"value": state.switches.value}, "system")
+                    except Exception:
+                        pass
                 # Central LED normalization: ensure all LEDs are off when no app is running.
                 try:
                     if self.hardware_service.leds:
                         for c in ("red", "yellow", "green", "blue"):
                             try:
-                                self.hardware_service.leds.set_led(c, False)  # type: ignore[arg-type]
+                                self.hardware_service.update_led(c, False)
                             except Exception:
                                 pass
                 except Exception:
@@ -363,7 +387,7 @@ class SystemManager(SystemService):
             if self.hardware_service.leds:
                 for c in ("red","yellow","green","blue"):
                     try:
-                        self.hardware_service.leds.set_led(c, False)
+                        self.hardware_service.update_led(c, False)
                     except Exception:
                         pass
             # Restore 7-seg to current switch value (clears LOAD) unless app already changed it
@@ -371,6 +395,11 @@ class SystemManager(SystemService):
                 state = self.hardware_service.get_hardware_state()
                 if state and self.hardware_service.display and hasattr(self.hardware_service.display, 'show_number'):
                     self.hardware_service.display.show_number(state.switches.value)
+                    try:
+                        # Ensure UI mirrors restored display value
+                        self.event_bus.publish("output.display.updated", {"value": state.switches.value}, "system")
+                    except Exception:
+                        pass
             except Exception:
                 pass
             # App may overwrite screen quickly; no extra action needed here.
@@ -381,7 +410,7 @@ class SystemManager(SystemService):
         """Handle Go button press."""
         # Snapshot current switch value immediately to avoid races with the
         # background monitor or multiplexed switch settling. Publish a
-        # display_update using the sampled value so the 7-seg shows the
+        # output.display.updated using the sampled value so the 7-seg shows the
         # canonical value at the moment of launch.
         try:
             # Small stabilization delay to allow mechanical switches/mux to settle
@@ -399,15 +428,15 @@ class SystemManager(SystemService):
             logger.info(f"Go button pressed. Snapshot switch value: {switch_value}")
             # Ensure the display mirrors the sampled value immediately
             try:
-                self.event_bus.publish("display_update", {"value": switch_value}, "system")
+                self.event_bus.publish("output.display.updated", {"value": switch_value}, "system")
             except Exception:
-                logger.debug("Failed to publish immediate display_update on go press")
+                logger.debug("Failed to publish immediate output.display.updated on go press")
 
         except Exception as e:
             logger.debug(f"Error snapshotting switches on go press: {e}")
 
         # Trigger app launch (transition feedback handled in launch handler)
-        self.event_bus.publish("app_launch_requested", {}, "system")
+        self.event_bus.publish("system.app.launch.requested", {}, "system")
 
     # ------------------------------------------------------------------
     # Visual / tactile feedback helpers
@@ -435,7 +464,7 @@ class SystemManager(SystemService):
             if leds:
                 for c in ("red","yellow","green","blue"):
                     try:
-                        leds.set_led(c, True)
+                        self.hardware_service.update_led(c, True)
                     except Exception:
                         pass
         except Exception:

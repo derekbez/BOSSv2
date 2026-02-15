@@ -231,10 +231,10 @@ class AppManager(AppManagerService):
         """Run an app lifecycle bookkeeping only (execution handled elsewhere)."""
         try:
             app.mark_starting()
-            self.event_bus.publish("app.starting", {"app": app.manifest.name}, "app_manager")
+            self.event_bus.publish("system.app.starting", {"app": app.manifest.name}, "app_manager")
             app.mark_running()
-            self.event_bus.publish("app.running", {"app": app.manifest.name}, "app_manager")
+            self.event_bus.publish("system.app.running", {"app": app.manifest.name}, "app_manager")
         except Exception as e:
             app.mark_error(str(e))
-            self.event_bus.publish("app.error", {"app": app.manifest.name, "error": str(e)}, "app_manager")
+            self.event_bus.publish("system.app.error", {"app": app.manifest.name, "error": str(e)}, "app_manager")
         # No finally block needed; no backend switching anymore

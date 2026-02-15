@@ -7,6 +7,7 @@ The Web UI Development Mode provides a sophisticated browser-based interface for
 ## Implementation Status ✅
 
 ### ✅ Completed Successfully
+
 - **✅ Architecture Migration**: WebUI server moved to correct presentation layer
 - **✅ Integration Complete**: WebUI starts automatically with `--hardware webui`
 - **✅ FastAPI Backend**: Modern, async server with WebSocket real-time updates  
@@ -19,7 +20,7 @@ The Web UI Development Mode provides a sophisticated browser-based interface for
 
 The existing WebUI provides:
 
-- **Complete Hardware Simulation**: 
+- **Complete Hardware Simulation**:
   - **Buttons**: Interactive Red, Yellow, Green, Blue, and GO buttons
   - **Switches**: 8-bit switch input (0-255) with decimal input and bit toggles  
   - **LEDs**: Real-time LED state indicators with proper colors
@@ -34,6 +35,7 @@ The existing WebUI provides:
 ## Clean Architecture Implementation ✅
 
 ### Final Structure (Completed)  
+
 ```
 boss/presentation/api/         # ✅ WebUI server in correct layer
 ├── web_ui.py                  # FastAPI server (moved from webui/server.py)
@@ -51,6 +53,7 @@ boss/hardware/webui/  # ✅ Hardware implementations (localized)
 ```
 
 ### Integration Points ✅
+
 - **✅ Hardware Factory**: WebUI hardware created when `--hardware webui` specified
 - **✅ Main System**: WebUI server starts automatically in main.py
 - **✅ Event Bus**: WebUI subscribes to domain events for real-time updates  
@@ -63,7 +66,7 @@ boss/hardware/webui/  # ✅ Hardware implementations (localized)
    - WebUI server starts in background thread on `http://localhost:8080`
    - Event handlers subscribe to relevant domain events
 
-2. **Real-Time Updates**: 
+2. **Real-Time Updates**:
    - App calls hardware methods (e.g., `led.set_state(True)`)
    - Hardware publishes domain events (e.g., `LedUpdateEvent`)
    - WebUI server receives events and broadcasts to browser
@@ -84,6 +87,7 @@ boss/hardware/webui/  # ✅ Hardware implementations (localized)
 POST /api/button/{color}/press
 POST /api/button/go/press
 ```
+
 Simulate button press events.
 
 ```http
@@ -91,34 +95,38 @@ POST /api/switch/set
 Content-Type: application/json
 {"value": 42}
 ```
+
 Set switch value (0-255).
 
 ```http
 GET /api/status
 ```
+
 Get current hardware state and system info.
 
 ### WebSocket Events
 
 **From Server to Browser:**
+
 ```json
 {
-  "type": "led_update",
-  "data": {"color": "red", "is_on": true}
+   "event": "output.led.state_changed",
+   "payload": {"color": "red", "is_on": true, "brightness": 1.0}
 }
 
 {
-  "type": "display_update", 
-  "data": {"value": 42}
+   "event": "output.display.updated", 
+   "payload": {"value": 42}
 }
 
 {
-  "type": "screen_update",
-  "data": {"text": "Hello World", "x": 100, "y": 50}
+   "event": "output.screen.updated",
+   "payload": {"content_type": "text", "content": "Hello World"}
 }
 ```
 
 **From Browser to Server:**
+
 ```json
 {
   "type": "button_press",
@@ -155,7 +163,7 @@ python -m boss.main --hardware webui
 
 ### Verified Features ✅
 
-- **✅ Auto-Start**: WebUI server launches automatically 
+- **✅ Auto-Start**: WebUI server launches automatically
 - **✅ Hardware Simulation**: All buttons, switches, LEDs, display working
 - **✅ Real-Time Updates**: WebSocket connection provides instant feedback
 - **✅ Event Integration**: Domain events flow correctly between app and WebUI
@@ -165,12 +173,14 @@ python -m boss.main --hardware webui
 ## Current Implementation Status
 
 ### What Exists ✅
+
 - Complete WebUI hardware implementations in `infrastructure/hardware/webui/`
 - FastAPI server with WebSocket support in `boss/webui/` (needs relocation)
 - HTML/CSS/JS frontend in `boss/webui/static/`
 - Integration with hardware factory for `--hardware webui`
 
 ### What Needs Fixing 🔧
+
 - **Move WebUI Server**: Relocate `boss/webui/server.py` to `presentation/api/web_ui.py`
 - **Integration**: Add WebUI server startup to main system when `--hardware webui` selected
 - **Event Loop Issues**: Fix WebSocket broadcasting threading issues
@@ -179,6 +189,7 @@ python -m boss.main --hardware webui
 ### Recommended Changes
 
 1. **Move WebUI Server to Presentation Layer**:
+
    ```
    boss/webui/server.py → boss/presentation/api/web_ui.py
    boss/webui/main.py → boss/presentation/api/web_ui_main.py  
@@ -186,6 +197,7 @@ python -m boss.main --hardware webui
    ```
 
 2. **Integrate WebUI Startup in Main System**:
+
    ```python
    # In main.py, after system creation
    if hardware_type == "webui":
@@ -200,6 +212,7 @@ python -m boss.main --hardware webui
 ## Technical Specifications ✅
 
 ### Dependencies (Verified Working)
+
 ```
 fastapi>=0.100.0
 uvicorn[standard]>=0.23.0
@@ -208,11 +221,13 @@ pydantic>=2.0.0
 ```
 
 ### Configuration
+
 - **Port**: `http://localhost:8070` (configurable in web_ui_main.py)
 - **Host**: `127.0.0.1` (localhost only for security)
 - **Threading**: Background daemon thread, non-blocking
 
 ### Final File Structure ✅
+
 ```
 boss/presentation/api/           # ✅ WebUI server in correct location
 ├── web_ui.py                    # FastAPI server with WebSocket support
@@ -230,6 +245,7 @@ boss/hardware/webui/  # ✅ Hardware implementations
 ```
 
 ### API Endpoints (Verified Working)
+
 ```python
 # From boss/presentation/api/web_ui.py
 POST /api/button/{button_id}/press    # red, yellow, green, blue, main
@@ -243,6 +259,7 @@ WS   /ws                              # WebSocket for real-time updates
 ```
 
 ### Windows Compatibility ✅
+
 - **✅ FastAPI/uvicorn**: Excellent Windows support verified
 - **✅ No GPIO dependencies**: Pure Python hardware simulation
 - **✅ Localhost binding**: Windows firewall friendly  
@@ -251,13 +268,13 @@ WS   /ws                              # WebSocket for real-time updates
 
 ---
 
-## ✅ Migration Completed Successfully!
+## ✅ Migration Completed Successfully
 
-The BOSS WebUI has been **successfully migrated and integrated** with the Clean Architecture! 
+The BOSS WebUI has been **successfully migrated and integrated** with the Clean Architecture!
 
 ### What Was Accomplished ✅
 
-1. **✅ Architectural Migration**: 
+1. **✅ Architectural Migration**:
    - Moved WebUI server from `boss/webui/` to `boss/presentation/api/`
    - Updated all import paths for Clean Architecture compliance
    - Removed old webui folder to prevent confusion
@@ -275,6 +292,7 @@ The BOSS WebUI has been **successfully migrated and integrated** with the Clean 
 ### Current Status: Production Ready ✅
 
 The BOSS WebUI is now:
+
 - ✅ **Architecturally Compliant**: Follows Clean Architecture principles  
 - ✅ **Fully Integrated**: Seamlessly starts with main BOSS system
 - ✅ **Windows Optimized**: Excellent performance on Windows platforms

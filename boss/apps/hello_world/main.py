@@ -229,8 +229,8 @@ def run(stop_event, api):
     
     try:
         # Subscribe to button events
-        sub_id1 = api.event_bus.subscribe("button_pressed", on_button_press)
-        sub_id2 = api.event_bus.subscribe("button_pressed", on_main_button_press)
+        sub_id1 = api.event_bus.subscribe("input.button.pressed", on_button_press)
+        sub_id2 = api.event_bus.subscribe("input.button.pressed", on_main_button_press)
         subscription_ids.extend([sub_id1, sub_id2])
         
         api.log_info("Event subscriptions created successfully")

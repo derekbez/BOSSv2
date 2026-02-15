@@ -1,15 +1,19 @@
 # B.O.S.S. Mini-App Development: Event-Driven API
 
 ## Overview
+
 All mini-apps in the B.O.S.S. architecture use a clean, event-driven API that provides access to hardware, screen, and system events. Mini-apps are located in `boss/apps/` and are co-located with the main system code for modularity. This enables apps to react to hardware changes without polling or direct hardware access.
 
 ## App Structure & Location
+
 Each mini-app should be located in `boss/apps/` and have:
+
 - `main.py` - Main entry point with `run(stop_event, api)` function
 - `manifest.json` - App metadata and configuration (supports both standard and legacy formats)
 - Optional `assets/` directory for images, sounds, data files, etc.
 
 ### Example Directory Structure
+
 ```
 boss/apps/
   list_all_apps/           # System app for browsing available apps
@@ -33,6 +37,7 @@ boss/apps/
 ## Manifest Examples
 
 ### Standard Format (Recommended)
+
 ```json
 {
   "name": "Hello World",
@@ -48,7 +53,9 @@ boss/apps/
 ```
 
 ### Legacy Format (Auto-converted)
+
 The system also supports legacy manifest formats for compatibility:
+
 ```json
 {
   "id": "list_all_apps",
@@ -61,9 +68,11 @@ The system also supports legacy manifest formats for compatibility:
   "instructions": "Uses yellow/blue buttons for navigation"
 }
 ```
+
 *Note: Legacy manifests are automatically converted to the standard format at runtime.*
 
 ## Main App Function
+
 ```python
 def run(stop_event, api):
     """
@@ -80,12 +89,13 @@ def run(stop_event, api):
 ## API Reference
 
 ### Event Bus (`api.event_bus`)
+
 ```python
 # Subscribe to events
-subscription_id = api.event_bus.subscribe("button_pressed", on_button_press)
+subscription_id = api.event_bus.subscribe("input.button.pressed", on_button_press)
 
 # Subscribe with filter
-subscription_id = api.event_bus.subscribe("button_pressed", on_red_button, 
+subscription_id = api.event_bus.subscribe("input.button.pressed", on_red_button, 
                                          filter_dict={"button": "red"})
 
 # Unsubscribe
@@ -96,6 +106,7 @@ api.event_bus.publish("custom_event", {"data": "value"})
 ```
 
 ### Screen Control (`api.screen`)
+
 ```python
 # Display text
 api.screen.display_text("Hello World!", font_size=32, color="white", align="center")
@@ -111,6 +122,7 @@ width, height = api.screen.get_screen_size()
 ```
 
 ### Hardware Control (`api.hardware`)
+
 ```python
 # Control LEDs
 api.hardware.set_led("red", True, brightness=0.8)  # Turn on red LED
@@ -125,12 +137,14 @@ api.hardware.play_sound("assets/beep.wav", volume=0.5)
 ```
 
 ### Logging (`api.log_*`)
+
 ```python
 api.log_info("App started successfully")
 api.log_error("Something went wrong")
 ```
 
 ### Utilities
+
 ```python
 # Get app directory path
 app_path = api.get_app_path()
@@ -144,18 +158,22 @@ data_file = api.get_asset_path("data.json")
 ## Available Events
 
 ### Hardware Events
-- `"button_pressed"` - `{"button": "red|yellow|green|blue"}`
-- `"button_released"` - `{"button": "red|yellow|green|blue"}`
-- `"go_button_pressed"` - `{}`
-- `"switch_changed"` - `{"old_value": int, "new_value": int}`
+
+- `"input.button.pressed"` - `{"button": "red|yellow|green|blue"}`
+- `"input.button.released"` - `{"button": "red|yellow|green|blue"}`
+- `"input.go_button.pressed"` - `{}`
+- `"input.switch.changed"` - `{"old_value": int, "new_value": int}`
 
 ### System Events
-- `"app_started"` - `{"app_name": str, "switch_value": int}`
-- `"app_stopped"` - `{"app_name": str, "switch_value": int, "reason": str}`
-- `"system_started"` - `{"hardware_type": str}`
-- `"system_shutdown"` - `{"reason": str}`
+
+- `"system.app.started"` - `{"app_name": str, "switch_value": int}`
+- `"system.app.finished"` - `{"app_name": str, "switch_value": int, "reason": str}`
+- `"system.app.error"` - `{"app_name": str, "switch_value": int, "error": str}`
+- `"system.started"` - `{"hardware_type": str}`
+- `"system.shutdown.initiated"` - `{"reason": str}`
 
 ## Example: Complete Mini-App
+
 ```python
 def run(stop_event, api):
     """
@@ -195,9 +213,9 @@ def run(stop_event, api):
         api.log_info(f"Switch changed to: {new_value}")
     
     # Subscribe to events
-    api.event_bus.subscribe("button_pressed", on_button_press)
-    api.event_bus.subscribe("button_released", on_button_release)
-    api.event_bus.subscribe("switch_changed", on_switch_change)
+    api.event_bus.subscribe("input.button.pressed", on_button_press)
+    api.event_bus.subscribe("input.button.released", on_button_release)
+    api.event_bus.subscribe("input.switch.changed", on_switch_change)
     
     # Main loop - wait for stop signal
     try:
@@ -216,6 +234,7 @@ def run(stop_event, api):
 ## Configuration & App Mappings
 
 Apps are mapped to switch values in `boss/config/app_mappings.json`:
+
 ```json
 {
   "app_mappings": {
@@ -233,6 +252,7 @@ Apps are mapped to switch values in `boss/config/app_mappings.json`:
 When a user sets the switches to a value (0-255) and presses the Go button, BOSS loads and runs the corresponding app. If no mapping exists for a switch value, the user will see a "No app mapped" message.
 
 ## Migration from Old Architecture (Completed Batch 1)
+
 1. Move app from legacy placeholder (e.g. `apps_placeholder_todo/`) into `boss/apps/<name>/`.
 2. Create or normalize `manifest.json` (standard fields: name, description, version, author, entry_point, timeout_seconds, requires_network, requires_audio, tags, config).
 3. Ensure `main.py` exposes `run(stop_event, api)`.
@@ -246,10 +266,12 @@ When a user sets the switches to a value (0-255) and presses the Go button, BOSS
 
 Status: All placeholder mini-apps have been migrated into `boss/apps/` (see epic file
 `docs/epic-miniapps-migration.yaml`). Two apps remain partial/placeholder feature-wise:
+
 - `internet_speed_check`: currently displays simulated values (future: integrate speedtest-cli)
 - `constellation_of_the_night`: static message; future enhancement to use astronomy dataset/API.
 
 Representative migrated categories:
+
 - Static asset: `app_jokes`, `public_domain_book_snippet`, `random_emoji_combo`
 - Network simple: `current_weather`, `dad_joke_generator`, `word_of_the_day`
 - Network periodic with caching cadence: `moon_phase`, `on_this_day`, `local_tide_times`
@@ -258,6 +280,7 @@ Representative migrated categories:
 See `docs/miniapps_external_requirements.md` for per-API environment variables, rate limits, and fallback strategy.
 
 ## Best Practices
+
 - **Location:** Always place apps in `boss/apps/` for proper module resolution and co-location
 - **Events:** Always subscribe to events rather than polling hardware
 - **Cleanup:** Clean up resources in the `finally` block
@@ -270,6 +293,7 @@ See `docs/miniapps_external_requirements.md` for per-API environment variables, 
 - **Dependencies:** Declare network/audio requirements in manifest for proper system validation
 
 ## Development Workflow
+
 1. Create new app directory in `boss/apps/your_app_name/`
 2. Add `main.py` with `run(stop_event, api)` function
 3. Add `manifest.json` with app metadata
@@ -279,6 +303,7 @@ See `docs/miniapps_external_requirements.md` for per-API environment variables, 
 7. Use the WebUI development interface for visual debugging
 
 ## More Examples
+
 - See the `boss/apps/` directory for complete working examples
 - Use `boss/apps/hello_world/` as a simple starting template
 - See `boss/apps/list_all_apps/` for a more complex example with assets and event handling

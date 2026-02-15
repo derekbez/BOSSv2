@@ -1,12 +1,15 @@
 # Hardware Parity Principle
 
 ## Overview
+
 The B.O.S.S. system implements a **Hardware Parity Principle** ensuring seamless development-to-production transitions. The WebUI is not just a debugging tool—it's a complete hardware emulation layer that behaves identically to real GPIO hardware.
 
 ## Core Principle
+>
 > **Any behavior implemented for real GPIO hardware must work identically in the WebUI, and any feature developed/tested in the WebUI must work identically on real hardware.**
 
 ## Why This Matters
+
 - **Confidence**: What you test in development will work in production
 - **Efficiency**: No need to constantly deploy to Pi for testing
 - **Debugging**: Complex interactions can be debugged in the WebUI first
@@ -15,12 +18,14 @@ The B.O.S.S. system implements a **Hardware Parity Principle** ensuring seamless
 ## Hardware Abstraction Layers
 
 ### 1. Real Hardware (GPIO)
+
 - Physical buttons connected to GPIO pins
 - Physical LEDs controlled via GPIO pins
 - TM1637 display showing actual numbers
 - Physical switches setting real states
 
 ### 2. WebUI Hardware (Development)
+
 - Virtual buttons in web interface
 - Virtual LED indicators with on/off states  
 - Virtual 7-segment display showing numbers
@@ -29,7 +34,9 @@ The B.O.S.S. system implements a **Hardware Parity Principle** ensuring seamless
 ### 3. Mock Hardware (Testing)
 
 ### Screen Backends Note
+
 The default screen backend is now the textual (Rich-based) backend for both development and production. The legacy Pillow framebuffer backend remains only for explicit legacy scenarios and is deprecated. Mini-apps should treat screen output as text-only; image APIs will no-op under textual.
+
 - In-memory state tracking
 - Console logging of hardware events
 - No visual interface, pure programmatic
@@ -37,7 +44,9 @@ The default screen backend is now the textual (Rich-based) backend for both deve
 ## Implementation Examples
 
 ### LED/Button Coordination
+
 **Real Hardware:**
+
 ```python
 # App sets LED on
 api.hardware.set_led('red', True)  # Physical LED lights up
@@ -47,6 +56,7 @@ api.hardware.set_led('red', True)  # Physical LED lights up
 ```
 
 **WebUI Hardware:**
+
 ```python
 # App sets LED on  
 api.hardware.set_led('red', True)  # Virtual LED shows "ON" in browser
@@ -58,13 +68,16 @@ api.hardware.set_led('red', True)  # Virtual LED shows "ON" in browser
 **Identical Result:** App receives the same button event structure in both cases.
 
 ### State Filtering
+
 **Real Hardware:**
+
 - RED LED is OFF
 - User presses physical RED button  
 - Hardware service checks LED state → press ignored
 - App receives no event
 
 **WebUI Hardware:**
+
 - RED LED indicator shows "OFF"
 - User clicks virtual RED button
 - API checks LED state → press ignored  
@@ -75,6 +88,7 @@ api.hardware.set_led('red', True)  # Virtual LED shows "ON" in browser
 ## Development Workflow
 
 ### 1. Develop in WebUI
+
 ```bash
 # Start system with WebUI
 python -m boss.main
@@ -86,6 +100,7 @@ python -m boss.main
 ```
 
 ### 2. Deploy to Hardware
+
 ```bash
 # Same code, same configuration
 # Hardware automatically detected
@@ -117,9 +132,9 @@ Button events have identical structure across all hardware layers:
 
 ```json
 {
-  "event": "button_pressed",
+  "event": "input.button.pressed",
   "payload": {
-    "button_id": "red",
+    "button": "red",
     "timestamp": "2025-01-23T10:30:00Z"
   }
 }
@@ -130,18 +145,21 @@ This consistency ensures mini-apps work identically regardless of hardware layer
 ## Testing Strategy
 
 ### Development Testing (WebUI)
+
 - Full functionality testing in browser
 - LED/button interaction validation
 - Screen content verification
 - Event flow debugging
 
 ### Integration Testing (Pi)
+
 - Periodic deployment to real hardware
 - Validation of GPIO pin assignments
 - Physical interaction testing
 - Performance verification
 
 ### Unit Testing (Mocks)
+
 - Fast automated testing
 - Logic verification without hardware
 - CI/CD pipeline integration
@@ -149,12 +167,14 @@ This consistency ensures mini-apps work identically regardless of hardware layer
 ## Best Practices
 
 ### For Developers
+
 1. **Always test in WebUI first** before deploying to Pi
 2. **Use same configuration files** in both environments  
 3. **Follow LED/button patterns** established in documentation
 4. **Verify events** using WebUI event log before production
 
 ### For Mini-App Authors
+
 1. **Use the App API exclusively** - never access hardware directly
 2. **Test LED coordination** in WebUI to ensure proper UX
 3. **Validate button event handling** using virtual controls
@@ -172,6 +192,7 @@ If behavior differs between WebUI and real hardware:
 ## Future Enhancements
 
 The Hardware Parity Principle enables:
+
 - **New hardware support** - add virtual equivalents for new devices
 - **Advanced debugging** - WebUI can show internal state not visible on Pi
 - **Automated testing** - WebUI can be scripted for comprehensive testing

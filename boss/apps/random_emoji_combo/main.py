@@ -53,7 +53,7 @@ def run(stop_event, api):
     # Setup
     api.screen.clear_screen()
     api.hardware.set_led("green", True)
-    sub_id = api.event_bus.subscribe("button_pressed", handle_button_press)
+    sub_id = api.event_bus.subscribe("input.button.pressed", handle_button_press)
     
     shuffle_and_display()
 

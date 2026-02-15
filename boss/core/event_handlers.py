@@ -17,11 +17,11 @@ class SystemEventHandler:
     
     def _setup_subscriptions(self):
         """Set up event subscriptions."""
-        self.event_bus.subscribe("system_started", self.on_system_started)
-        self.event_bus.subscribe("system_shutdown", self.on_system_shutdown)
-        self.event_bus.subscribe("app_error", self.on_app_error)
-        self.event_bus.subscribe("switch_changed", self.on_switch_changed)
-        self.event_bus.subscribe("go_button_pressed", self.on_go_button_pressed)
+        self.event_bus.subscribe("system.started", self.on_system_started)
+        self.event_bus.subscribe("system.shutdown.initiated", self.on_system_shutdown)
+        self.event_bus.subscribe("system.app.error", self.on_app_error)
+        self.event_bus.subscribe("input.switch.changed", self.on_switch_changed)
+        self.event_bus.subscribe("input.go_button.pressed", self.on_go_button_pressed)
     
     def on_system_started(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle system startup."""
@@ -46,7 +46,7 @@ class SystemEventHandler:
         logger.info(f"Switch changed from {old_value} to {new_value}")
         
         # Publish display update event
-        self.event_bus.publish("display_update", {"value": new_value}, "system")
+        self.event_bus.publish("output.display.updated", {"value": new_value}, "system")
     
     def on_go_button_pressed(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle Go button presses."""
@@ -64,9 +64,9 @@ class HardwareEventHandler:
     
     def _setup_subscriptions(self):
         """Set up event subscriptions."""
-        self.event_bus.subscribe("led_update", self.on_led_update)
-        self.event_bus.subscribe("display_update", self.on_display_update)
-        self.event_bus.subscribe("screen_update", self.on_screen_update)
+        self.event_bus.subscribe("output.led.state_changed", self.on_led_update)
+        self.event_bus.subscribe("output.display.updated", self.on_display_update)
+        self.event_bus.subscribe("output.screen.updated", self.on_screen_update)
     
     def on_led_update(self, event_type: str, payload: Dict[str, Any]) -> None:
         """Handle LED update requests."""

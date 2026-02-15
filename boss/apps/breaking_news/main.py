@@ -120,7 +120,7 @@ def run(stop_event, api):
             if paginator.next():
                 api.screen.display_text(f"{title}\n\n" + "\n".join(paginator.page_lines()), align="left")
 
-    sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
+    sub_ids.append(api.event_bus.subscribe("input.button.pressed", on_button))
 
     try:
         show_news()

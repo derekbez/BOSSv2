@@ -73,7 +73,7 @@ class AppRunner(AppRunnerService):
             self._current_thread.start()
             
             # Publish app started event
-            self.event_bus.publish("app_started", {
+            self.event_bus.publish("system.app.started", {
                 "app_name": app.manifest.name,
                 "switch_value": app.switch_value
             }, "app_runner")
@@ -174,7 +174,7 @@ class AppRunner(AppRunnerService):
             app.mark_error(error_msg)
 
             # Publish app error event
-            self.event_bus.publish("app_error", {
+            self.event_bus.publish("system.app.error", {
                 "app_name": app.manifest.name,
                 "switch_value": app.switch_value,
                 "error": error_msg
@@ -186,7 +186,7 @@ class AppRunner(AppRunnerService):
             # Determine reason and publish app_stopped for both normal completion and requested stop
             reason = "timeout" if timed_out.get("value") else ("stopped" if stop_event.is_set() else "normal")
             try:
-                self.event_bus.publish("app_stopped", {
+                self.event_bus.publish("system.app.finished", {
                     "app_name": app.manifest.name,
                     "switch_value": app.switch_value,
                     "reason": reason
@@ -225,7 +225,7 @@ class AppRunner(AppRunnerService):
                         pass
                     else:
                         # Default 'return' behavior: publish an event to return to startup
-                        self.event_bus.publish("return_to_startup", {"reason": "timeout", "app_name": app.manifest.name}, "app_runner")
+                        self.event_bus.publish("system.app.return.requested", {"reason": "timeout", "app_name": app.manifest.name}, "app_runner")
             except Exception:
                 logger.exception("Error handling post-timeout behavior")
     

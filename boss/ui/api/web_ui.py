@@ -51,11 +51,6 @@ class WebSocketManager:
             event_bus.subscribe("output.display.updated", self._on_display_changed)
             event_bus.subscribe("output.screen.updated", self._on_screen_changed)
             event_bus.subscribe("input.switch.changed", self._on_switch_changed)
-            event_bus.subscribe("switch_change", self._on_switch_changed)  # legacy name
-            event_bus.subscribe("switch_changed", self._on_switch_changed)  # canonical name
-            # Display events: prefer canonical and output updates. Avoid legacy duplicate events.
-            event_bus.subscribe("display_update", self._on_display_changed)  # canonical name
-            event_bus.subscribe("output.display.updated", self._on_display_changed)
     
     async def connect(self, websocket: WebSocket):
         """Accept a new WebSocket connection."""
@@ -220,7 +215,7 @@ class WebSocketManager:
     def _on_led_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle LED state change events."""
         self._schedule_broadcast({
-            "event": "led_changed",
+            "event": "output.led.state_changed",
             "payload": payload,
             "timestamp": time.time()
         })
@@ -228,7 +223,7 @@ class WebSocketManager:
     def _on_display_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle display update events."""
         self._schedule_broadcast({
-            "event": "display_changed",
+            "event": "output.display.updated",
             "payload": payload,
             "timestamp": time.time()
         })
@@ -236,7 +231,7 @@ class WebSocketManager:
     def _on_screen_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle screen update events."""
         self._schedule_broadcast({
-            "event": "screen_changed",
+            "event": "output.screen.updated",
             "payload": payload,
             "timestamp": time.time()
         })
@@ -244,7 +239,7 @@ class WebSocketManager:
     def _on_switch_changed(self, event_type: str, payload: Dict[str, Any]):
         """Handle switch change events."""
         self._schedule_broadcast({
-            "event": "switch_changed",
+            "event": "input.switch.changed",
             "payload": payload,
             "timestamp": time.time()
         })
@@ -317,28 +312,10 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
             else:
                 logger.warning("Go button not properly connected")
         else:
-            # Color buttons - check if LED is on before processing button press
+            # Color buttons - actual gating happens centrally in HardwareManager
             buttons = hardware_dict.get('buttons')
-            leds = hardware_dict.get('leds')
-            
-            # Check if the corresponding LED is active
-            led_is_active = False
-            if leds and hasattr(leds, 'get_led_state'):
-                try:
-                    from boss.core.models import LedColor
-                    led_color = LedColor(button_id)
-                    led_state = leds.get_led_state(led_color)
-                    led_is_active = led_state.is_on if led_state else False
-                except (ValueError, AttributeError):
-                    led_is_active = False
-            
-            if not led_is_active:
-                logger.info(f"Button {button_id} press ignored - corresponding LED is OFF (button not active)")
-                return {"status": "ignored", "button": button_id, "reason": "LED not active"}
-            
-            # Process button press since LED is active
             if buttons and hasattr(buttons, 'handle_button_press'):
-                logger.debug(f"Processing {button_id} button press (LED is active)")
+                logger.debug(f"Processing {button_id} button press")
                 buttons.handle_button_press(button_id)
                 logger.info(f"Color button {button_id} press processed successfully")
             else:
@@ -364,9 +341,9 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         else:
             logger.warning("Switch handle_switch_change method not available")
         
-        # Publish a canonical system display_update so every backend mirrors the value
+        # Publish a canonical display update so every backend mirrors the value
         if event_bus:
-            event_bus.publish("display_update", {"value": request.value}, "system")
+            event_bus.publish("output.display.updated", {"value": request.value}, "system")
         
         return {"status": "success", "value": request.value}
     
@@ -382,16 +359,14 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         if not leds:
             raise HTTPException(status_code=404, detail=f"LEDs not found")
         
-        # Set LED state using the proper LED interface
-        try:
-            from boss.core.models import LedColor
-            led_color = LedColor(color)
-            if hasattr(leds, 'set_led'):
-                leds.set_led(led_color, request.state)
-            else:
-                logger.warning(f"LED set_led method not available")
-        except ValueError:
-            raise HTTPException(status_code=400, detail=f"Invalid LED color: {color}")
+        if event_bus:
+            event_bus.publish("output.led.state_changed", {
+                "color": color,
+                "is_on": bool(request.state),
+                "brightness": 1.0
+            }, "webui")
+        else:
+            logger.warning("Event bus not available; LED state change not published")
         
         return {"status": "success", "color": color, "state": request.state}
     
@@ -409,12 +384,18 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
             number = int(request.text)
             if hasattr(display, 'show_number') and 0 <= number <= 9999:
                 display.show_number(number)
+                if event_bus:
+                    event_bus.publish("output.display.updated", {"value": number, "type": "number", "text": str(number)}, "webui")
             elif hasattr(display, 'show_text'):
                 display.show_text(request.text)
+                if event_bus:
+                    event_bus.publish("output.display.updated", {"text": request.text, "type": "text"}, "webui")
         except ValueError:
             # Not a number, show as text
             if hasattr(display, 'show_text'):
                 display.show_text(request.text)
+                if event_bus:
+                    event_bus.publish("output.display.updated", {"text": request.text, "type": "text"}, "webui")
         
         return {"status": "success", "text": request.text}
     
@@ -436,11 +417,11 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         
         # Manually trigger screen update event for web UI
         if event_bus:
-            event_bus.publish("screen_update", {
-                "text": request.text,
-                "screen_content": request.text,
+            event_bus.publish("output.screen.updated", {
+                "content_type": "text",
+                "content": request.text,
                 "timestamp": time.time()
-            })
+            }, "webui")
         
         return {"status": "success", "text": request.text}
     
@@ -457,12 +438,11 @@ def create_app(hardware_dict: Dict[str, Any], event_bus) -> FastAPI:
         
         # Manually trigger screen clear event for web UI
         if event_bus:
-            event_bus.publish("screen_update", {
-                "text": "",
-                "screen_content": "",
-                "action": "clear",
+            event_bus.publish("output.screen.updated", {
+                "content_type": "clear",
+                "content": "black",
                 "timestamp": time.time()
-            })
+            }, "webui")
         
         return {"status": "success", "action": "cleared"}
     

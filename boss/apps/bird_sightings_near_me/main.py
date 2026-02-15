@@ -173,7 +173,7 @@ def run(stop_event, api):
             if paginator.next():
                 _render()
 
-    sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
+    sub_ids.append(api.event_bus.subscribe("input.button.pressed", on_button))
 
     try:
         refresh_data()

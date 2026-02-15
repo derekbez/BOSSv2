@@ -26,10 +26,10 @@ class TestHardwareManager:
 
     def test_initialize(self, mock_hardware_factory):
         event_bus = Mock()
-    # components from fixture already return objects whose initialize() returns True
-           hm = HardwareManager(mock_hardware_factory, event_bus)
-           with patch.object(hm, '_setup_callbacks'), \
-               patch.object(hm, '_update_hardware_state'):
+        # components from fixture already return objects whose initialize() returns True
+        hm = HardwareManager(mock_hardware_factory, event_bus)
+        with patch.object(hm, '_setup_callbacks'), \
+            patch.object(hm, '_update_hardware_state'):
             hm.initialize()
 
         assert hm.buttons is not None
@@ -76,7 +76,7 @@ class TestHardwareManager:
             hm.start_monitoring()
         assert hm._monitoring_active is True
         assert hm._monitoring_thread is not None
-    # Thread target is patched; thread may terminate immediately. Just ensure a Thread object was created.
+        # Thread target is patched; thread may terminate immediately. Just ensure a Thread object was created.
         hm.stop_monitoring()
         assert hm._monitoring_active is False
 

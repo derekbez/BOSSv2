@@ -64,7 +64,7 @@ class TestSystemManager:
         assert system_manager._running == True
         
         # Verify system started event was published
-        event_bus.publish.assert_called_with("system_started", {"hardware_type": "mock"}, "system")
+        event_bus.publish.assert_called_with("system.started", {"hardware_type": "mock"}, "system")
     
     def test_start_system_already_running(self):
         """Test starting system when already running."""
@@ -136,7 +136,7 @@ class TestSystemManager:
             system_manager.stop()
         
         # Verify shutdown sequence
-        event_bus.publish.assert_called_with("system_shutdown", {"reason": "normal"}, "system")
+        event_bus.publish.assert_called_with("system.shutdown.initiated", {"reason": "normal"}, "system")
         mock_stop_webui.assert_called_once()
         app_runner.stop_current_app.assert_called_once()
         hardware_service.stop_monitoring.assert_called_once()
@@ -216,63 +216,13 @@ class TestSystemManager:
         # The force-exit thread logs a warning when forcing exit
         mock_logger.warning.assert_any_call('Forcing exit due to shutdown timeout')
     
-    def test_start_webui_if_needed_webui_type(self):
-        """Test starting WebUI for webui hardware type."""
-        event_bus = Mock()
-        hardware_service = Mock()
-        app_manager = Mock()
-        app_runner = Mock()
-        
-        # Mock the hardware components
-        hardware_service.buttons = Mock()
-        hardware_service.go_button = Mock()
-        hardware_service.leds = Mock()
-        hardware_service.switches = Mock()
-        hardware_service.display = Mock()
-        hardware_service.screen = Mock()
-        
-        system_manager = SystemManager(
-            event_bus=event_bus,
-            hardware_service=hardware_service,
-            app_manager=app_manager,
-            app_runner=app_runner
-        )
-        
-        with patch('boss.core.system_manager.start_web_ui') as mock_start_webui:
-            mock_start_webui.return_value = 8080
-            
-            system_manager.start_webui_if_needed("webui")
-        
-        assert system_manager._webui_port == 8080
-        mock_start_webui.assert_called_once()
-    
-    def test_start_webui_if_needed_other_type(self):
-        """Test not starting WebUI for non-webui hardware type."""
-        event_bus = Mock()
-        hardware_service = Mock()
-        app_manager = Mock()
-        app_runner = Mock()
-        
-        system_manager = SystemManager(
-            event_bus=event_bus,
-            hardware_service=hardware_service,
-            app_manager=app_manager,
-            app_runner=app_runner
-        )
-        
-        with patch('boss.core.system_manager.start_web_ui') as mock_start_webui:
-            system_manager.start_webui_if_needed("raspberry_pi")
-        
-        # Should not start WebUI
-        mock_start_webui.assert_not_called()
-        assert system_manager._webui_port is None
-    
     def test_stop_webui_if_running(self):
         """Test stopping WebUI when running."""
         event_bus = Mock()
         hardware_service = Mock()
         app_manager = Mock()
         app_runner = Mock()
+        hardware_service.hardware_factory.stop_dev_ui = Mock()
         
         system_manager = SystemManager(
             event_bus=event_bus,
@@ -284,10 +234,9 @@ class TestSystemManager:
         # Set WebUI as running
         system_manager._webui_port = 8080
         
-        with patch('boss.core.system_manager.stop_web_ui') as mock_stop_webui:
-            system_manager.stop_webui_if_running()
+        system_manager.stop_webui_if_running()
         
-        mock_stop_webui.assert_called_once()
+        hardware_service.hardware_factory.stop_dev_ui.assert_called_once()
         assert system_manager._webui_port is None
     
     def test_stop_webui_if_running_not_running(self):
@@ -329,12 +278,11 @@ class TestSystemManager:
         
         # Verify event subscriptions were set up
         expected_subscriptions = [
-            ("app_launch_requested", system_manager._on_app_launch_requested),
-            ("go_button_pressed", system_manager._on_go_button_pressed),
-            ("system_shutdown", system_manager._on_system_shutdown_requested),
-            ("led_update", system_manager._on_led_update),
-            ("display_update", system_manager._on_display_update),
-            ("screen_update", system_manager._on_screen_update)
+            ("system.app.launch.requested", system_manager._on_app_launch_requested),
+            ("input.go_button.pressed", system_manager._on_go_button_pressed),
+            ("system.app.started", system_manager._on_app_started),
+            ("system.app.finished", system_manager._on_app_stopped),
+            ("system.shutdown.requested", system_manager._on_system_shutdown_requested)
         ]
         
         # Check that subscribe was called for each expected event
@@ -365,7 +313,7 @@ class TestSystemManager:
         )
         
         payload = {}
-        system_manager._on_app_launch_requested("app_launch_requested", payload)
+        system_manager._on_app_launch_requested("system.app.launch.requested", payload)
         
         # Should get hardware state, find app, and start it
         hardware_service.get_hardware_state.assert_called_once()
@@ -388,47 +336,7 @@ class TestSystemManager:
         )
         
         payload = {}
-        system_manager._on_go_button_pressed("go_button_pressed", payload)
+        system_manager._on_go_button_pressed("input.go_button.pressed", payload)
         
         # Should publish app launch request
-        event_bus.publish.assert_called_with("app_launch_requested", {}, "system")
-    
-    def test_on_led_update(self):
-        """Test LED update handler."""
-        event_bus = Mock()
-        hardware_service = Mock()
-        app_manager = Mock()
-        app_runner = Mock()
-        
-        system_manager = SystemManager(
-            event_bus=event_bus,
-            hardware_service=hardware_service,
-            app_manager=app_manager,
-            app_runner=app_runner
-        )
-        
-        payload = {"color": "red", "is_on": True, "brightness": 0.8}
-        system_manager._on_led_update("led_update", payload)
-        
-        # Should call hardware service
-        hardware_service.update_led.assert_called_with("red", True, 0.8)
-    
-    def test_on_display_update(self):
-        """Test display update handler."""
-        event_bus = Mock()
-        hardware_service = Mock()
-        app_manager = Mock()
-        app_runner = Mock()
-        
-        system_manager = SystemManager(
-            event_bus=event_bus,
-            hardware_service=hardware_service,
-            app_manager=app_manager,
-            app_runner=app_runner
-        )
-        
-        payload = {"value": 123, "brightness": 0.9}
-        system_manager._on_display_update("display_update", payload)
-        
-        # Should call hardware service
-        hardware_service.update_display.assert_called_with(123, 0.9)
+        event_bus.publish.assert_called_with("system.app.launch.requested", {}, "system")

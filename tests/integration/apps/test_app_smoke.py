@@ -48,8 +48,8 @@ class DummyEventBus:
     # Minimal publish for button simulation
     def publish_button(self, button: str):
         for (_, (etype, handler)) in list(self._subs.items()):
-            if etype == "button_pressed":
-                handler("button_pressed", {"button": button})
+            if etype == "input.button.pressed":
+                handler("input.button.pressed", {"button": button})
 
 class DummyAPI:
     def __init__(self, app_dir: Path):

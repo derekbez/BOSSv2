@@ -67,8 +67,8 @@ class TestSystemIntegration:
         def lifecycle_handler(event_type, payload):
             lifecycle_events.append(event_type)
         
-        event_bus.subscribe("app_started", lifecycle_handler)
-        event_bus.subscribe("app_finished", lifecycle_handler)
+        event_bus.subscribe("system.app.started", lifecycle_handler)
+        event_bus.subscribe("system.app.finished", lifecycle_handler)
         
         # Get the test app
         test_app = app_manager.get_app_by_switch_value(0)
@@ -77,7 +77,7 @@ class TestSystemIntegration:
         # Start the app and wait for lifecycle event
         app_runner.start_app(test_app)
         assert wait_for(lambda: test_app.is_running, timeout=1.0)
-        assert wait_for(lambda: "app_started" in lifecycle_events, timeout=1.0)
+        assert wait_for(lambda: "system.app.started" in lifecycle_events, timeout=1.0)
         
         # Verify app is running
         running_app = app_runner.get_running_app()
@@ -86,7 +86,7 @@ class TestSystemIntegration:
         # Stop the app (or wait for it to complete naturally)
         app_runner.stop_current_app()
         assert wait_for(lambda: not test_app.is_running, timeout=1.0)
-        # Note: app_finished may be published before or after app completes in test scenario
+        # Note: system.app.finished may be published before or after app completes in test scenario
         
         # Verify app is stopped
         running_app = app_runner.get_running_app()
@@ -107,20 +107,20 @@ class TestSystemIntegration:
             events_received.append((event_type, payload))
         
         # Subscribe to various events
-        event_bus.subscribe("button_pressed", event_handler)
-        event_bus.subscribe("switch_changed", event_handler)
-        event_bus.subscribe("led_update", event_handler)
+        event_bus.subscribe("input.button.pressed", event_handler)
+        event_bus.subscribe("input.switch.changed", event_handler)
+        event_bus.subscribe("output.led.state_changed", event_handler)
         
         # Simulate hardware events
-        event_bus.publish("button_pressed", {"button": "red"}, "test")
-        event_bus.publish("switch_changed", {"old_value": 0, "new_value": 5}, "test")
-        event_bus.publish("led_update", {"color": "red", "is_on": True}, "test")
+        event_bus.publish("input.button.pressed", {"button": "red"}, "test")
+        event_bus.publish("input.switch.changed", {"old_value": 0, "new_value": 5}, "test")
+        event_bus.publish("output.led.state_changed", {"color": "red", "is_on": True}, "test")
         
         # Event-driven wait
         assert wait_for(lambda: len(events_received) == 3, timeout=0.5)
-        assert ("button_pressed", {"button": "red"}) in events_received
-        assert ("switch_changed", {"old_value": 0, "new_value": 5}) in events_received
-        assert ("led_update", {"color": "red", "is_on": True}) in events_received
+        assert ("input.button.pressed", {"button": "red"}) in events_received
+        assert ("input.switch.changed", {"old_value": 0, "new_value": 5}) in events_received
+        assert ("output.led.state_changed", {"color": "red", "is_on": True}) in events_received
     
     def test_hardware_state_updates(self, hardware_manager):
         """Test hardware state updates through the system."""

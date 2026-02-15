@@ -55,7 +55,7 @@ def run(stop_event, api):
             last_fetch = time.time()
             show()
 
-    sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
+    sub_ids.append(api.event_bus.subscribe("input.button.pressed", on_button))
 
     try:
         show()

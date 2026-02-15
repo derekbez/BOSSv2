@@ -118,7 +118,7 @@ def run(stop_event: Event, api: Any) -> None:
             display_page(page)
 
     sub_id = api.event_bus.subscribe(
-        'button_pressed',
+        'input.button.pressed',
         on_button_press
     )
 

@@ -46,10 +46,10 @@ def test_return_on_timeout(tmp_path):
     time.sleep(1.5)
     # wait a moment for events
     time.sleep(0.2)
-    # Expect app_stopped and return_to_startup
+    # Expect system.app.finished and system.app.return.requested
     names = [e[0] for e in bus.events]
-    assert "app_stopped" in names
-    assert any(e[0] == "return_to_startup" for e in bus.events)
+    assert "system.app.finished" in names
+    assert any(e[0] == "system.app.return.requested" for e in bus.events)
 
 
 def test_rerun_on_timeout(tmp_path):
@@ -71,7 +71,7 @@ def test_rerun_on_timeout(tmp_path):
     time.sleep(1.5)
     time.sleep(0.2)
     # after timeout, runner should have attempted to start again
-    assert len([e for e in bus.events if e[0] == 'app_stopped']) >= 1
+    assert len([e for e in bus.events if e[0] == 'system.app.finished']) >= 1
     # we also expect start_app to have been invoked again (factory called)
     assert started.count(manifest.name) >= 2
 
@@ -84,7 +84,7 @@ def test_none_on_timeout(tmp_path):
     runner.start_app(app)
     time.sleep(1.5)
     time.sleep(0.2)
-    # app_stopped should still be published but no return_to_startup
+    # system.app.finished should still be published but no return request
     names = [e[0] for e in bus.events]
-    assert "app_stopped" in names
-    assert not any(e[0] == "return_to_startup" for e in bus.events)
+    assert "system.app.finished" in names
+    assert not any(e[0] == "system.app.return.requested" for e in bus.events)

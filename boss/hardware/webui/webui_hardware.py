@@ -158,17 +158,9 @@ class WebUILeds(LedInterface):
         return self._available
     
     def set_led(self, color: LedColor, is_on: bool, brightness: float = 1.0) -> None:
-        """Set LED state and publish to WebUI."""
+        """Set LED state (no event re-published by hardware)."""
         self._led_states[color] = LedState(color=color, is_on=is_on, brightness=brightness)
         logger.debug(f"WebUI LED {color.value}: {'ON' if is_on else 'OFF'} (brightness: {brightness})")
-        
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.led.state_changed", {
-                "led_id": color.value,
-                "state": "on" if is_on else "off",
-                "brightness": brightness
-            })
     
     def get_led_state(self, color: LedColor) -> LedState:
         """Get current LED state."""
@@ -263,64 +255,28 @@ class WebUIDisplay(DisplayInterface):
         return self._available
     
     def show_number(self, value: int, brightness: float = 1.0) -> None:
-        """Display a number (0-9999)."""
+        """Display a number (0-9999). (Hardware does not re-publish events.)"""
         if not 0 <= value <= 9999:
             raise ValueError(f"Display value must be 0-9999, got {value}")
         
         self._current_value = value
         self._brightness = brightness
         logger.debug(f"WebUI display: {value} (brightness: {brightness})")
-        
-        # Publish event for WebUI update
-        if self._event_bus:
-            # Only emit the output.display.updated event; the canonical display_update
-            # is published by the system when switches change. Avoid duplicate/legacy
-            # events that can cause transient UI state.
-            self._event_bus.publish("output.display.updated", {
-                "type": "number",
-                "value": value,
-                "brightness": brightness,
-                "text": str(value)
-            })
     
     def show_text(self, text: str, brightness: float = 1.0) -> None:
-        """Display text (limited characters)."""
+        """Display text (limited characters). (Hardware does not re-publish events.)"""
         self._brightness = brightness
         logger.debug(f"WebUI display text: '{text}' (brightness: {brightness})")
-        
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.display.updated", {
-                "type": "text",
-                "text": text,
-                "brightness": brightness
-            })
     
     def clear(self) -> None:
-        """Clear the display."""
+        """Clear the display. (Hardware does not re-publish events.)"""
         self._current_value = None
         logger.debug("WebUI display cleared")
-        
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.display.updated", {
-                "type": "clear",
-                "text": "",
-                "brightness": self._brightness
-            })
     
     def set_brightness(self, brightness: float) -> None:
-        """Set display brightness (0.0-1.0)."""
+        """Set display brightness (0.0-1.0). (Hardware does not re-publish events.)"""
         self._brightness = brightness
         logger.debug(f"WebUI display brightness: {brightness}")
-        
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.display.updated", {
-                "type": "brightness",
-                "brightness": brightness,
-                "text": str(self._current_value) if self._current_value is not None else ""
-            })
 
 
 class WebUIScreen(ScreenInterface):
@@ -374,16 +330,8 @@ class WebUIScreen(ScreenInterface):
                 logger.debug(f"WebUI wrap failed: {e}")
         self._current_content = processed
         
-        # Publish event for WebUI update - use the correct event that WebSocket manager listens for
-        if self._event_bus:
-            self._event_bus.publish("output.screen.updated", {
-                "text": processed,
-                "font_size": font_size,
-                "color": color,
-                "background": background,
-                "align": align,
-                "content_type": "text"
-            }, "webui_screen")
+        # Hardware UI update only (do not re-publish output.screen.updated from hardware)
+        # The event bus is the authoritative source of screen events; callers should publish.
         
         # Unicode-safe logging: some Windows consoles can't encode certain glyphs (e.g. ₹)
         max_log_len = 500
@@ -398,29 +346,14 @@ class WebUIScreen(ScreenInterface):
         """Display an image on screen."""
         self._current_content = f"Image: {image_path}"
         
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.screen.updated", {
-                "image_path": image_path,
-                "scale": scale,
-                "position": position,
-                "content_type": "image"
-            }, "webui_screen")
-        
+        # Hardware UI update only (do not re-publish output.screen.updated from hardware)
         logger.info(f"WebUI screen image: {image_path} (scale: {scale}, pos: {position})")
     
     def clear_screen(self, color: str = "black") -> None:
         """Clear screen with specified color."""
         self._current_content = ""
         
-        # Publish event for WebUI update
-        if self._event_bus:
-            self._event_bus.publish("output.screen.updated", {
-                "text": "",
-                "color": color,
-                "content_type": "clear"
-            }, "webui_screen")
-        
+        # Hardware UI update only (do not re-publish output.screen.updated from hardware)
         logger.info(f"WebUI screen cleared with color: {color}")
     
     def get_screen_size(self) -> tuple:

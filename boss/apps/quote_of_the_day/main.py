@@ -57,7 +57,7 @@ def run(stop_event, api):  # signature required by platform
         if event.get("button") == "green":
             show_quote()
 
-    sub_ids.append(api.event_bus.subscribe("button_pressed", on_button))
+    sub_ids.append(api.event_bus.subscribe("input.button.pressed", on_button))
 
     try:
         show_quote()

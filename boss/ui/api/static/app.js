@@ -90,16 +90,16 @@ class BOSSWebUI {
             case 'initial_state':
                 this.updateHardwareState(data.payload);
                 break;
-            case 'led_changed':
+            case 'output.led.state_changed':
                 this.updateLEDState(data.payload);
                 break;
-            case 'display_changed':
+            case 'output.display.updated':
                 this.updateDisplayState(data.payload);
                 break;
-            case 'screen_changed':
+            case 'output.screen.updated':
                 this.updateScreenState(data.payload);
                 break;
-            case 'switch_changed':
+            case 'input.switch.changed':
                 this.updateSwitchState(data.payload);
                 break;
         }
@@ -131,9 +131,8 @@ class BOSSWebUI {
     }
 
     updateLEDState(payload) {
-        if (payload.led_id && payload.state !== undefined) {
-            const isOn = payload.state === 'on';
-            this.updateLEDIndicator(payload.led_id, isOn);
+        if (payload.color && payload.is_on !== undefined) {
+            this.updateLEDIndicator(payload.color, !!payload.is_on);
         }
     }
 
@@ -154,9 +153,12 @@ class BOSSWebUI {
 
     updateDisplayState(payload) {
         if (payload.value !== undefined) {
-            // Ignore explicit nulls from legacy/clear events to avoid flicker
             if (payload.value === null) return;
             this.updateDisplayValue(payload.value);
+            return;
+        }
+        if (payload.text !== undefined) {
+            this.updateDisplayValue(payload.text);
         }
     }
 
@@ -173,12 +175,12 @@ class BOSSWebUI {
 
         // Handle different payload structures
         let content = '';
-        if (payload.text) {
+        if (payload.content) {
+            content = payload.content;
+        } else if (payload.text) {
             content = payload.text;
         } else if (payload.details && payload.details.text) {
             content = payload.details.text;
-        } else if (payload.content) {
-            content = payload.content;
         }
 
         if (content) {

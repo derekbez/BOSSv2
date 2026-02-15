@@ -2,14 +2,7 @@
 
 This guide sets up B.O.S.S. on a Raspberry Pi for production and on Windows for WebUI development. Dependencies are centralized in requirements/base.txt and requirements/dev.txt.
 
-Important: The screen backend is now simplified to 'textual'. The legacy Pillow framebuffer and selectable Rich modes have been removed; Rich persists only as an internal fallback if Textual cannot start.
-
-Secrets / External API Keys:
-- Real secrets live outside git: `secrets/secrets.env` (ignored) on dev, `/etc/boss/secrets.env` on the Pi.
-- Template committed at `secrets/secrets.sample.env` — copy & fill in values.
-- Sync helper: `python scripts/sync_secrets.py push --host <pi-host>` (also: pull / verify).
-- Environment variable naming convention: `BOSS_APP_<APPNAME>_<PURPOSE>` (per app) or `BOSS_GLOBAL_<PURPOSE>`.
-- See `docs/external_apis.md` for registry and usage patterns.
+Important: The default screen backend is rich. You can override per app via manifest or system-wide in boss/config/boss_config.json.
 
 ### Raspberry Pi Setup (64-bit Lite OS)
 
@@ -18,6 +11,8 @@ Secrets / External API Keys:
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y git python3 python3-pip python3-venv python3-dev build-essential \
 	pkg-config libffi-dev fontconfig python3-lgpio
+sudo apt install -y libjpeg-dev zlib1g-dev libpng-dev libfreetype6-dev \
+                 libwebp-dev libtiff-dev libopenjp2-7-dev	
 ```
 
 
@@ -35,10 +30,6 @@ python -m pip install --upgrade pip
 3) Install Python packages
 ```
 pip install -r requirements/base.txt -r requirements/dev.txt
-```
-`requests` is now an explicit runtime dependency for network mini‑apps. If it is missing all external data apps will fall back to messages like "network error". Verify with:
-```
-python -c "import requests, sys; print('requests', requests.__version__)"
 ```
 
 4) GPIO backend (recommended)
@@ -64,11 +55,7 @@ sudo systemctl start boss && sudo journalctl -u boss -f
 
 Screen geometry note (HDMI): Ensure screen_width and screen_height in boss/config/boss_config.json match the framebuffer. Check with: fbset -fb /dev/fb0 -i
 
-Legacy backends have been removed; set `screen_backend` to "textual" (or "auto" which resolves to textual).
-
-Secrets on Pi (systemd):
-- Place secrets in `/etc/boss/secrets.env` (chmod 600) and add `EnvironmentFile=/etc/boss/secrets.env` to the service unit if not already present.
-- Restart service after updating secrets.
+To use the Pillow backend system-wide: set { "hardware": { "screen_backend": "pillow" } } in boss/config/boss_config.json. Default is "rich".
 
 ### Windows WebUI Development (CMD)
 
@@ -78,8 +65,7 @@ Secrets on Pi (systemd):
 - .\.venv\Scripts\activate
 
 2) Install dependencies
- - pip install -r requirements/base.txt -r requirements/dev.txt
-	 - Verify: `python -c "import requests; print('requests OK')"`
+- pip install -r requirements/base.txt -r requirements/dev.txt
 
 3) Verify WebUI server deps
 - python -c "import uvicorn, fastapi; print('uvicorn', uvicorn.__version__)"
@@ -87,16 +73,10 @@ Secrets on Pi (systemd):
 
 4) Run with WebUI hardware emulation
 - python -m boss.main --hardware webui
-If multiple apps show generic "unavailable" errors, first confirm `requests` installed and required API keys are set.
 
-5) Screen backend config
-- System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "textual" | "auto" (auto resolves to textual)
-- Per-app backend preference is no longer supported (field ignored if present).
-
-Local secrets usage (Windows):
-- Copy `secrets/secrets.sample.env` -> `secrets/secrets.env` and fill values.
-- (Optional) Add a `setx` persistent env var if you prefer not to load from file.
-
+5) Change screen backend (optional)
+- System-wide: edit boss/config/boss_config.json → hardware.screen_backend: "rich" | "pillow" (default: rich)
+- Per app: set preferred_screen_backend in the app's manifest.json
 
 ++++++++++
 

@@ -33,7 +33,7 @@ def run(stop_event: Event, api: Any) -> None:
     
     def on_button_press(event_type, event):
         # Only respond to button press, not release
-        if event_type != 'button_pressed':
+        if event_type != 'input.button.pressed':
             return
         button = event.get('button_id') or event.get('button')
         
@@ -41,26 +41,26 @@ def run(stop_event: Event, api: Any) -> None:
             api.screen.clear_screen()
             api.screen.display_text("Rebooting system...", font_size=16, align="center")
             api.log_info("AdminShutdown: Reboot triggered by user.")
-            api.event_bus.publish('system_shutdown', {'reason': 'reboot'}, 'admin_shutdown')
+            api.event_bus.publish('system.shutdown.requested', {'reason': 'reboot'}, 'admin_shutdown')
             stop_event.set()
             
         elif button == 'blue':
             api.screen.clear_screen()
             api.screen.display_text("Shutting down system...", font_size=16, align="center")
             api.log_info("AdminShutdown: Poweroff triggered by user.")
-            api.event_bus.publish('system_shutdown', {'reason': 'poweroff'}, 'admin_shutdown')
+            api.event_bus.publish('system.shutdown.requested', {'reason': 'poweroff'}, 'admin_shutdown')
             stop_event.set()
             
         elif button == 'green':
             api.screen.clear_screen()
             api.screen.display_text("Exiting to OS shell...", font_size=16, align="center")
             api.log_info("AdminShutdown: Exit to OS triggered by user.")
-            api.event_bus.publish('system_shutdown', {'reason': 'exit_to_os'}, 'admin_shutdown')
+            api.event_bus.publish('system.shutdown.requested', {'reason': 'exit_to_os'}, 'admin_shutdown')
             stop_event.set()
 
     # Subscribe to button events
     sub_id = api.event_bus.subscribe(
-        'button_pressed',
+        'input.button.pressed',
         on_button_press
     )
 

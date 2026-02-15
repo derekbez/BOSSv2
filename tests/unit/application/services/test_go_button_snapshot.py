@@ -39,9 +39,9 @@ def test_go_button_snapshot_publishes_display_update():
     manager = SystemManager(bus, hw, app_manager=None, app_runner=None)
 
     # Call the handler directly
-    manager._on_go_button_pressed("go_button_pressed", {})
+    manager._on_go_button_pressed("input.go_button.pressed", {})
 
-    # Check that a display_update was published with the sampled value
-    found = [p for p in bus.published if p[0] == "display_update"]
-    assert found, "No display_update published"
+    # Check that an output.display.updated was published with the sampled value
+    found = [p for p in bus.published if p[0] == "output.display.updated"]
+    assert found, "No output.display.updated published"
     assert found[0][1]["value"] == 42

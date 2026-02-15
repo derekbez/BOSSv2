@@ -101,7 +101,7 @@ class AppScreenAPI(ScreenAPIInterface):
                         values <=200 as character columns; otherwise it derives an
                         approximate column count).
         """
-        self._event_bus.publish("screen_update", {
+        self._event_bus.publish("output.screen.updated", {
             "content_type": "text",
             "content": text,
             "font_size": font_size,
@@ -114,7 +114,7 @@ class AppScreenAPI(ScreenAPIInterface):
     
     def display_image(self, image_path: str, scale: float = 1.0, position: tuple = (0, 0)) -> None:
         """Display an image on screen."""
-        self._event_bus.publish("screen_update", {
+        self._event_bus.publish("output.screen.updated", {
             "content_type": "image",
             "content": image_path,
             "scale": scale,
@@ -123,7 +123,7 @@ class AppScreenAPI(ScreenAPIInterface):
     
     def clear_screen(self, color: str = "black") -> None:
         """Clear screen with specified color."""
-        self._event_bus.publish("screen_update", {"content_type": "clear", "content": color}, f"app:{self._app_name}")
+        self._event_bus.publish("output.screen.updated", {"content_type": "clear", "content": color}, f"app:{self._app_name}")
     
     def get_screen_size(self) -> tuple:
         """Get screen dimensions (width, height)."""
@@ -156,7 +156,7 @@ class AppHardwareAPI(HardwareAPIInterface):
         if not 0.0 <= brightness <= 1.0:
             raise ValueError(f"LED brightness must be 0.0-1.0, got {brightness}")
         
-        self._event_bus.publish("led_update", {
+        self._event_bus.publish("output.led.state_changed", {
             "color": color,
             "is_on": is_on,
             "brightness": brightness

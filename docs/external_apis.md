@@ -4,6 +4,7 @@ Date: 2025-08-30 (merged)
 Status: Living document (single authoritative reference). supersedes former `miniapps_external_requirements.md` (now archived in `docs/archive/`).
 
 This document is the single source of truth for:
+
 * External web services used by mini‑apps (service-level registry)
 * Per‑app external requirements (env vars, rate limits, fallback UX)
 * Naming conventions and migration notes
@@ -11,6 +12,7 @@ This document is the single source of truth for:
 > NOTE: Some existing app code still references legacy (unprefixed) environment variable names (e.g. `AVIATIONSTACK_API_KEY`). The canonical naming going forward uses the `BOSS_APP_` prefix. Until code is fully migrated, ensure BOTH names are present for affected keys in environments (or add a small compatibility lookup). See the Transitional Mapping section below.
 
 ## 1. Conventions
+
 | Item | Convention |
 |------|------------|
 | Per‑app secret env var name (canonical) | `BOSS_APP_<SERVICE>_API_KEY` or `_API_TOKEN` |
@@ -22,6 +24,7 @@ This document is the single source of truth for:
 | Network timeout guidance | ≤ 6s per request |
 
 ## 2. Transitional Env Var Mapping (to remove after migration)
+
 | Legacy (used in code today) | Canonical Prefixed Form |
 |----------------------------|-------------------------|
 | AVIATIONSTACK_API_KEY | BOSS_APP_AVIATIONSTACK_API_KEY (migration COMPLETE – legacy no longer referenced in code) |
@@ -33,6 +36,7 @@ This document is the single source of truth for:
 Action: create follow-up task to refactor apps to use only canonical names, then drop this section.
 
 ## 3. Service Registry
+
 Add a row when adopting a new third‑party service (NOT for purely local data sources). Reformatted to YAML for plain‑text readability.
 
 ```yaml
@@ -102,7 +106,9 @@ services:
 ```
 
 ## 4. Per-App External Requirements (Merged)
+
 Legend:
+
 * Env Var: canonical preferred name (legacy name in parentheses if still used in code)
 * Fallback: User-friendly text shown on screen when data unavailable
 
@@ -265,6 +271,7 @@ apps_requirements:
 ```
 
 ## 5. Implementation Guidelines
+
 1. Always set an explicit timeout (<= 6s) on network calls.
 2. Provide concise, user-friendly fallback text; never show raw tracebacks on screen.
 3. Respect documented refresh intervals to stay within rate limits (see table).
@@ -273,10 +280,12 @@ apps_requirements:
 6. Don’t raise inside main loop; catch, log, fallback.
 
 ## 6. Fallback & Offline Strategy
+
 * If env var absent and a public demo key exists (NASA), optionally try the demo key; otherwise display fallback text.
 * (Future) Consider exponential backoff after repeated failures to reduce log noise & API usage.
 
 ## 7. Example Mini‑App Snippet
+
 ```python
 from boss.config import secrets
 
@@ -287,6 +296,7 @@ if not API_KEY:
 ```
 
 ## 8. Adding a New External API (Process)
+
 1. Choose a service id (lowercase) e.g. `space_data`.
 2. Add to Service Registry table.
 3. Add canonical env var to `secrets/secrets.sample.env` with `CHANGE_ME`.
@@ -295,24 +305,29 @@ if not API_KEY:
 6. Update Per-App table above with fallback behaviour.
 
 ## 9. Secret Rotation (Simple Flow)
+
 1. Update local `secrets/secrets.env` with new value.
 2. Push to Pi: `python scripts/sync_secrets.py push`.
 3. Restart: `sudo systemctl restart boss`.
 4. Remove old key after verification.
 
 ## 10. Security Notes (Right‑Sized)
+
 * Never commit real secrets.
 * Production secrets file: `/etc/boss/secrets.env` (chmod 600, root:root).
 * Future hardening (optional): encrypted secrets file with age/gnupg; design remains pluggable.
 
 ## 11. Validation Checklist (Per API App)
+
 Use when reviewing or adding an app:
+
 * [ ] Manifest has `requires_network: true`.
 * [ ] Timeout set on every `requests` call.
 * [ ] Fallback text path exercised (tested or simulated).
 * [ ] LED/button usage adheres to parity pattern (if interactive).
 * [ ] No direct `requests` usage without explicit `timeout=`.
 * [ ] Import guard uses standard pattern:
+
 ```python
 try:
     import requests  # type: ignore
@@ -320,12 +335,15 @@ except Exception:  # pragma: no cover
     requests = None  # type: ignore
     # (Future enhancement: central warning log if missing)
 ```
+
 If `requests` is None the fetch helper returns `None`; ensure dependency installed via `pip install -r requirements/base.txt`.
+
 * [ ] Uses canonical env var name (or transitional mapping documented) and present in sample env.
 
 ## 12. Future Improvements
+
 * Remove transitional mapping after code refactor.
-* Introduce automated startup validator that emits `app_error` and filters apps missing required secrets.
+* Introduce automated startup validator that emits `system.app.error` and filters apps missing required secrets.
 * Provide shared truncation/wrapping utility for long API responses.
 
 ---

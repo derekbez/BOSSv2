@@ -61,9 +61,9 @@ class TestEventBus:
         handler = Mock()
         filter_dict = {"button": "red"}
         
-        subscription_id = event_bus.subscribe("button_pressed", handler, filter_dict)
+        subscription_id = event_bus.subscribe("input.button.pressed", handler, filter_dict)
         
-        subscription = event_bus._subscriptions["button_pressed"][0]
+        subscription = event_bus._subscriptions["input.button.pressed"][0]
         assert subscription.filter_dict == filter_dict
     
     def test_publish_and_handle_event(self):
@@ -94,15 +94,15 @@ class TestEventBus:
         handler2 = Mock()
         
         # Subscribe with different filters
-        event_bus.subscribe("button_pressed", handler1, {"button": "red"})
-        event_bus.subscribe("button_pressed", handler2, {"button": "blue"})
+        event_bus.subscribe("input.button.pressed", handler1, {"button": "red"})
+        event_bus.subscribe("input.button.pressed", handler2, {"button": "blue"})
         
         # Publish red button event
-        event_bus.publish("button_pressed", {"button": "red", "timestamp": 123})
+        event_bus.publish("input.button.pressed", {"button": "red", "timestamp": 123})
         time.sleep(0.1)
         
         # Only handler1 should be called
-        handler1.assert_called_once_with("button_pressed", {"button": "red", "timestamp": 123})
+        handler1.assert_called_once_with("input.button.pressed", {"button": "red", "timestamp": 123})
         handler2.assert_not_called()
         
         # Reset mocks
@@ -110,12 +110,12 @@ class TestEventBus:
         handler2.reset_mock()
         
         # Publish blue button event
-        event_bus.publish("button_pressed", {"button": "blue", "timestamp": 456})
+        event_bus.publish("input.button.pressed", {"button": "blue", "timestamp": 456})
         time.sleep(0.1)
         
         # Only handler2 should be called
         handler1.assert_not_called()
-        handler2.assert_called_once_with("button_pressed", {"button": "blue", "timestamp": 456})
+        handler2.assert_called_once_with("input.button.pressed", {"button": "blue", "timestamp": 456})
         
         event_bus.stop()
     
@@ -128,12 +128,12 @@ class TestEventBus:
         handler_filtered = Mock()
         
         # Subscribe without filter and with filter
-        event_bus.subscribe("button_pressed", handler_all)
-        event_bus.subscribe("button_pressed", handler_filtered, {"button": "red"})
+        event_bus.subscribe("input.button.pressed", handler_all)
+        event_bus.subscribe("input.button.pressed", handler_filtered, {"button": "red"})
         
         # Publish events
-        event_bus.publish("button_pressed", {"button": "red"})
-        event_bus.publish("button_pressed", {"button": "blue"})
+        event_bus.publish("input.button.pressed", {"button": "red"})
+        event_bus.publish("input.button.pressed", {"button": "blue"})
         time.sleep(0.1)
         
         # handler_all should receive both events
